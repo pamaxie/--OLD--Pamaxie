@@ -4,7 +4,7 @@ Documentation for this project can be found at [Pamaxies homepage](http://pamaxi
 
 ![**Content Detection**](https://i.imgur.com/vMUR0LQ.png)<br/>
 Pamaxie was developed to ensure and verify the security of content and media on the internet.
-This was developed to allow developers of chat applications to moderate content automatically. For example by a neural network scanning images for certain properties, and we plan on supporting other types of media as well. The intention of this connection of Machine Learning and hand crafted algorithms is to create a service that allows the internet to be more secure. Our goal is to make the web more fun and safe to browse, and prevent users from seeing content on websites that they, may want to avoid
+This was developed to allow developers of chat applications to moderate content automatically. For example by a neural network scanning images for certain properties, and we plan on supporting other types of media as well. The intention of this connection of Machine Learning and hand crafted algorithms is to create a service that allows the internet to be more secure. Our goal is to make the web more fun and safe to browse, and prevent users from seeing content on websites that they, may want to avoid.
 
 ![**Content Detection**](https://i.imgur.com/Egy7Q1I.png)<br/>
 
