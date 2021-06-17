@@ -20,9 +20,6 @@ namespace PamaxieML.Model
         // Method for consuming model in your app
         public static ModelOutput Predict(ModelInput input, out OutputProperties properties)
         {
-
-
-
             var result = PredictionEngine.Value.Predict(input);
             var label = OutputProperties.ImagePredictionResult.None;
             switch (result.Prediction)

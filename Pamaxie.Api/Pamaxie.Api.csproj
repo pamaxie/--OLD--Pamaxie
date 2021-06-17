@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Assemblies\Pamaxie.Database.Extensions\Pamaxie.Database.Extensions.csproj" />
-    <ProjectReference Include="..\PamaxieML.Model\PamaxieML.Model.csproj" />
+    <ProjectReference Include="..\Assemblies\Pamaxie.Database.Extensions\Pamaxie.Database.Extensions.csproj" />
+    <ProjectReference Include="..\MLModules\PamaxieML.Model\PamaxieML.Model.csproj" />
   </ItemGroup>
 </Project>
