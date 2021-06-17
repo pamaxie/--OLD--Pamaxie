@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace Pamaxie.Blazor.PageModels
+namespace Pamaxie.Website.PageModels
 {
     public class AboutModel : ComponentBase
     {

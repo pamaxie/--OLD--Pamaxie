@@ -7,10 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
-using Pamaxie.Blazor.Services;
+using Pamaxie.Website.Services;
 using System.Net.Http;
 
-namespace Pamaxie.Blazor
+namespace Pamaxie.Website
 {
     public class Startup
     {

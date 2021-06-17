@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Pamaxie.Blazor": {
+    "Pamaxie.Website": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

@@ -2,7 +2,7 @@ using System.Threading;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Pamaxie.Blazor
+namespace Pamaxie.Website
 {
     public class Program
     { 

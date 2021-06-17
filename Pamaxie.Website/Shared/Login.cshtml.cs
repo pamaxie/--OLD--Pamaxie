@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-namespace Pamaxie.Blazor.Shared
+namespace Pamaxie.Website.Shared
 {
     [AllowAnonymous]
     public class LoginModel : PageModel

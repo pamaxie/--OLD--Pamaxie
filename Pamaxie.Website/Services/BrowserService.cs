@@ -1,7 +1,7 @@
 ﻿using Microsoft.JSInterop;
 using System.Threading.Tasks;
 
-namespace Pamaxie.Blazor.Services
+namespace Pamaxie.Website.Services
 {
     public class BrowserService
     {
