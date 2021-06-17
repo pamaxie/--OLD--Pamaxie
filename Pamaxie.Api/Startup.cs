@@ -24,7 +24,8 @@ namespace PamaxieML.Api
         public void ConfigureServices(IServiceCollection services)
         {
             //Load Data Storage Configuration from appsettings.json
-            IConfigurationSection dbConfigSection = Configuration.GetSection("SQLConnectionString");
+            
+            IConfigurationSection dbConfigSection = Configuration.GetSection("DbConfig");
             Environment.SetEnvironmentVariable("PamaxieSqlDb", dbConfigSection.GetValue<string>("PamaxieSqlDb"));
             Environment.SetEnvironmentVariable("PamaxieRedisAddr", dbConfigSection.GetValue<string>("PamaxieRedisAddr"));
             Environment.SetEnvironmentVariable("PamaxiePublicRedisAddr", dbConfigSection.GetValue<string>("PamaxiePublicRedisAddr"));

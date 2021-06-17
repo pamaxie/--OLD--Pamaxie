@@ -71,20 +71,24 @@ namespace Pamaxie.Database.Redis.DataClasses
         /// </summary>
         public bool TryLoadData(out MediaData data)
         {
+            data = new MediaData();
             try
             {
                 IDatabase db = RedisData.Redis.GetDatabase();
                 var rawData = db.StringGet(MediaHash);
+                if (string.IsNullOrEmpty(rawData))
+                    return false;
+
                 data = JsonConvert.DeserializeObject<MediaData>(rawData);
                 _data = data;
                 return true;
             }
-            catch (ArgumentNullException)
+            catch (TypeInitializationException exception)
             {
-                data = new MediaData();
+                Console.WriteLine("An exception occured trying to initialise " + exception.Source);
+                Console.WriteLine(exception.Message);
                 return false;
             }
-
         }
     }
 

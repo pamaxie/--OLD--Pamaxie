@@ -1,0 +1,84 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IHttpContextAccessor httpContextAccessor
+
+<MudLayout>
+    <MudAppBar Elevation="1" Dense="true">
+        <!--Display Buttons depending on Authorization State of User-->
+
+
+        <AuthorizeView>
+            <Authorized>
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+                <MudAppBarSpacer />
+                <MudIconButton Icon="@Icons.Material.Filled.SupportAgent" Color="Color.Inherit" Edge="Edge.End" Link="https://support.deamonic.net" />
+                <MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" Edge="Edge.End" OnClick="Logout" />
+            </Authorized>
+            <NotAuthorized>
+                <MudAppBarSpacer />
+                <MudIconButton Icon="@Icons.Material.Filled.Login" Color="Color.Inherit" Edge="Edge.End" OnClick="Login" />
+            </NotAuthorized>
+        </AuthorizeView>
+    </MudAppBar>
+
+    <AuthorizeView>
+        <Authorized>
+            <MudDrawer @bind-Open="_drawerOpen" Elevation="2" Style="background: #313131">
+                <MudDrawerHeader Style="padding: 0px">
+                    <MudCard Style="width: 100%">
+                        <MudCardHeader>
+                            <CardHeaderAvatar>
+                                <MudAvatar Image="@AvatarUrl" />
+                            </CardHeaderAvatar>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.subtitle1" Style="font-size: 14px; line-height: 14px;">
+                                    @httpContextAccessor.HttpContext.User.Identity.Name <br />
+
+                                </MudText>
+                            </CardHeaderContent>
+                            <CardHeaderActions>
+                                <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+                            </CardHeaderActions>
+                        </MudCardHeader>
+                    </MudCard>
+                </MudDrawerHeader>
+                <MudNavMenu>
+                </MudNavMenu>
+            </MudDrawer>
+            <MudMainContent>
+                @ChildContent
+            </MudMainContent>
+        </Authorized>
+    </AuthorizeView>
+</MudLayout>
+
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    public string AvatarUrl { get; set; }
+
+    //Default this to false so we don't push the drawer open all the time...
+    bool _drawerOpen = false;
+
+    async Task DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+
+    private void Login()
+    {
+        NavigationManager.NavigateTo("Account/Login", true);
+    }
+
+    private void Logout()
+    {
+        NavigationManager.NavigateTo("Account/Logout", true);
+    }
+
+}

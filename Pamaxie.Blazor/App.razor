@@ -1,0 +1,52 @@
+﻿@inject AuthenticationStateProvider AuthenticationStateProvider
+<!--Mud Blazor components for fancy schmancy UI-->
+<MudThemeProvider Theme="@darkTheme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+
+<Router AppAssembly="@typeof(Program).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+            <NotAuthorized>
+                <Pamaxie.Blazor.Shared.RedirectToLogin />
+            </NotAuthorized>
+        </AuthorizeRouteView>
+    </Found>
+    <NotFound>
+        <CascadingAuthenticationState>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p>Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </CascadingAuthenticationState>
+    </NotFound>
+</Router>
+
+@code{
+
+    MudTheme darkTheme = new MudTheme()
+    {
+        Palette = new Palette()
+        {
+            Black = "#111111",
+            Background = "#212121",
+            BackgroundGrey = "#212121",
+            Surface = "#212121",
+            DrawerBackground = "#27272f",
+            DrawerText = "rgba(255,255,255, 1)",
+            DrawerIcon = "rgba(255,255,255, 1)",
+            AppbarBackground = "#292b2c",
+            AppbarText = "rgba(255,255,255, 1)",
+            Primary = "#ffffff",
+            TextPrimary = "rgba(255,255,255, 1)",
+            TextSecondary = "rgba(255,255,255, 1)",
+            ActionDefault = "#adadb1",
+            ActionDisabled = "rgba(255,255,255, 0.5)",
+            ActionDisabledBackground = "rgba(255,255,255, 0.12)",
+            PrimaryContrastText = "rgba(255,255,255, 1)",
+            SecondaryContrastText = "rgba(255,255,255, 1)",
+            InfoContrastText = "rgba(255,255,255, 1)",
+            WarningContrastText = "rgba(255,255,255, 1)",
+        }
+    };
+}
