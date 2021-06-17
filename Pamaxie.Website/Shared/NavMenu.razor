@@ -1,0 +1,122 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Microsoft.Data.SqlClient
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IHttpContextAccessor httpContextAccessor
+
+
+<MudLayout>
+    <MudAppBar Elevation="1" Dense="true">
+        <AuthorizeView>
+            <Authorized>
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+            </Authorized>
+        </AuthorizeView>
+
+
+        <!--Display Buttons depending on Authorization State of User-->
+        <img class="logo-big" alt="Logo" src="img/Logo-Big.webp" />
+        <MudAppBarSpacer />
+        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Edge="Edge.End" Link="https://github.com/deamonicnet/Pamaxie" />
+        <AuthorizeView>
+            <Authorized>
+                <MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" Edge="Edge.End" OnClick="Logout">
+                    Logout
+                </MudIconButton>
+            </Authorized>
+            <NotAuthorized>
+                <MudIconButton Icon="@Icons.Material.Filled.Login" Color="Color.Inherit" Edge="Edge.End" OnClick="Login">
+                    Login
+                </MudIconButton>
+            </NotAuthorized>
+        </AuthorizeView>
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="2" Style="background: #313131">
+        <MudDrawerHeader Style="padding: 0px">
+            <MudCard Style="width: 100%">
+                <MudCardHeader>
+                    <CardHeaderAvatar>
+                        <MudAvatar Image="@AvatarUrl" />
+                    </CardHeaderAvatar>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.subtitle1" Style="font-size: 14px; line-height: 14px;">
+                            @httpContextAccessor.HttpContext.User.Identity.Name <br />
+
+                        </MudText>
+                        @if (IsAdminUser)
+                        {
+                            <MudText Typo="Typo.subtitle1" Style="font-size: 10px; line-height: 11px;">
+                                #@UserId
+                            </MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Error" Style="font-size: 10px; line-height: 11px;">
+                                Administrator
+                            </MudText>
+                        }
+
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default">
+
+                        </MudIconButton>
+                    </CardHeaderActions>
+                </MudCardHeader>
+            </MudCard>
+        </MudDrawerHeader>
+
+        <MudNavMenu>
+
+        </MudNavMenu>
+    </MudDrawer>
+
+    @if (SqlDown)
+    {
+        <div class="banner">
+            <MudButton OnClick="AckSqlDown">x</MudButton>
+            <h4>SQL Server Down</h4>
+            <p>The current Sql Server is down. We are working very hard on re</p>
+        </div>
+    }
+    <MudMainContent>
+        @ChildContent
+    </MudMainContent>
+</MudLayout>
+
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    public bool SqlDown { get; set; } = false;
+    public bool IsAdminUser { get; set; }
+    private string AvatarUrl = string.Empty;
+    private ulong UserId;
+
+    //Default this to false so we don't push the drawer open all the time...
+    bool _drawerOpen = false;
+
+    async Task DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    async Task AckSqlDown()
+    {
+
+    }
+
+    async Task Login()
+    {
+
+    }
+
+    async Task Logout()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+}

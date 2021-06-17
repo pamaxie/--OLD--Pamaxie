@@ -1,0 +1,67 @@
+﻿@page "/About"
+@inherits AboutModel
+
+<body id="page-top">
+    <!-- Header -->
+
+    <header class="masthead">
+        <div class="backdrop">
+            <div class="container d-flex h-100 align-items-center">
+                <div class="mx-auto text-center">
+                    <h1 class="text-50 mx-auto mt-2 mb-5" style="font-size: 240%;">Content Detection at your fingertips</h1>
+                    <h2 class="text-50 mx-auto mt-2 mb-5 deskformtext" style="font-size: 100%;">
+                        Pamaxie was developed to ensure and verify the security of content and media on the internet.
+                        Allowing developers of chat applications to moderate content of media automatically. Stay tuned for more.
+                    </h2>
+                    <div class="container-fluid">
+                        <a href="https://github.com/deamonicnet/Pamaxie" class="btn btn-primary-two">View Github</a>
+                        <a href="/wiki" class="btn btn-primary-two">Read Documentation</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+
+    <!-- Project Features Section -->
+    <section id="projects" class="wave-container">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 160">
+            <path fill="#3F3D56" fill-opacity="1" d="M0,64L80,58.7C160,53,320,43,480,64C640,85,800,139,960,149.3C1120,160,1280,128,1360,112L1440,96L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"></path>
+        </svg>
+    </section>
+
+
+    <!-- This was disabled for now cause the styling drove me nuts. Please if you know how to design stuff and if you feel like giving it a try do so.
+        The design docs are included in this repo under this Project.
+    <MudTabs Outlined="true" Position="Position.Left" Rounded="true" Border="true"
+             ApplyEffectsToContainer="true" Class="mt-8" PanelClass="pa-6" Style="border-color: transparent;">
+        <MudTabPanel Text="Item One">
+            <MudCard Style="background: transparent; box-shadow: none; border-left: 3px solid; border-radius: 0px;" Class="dynwidth">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h4">Image Recognition</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardMedia Image="../img/chatapp.png" Height="250" />
+                <MudCardContent>
+                    <MudText Typo="Typo.body1">
+                        We detect the content of images sent to our API
+                        and send you back the results we get and how confident
+                        we are about what we think it may be. This means its in your hands to decide what
+                        and when you want to intervene and remove content
+                        from your media. Our data is returned in percentiles of confidence meaning you can tune things yourself.
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudTabPanel>
+        <MudTabPanel Text="Item Two">
+
+        </MudTabPanel>
+        <MudTabPanel Text="Item Three">
+
+        </MudTabPanel>
+    </MudTabs>-->
+</body>
+
+@code{ string CurrImage { get; set; } }
