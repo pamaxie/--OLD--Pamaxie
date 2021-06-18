@@ -8,16 +8,18 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>a1a59e4e-91e4-4ab7-9d06-64bf916b4610</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="FluentValidation" Version="10.0.0" />
-	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.13" />
-    <PackageReference Include="MudBlazor" Version="2.0.7" />
+	  <PackageReference Include="FluentValidation" Version="10.2.3" />
+	  <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.18.0-beta2" />
+	  <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.7" />
+	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
+    <PackageReference Include="MudBlazor" Version="5.0.13" />
   </ItemGroup>
 
   <ItemGroup>

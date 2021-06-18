@@ -1,23 +1,35 @@
 ﻿@using Microsoft.AspNetCore.Http
-@inject NavigationManager NavigationManager
-@inject AuthenticationStateProvider AuthenticationStateProvider
-@inject IHttpContextAccessor httpContextAccessor
+@using Pamaxie.Blazor.Authentication
+@using Pamaxie.Blazor.Authentication.Data
+@using Microsoft.ApplicationInsights
+@inject NavigationManager _navigationManager
+@inject AuthenticationStateProvider _authenticationStateProvider
+@inject IHttpContextAccessor _httpContextAccessor
 
 <MudLayout>
     <MudAppBar Elevation="1" Dense="true">
         <!--Display Buttons depending on Authorization State of User-->
+        <AuthorizeView>
+            <Authorized>
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/>
+            </Authorized>
+        </AuthorizeView>
 
+        <MudBreadcrumbs Items="_items">
+            <SeparatorTemplate>
+                <MudIcon Icon="@Icons.Material.Filled.ArrowForward" Size="Size.Small"/>
+            </SeparatorTemplate>
+        </MudBreadcrumbs>
 
         <AuthorizeView>
             <Authorized>
-                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-                <MudAppBarSpacer />
-                <MudIconButton Icon="@Icons.Material.Filled.SupportAgent" Color="Color.Inherit" Edge="Edge.End" Link="https://support.deamonic.net" />
-                <MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" Edge="Edge.End" OnClick="Logout" />
+                <MudAppBarSpacer/>
+                <MudIconButton Icon="@Icons.Material.Filled.SupportAgent" Color="Color.Inherit" Edge="Edge.End" Link="https://support.deamonic.net"/>
+                <MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" Edge="Edge.End" OnClick="Logout"/>
             </Authorized>
             <NotAuthorized>
-                <MudAppBarSpacer />
-                <MudIconButton Icon="@Icons.Material.Filled.Login" Color="Color.Inherit" Edge="Edge.End" OnClick="Login" />
+                <MudAppBarSpacer/>
+                <MudIconButton Icon="@Icons.Material.Filled.Login" Color="Color.Inherit" Edge="Edge.End" OnClick="Login"/>
             </NotAuthorized>
         </AuthorizeView>
     </MudAppBar>
@@ -29,21 +41,27 @@
                     <MudCard Style="width: 100%">
                         <MudCardHeader>
                             <CardHeaderAvatar>
-                                <MudAvatar Image="@AvatarUrl" />
+                                <MudAvatar Image="@Profile?.ProfilePictureAddress"/>
                             </CardHeaderAvatar>
                             <CardHeaderContent>
                                 <MudText Typo="Typo.subtitle1" Style="font-size: 14px; line-height: 14px;">
-                                    @httpContextAccessor.HttpContext.User.Identity.Name <br />
-
+                                    @Profile?.UserName <br/>
+                                </MudText>
+                                <MudText Typo="Typo.subtitle2" Style="font-size: 8px; line-height: 9px;">
+                                    @Profile?.EmailAddress
+                                </MudText>
+                                <MudText Typo="Typo.subtitle2" Style="font-size: 6px; line-height: 9px;">
+                                    @Profile?.UserId
                                 </MudText>
                             </CardHeaderContent>
                             <CardHeaderActions>
-                                <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default"/>
                             </CardHeaderActions>
                         </MudCardHeader>
                     </MudCard>
                 </MudDrawerHeader>
                 <MudNavMenu>
+
                 </MudNavMenu>
             </MudDrawer>
             <MudMainContent>
@@ -55,30 +73,47 @@
 
 
 @code {
+    //Render Frag for rendering the child content of the Website
     [Parameter]
     public RenderFragment ChildContent { get; set; }
-    public string AvatarUrl { get; set; }
+
+    private ProfileData Profile { get; set; }
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>();
 
     //Default this to false so we don't push the drawer open all the time...
     bool _drawerOpen = false;
 
-    async Task DrawerToggle()
+    private void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
+        var relativePath = _navigationManager.ToBaseRelativePath(_navigationManager.Uri);
+        var path = relativePath.Split('/');
+        string pathDesignator = string.Empty;
+        foreach (var href in path)
+        {
+            pathDesignator += href;
+            
+            _items.Add(new BreadcrumbItem(string.IsNullOrEmpty(href) ? href : "Home" , _navigationManager.BaseUri + pathDesignator));
+        }
+
+        var user = _httpContextAccessor?.HttpContext?.User;
+        Profile = user.GetGoogleAuthData()?.GetProfileData();
+        return Task.CompletedTask;
     }
 
     private void Login()
     {
-        NavigationManager.NavigateTo("Account/Login", true);
+        _navigationManager.NavigateTo("/Login", true);
     }
 
     private void Logout()
     {
-        NavigationManager.NavigateTo("Account/Logout", true);
+        _navigationManager.NavigateTo("/Logout", true);
     }
 
 }

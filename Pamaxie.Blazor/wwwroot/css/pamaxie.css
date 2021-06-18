@@ -223,11 +223,11 @@ main {
     filter: drop-shadow(1px 1px 20px black);
 }
 
-.hideSmall {
+.hideBig {
     display: none;
 }
 
-.hideBig {
+.hideSmall {
     display: none;
 }
 
@@ -356,11 +356,11 @@ footer {
         margin-left: 30%;
         border-radius: 15px 0px 0px 15px
     }
+}
 
-    .hideBig {
+@media (min-width: 992px){
+    .hideSmall {
         display: flex;
-        width: 70%;
-        height: 70%;
         visibility: visible;
     }
 }
@@ -380,11 +380,8 @@ footer {
 }
 
 @media(max-width: 991px) {
-    .hideSmall {
+    .hideBig {
         display: flex;
-        width: 30%;
-        height: 30%;
-        margin-left: 35%;
         visibility: visible;
     }
 }
@@ -517,6 +514,17 @@ footer {
 @media(min-width: 991px) {
     .dynwidth {
         width: 45%;
+        visibility: visible;
+    }
+}
+
+.dynheight {
+    height: 500px;
+}
+
+@media(min-width: 1000px) {
+    .dynheight {
+        height: 700px;
         visibility: visible;
     }
 }

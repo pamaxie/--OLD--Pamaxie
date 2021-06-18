@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,8 +30,11 @@ namespace Pamaxie.Blazor
             //Adds access to the HTTP Context
             services.AddHttpContextAccessor();
 
+
+
             //Add the Mudblazor Theme
             services.AddMudServices();
+
 
             services.AddAuthentication(options =>
             {
@@ -39,6 +43,16 @@ namespace Pamaxie.Blazor
                 options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
                 .AddCookie();
+
+            services.AddAuthentication().AddGoogle(options =>
+            {
+                options.ClientId = Configuration["Google:ClientId"];
+                options.ClientSecret = Configuration["Google:ClientSecret"];
+                options.ClaimActions.MapJsonKey("urn:google:profile", "link");
+                options.ClaimActions.MapJsonKey("urn:google:image", "picture");
+            });
+
+            services.AddApplicationInsightsTelemetry();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
