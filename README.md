@@ -1,6 +1,6 @@
 ![**Pamaxie**](https://i.imgur.com/UzSZPs2.png)
 
-Documentation for this project can be found at [Pamaxies homepage](http://pamaxie.com:5003/). Please let us know if the API misbehaves in any way. We will assist you as soon as possible.
+Documentation for this project can be found at [Pamaxies wiki](https://wiki.pamaxie.com/). API Tokens can be requested at [Deamonics website](https://.pamaxie.com/). Please let us know if the API misbehaves in any way. We will assist you as soon as possible.
 
 ![**Content Detection**](https://i.imgur.com/vMUR0LQ.png)<br/>
 Pamaxie was developed to ensure and verify the security of content and media on the internet.
