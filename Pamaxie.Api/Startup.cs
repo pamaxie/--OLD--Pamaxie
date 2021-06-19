@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Pamaxie.Database.Extensions;
 using PamaxieML.Api.Security;
 
 namespace PamaxieML.Api
@@ -29,6 +30,7 @@ namespace PamaxieML.Api
             Environment.SetEnvironmentVariable("PamaxieSqlDb", dbConfigSection.GetValue<string>("PamaxieSqlDb"));
             Environment.SetEnvironmentVariable("PamaxieRedisAddr", dbConfigSection.GetValue<string>("PamaxieRedisAddr"));
             Environment.SetEnvironmentVariable("PamaxiePublicRedisAddr", dbConfigSection.GetValue<string>("PamaxiePublicRedisAddr"));
+            Environment.SetEnvironmentVariable("ApplyMigrations", dbConfigSection.GetValue<string>("Apply Migrations"));
 
             services.AddControllers();
             IConfigurationSection section = Configuration.GetSection("AuthData");
@@ -52,16 +54,31 @@ namespace PamaxieML.Api
                 });
 
             services.AddTransient<TokenGenerator>();
+
+
+            //Checking if the Redis and SQL Database is reachable and all dandy.
+            if (!DbExtensions.SqlDbCheckup(out var sqlErrors))
+            {
+                Console.WriteLine(sqlErrors);
+                Environment.Exit(501);
+            }
+
+            if (!DbExtensions.RedisDbCheckup(out var redisErrors))
+            {
+                Console.WriteLine(redisErrors);
+                Environment.Exit(501);
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+
             app.UseRouting();
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-            
         }
     }
 }

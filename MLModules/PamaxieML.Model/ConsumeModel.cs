@@ -58,7 +58,6 @@ namespace PamaxieML.Model
             // Load model & create prediction engine
             ITransformer mlModel = mlContext.Model.Load(ModelPath, out var modelInputSchema);
             var predEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(mlModel);
-            Console.Clear();
             return predEngine;
         }
     }

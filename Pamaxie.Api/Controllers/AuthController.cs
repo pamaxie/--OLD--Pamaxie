@@ -8,6 +8,7 @@ using PamaxieML.Api.Security;
 using PamaxieML.Api.Data;
 using Pamaxie.Database.Sql.DataClasses;
 using Pamaxie.Extensions;
+using System;
 
 namespace Pamaxie.Api.Controllers
 {
@@ -67,8 +68,17 @@ namespace Pamaxie.Api.Controllers
             
             if (string.IsNullOrEmpty(result)) 
                 return BadRequest(ErrorHandler.BadData());
+            Application appData;
+            try
+            {
+                appData = JsonConvert.DeserializeObject<Application>(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400);
+            }
             
-            Application appData = JsonConvert.DeserializeObject<Application>(result);
+            
 
             if (default(long) == appData.ApplicationId)
                 return BadRequest(ErrorHandler.UnAuthorized());

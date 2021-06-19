@@ -4,6 +4,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using PamaxieML.Model;
 
 namespace PamaxieML.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class VisionController : ControllerBase
@@ -30,6 +32,7 @@ namespace PamaxieML.Api.Controllers
         /// </summary>
         /// <returns>oAuth Token</returns>
         [HttpGet("status")]
+        [AllowAnonymous]
         public ActionResult<string> ProbeApiTask()
         {
             return "API is available";

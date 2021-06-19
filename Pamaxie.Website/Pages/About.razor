@@ -1,0 +1,84 @@
+﻿@page "/about"
+<body id="page-top">
+
+<!-- Header -->
+<header class="masthead">
+    <div class="backdrop">
+        <div class="container d-flex h-100 align-items-center">
+            <div class="mx-auto text-center">
+                <h1 class="text-50 mx-auto mt-2 mb-5" style="font-size: 240%;">Content Detection at your fingertips</h1>
+                <h2 class="text-50 mx-auto mt-2 mb-5 deskformtext" style="font-size: 100%;">
+                    Pamaxie was developed to ensure and verify the security of content and media on the internet.
+                    Allowing developers of chat applications to moderate content of media automatically. Stay tuned for more.
+                </h2>
+                <div class="container-fluid">
+                    <a href="https://github.com/deamonicnet/Pamaxie" class="btn btn-primary-two">View Github</a>
+                    <a href="https://wiki.pamaxie.com/" class="btn btn-primary-two">Read Documentation</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Fancy smancy styling path -->
+<svg style="max-height: 180px; width: 100%; height: 100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 400" preserveAspectRatio="none">
+    <path style="fill: #3F3D56; opacity: 1" d="M0,256L80,256C160,256,320,256,480,224C640,192,800,128,960,133.3C1120,139,1280,213,1360,250.7L1440,288L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z" class="accent-path"></path>
+    <path style="fill: #3F3D56; opacity: 0.4" d="M0,160L40,133.3C80,107,160,53,240,64C320,75,400,149,480,202.7C560,256,640,288,720,293.3C800,299,880,277,960,256C1040,235,1120,213,1200,208C1280,203,1360,213,1400,218.7L1440,224L1440,0L1400,0C1360,0,1280,0,1200,0C1120,0,1040,0,960,0C880,0,800,0,720,0C640,0,560,0,480,0C400,0,320,0,240,0C160,0,80,0,40,0L0,0Z" class="accent-path"></path>
+</svg>
+
+<!-- Project Features Section -->
+<MudCarousel Style="height:700px; padding-left: 10%; padding-right: 10%;" Class="dynheight" ShowArrows="true" ShowDelimiters="false" AutoCycle="false" TData="object">
+    <MudCarouselItem Color="@Color.Primary" Style="padding-top: 150px; overflow: scroll">
+        <div class="d-flex" style="height:100%; display: inline !important;">
+
+
+            <MudText Style="text-align: center; padding-left: 20%; padding-right: 20%" Typo="Typo.h3">Image Recognition</MudText> <br/>
+            
+                        <div class="hideSmall" style="width: 100%">
+                            <img src="img/chat-app.png" alt="ChatApp" class="mg-20" style="display: block; margin-left:auto; margin-right: auto; width: 20%;"/>
+                        </div>
+
+            <MudText Class="mg-10" Style="text-align: center; padding-left: 20%; padding-right: 20%" Typo="Typo.body1">
+                We detect the
+                content of images sent to our API and send you back the results we get and how confident we are about
+                what we think it may be. This means its in your hands to decide what and when you want to intervene and
+                remove content from your media. Our data is returned in percentiles of confidence meaning
+                you can tune things yourself.
+            </MudText>
+            <MudButton Style="display: block; margin-left:auto; margin-right: auto; width: 20%;">More Info</MudButton>
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Color="@Color.Secondary" Style="padding-top: 150px; overflow: scroll">
+        <div class="d-flex" style="height:100%; display: inline !important;">
+            <MudText Style="text-align: center; padding-left: 20%; padding-right: 20%" Typo="Typo.h3">Scan Videos</MudText> <br/>
+            
+                        <div class="hideSmall" style="width: 100%">
+                            <img src="img/bad-video.png" alt="ScanVideo"  class="mg-20" style="display: block; margin-left:auto; margin-right: auto; width: 20%;"/>
+                        </div>
+
+            <MudText Class="mg-10" Style="text-align: center; padding-left: 20%; padding-right: 20%" Typo="Typo.body1">
+                Our software is aiming to scan videos through keyframe extraction and analyze every key frame over our
+                network of image recognition modules quickly. We plan to speed this up to the point where scanning hours
+                of video files can be done in a few minutes if possible.
+            </MudText>
+            <MudButton Style="display: block; margin-left:auto; margin-right: auto; width: 20%;">More Info</MudButton>
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Color="@Color.Tertiary" Style="padding-top: 150px; overflow: scroll">
+        <div class="d-flex" style="height:100%; display: inline !important;">
+            <MudText Style="text-align: center; padding-left: 20%; padding-right: 20%" Typo="Typo.h3">Image Recognition</MudText> <br/>
+            
+                        <div class="hideSmall" style="width: 100%">
+                            <img src="img/file-upload.png" alt="ChatApp" class="mg-20" style="display: block; margin-left:auto; margin-right: auto; width: 20%;"/>
+                        </div>
+
+            <MudText Class="mg-10" Style="text-align: center; padding-left: 20%; padding-right: 20%;" Typo="Typo.body1">
+                We don't only validate the content of files like images or videos though. We aim to validate a wide
+                range of media types including Text, Executables or Audio. Pamaxie is still in development and will be for
+                a while, aiming to achieve effective and fast filtering for more than one type of media.
+            </MudText>
+            <MudButton Style="display: block; margin-left:auto; margin-right: auto; width: 20%;">More Info</MudButton>
+        </div>
+    </MudCarouselItem>
+</MudCarousel>
+</body>

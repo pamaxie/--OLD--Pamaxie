@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pamaxie.Database.Sql;
 
 namespace Pamaxie.Database.Sql.Migrations
 {
     [DbContext(typeof(SqlDbContext))]
-    partial class SqlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210619021730_Initial-Migration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,10 +64,10 @@ namespace Pamaxie.Database.Sql.Migrations
                     b.Property<string>("ApplicationName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Deleted")
+                    b.Property<bool>("Blocked")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("Disabled")
+                    b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("LastAuth")

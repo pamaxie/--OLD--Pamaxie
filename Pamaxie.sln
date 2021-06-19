@@ -33,7 +33,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.Database.Api", "Ass
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.Database.Extensions", "Assemblies\Pamaxie.Database.Extensions\Pamaxie.Database.Extensions.csproj", "{0940B5CF-2D92-4ECA-9EDB-960D470DE036}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.Blazor", "Pamaxie.Blazor\Pamaxie.Blazor.csproj", "{3BF37CBD-5C7D-47A1-9E1A-D223D186DA01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.Website", "Pamaxie.Website\Pamaxie.Website.csproj", "{3BF37CBD-5C7D-47A1-9E1A-D223D186DA01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

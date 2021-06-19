@@ -360,3 +360,5 @@ Pamaxie.Api/appsettings.Development.json
 #END OF FILE
 
 Pamaxie.Website/appsettings.json
+
+Pamaxie.Website/appsettings.Development.json

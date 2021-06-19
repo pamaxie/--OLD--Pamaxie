@@ -7,13 +7,13 @@ namespace Pamaxie.Database.Sql.DataClasses
     public class User
     {
         [Key] 
-        public ulong Id { get; set; }
+        public long Id { get; set; }
+        public string GoogleUserId { get; set; }
         public string Username { get; set; }
         
         [EmailAddress] 
         public string Email { get; set; }
 
-        [Phone] 
-        public string PhoneNumber { get; set; }
+        public bool DeletedAccount { get; set; }
     }
 }

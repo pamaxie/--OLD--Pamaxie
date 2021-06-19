@@ -10,7 +10,7 @@ namespace Pamaxie.Database.Sql
         public DbSet<User> Users { get; set; }
 
         //Tables of all our Registered Applications
-        public DbSet<Application> ApplicationAuthentications { get; set; }
+        public DbSet<Application> Applications { get; set; }
 
         //Tables related to things for URL Filters.
         public DbSet<AdvertisingUrl> AdvertisingUrls { get; set; }
@@ -34,11 +34,10 @@ namespace Pamaxie.Database.Sql
         {
             options.UseSqlServer(Environment.GetEnvironmentVariable("PamaxieSqlDb") ?? string.Empty);
         }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Application>()
-                .HasAlternateKey(k => k.UserId);
+            modelBuilder.Entity<User>().HasAlternateKey(k => k.GoogleUserId);
         }
     }
 }
