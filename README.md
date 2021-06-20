@@ -21,6 +21,3 @@ Our API can be either trained with your own data.
 If you don't want to train your own data, you can just access our API for free by just creating an account on our website. 
 
 ### We will release further updates on the wiki once the API is available for public signup.
-
-[![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=fae49f0cbef2&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge) 
-
