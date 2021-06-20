@@ -1,5 +1,8 @@
 ![**Pamaxie**](https://i.imgur.com/UzSZPs2.png)
 
+[![CodeQL Check](https://github.com/deamonicnet/Pamaxie/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/deamonicnet/Pamaxie/actions/workflows/codeql-analysis.yml)
+[![.NET Build Test](https://github.com/deamonicnet/Pamaxie/actions/workflows/dotnet.yml/badge.svg)](https://github.com/deamonicnet/Pamaxie/actions/workflows/dotnet.yml)  
+
 Documentation for this project can be found at [Pamaxies wiki](https://wiki.pamaxie.com/). API Credentials can be created at [Pamaxies website](https://.pamaxie.com/). Please let us know if the API misbehaves in any way. We will assist you as soon as possible.
 
 ![**Content Detection**](https://i.imgur.com/vMUR0LQ.png)<br/>
@@ -19,5 +22,5 @@ If you don't want to train your own data, you can just access our API for free b
 
 ### We will release further updates on the wiki once the API is available for public signup.
 
-[![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=fae49f0cbef2&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
+[![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=fae49f0cbef2&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge) 
 
