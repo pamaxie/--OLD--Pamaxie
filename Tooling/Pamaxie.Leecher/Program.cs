@@ -1,44 +1,40 @@
-﻿using System;
+﻿using DnsClient;
+using Pamaxie.Leecher.Database;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Security;
 using System.Threading;
 using System.Threading.Tasks;
-using DnsClient;
-using HtmlAgilityPack;
-using Pamaxie.Leecher.Database;
-using Pamaxie.Leecher.Image_Prep;
 
 namespace Pamaxie.Leecher
 {
-    class Program
+    public static class Program
     {
-        public static string OriginFile;
-        public static string ImageDestinationDir;
-        public static string Type;
-        public static int OverallUrls;
-        public static int CurrentUrlIdx;
-        public static int FailedUrls = 0;
-        public static int WorkerThreads = 10;
-        public static bool ShowErrors = false;
-        public static List<Thread> WorkerThreadList;
-        public static Stopwatch ProgressStopwatch;
-        public static string SweepingStep;
+        private static string _originFile;
+        internal static readonly string ImageDestinationDir = string.Empty;
+        private static string _type;
+        private static int _overallUrls;
+        private static int _currentUrlIdx;
+        private static int _failedUrls = 0;
+        private static int _workerThreads = 10;
+        private static bool _showErrors = false;
+        private static List<Thread> _workerThreadList;
+        private static Stopwatch _progressStopwatch;
+        private static string _sweepingStep;
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             //Ask the user for a plaintext file to load the urls from
             while (true)
             {
                 Console.WriteLine(@"Please enter a file including path to read urls from");
-                var originFile = Console.ReadLine();
+                string originFile = Console.ReadLine();
                 if (File.Exists(originFile))
                 {
-                    OriginFile = originFile;
+                    _originFile = originFile;
                     break;
                 }
 
@@ -49,26 +45,25 @@ namespace Pamaxie.Leecher
             while (true)
             {
                 Console.WriteLine(@"Clear out database before continuing? THIS CAN NOT BE UNDONE! (y/N)");
-                var key = Console.ReadKey();
-                switch (key.Key)
+                ConsoleKeyInfo key = Console.ReadKey();
+                switch (key)
                 {
-                    case ConsoleKey.Y:
-                        using (var dbcontext = new SqlDbContext())
+                    case {Key: ConsoleKey.Y}:
+                        using (SqlDbContext dbContext = new())
                         {
-                            var items = dbcontext.Label.ToList();
-                            dbcontext.RemoveRange(items);
-                            dbcontext.SaveChanges();
+                            List<LabelData> items = dbContext.Label.ToList();
+                            dbContext.RemoveRange(items);
+                            dbContext.SaveChanges();
                         }
                         break;
-                    case ConsoleKey.N:
+                    case {Key: ConsoleKey.N}:
                         break;
-                    case ConsoleKey.Enter:
+                    case {Key: ConsoleKey.Enter}:
                         break;
                     default:
                         Console.WriteLine("Unexpected input detected please try again.");
                         continue;
                 }
-
                 break;
             }
 
@@ -77,19 +72,18 @@ namespace Pamaxie.Leecher
             {
                 Console.WriteLine(
                     @"Display error messages (These may be unreadable because our Scraper is quite quick on his legs)? (y/N)");
-                var key = Console.ReadKey();
-                switch (key.Key)
+                ConsoleKeyInfo key = Console.ReadKey();
+                switch (key)
                 {
-                    case ConsoleKey.Y:
-                        ShowErrors = true;
+                    case {Key: ConsoleKey.Y}:
+                        _showErrors = true;
                         break;
-                    case ConsoleKey.Enter:
+                    case {Key: ConsoleKey.Enter}:
                         break;
                     default:
                         Console.WriteLine("Unexpected input detected please try again.");
                         continue;
                 }
-
                 break;
             }
 
@@ -105,31 +99,31 @@ namespace Pamaxie.Leecher
                                   "6: advertising\n" +
                                   "7: other\n" +
                                   "Options 1-7: \n");
-                var key = Console.ReadKey();
-                switch (key.Key)
+                ConsoleKeyInfo key = Console.ReadKey();
+                switch (key)
                 {
-                    case ConsoleKey.D1:
-                        Type = "adult";
+                    case {Key: ConsoleKey.D1}:
+                        _type = "adult";
                         break;
-                    case ConsoleKey.D2:
-                        Type = "marketing";
+                    case {Key: ConsoleKey.D2}:
+                        _type = "marketing";
                         break;
-                    case ConsoleKey.D3:
-                        Type = "banking";
+                    case {Key: ConsoleKey.D3}:
+                        _type = "banking";
                         break;
-                    case ConsoleKey.D4:
-                        Type = "hacking";
+                    case {Key: ConsoleKey.D4}:
+                        _type = "hacking";
                         break;
-                    case ConsoleKey.D5:
-                        Type = "mixed-adult";
+                    case {Key: ConsoleKey.D5}:
+                        _type = "mixed-adult";
                         break;
-                    case ConsoleKey.D6:
-                        Type = "advertising";
+                    case {Key: ConsoleKey.D6}:
+                        _type = "advertising";
                         break;
-                    case ConsoleKey.D7:
+                    case {Key: ConsoleKey.D7}:
                         while (true)
                         {
-                            var type = Console.ReadLine();
+                            string type = Console.ReadLine();
                             if (string.IsNullOrEmpty(type))
                             {
                                 Console.WriteLine("Type can not be empty please enter a valid type.");
@@ -137,16 +131,16 @@ namespace Pamaxie.Leecher
                             }
 
                             Console.WriteLine($"Do you want to set the type to: {type}? (Y/n)");
-                            var typeConfirm = Console.ReadKey();
-                            switch (typeConfirm.Key)
+                            ConsoleKeyInfo typeConfirm = Console.ReadKey();
+                            switch (typeConfirm)
                             {
-                                case ConsoleKey.Y:
-                                    Type = type;
+                                case {Key: ConsoleKey.Y}:
+                                    _type = type;
                                     break;
-                                case ConsoleKey.Enter:
-                                    Type = type;
+                                case {Key: ConsoleKey.Enter}:
+                                    _type = type;
                                     break;
-                                case ConsoleKey.N:
+                                case {Key: ConsoleKey.N}:
                                     type = string.Empty;
                                     break;
                                 default:
@@ -154,13 +148,10 @@ namespace Pamaxie.Leecher
                                     continue;
                             }
                         }
-
-                        break;
                     default:
                         Console.WriteLine("Unknown type please enter a type from the list above");
                         continue;
                 }
-
                 break;
             }
 
@@ -169,25 +160,24 @@ namespace Pamaxie.Leecher
             {
                 Console.WriteLine(
                     "Please enter an amount of Worker-Threads to use. Please remember that we do not recommend this to exceed your actual Threads on your machine.\n");
-                if (!(int.TryParse(Console.ReadLine(), out var num)))
+                if (!(int.TryParse(Console.ReadLine(), out int num)))
                 {
                     Console.WriteLine("Invalid number entered. Please enter a non floating point integer number");
                 }
-
-                WorkerThreads = num;
+                _workerThreads = num;
                 break;
             }
 
             //Validate settings exist
-            if (OriginFile == null)
+            if (_originFile == null)
             {
                 Console.WriteLine(@"Hit unexpected problem. Please try again.");
                 return;
             }
 
-            var text = File.ReadAllLines(OriginFile).ToList();
-            OverallUrls = text.Count;
-            switch (OverallUrls)
+            List<string> text = File.ReadAllLines(_originFile).ToList();
+            _overallUrls = text.Count;
+            switch (_overallUrls)
             {
                 //Has less than 1 Url so basically the file is empty.
                 case < 1:
@@ -199,35 +189,34 @@ namespace Pamaxie.Leecher
                 //Ask user if they want to attempt to separate the data via CSV separation cause 1 URL seems quite low...
                 case 1:
                 {
-                    var attemptCsvSeperation = false;
+                    bool attemptCsvSeparation = false;
                     while (true)
                     {
                         Console.WriteLine("Only found a single line attempt to separate over commas (CSV File)? (Y/n)");
-                        var doCsvConfirm = Console.ReadKey();
-                        switch (doCsvConfirm.Key)
+                        ConsoleKeyInfo doCsvConfirm = Console.ReadKey();
+                        switch (doCsvConfirm)
                         {
-                            case ConsoleKey.Y:
-                                attemptCsvSeperation = true;
+                            case {Key: ConsoleKey.Y}:
+                                attemptCsvSeparation = true;
                                 break;
-                            case ConsoleKey.N:
+                            case {Key: ConsoleKey.N}:
                                 Console.WriteLine("Not doing CSV separation and continuing with scraping progress..");
                                 break;
-                            case ConsoleKey.Enter:
+                            case {Key: ConsoleKey.Enter}:
                                 break;
                             default:
                                 Console.WriteLine("Unexpected input detected please try again.");
                                 continue;
                         }
-
                         break;
                     }
 
-                    if (!attemptCsvSeperation)
+                    if (!attemptCsvSeparation)
                     {
                         Console.WriteLine(
                             "Attempting to separate over commas. We do not recommend feeding CSV files into here.");
-                        List<string> newTextList = new List<string>();
-                        foreach (var line in text.ToList())
+                        List<string> newTextList = new();
+                        foreach (string line in text.ToList())
                         {
                             newTextList.AddRange(line.Split(","));
                         }
@@ -236,29 +225,27 @@ namespace Pamaxie.Leecher
                         {
                             Console.WriteLine(
                                 $"Found: {newTextList.Count} lines after separation. Continue or exit to re-validate data? (Y/n)");
-                            var doCsvConfirm = Console.ReadKey();
-                            switch (doCsvConfirm.Key)
+                            ConsoleKeyInfo doCsvConfirm = Console.ReadKey();
+                            switch (doCsvConfirm)
                             {
-                                case ConsoleKey.Y:
+                                case {Key: ConsoleKey.Y}:
                                     Console.WriteLine("Press any key to exit...");
                                     Console.ReadKey();
                                     Environment.Exit(1);
                                     break;
-                                case ConsoleKey.N:
+                                case {Key: ConsoleKey.N}:
                                     Console.WriteLine($"Continuing with {newTextList.Count} Urls");
                                     break;
-                                case ConsoleKey.Enter:
+                                case {Key: ConsoleKey.Enter}:
                                     Console.WriteLine($"Continuing with {newTextList.Count} Urls");
                                     break;
                                 default:
                                     Console.WriteLine("Unexpected input detected please try again.");
                                     continue;
                             }
-
                             break;
                         }
                     }
-
                     break;
                 }
             }
@@ -267,35 +254,33 @@ namespace Pamaxie.Leecher
             //Ask the user if they want to do a sweeping of Urls before grabbing their content images as well
             while (true)
             {
-                Console.WriteLine(@"Sweep urls (Validate their Records exist and they are reachable) before Scraping their content? This results in less errors but makes scraping on large lists a lot slower... (n/Y)");
-                var key = Console.ReadKey();
-                switch (key.Key)
+                Console.WriteLine(
+                    @"Sweep urls (Validate their Records exist and they are reachable) before Scraping their content? This results in less errors but makes scraping on large lists a lot slower... (n/Y)");
+                ConsoleKeyInfo key = Console.ReadKey();
+                switch (key)
                 {
-                    case ConsoleKey.Y:
+                    case {Key: ConsoleKey.Y}:
                         break;
-                    case ConsoleKey.N:
+                    case {Key: ConsoleKey.N}:
                         skipSweep = true;
                         break;
-                    case ConsoleKey.Enter:
+                    case {Key: ConsoleKey.Enter}:
                         break;
                     default:
                         Console.WriteLine("Unexpected input detected please try again.");
                         continue;
                 }
-
                 break;
             }
 
-            var backgroundThreadRunning = true;
+            bool backgroundThreadRunning = true;
             Thread uiThread;
-            var sweepedUrls = new List<string>();
+            List<string> sweptUrls = new();
             if (!skipSweep)
             {
-                ProgressStopwatch = new Stopwatch();
-                ProgressStopwatch.Start();
+                _progressStopwatch = new Stopwatch();
+                _progressStopwatch.Start();
                 
-
-
                 Console.WriteLine("Starting multi step sweep");
                 
                 for (int i = 0; i < 6; i++)
@@ -315,74 +300,73 @@ namespace Pamaxie.Leecher
                 uiThread.Start();
 
                 //Check if DNS records exist
-                SweepingStep = "checking each domains DNS Records";
+                _sweepingStep = "checking each domains DNS Records";
                 Parallel.ForEach(text, (domain) =>
                 {
-                    var isIp = false;
-                    CurrentUrlIdx++;
+                    bool isIp = false;
+                    _currentUrlIdx++;
 
-                    if (IPAddress.TryParse(domain, out _))
-                        isIp = true;
+                    if (IPAddress.TryParse(domain, out _)) isIp = true;
 
                     if (!isIp)
                     {
                         try
                         {
-                            var client = new LookupClient();
+                            LookupClient client = new();
 
-                            var hostEntry = client.GetHostEntry(domain);
+                            IPHostEntry hostEntry = client.GetHostEntry(domain);
 
                             //Host has no DNS entries thus it will not be looked up.
                             if (hostEntry == null || hostEntry.AddressList.Length < 1)
                             {
-                                FailedUrls++;
+                                _failedUrls++;
                                 return;
                             }
 
                             //Add if there are host entries
-                            sweepedUrls.Add(domain);
+                            sweptUrls.Add(domain);
                         }
                         catch (DnsResponseException)
                         {
-                            FailedUrls++;
+                            _failedUrls++;
                         }
 
                     }
 
                     //Add if there are no host entries.
-                    sweepedUrls.Add(domain);
+                    sweptUrls.Add(domain);
                 });
 
                 //Reset progress for next step
                 text.Clear();
-                text = sweepedUrls;
-                OverallUrls = text.Count;
-                CurrentUrlIdx = 0;
-                FailedUrls = 0;
+                text = sweptUrls;
+                _overallUrls = text.Count;
+                _currentUrlIdx = 0;
+                _failedUrls = 0;
 
                 //Check if Domains can be reached over http or https
-                SweepingStep = "checking which domains are reachable";
+                _sweepingStep = "checking which domains are reachable";
                 Parallel.ForEach(text, (domain) =>
                 {
-                    var exists = false;
-                    CurrentUrlIdx++;
+                    _currentUrlIdx++;
 
                     try
                     {
-                        exists = UrlInteraction.UrlExists($"http://{domain}", out var resUri);
+                        bool exists = UrlInteraction.UrlExists($"http://{domain}", out string resUri);
                         if (exists)
                         {
-                            sweepedUrls.Add(resUri);
+                            sweptUrls.Add(resUri);
                             return;
                         }
                     }
-                    catch (Exception ex)
+                    catch
                     {
+                        // ignored
                     }
 
-                    FailedUrls++;
+                    _failedUrls++;
                 });
-                ProgressStopwatch.Stop();
+                _progressStopwatch.Stop();
                 backgroundThreadRunning = false;
 
                 //Waiting for threads to join again
@@ -396,77 +380,72 @@ namespace Pamaxie.Leecher
                 Thread.Sleep(500);
 
                 //Reset out Progress and the Worker Thread List
-                ProgressStopwatch.Reset();
-                CurrentUrlIdx = 0;
-                OverallUrls = sweepedUrls.Count;
+                _progressStopwatch.Reset();
+                _currentUrlIdx = 0;
+                _overallUrls = sweptUrls.Count;
                 text.Clear();
-                text.AddRange(sweepedUrls);
+                text.AddRange(sweptUrls);
             }
             else
             {
-                foreach (var url in text)
+                for (int index = 0; index < text.Count; index++)
                 {
-                    sweepedUrls.Add($"http://{url}");
+                    string url = text[index];
+                    sweptUrls.Add($"http://{url}");
                 }
 
-                ProgressStopwatch = new Stopwatch();
-                ProgressStopwatch.Start();
+                _progressStopwatch = new Stopwatch();
+                _progressStopwatch.Start();
             }
 
-            OverallUrls = sweepedUrls.Count;
-            var lists = new List<List<string>>();
-            var listSize = OverallUrls / WorkerThreads;
+            _overallUrls = sweptUrls.Count;
+            List<List<string>> lists = new();
+            int listSize = _overallUrls / _workerThreads;
             if (listSize == 0) listSize = 1;
-            WorkerThreadList = new List<Thread>();
+            _workerThreadList = new List<Thread>();
             lists.Clear();
 
-
-            for (var i = 0; i < OverallUrls; i += listSize)
+            for (int i = 0; i < _overallUrls; i += listSize)
             {
-                lists.Add(sweepedUrls.GetRange(i, Math.Min(listSize, OverallUrls - i)));
+                lists.Add(sweptUrls.GetRange(i, Math.Min(listSize, _overallUrls - i)));
             }
-            WorkerThreadList.Clear();
+            _workerThreadList.Clear();
             backgroundThreadRunning = true;
 
-
             //Runs a thread pool for the split up lists to basically gather all URLs and their respective website text.
-            foreach (var list in lists)
+            foreach (List<string> list in lists)
             {
-                var t = new Thread(() =>
+                Thread t = new(() =>
                 {
                     //Parallel.ForEach(text, (url) =>
-                    foreach (var url in list)
+                    foreach (string url in list)
                     {
-                        var newurl = "https://youporn.com";
-
-
-                        CurrentUrlIdx++;
-
-
-                        var webText = UrlInteraction.GrabText(newurl);
+                        const string newUrl = "https://youporn.com";
+                        _currentUrlIdx++;
+                        string webText = UrlInteraction.GrabText(newUrl);
 
                         if (string.IsNullOrEmpty(webText))
                         {
-                            if (ShowErrors)
-                                Console.WriteLine(
-                                    @"Text is empty assuming website is down.",
-                                    Color.Red);
+                            if (_showErrors)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine( @"Text is empty assuming website is down.");
+                                Console.ForegroundColor = ConsoleColor.Black;
+                            }
                             continue;
                         }
 
                         try
                         {
-                            using var dbContext = new SqlDbContext();
-                            dbContext.Label.Add(new LabelData() {Content = webText, Url = url, UrlType = Type});
+                            using SqlDbContext dbContext = new();
+                            dbContext.Label.Add(new LabelData() {Content = webText, Url = url, UrlType = _type});
                             dbContext.SaveChangesAsync();
                         }
-                        catch (ObjectDisposedException)
-                        {
-                        }
+                        catch (ObjectDisposedException) { }
                     } //);
                 });
                 t.Start();
-                WorkerThreadList.Add(t);
+                _workerThreadList.Add(t);
             }
 
             uiThread = new Thread((() =>
@@ -480,7 +459,7 @@ namespace Pamaxie.Leecher
             uiThread.Start();
 
             //Join threads back into main thread
-            foreach (var thread in WorkerThreadList)
+            foreach (Thread thread in _workerThreadList)
             {
                 do
                 {
@@ -491,49 +470,49 @@ namespace Pamaxie.Leecher
 
             //Waiting for everything to rejoin together and update threads to stop
             Thread.Sleep(500);
-            ProgressStopwatch.Stop();
+            _progressStopwatch.Stop();
             Console.WriteLine("Finished scraping URLs. Press any key to exit...");
             Console.ReadKey();
         }
-
+        
         /// <summary>
         /// Displays the current sweeping progress to attach http and https to the urls
         /// </summary>
         private static void DrawSweepProgress()
         {
-            if (CurrentUrlIdx == 0) return;
+            if (_currentUrlIdx == 0) return;
             Console.SetCursorPosition(0, 0);
             Console.CursorVisible = false;
-            var tickPerObject = ProgressStopwatch.ElapsedTicks / CurrentUrlIdx;
-            var remainingTime = TimeSpan.FromTicks(tickPerObject * (OverallUrls - CurrentUrlIdx));
-            var progressBar = GetProgress((((float)CurrentUrlIdx / (float)OverallUrls) * 100) *2, 200);
+            long tickPerObject = _progressStopwatch.ElapsedTicks / _currentUrlIdx;
+            TimeSpan remainingTime = TimeSpan.FromTicks(tickPerObject * (_overallUrls - _currentUrlIdx));
+            string progressBar = GetProgress((((float)_currentUrlIdx / (float)_overallUrls) * 100) *2, 200);
             Console.WriteLine("Overall sweeping progress of Urls\n" +
-                              $"Currently we are: {SweepingStep}\n" +
-                              $"Failed to validate: {((float)FailedUrls / (float)OverallUrls) * 100}%\n" +
+                              $"Currently we are: {_sweepingStep}\n" +
+                              $"Failed to validate: {((float)_failedUrls / (float)_overallUrls) * 100}%\n" +
                               $"Remaining minutes: {remainingTime:c}\n" +
-                              $"Sweeped {CurrentUrlIdx}/{OverallUrls} so far.\n" +
+                              $"Swept {_currentUrlIdx}/{_overallUrls} so far.\n" +
                               $"{progressBar}\n");
         }
 
         /// <summary>
         /// Draws the overall progress of scraping the website content.
         /// </summary>
-        public static void DrawOverallProgress()
+        private static void DrawOverallProgress()
         {
-            if (CurrentUrlIdx == 0) return;
+            if (_currentUrlIdx == 0) return;
             Console.SetCursorPosition(0, 0);
             Console.CursorVisible = false;
-            var progressBar = GetProgress((((float)CurrentUrlIdx / (float)OverallUrls) * 100) * 2, 200);
-            var tickPerObject = ProgressStopwatch.ElapsedTicks / CurrentUrlIdx;
-            var remainingTime = TimeSpan.FromTicks(tickPerObject * (OverallUrls - CurrentUrlIdx));
-            var runningThreads = WorkerThreadList.Count(x => x.IsAlive);
-            var progressStopWatch = ProgressStopwatch.Elapsed.ToString("g");
+            string progressBar = GetProgress(((float)_currentUrlIdx / _overallUrls) * 100 * 2, 200);
+            long tickPerObject = _progressStopwatch.ElapsedTicks / _currentUrlIdx;
+            TimeSpan remainingTime = TimeSpan.FromTicks(tickPerObject * (_overallUrls - _currentUrlIdx));
+            int runningThreads = _workerThreadList.Count(x => x.IsAlive);
+            string progressStopWatch = _progressStopwatch.Elapsed.ToString("g");
             Console.WriteLine("Overall scraping progress\n" +
                               $"Overall runtime is: {progressStopWatch}\n" +
                               $"Runtime per object is: {tickPerObject} Ticks/Url\n" +
                               $"Remaining Time is: {remainingTime:c}\n" +
                               $"Still running worker threads: {runningThreads}\n" +
-                              $"Scraped {CurrentUrlIdx}/{OverallUrls} so far.\n" +
+                              $"Scraped {_currentUrlIdx}/{_overallUrls} so far.\n" +
                               $"{progressBar}\n");
         }
 
@@ -541,11 +520,11 @@ namespace Pamaxie.Leecher
         /// Displays Progress
         /// </summary>
         /// <param name="currentProgress"></param>
+        /// <param name="width"></param>
         /// <returns></returns>
-        public static string GetProgress(double currentProgress, int width)
+        private static string GetProgress(double currentProgress, int width)
         {
-            var progressBar = string.Empty;
-
+            string progressBar = string.Empty;
             for (int i = 0; i < width; i++)
             {
                 if (currentProgress * 100 / width > 1)
@@ -557,9 +536,7 @@ namespace Pamaxie.Leecher
 
                 progressBar += "░";
             }
-
             progressBar += string.Empty;
-
             return progressBar;
         }
     }

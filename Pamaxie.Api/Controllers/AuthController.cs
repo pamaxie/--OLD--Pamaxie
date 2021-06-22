@@ -33,7 +33,7 @@ namespace Pamaxie.Api.Controllers
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
 
-            Application? appData = JsonConvert.DeserializeObject<Application>(result);
+            Application appData = JsonConvert.DeserializeObject<Application>(result);
 
             if (string.IsNullOrEmpty(appData?.AppToken) || default == appData.ApplicationId)
                 return Unauthorized(ErrorHandler.UnAuthorized());

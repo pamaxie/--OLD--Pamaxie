@@ -52,7 +52,7 @@ namespace PamaxieML.Api.Controllers
                 return JsonConvert.SerializeObject(knownResult);
             }
 
-            FileInfo? image = ImageProcessing.DownloadFile(result);
+            FileInfo image = ImageProcessing.DownloadFile(result);
             // Add input data
             ModelInput input = new()
             {

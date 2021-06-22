@@ -5,20 +5,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Pamaxie.Api.Security;
+using System.Text;
 
 namespace Pamaxie.Api
 {
     public class Startup
     {
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         /// <summary>
         /// Gets called by the runtime to add Services to the container
@@ -55,7 +54,7 @@ namespace Pamaxie.Api
         /// </summary>
         /// <param name="app"><see cref="IApplicationBuilder"/> Builder</param>
         /// <param name="env">Hosting Enviorement</param>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment()) 
                 app.UseDeveloperExceptionPage();

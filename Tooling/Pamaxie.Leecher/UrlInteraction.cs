@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Security;
-using System.Text;
-using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Pamaxie.Leecher.Image_Prep;
+using static System.String;
 
 namespace Pamaxie.Leecher
 {
-    public class UrlInteraction
+    public static class UrlInteraction
     {
         /// <summary>
         /// Grabs all the plaintext from a Url
@@ -21,14 +19,14 @@ namespace Pamaxie.Leecher
         {
             try
             {
-                using System.Net.WebClient client = new System.Net.WebClient();
-                if (!UrlExists(url, out url)) return string.Empty;
-                var htmlContent = client.DownloadString(url);
+                using WebClient client = new();
+                if (!UrlExists(url, out url)) return Empty;
+                string htmlContent = client.DownloadString(url);
                 return GetTextsFromHtml(htmlContent);
             }
             catch (WebException)
             {
-                return string.Empty;
+                return Empty;
             }
         }
 
@@ -40,21 +38,14 @@ namespace Pamaxie.Leecher
         /// <returns></returns>
         public static bool UrlExists(string url, out string redirectUri)
         {
-            redirectUri = string.Empty;
+            redirectUri = Empty;
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
             req.AllowAutoRedirect = true;
             //Ignore certificate errors.
-            req.ServerCertificateValidationCallback += (sender, certificate, chain, errors) =>
-            {
-                // local dev, just approve all certs
-                return errors == SslPolicyErrors.None;
-            };
+            req.ServerCertificateValidationCallback += (sender, certificate, chain, errors) => errors == SslPolicyErrors.None;
             HttpWebResponse res = (HttpWebResponse)req.GetResponse();
             redirectUri = res.ResponseUri.AbsoluteUri;
-            if (res.StatusCode == HttpStatusCode.OK)
-                return true;
-            else
-                return false;
+            return res.StatusCode == HttpStatusCode.OK;
         }
 
         /// <summary>
@@ -64,9 +55,8 @@ namespace Pamaxie.Leecher
         /// <returns></returns>
         private static string GetTextsFromHtml(string html)
         {
-            if (string.IsNullOrEmpty(html))
-                return "";
-            var htmlDoc = new HtmlDocument();
+            if (IsNullOrEmpty(html)) return "";
+            HtmlDocument htmlDoc = new();
             htmlDoc.LoadHtml(html);
             return GetTextsFromNode(htmlDoc.DocumentNode.ChildNodes);
         }
@@ -79,25 +69,22 @@ namespace Pamaxie.Leecher
         private static string GetTextsFromNode(HtmlNodeCollection nodes)
         {
             string texts = "";
-            foreach (var node in nodes)
+            foreach (HtmlNode node in nodes)
             {
-                if (node.Name.ToLowerInvariant() == "style")
-                    continue;
+                if (node.Name.ToLowerInvariant() == "style") continue;
                 if (node.HasChildNodes)
                 {
-                    texts = texts + GetTextsFromNode(node.ChildNodes);
+                    texts += GetTextsFromNode(node.ChildNodes);
                 }
                 else
                 {
-                    var innerText = node.InnerText;
-                    if (!string.IsNullOrWhiteSpace(innerText))
-                    {
-                        if (node.Name.ToLowerInvariant() == "span")
+                    string innerText = node.InnerText;
+                    if (IsNullOrWhiteSpace(innerText)) continue;
+                    if (node.Name.ToLowerInvariant() == "span")
 
-                            texts = texts + " " + node.InnerText + "\n";
-                        else
-                            texts = texts + node.InnerText;
-                    }
+                        texts = texts + " " + node.InnerText + "\n";
+                    else
+                        texts += node.InnerText;
                 }
             }
 
@@ -111,19 +98,19 @@ namespace Pamaxie.Leecher
         public static void GrabAllImages(string url)
         {
             // declare html document
-            var document = new HtmlWeb().Load(url);
+            HtmlDocument document = new HtmlWeb().Load(url);
 
             // now using LINQ to grab/list all images from website
-            var imageUrls = document.DocumentNode.Descendants("img")
+            string[] imageUrls = document.DocumentNode.Descendants("img")
                 .Select(e => e.GetAttributeValue("src", null))
-                .Where(s => !String.IsNullOrEmpty(s)).ToArray();
+                .Where(s => !IsNullOrEmpty(s)).ToArray();
 
             if (imageUrls.Length == 0) return;
             // now showing all images from web page one by one
-            foreach (var item in imageUrls)
+            foreach (string item in imageUrls)
             {
-                var file = ImagePreparation.DownloadFile(item);
-                var preppedFile = ImagePreparation.PrepareFile(file?.FullName);
+                FileInfo file = ImagePreparation.DownloadFile(item);
+                FileInfo preppedFile = ImagePreparation.PrepareFile(file?.FullName);
                 preppedFile.MoveTo(Program.ImageDestinationDir + "/" + preppedFile.Name + "." + preppedFile.Extension);
             }
         }

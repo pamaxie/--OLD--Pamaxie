@@ -1,10 +1,5 @@
-using CryptSharp.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
 using Pamaxie.Api.Data;
 using Pamaxie.Api.Security;
 

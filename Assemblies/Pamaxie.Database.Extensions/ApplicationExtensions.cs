@@ -1,11 +1,10 @@
-﻿using Pamaxie.Database.Sql;
+﻿using Pamaxie.Database.Extensions.Basic;
+using Pamaxie.Database.Sql;
 using Pamaxie.Database.Sql.DataClasses;
-using System.Diagnostics;
-using System.Linq;
 using System;
 using System.Collections.Generic;
-using Pamaxie.Database.Extensions.Basic;
-using Pamaxie.Database.Extensions.Data;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Pamaxie.Extensions
 {
@@ -18,14 +17,14 @@ namespace Pamaxie.Extensions
         /// <returns></returns>
         public static List<Application> GetApplications(long userId)
         {
-            using var dbContext = new SqlDbContext();
+            using SqlDbContext dbContext = new();
             return dbContext.Applications.Where(x => x.UserId == userId).ToList();
         }
 
         public static long GetLastIndex()
         {
-            using var dbContext = new SqlDbContext();
-            var application = dbContext.Applications.OrderBy(key => key.ApplicationId).LastOrDefault()?.ApplicationId;
+            using SqlDbContext dbContext = new();
+            long? application = dbContext.Applications.OrderBy(key => key.ApplicationId).LastOrDefault()?.ApplicationId;
             return application ?? 1;
         }
 
@@ -38,13 +37,13 @@ namespace Pamaxie.Extensions
         public static bool CreateApplication(Application application, out Application createdApplication)
         {
             createdApplication = null;
-            using var dbContext = new SqlDbContext();
+            using SqlDbContext dbContext = new();
             try
             {
-                application.ApplicationId = default(long);
+                application.ApplicationId = default;
                 application.AppTokenHash = BCrypt.Net.BCrypt.HashPassword(application.AppToken, ByCrptExt.CalculateSaltCost());
                 application.AppToken = string.Empty;
-                var dbApp = dbContext.Applications.Add(new Application { 
+                EntityEntry<Application> dbApp = dbContext.Applications.Add(new Application { 
                     ApplicationId = application.ApplicationId,
                     ApplicationName = application.ApplicationName,
                     AppTokenHash = application.AppTokenHash,
@@ -71,10 +70,9 @@ namespace Pamaxie.Extensions
         /// <returns><see cref="bool"/> if operation was successful</returns>
         public static bool SetApplicationStatus(this Application application, bool enabled)
         {
-            using var dbContext = new SqlDbContext();
-            var dbApp = dbContext.Applications.FirstOrDefault(x => x.ApplicationId == application.ApplicationId);
-            if (dbApp == null)
-                return false;
+            using SqlDbContext dbContext = new();
+            Application dbApp = dbContext.Applications.FirstOrDefault(x => x.ApplicationId == application.ApplicationId);
+            if (dbApp == null) return false;
 
             //Sets the application to be disabled. This prevents login attempts 
             dbApp.Disabled = !enabled;
@@ -88,10 +86,9 @@ namespace Pamaxie.Extensions
         /// <returns><see cref="bool"/> if operation was successful</returns>
         public static bool DeleteApplication(this Application application)
         {
-            using var dbContext = new SqlDbContext();
-            var dbApp = dbContext.Applications.FirstOrDefault(x => x.ApplicationId == application.ApplicationId);
-            if (dbApp == null)
-                return false;
+            using SqlDbContext dbContext = new();
+            Application dbApp = dbContext.Applications.FirstOrDefault(x => x.ApplicationId == application.ApplicationId);
+            if (dbApp == null) return false;
 
             //Set the column to deleted and clear / anonymize its values
             dbApp.LastAuth = DateTime.MinValue;

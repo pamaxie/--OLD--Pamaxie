@@ -1,10 +1,11 @@
-﻿using Pamaxie.Database.Sql;
-using System.Linq;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore;
-using System;
+using Pamaxie.Database.Sql;
 using StackExchange.Redis;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Pamaxie.Database.Extensions
 {
@@ -18,25 +19,22 @@ namespace Pamaxie.Database.Extensions
         public static bool SqlDbCheckup(out string errorReason)
         {
             errorReason = string.Empty;
-            using var dbContext = new SqlDbContext();
+            using SqlDbContext dbContext = new();
             if (!dbContext.Database.CanConnect())
             {
                 errorReason += "SQL Connection was not possible. Please ensure the value is set. For configuration examples please view our documentation at https://wiki.pamaxie.com";
                 return false;
             }
-            var migrationsAssembly = dbContext.GetService<IMigrationsAssembly>();
-            var historyRepository = dbContext.GetService<IHistoryRepository>();
-            var all = migrationsAssembly.Migrations.Keys;
-            var applied = historyRepository.GetAppliedMigrations().Select(r => r.MigrationId);
-            var pending = all.Except(applied).ToList();;
+            IMigrationsAssembly migrationsAssembly = dbContext.GetService<IMigrationsAssembly>();
+            IHistoryRepository historyRepository = dbContext.GetService<IHistoryRepository>();
+            IEnumerable<string> all = migrationsAssembly.Migrations.Keys;
+            IEnumerable<string> applied = historyRepository.GetAppliedMigrations().Select(r => r.MigrationId);
+            List<string> pending = all.Except(applied).ToList();;
             Console.WriteLine("Checking if database exists...");
-            if (dbContext.Database.EnsureCreated())
-            {
-                Console.WriteLine("SQL Database was created and schemas were applied");
-            }
+            if (dbContext.Database.EnsureCreated()) Console.WriteLine("SQL Database was created and schemas were applied");
 
-            var applyMigrations = Environment.GetEnvironmentVariable("ApplyMigrations");
-            bool.TryParse(applyMigrations, out var doMigration);
+            string applyMigrations = Environment.GetEnvironmentVariable("ApplyMigrations");
+            bool.TryParse(applyMigrations, out bool doMigration);
             if (!pending.Any()) return true;
             Console.WriteLine($"{pending.Count} Pending Migrations were found.");
             if (!doMigration)
@@ -51,14 +49,13 @@ namespace Pamaxie.Database.Extensions
                 Console.WriteLine("Migrations were applied successfully");
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 Console.WriteLine(string.Empty);
                 errorReason += $"Failed automatically applying {pending.Count} migrations. Please ensure your database is properly configured.\n";
                 return false;
             }
         }
-
 
         /// <summary>
         /// Verifies the connection to the Redis Database
@@ -68,7 +65,7 @@ namespace Pamaxie.Database.Extensions
         public static bool RedisDbCheckup(out string errorReason)
         {
             errorReason = string.Empty;
-            var connectionMultiplexer =
+            ConnectionMultiplexer connectionMultiplexer =
 #if DEBUG
             ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariable("PamaxiePublicRedisAddr") ?? string.Empty);
 #else
@@ -76,7 +73,7 @@ namespace Pamaxie.Database.Extensions
 #endif
             if (connectionMultiplexer.IsConnected)
             {
-                var db = connectionMultiplexer.GetDatabase();
+                IDatabase db = connectionMultiplexer.GetDatabase();
 
                 if (!db.StringSet("testKey", "testValue"))
                 {

@@ -25,7 +25,7 @@ namespace Pamaxie.Database.Redis.DataClasses
         /// <summary>
         /// Image hash for reading the data from the Database
         /// </summary>
-        string MediaHash { get; set; }
+        private string MediaHash { get; }
 
         /// <summary>
         /// The data for the image
@@ -36,15 +36,13 @@ namespace Pamaxie.Database.Redis.DataClasses
         {
             get
             {
-                if (_data != null)
-                    return _data;
+                if (_data != null) return _data;
 
-                if (MediaHash == null)
-                    throw new InvalidOperationException("Cannot get Data when image hash is null or not set");
+                if (MediaHash == null) throw new InvalidOperationException("Cannot get Data when image hash is null or not set");
 
-                IDatabase db = Pamaxie.Database.Redis.RedisData.Redis.GetDatabase();
-                var rawData = db.StringGet(MediaHash);
-                var data = JsonConvert.DeserializeObject<MediaData>(rawData);
+                IDatabase db = RedisData.Redis.GetDatabase();
+                RedisValue rawData = db.StringGet(MediaHash);
+                MediaData data = JsonConvert.DeserializeObject<MediaData>(rawData);
                 _data = data;
                 return data;
             }
@@ -54,13 +52,13 @@ namespace Pamaxie.Database.Redis.DataClasses
                 {
                     throw new InvalidOperationException("Cannot set Data when image Hash is null or not set");
                 }
-                if (Equals(_data, value))
-                    return;
+                if (Equals(_data, value)) return;
 
-                IDatabase db = Pamaxie.Database.Redis.RedisData.Redis.GetDatabase();
-                var mediaData = JsonConvert.SerializeObject(value);
+                IDatabase db = RedisData.Redis.GetDatabase();
+                string mediaData = JsonConvert.SerializeObject(value);
 
-                //Delete database data after 90 days because accessing the data is not really relevant to use anymore (we don't wanna build a database on peoples pictures after all) if you do feel free to remove the flags.
+                //Delete database data after 90 days because accessing the data is not really relevant to use anymore
+                //(we don't wanna build a database on peoples pictures after all) if you do feel free to remove the flags.
                 db.StringSet(MediaHash, mediaData, new TimeSpan(90, 0, 0, 0, 0), When.Always, CommandFlags.FireAndForget);
                 _data = value;
             }
@@ -75,9 +73,8 @@ namespace Pamaxie.Database.Redis.DataClasses
             try
             {
                 IDatabase db = RedisData.Redis.GetDatabase();
-                var rawData = db.StringGet(MediaHash);
-                if (string.IsNullOrEmpty(rawData))
-                    return false;
+                RedisValue rawData = db.StringGet(MediaHash);
+                if (string.IsNullOrEmpty(rawData)) return false;
 
                 data = JsonConvert.DeserializeObject<MediaData>(rawData);
                 _data = data;
@@ -91,7 +88,6 @@ namespace Pamaxie.Database.Redis.DataClasses
             }
         }
     }
-
 
     public class MediaData
     {

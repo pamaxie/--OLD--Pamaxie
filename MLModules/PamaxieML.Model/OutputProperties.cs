@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PamaxieML.Model
+﻿namespace PamaxieML.Model
 {
     public class OutputProperties
     {

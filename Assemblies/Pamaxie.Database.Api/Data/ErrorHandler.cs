@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Pamaxie.Api.Data
+﻿namespace Pamaxie.Api.Data
 {
     public class ErrorHandler
     {

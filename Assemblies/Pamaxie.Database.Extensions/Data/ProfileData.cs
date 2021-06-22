@@ -10,9 +10,6 @@ namespace Pamaxie.Database.Extensions.Data
         public string EmailAddress { get; set; }
         public string ProfilePictureAddress { get; set; }
         public bool Deleted { get; set; }
-        public ProfileData GetProfileData()
-        {
-            return this;
-        }
+        public ProfileData GetProfileData() => this;
     }
 }

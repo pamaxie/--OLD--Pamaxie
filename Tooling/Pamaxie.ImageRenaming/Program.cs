@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Mime;
 
 namespace ImageRenaming
 {
-    class Program
+    public static class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             string folder;
             while (true)
@@ -20,8 +20,8 @@ namespace ImageRenaming
 
             if (folder == string.Empty) return;
 
-            var files = Directory.GetFiles(folder).ToList();
-            Console.WriteLine("Found " + files.Count() + "Files");
+            List<string> files = Directory.GetFiles(folder ?? string.Empty).ToList();
+            Console.WriteLine("Found " + files.Count + "Files");
 
             while (true)
             {
@@ -33,9 +33,9 @@ namespace ImageRenaming
             if (folder == string.Empty) return;
 
 
-            foreach (var file in files)
+            foreach (string file in files)
             {
-                FileInfo fi = new FileInfo(file);
+                FileInfo fi = new(file);
                 Guid guid = Guid.NewGuid();
                 try
                 {

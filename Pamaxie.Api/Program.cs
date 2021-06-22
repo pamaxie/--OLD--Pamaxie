@@ -16,7 +16,7 @@ namespace PamaxieML.Api
             {
                 Console.WriteLine("We are testing if the neural network works. This may take a minute.");
 
-                FileInfo? image = ImageProcessing.DownloadFile("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png");
+                FileInfo image = ImageProcessing.DownloadFile("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png");
                 // Add input data
                 ModelInput input = new()
                 {

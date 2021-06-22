@@ -1,18 +1,18 @@
-﻿using System;
-using Catalyst;
+﻿using Catalyst;
 using Mosaik.Core;
+using System;
 
 namespace Pamaxie.Catalyst
 {
-    class Program
+    public static class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Storage.Current = new OnlineRepositoryStorage(new DiskStorage("catalyst-models"));
             Pipeline.For(Language.English);
-            var nlp = Pipeline.For(Language.English);
-            var doc = new Document("The person", Language.English);
-            var process = nlp.ProcessSingle(doc);
+            Pipeline nlp = Pipeline.For(Language.English);
+            Document doc = new Document("The person", Language.English);
+            IDocument process = nlp.ProcessSingle(doc);
             Console.WriteLine(doc.ToJson());
         }
     }

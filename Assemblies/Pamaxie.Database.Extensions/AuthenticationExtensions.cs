@@ -1,9 +1,8 @@
-﻿using Pamaxie.Database.Sql;
+﻿using Pamaxie.Database.Extensions.Basic;
+using Pamaxie.Database.Sql;
 using Pamaxie.Database.Sql.DataClasses;
-using System.Diagnostics;
-using System.Linq;
 using System;
-using Pamaxie.Database.Extensions.Basic;
+using System.Linq;
 
 namespace Pamaxie.Extensions
 {
@@ -16,9 +15,9 @@ namespace Pamaxie.Extensions
         /// <returns></returns>
         public static bool VerifyAuth(this Application applicationAuth)
         {
-            using var dbContext = new SqlDbContext();
-            var dbAppAuth = dbContext.Applications.FirstOrDefault(x => x.ApplicationId == applicationAuth.ApplicationId);
-            if (dbAppAuth != null && dbAppAuth.Disabled || dbAppAuth.Deleted)
+            using SqlDbContext dbContext = new();
+            Application dbAppAuth = dbContext.Applications.FirstOrDefault(x => x.ApplicationId == applicationAuth.ApplicationId);
+            if (dbAppAuth != null && (dbAppAuth is {Disabled: true} || dbAppAuth.Deleted))
             {
                 return false;
             }
@@ -42,15 +41,19 @@ namespace Pamaxie.Extensions
         /// <returns><see cref="bool"/> Has been created / altered?</returns>
         public static bool UpdateValue(this Application applicationAuthentication, bool createNew)
         {
-            using var dbContext = new SqlDbContext();
-            var dbAppAuth = dbContext.Applications.FirstOrDefault(x => x.ApplicationId == applicationAuthentication.ApplicationId);
-            if (dbAppAuth == null && createNew)
-                return dbAppAuth.CreateValue(out _, false);
+            using SqlDbContext dbContext = new();
+            Application dbAppAuth = dbContext.Applications.FirstOrDefault(x => x.ApplicationId == applicationAuthentication.ApplicationId);
+            if (dbAppAuth == null && createNew) return ((Application) null).CreateValue(out _, false);
 
             //Creating the Hash and calculating the optimal hash cost automatically
-            dbAppAuth.AppTokenHash = BCrypt.Net.BCrypt.HashPassword(applicationAuthentication.AppToken, ByCrptExt.CalculateSaltCost());
-            dbAppAuth.AppToken = null;
-            dbContext.Applications.Update(dbAppAuth);
+            if (dbAppAuth != null)
+            {
+                dbAppAuth.AppTokenHash =
+                    BCrypt.Net.BCrypt.HashPassword(applicationAuthentication.AppToken, ByCrptExt.CalculateSaltCost());
+                dbAppAuth.AppToken = null;
+                dbContext.Applications.Update(dbAppAuth);
+            }
+
             return true;
         }
 
@@ -62,34 +65,28 @@ namespace Pamaxie.Extensions
         /// <param name="creationError">The reason the creation failed if it did not it will be <see cref="null"/></param>
         /// <param name="shouldThrow">Should the method throw exceptions or just output the error</param>
         /// <returns><see cref="bool"/> Has been created / altered?</returns>
-        public static bool CreateValue(this Application applicationAuthentication, out string creationError, bool shouldThrow)
+        private static bool CreateValue(this Application applicationAuthentication, out string creationError, bool shouldThrow)
         {
             creationError = null;
-            using var dbContext = new SqlDbContext();
-            if (default(long) == applicationAuthentication.ApplicationId)
+            using SqlDbContext dbContext = new();
+            if (default == applicationAuthentication.ApplicationId)
             {
                 creationError = "You need to input an Application Id to create a new Application";
-                if (shouldThrow)
-                    throw new InvalidOperationException(creationError);
-
+                if (shouldThrow) throw new InvalidOperationException(creationError);
                 return false;
             }
                     
             if (string.IsNullOrEmpty(applicationAuthentication.AppToken))
             {
                 creationError = "You need to input an App Token to create a new Application";
-                if (shouldThrow)
-                    throw new InvalidOperationException(creationError);
-
+                if (shouldThrow) throw new InvalidOperationException(creationError);
                 return false;
             }
 
             if (string.IsNullOrEmpty(applicationAuthentication.AppTokenHash))
             {
                 creationError = "You cannot have a hash already for a non known application. The hashing is handled by us because we determine automatic optimal salt.";
-                if (shouldThrow)
-                    throw new InvalidOperationException(creationError);
-
+                if (shouldThrow) throw new InvalidOperationException(creationError);
                 return false;
             }
 

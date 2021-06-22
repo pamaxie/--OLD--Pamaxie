@@ -1,11 +1,9 @@
-﻿using Pamaxie.Database.Sql;
+﻿using Pamaxie.Database.Extensions.Data;
+using Pamaxie.Database.Sql;
 using Pamaxie.Database.Sql.DataClasses;
-using System.Diagnostics;
 using System.Linq;
 using System;
 using System.Collections.Generic;
-using Pamaxie.Database.Extensions.Basic;
-using Pamaxie.Database.Extensions.Data;
 
 namespace Pamaxie.Extensions
 {
@@ -18,7 +16,7 @@ namespace Pamaxie.Extensions
         /// <returns></returns>
         public static User GetUser(string GoogleUserId)
         {
-            using var dbContext = new SqlDbContext();
+            using SqlDbContext dbContext = new();
             return dbContext.Users.FirstOrDefault(x => x.GoogleUserId == GoogleUserId);
         }
         
@@ -29,10 +27,10 @@ namespace Pamaxie.Extensions
         /// <returns><see cref="bool"/> was success?</returns>
         public static bool CreateUser(IProfileData userProfile)
         {
-            using var dbContext = new SqlDbContext();
+            using SqlDbContext dbContext = new();
             try
             {
-                var existingDbUser =
+                User existingDbUser =
                     dbContext.Users.FirstOrDefault(x => x.GoogleUserId == userProfile.GoogleClaimUserId);
                 if (existingDbUser != null)
                 {
@@ -44,7 +42,7 @@ namespace Pamaxie.Extensions
                     return true;
                 }
                 
-                var user = new User() { GoogleUserId = userProfile.GoogleClaimUserId, Email = userProfile.EmailAddress, Username = userProfile.UserName};
+                User user = new() { GoogleUserId = userProfile.GoogleClaimUserId, Email = userProfile.EmailAddress, Username = userProfile.UserName};
                 dbContext.Users.Add(user);
                 dbContext.SaveChanges();
                 return true;
@@ -63,12 +61,11 @@ namespace Pamaxie.Extensions
         /// <returns><see cref="bool"/> was successful?</returns>
         public static bool DeleteUserData(this IProfileData UserProfile)
         {
-            using var dbContext = new SqlDbContext();
-            var user = dbContext.Users.FirstOrDefault(x => x.Id == UserProfile.Id);
-            if (user == null)
-                return false;
-            var applications = ApplicationExtensions.GetApplications(UserProfile.Id);
-            foreach (var application in applications)
+            using SqlDbContext dbContext = new();
+            User user = dbContext.Users.FirstOrDefault(x => x.Id == UserProfile.Id);
+            if (user == null) return false;
+            List<Application> applications = ApplicationExtensions.GetApplications(UserProfile.Id);
+            foreach (Application application in applications)
             {
                 application.DeleteApplication();
 
@@ -81,7 +78,5 @@ namespace Pamaxie.Extensions
             dbContext.SaveChanges();
             return true;
         }
-
-
     }
 }

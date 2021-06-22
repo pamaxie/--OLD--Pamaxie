@@ -1,17 +1,16 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using ImageCrawler;
+using Pamaxie.ImageCrawler.Image_Prep;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Security;
 using System.Text;
-using HtmlAgilityPack;
-using ImageCrawler;
-using Pamaxie.ImageCrawler.Image_Prep;
 
 namespace Pamaxie.ImageCrawler
 {
-    public class UrlInteraction
+    public static class UrlInteraction
     {
         /// <summary>
         /// Parse links and get a list of them.
@@ -22,7 +21,6 @@ namespace Pamaxie.ImageCrawler
         {
             try
             {
-
                 string data = string.Empty;
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlToCrawl);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -32,10 +30,9 @@ namespace Pamaxie.ImageCrawler
                     Stream receiveStream = response.GetResponseStream();
                     StreamReader readStream = null;
 
-                    if (String.IsNullOrWhiteSpace(response.CharacterSet))
-                        readStream = new StreamReader(receiveStream);
-                    else
-                        readStream = new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet));
+                    readStream = string.IsNullOrWhiteSpace(response.CharacterSet)
+                        ? new StreamReader(receiveStream)
+                        : new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet));
 
                     data = readStream.ReadToEnd();
 
@@ -43,18 +40,17 @@ namespace Pamaxie.ImageCrawler
                     readStream.Close();
                 }
 
-                HashSet<string> list = new HashSet<string>();
-                if (string.IsNullOrEmpty(data))
-                    return new List<string>();
+                HashSet<string> list = new();
+                if (string.IsNullOrEmpty(data)) return new List<string>();
 
-                var doc = new HtmlDocument();
+                HtmlDocument doc = new();
                 doc.LoadHtml(data);
                 HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//a[@href]");
 
-                foreach (var n in nodes)
+                foreach (HtmlNode n in nodes)
                 {
                     string href = n.Attributes["href"].Value;
-                    var url = GetAbsoluteUrlString(urlToCrawl, href);
+                    string url = GetAbsoluteUrlString(urlToCrawl, href);
                     if (string.IsNullOrEmpty(url) || url.Contains(Program.BaseUrl)) continue;
                     list.Add(url);
                 }
@@ -66,7 +62,6 @@ namespace Pamaxie.ImageCrawler
                 Console.WriteLine(ex);
                 return new List<string>();
             }
-
         }
 
         /// <summary>
@@ -75,11 +70,10 @@ namespace Pamaxie.ImageCrawler
         /// <param name="baseUrl"></param>
         /// <param name="url"></param>
         /// <returns></returns>
-        static string GetAbsoluteUrlString(string baseUrl, string url)
+        private static string GetAbsoluteUrlString(string baseUrl, string url)
         {
-            var uri = new Uri(url, UriKind.RelativeOrAbsolute);
-            if (!uri.IsAbsoluteUri)
-                uri = new Uri(new Uri(baseUrl), uri);
+            Uri uri = new Uri(url, UriKind.RelativeOrAbsolute);
+            if (!uri.IsAbsoluteUri) uri = new Uri(new Uri(baseUrl), uri);
             return uri.ToString();
         }
 
@@ -90,15 +84,15 @@ namespace Pamaxie.ImageCrawler
         public static void GrabAllImages(string url)
         {
             // declare html document
-            var document = new HtmlWeb().Load(url);
+            HtmlDocument document = new HtmlWeb().Load(url);
             // now using LINQ to grab/list all images from website
-            var imageUrls = document.DocumentNode.Descendants("img")
+            string[] imageUrls = document.DocumentNode.Descendants("img")
                 .Select(e => e.GetAttributeValue("src", null))
-                .Where(s => !String.IsNullOrEmpty(s)).ToArray();
+                .Where(s => !string.IsNullOrEmpty(s)).ToArray();
 
             if (imageUrls.Length == 0) return;
             // now showing all images from web page one by one
-            foreach (var item in imageUrls)
+            foreach (string item in imageUrls)
             {
                 try
                 {
@@ -107,17 +101,19 @@ namespace Pamaxie.ImageCrawler
                         continue;
                     }
 
-                    var file = ImagePreparation.DownloadFile(item);
-                    ImagePreparation.PrepareFile(file?.FullName).MoveTo(Program.ImageDestinationDir + "/" + ImagePreparation.PrepareFile(file?.FullName).Name + "." +
-                                                                        ImagePreparation.PrepareFile(file?.FullName).Extension);
+                    FileInfo file = ImagePreparation.DownloadFile(item);
+                    ImagePreparation.PrepareFile(file?.FullName).MoveTo(Program.ImageDestinationDir + "/" +
+                                                                        ImagePreparation.PrepareFile(file?.FullName)
+                                                                            .Name + "." +
+                                                                        ImagePreparation.PrepareFile(file?.FullName)
+                                                                            .Extension);
                     Program.DownloadedImageUrls.Add(item);
                     Program.CurrentImgCount++;
                 }
-                catch(Exception ex)
+                catch
                 {
-
+                    // ignored
                 }
-
             }
         }
     }

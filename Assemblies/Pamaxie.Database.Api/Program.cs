@@ -1,16 +1,14 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
 
 namespace Pamaxie.Api
 {
     /// <summary>
     /// BUG: This is just here for future proofing. This is a concept idea to have the data flow over this api instead of the ML Apis
     /// </summary>
-    public class Program
+    public static class Program
     {
         /// <summary>
         /// Main Function
@@ -27,12 +25,11 @@ namespace Pamaxie.Api
         /// </summary>
         /// <param name="args">Startup Args</param>
         /// <returns><see cref="IHostBuilder"/> for the API</returns>
-        public static IHostBuilder CreateHostBuilder(string[] args)
+        private static IHostBuilder CreateHostBuilder(string[] args)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder().AddCommandLine(args).Build();
             string hostUrl = configuration["hosturl"];
-            if (string.IsNullOrEmpty(hostUrl))
-                hostUrl = "http://0.0.0.0:6000";
+            if (string.IsNullOrEmpty(hostUrl)) hostUrl = "http://0.0.0.0:6000";
             return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

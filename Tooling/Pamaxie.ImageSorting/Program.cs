@@ -5,47 +5,44 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using CoenM.ImageHash;
 using CoenM.ImageHash.HashAlgorithms;
 using PamaxieML.Model;
-using Console = System.Console;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading;
-using CoenM.ImageHash;
 using static PamaxieML.Model.OutputProperties;
 
 namespace Pamaxie.ImageSorting
 {
-    class Program
+    public static class Program
     {
-        public const string CopyFolderName = "Compared Files";
-        public static readonly IEnumerable<ImagePredictionResult> OutputDirectories = Enum.GetValues(typeof(OutputProperties.ImagePredictionResult)).Cast<OutputProperties.ImagePredictionResult>();
-        public static string SourceDir = string.Empty;
-        public static string TargetDir = string.Empty;
-        public static int CurrentFileIdx;
-        public static int OverallFiles;
-        public static int SimilarItems;
-        public static string SweepingStep;
-        public static Stopwatch Timer;
+        private const string CopyFolderName = "Compared Files";
+        private static readonly IEnumerable<ImagePredictionResult> OutputDirectories = Enum.GetValues(typeof(ImagePredictionResult)).Cast<ImagePredictionResult>();
+        private static string _sourceDir = string.Empty;
+        private static string _targetDir = string.Empty;
+        internal static int CurrentFileIdx;
+        internal static int OverallFiles;
+        private static int _similarItems;
+        internal static string SweepingStep;
+        internal static Stopwatch Timer;
         
         ///Sorts out images beforehand by predicted label and accuracy for said label.
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            bool comparefiles = false;
+            bool compareFiles = false;
 
             while (true)
             {
-                Console.WriteLine("Do you want to verify images are douplicates or not or do you want to go streight up to training?");
-                var key = Console.ReadKey();
-                switch (key.Key)
+                Console.WriteLine("Do you want to verify images are duplicates or not or do you want to go straight up to training?");
+                ConsoleKeyInfo key = Console.ReadKey();
+                switch (key)
                 {
-                    case ConsoleKey.Y:
-                        comparefiles = true;
+                    case {Key: ConsoleKey.Y}:
+                        compareFiles = true;
                         break;
-                    case ConsoleKey.N:
+                    case {Key: ConsoleKey.N}:
                         break;
-                    case ConsoleKey.Enter:
+                    case {Key: ConsoleKey.Enter}:
                         break;
                     default:
                         Console.WriteLine("Unexpected input detected please try again.");
@@ -54,37 +51,32 @@ namespace Pamaxie.ImageSorting
                 break;
             }
 
-            if (comparefiles)
+            if (compareFiles)
             {
                 while (true)
                 {
                     Console.WriteLine("Please enter the folder which contains the images you want to predict the values of.");
-                    SourceDir = Console.ReadLine();
-                    if (Directory.Exists(SourceDir)) break;
+                    _sourceDir = Console.ReadLine();
+                    if (Directory.Exists(_sourceDir)) break;
                     Console.WriteLine("Invalid or Unknown Folder was entered. Folder could not be found. Please try again.");
                 }
             }
 
             while (true)
             {
-                if (comparefiles)
-                    Console.WriteLine("Please enter a target DIRECTORY. Please do NOT place this on your desktop directly. We will create a few folders so it may get quite crowded.");
-                else
-                    Console.WriteLine("Please enter a target directory for the images to scan. We will move all images that will be used for the comparison over from the directory root into a folder called: \"Compared Files\"");
-                TargetDir = Console.ReadLine();
-                if (Directory.Exists(TargetDir)) break;
+                Console.WriteLine(compareFiles
+                    ? "Please enter a target DIRECTORY. Please do NOT place this on your desktop directly. We will create a few folders so it may get quite crowded."
+                    : "Please enter a target directory for the images to scan. We will move all images that will be used for the comparison over from the directory root into a folder called: \"Compared Files\"");
+                _targetDir = Console.ReadLine();
+                if (Directory.Exists(_targetDir)) break;
                 Console.WriteLine("Target directory could not be found. Please ensure it exists and try again.");
             }
 
             //This may run for a long ass time.
             Console.WriteLine("Getting all files in the directory. Can take a very very long time.");
-            var files = Directory.GetFiles(SourceDir);
+            string[] files = Directory.GetFiles(_sourceDir ?? string.Empty);
 
-            var items = new List<Tuple<string, ulong>>();
-            if (comparefiles)
-                items = GetSimilarItems(files);
-            else
-                items = MoveToSubDir(files);
+            List<Tuple<string, ulong>> items = compareFiles ? GetSimilarItems(files) : MoveToSubDir(files);
             Console.Clear();
 
             Console.Write("Finished work on detecting similar items.");
@@ -99,15 +91,15 @@ namespace Pamaxie.ImageSorting
             while (true)
             {
                 Console.WriteLine("Do you want to copy the files to the output directory? (Highly recommended, if you abort this during the Neural Network process all data will be lost.)");
-                var key = Console.ReadKey();
-                switch (key.Key)
+                ConsoleKeyInfo key = Console.ReadKey();
+                switch (key)
                 {
-                    case ConsoleKey.Y:
+                    case {Key: ConsoleKey.Y}:
                         copyItems = true;
                         break;
-                    case ConsoleKey.N:
+                    case {Key: ConsoleKey.N}:
                         break;
-                    case ConsoleKey.Enter:
+                    case {Key: ConsoleKey.Enter}:
                         break;
                     default:
                         Console.WriteLine("Unexpected input detected please try again.");
@@ -118,7 +110,7 @@ namespace Pamaxie.ImageSorting
 
             if (copyItems)
             {
-                items = CopyFiles(items, TargetDir);
+                items = CopyFiles(items, _targetDir);
                 Console.Write("Finished copying items");
                 for (int i = 0; i < 6; i++)
                 {
@@ -135,23 +127,21 @@ namespace Pamaxie.ImageSorting
             }
 
             Console.WriteLine("Creating Neural network folders");
-            foreach (var directory in OutputDirectories)
+            foreach (ImagePredictionResult directory in OutputDirectories)
             {
                 Console.WriteLine("Creating Directory structure for label: " + directory);
-                var newDir = TargetDir + "\\" + directory;
-                if (!Directory.Exists(newDir))
+                string newDir = _targetDir + "\\" + directory;
+                if (Directory.Exists(newDir)) continue;
+                Directory.CreateDirectory(newDir);
+                for (int i = 0; i < 10; i++)
                 {
-                    Directory.CreateDirectory(newDir);
-                    for (int i = 0; i < 10; i++)
-                    {
-                        Directory.CreateDirectory(newDir + "\\" + i * 10 + "%");
-                    }
+                    Directory.CreateDirectory(newDir + "\\" + i * 10 + "%");
                 }
             }
 
 
             Console.WriteLine("Finished creating directories.");
-            var doingWork = true;
+            bool doingWork = true;
             new Thread((() =>
             {
                 Console.Clear();
@@ -165,46 +155,38 @@ namespace Pamaxie.ImageSorting
             OverallFiles = items.Count;
             Timer.Reset();
             Timer.Start();
-            foreach (var item in items)
+            foreach ((string item1, _) in items)
             {
                 CurrentFileIdx++;
-
 
                 // Add input data
                 ModelInput input = new ModelInput
                 {
-                    ImageSource = item.Item1
+                    ImageSource = item1
                 };
                 // Load model and predict output of sample data
                 ConsumeModel.Predict(input, out OutputProperties labelResult);
-                var folder = string.Empty;
-                switch (labelResult.PredictedLabel)
+                string folder = labelResult.PredictedLabel switch
                 {
-                    case OutputProperties.ImagePredictionResult.Gore:
-                        folder = GetLikelyhoodFolder(labelResult.GoreLikelihood) + "%";
-                        break;
-                    case OutputProperties.ImagePredictionResult.None:
-                        folder = GetLikelyhoodFolder(labelResult.NoneLikelihood) + "%";
-                        break;
-                    case OutputProperties.ImagePredictionResult.Pornographic:
-                        folder = GetLikelyhoodFolder(labelResult.PornographicLikelihood) + "%";
-                        break;
-                    case OutputProperties.ImagePredictionResult.Racy:
-                        folder = GetLikelyhoodFolder(labelResult.RacyLikelihood) + "%";
-                        break;
-                    case OutputProperties.ImagePredictionResult.Violence:
-                        folder = GetLikelyhoodFolder(labelResult.ViolenceLikelihood) + "%";
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                    ImagePredictionResult.Gore =>
+                        GetLikelihoodFolder(labelResult.GoreLikelihood) + "%",
+                    ImagePredictionResult.None =>
+                        GetLikelihoodFolder(labelResult.NoneLikelihood) + "%",
+                    ImagePredictionResult.Pornographic => GetLikelihoodFolder(labelResult
+                        .PornographicLikelihood) + "%",
+                    ImagePredictionResult.Racy =>
+                        GetLikelihoodFolder(labelResult.RacyLikelihood) + "%",
+                    ImagePredictionResult.Violence => GetLikelihoodFolder(labelResult
+                        .ViolenceLikelihood) + "%",
+                    _ => throw new ArgumentOutOfRangeException()
+                };
 
                 if (CurrentFileIdx < 4)
                 {
                     Console.Clear();
                 }
-                var fi = new FileInfo(item.Item1);
-                fi.CopyTo(TargetDir + "\\" + labelResult.PredictedLabel + "\\" + folder + "\\" + fi.Name, true);
+                FileInfo fi = new(item1);
+                fi.CopyTo(_targetDir + "\\" + labelResult.PredictedLabel + "\\" + folder + "\\" + fi.Name, true);
             }
 
             Timer.Stop();
@@ -215,14 +197,14 @@ namespace Pamaxie.ImageSorting
         }
 
         /// <summary>
-        /// Get the folder where to put the items in depending on likelyhood.
+        /// Get the folder where to put the items in depending on likelihood.
         /// </summary>
-        /// <param name="likelyhood"></param>
+        /// <param name="likelihood"></param>
         /// <returns></returns>
-        public static string GetLikelyhoodFolder(float likelyhood)
+        private static string GetLikelihoodFolder(float likelihood)
         {
-            likelyhood *= 100;
-            var num = likelyhood  - likelyhood % 10;
+            likelihood *= 100;
+            float num = likelihood  - likelihood % 10;
             if (num >= 100)
             {
                 num -= 10;
@@ -237,13 +219,12 @@ namespace Pamaxie.ImageSorting
         /// <returns></returns>
         private static List<Tuple<string, ulong>> MoveToSubDir(string[] files)
         {
-            var items = new List<Tuple<string, ulong>>();
-            foreach (var file in files)
+            List<Tuple<string, ulong>> items = new();
+            foreach (string file in files)
             {
                 //TODO: implement this
                 throw new NotImplementedException();
             }
-
             return items;
         }
 
@@ -252,7 +233,7 @@ namespace Pamaxie.ImageSorting
         /// </summary>
         /// <param name="files"></param>
         /// <returns></returns>
-        public static List<Tuple<string, ulong>> GetSimilarItems(string[] files)
+        private static List<Tuple<string, ulong>> GetSimilarItems(string[] files)
         {
             //Calculate MD5 Hashes
             #region GetMd5Hashes
@@ -262,7 +243,7 @@ namespace Pamaxie.ImageSorting
                 Console.Write(".");
                 Thread.Sleep(500);
             }
-            var hashAlgorithm = new DifferenceHash();
+            DifferenceHash hashAlgorithm = new();
 
             SweepingStep = "Calculating MD5 Hashes";
             OverallFiles = files.Length;
@@ -279,21 +260,20 @@ namespace Pamaxie.ImageSorting
                 }
             })).Start();
 
-            var fileWithHash = new ConcurrentBag<Tuple<string, ulong>>();
-            Parallel.ForEach(files, (file) =>
+            ConcurrentBag<Tuple<string, ulong>> fileWithHash = new();
+            Parallel.ForEach(files, file =>
             {
                 try
                 {
                     CurrentFileIdx++;
-                    using var stream = File.OpenRead(file);
-                    var hash = hashAlgorithm.Hash(stream);
+                    using FileStream stream = File.OpenRead(file);
+                    ulong hash = hashAlgorithm.Hash(stream);
                     fileWithHash.Add(new Tuple<string, ulong>(file, hash));
                 }
-                catch (Exception)
+                catch
                 {
-
+                    // ignored
                 }
-
             });
             doingWork = false;
 
@@ -301,7 +281,7 @@ namespace Pamaxie.ImageSorting
             Console.Clear();
             Console.WriteLine("Going through roughly " + files.Length + " took around: " + Timer.Elapsed.ToString("g"));
 
-            Console.Write("Starting to compare hashes and find direct douplicates");
+            Console.Write("Starting to compare hashes and find direct duplicates");
             for (int i = 0; i < 6; i++)
             {
                 Console.Write(".");
@@ -310,11 +290,10 @@ namespace Pamaxie.ImageSorting
             Timer.Reset();
             #endregion
 
-            //Compare the Calculated MD5 hashes and never store doupes.
+            //Compare the Calculated MD5 hashes and never store dupes.
             #region CompareMD5Hashes
-
-            var comparisonInput = fileWithHash.ToArray();
-            var comparedItems = new List<Tuple<string, ulong>>();
+            Tuple<string, ulong>[] comparisonInput = fileWithHash.ToArray();
+            List<Tuple<string, ulong>> comparedItems = new();
             SweepingStep = "Detecting direct MD5 Similarities and ignoring items with too high similarity.";
             CurrentFileIdx = 0;
             OverallFiles = fileWithHash.Count;
@@ -329,24 +308,14 @@ namespace Pamaxie.ImageSorting
                 }
             })).Start();
 
-            foreach (var file in comparisonInput)
+            foreach (Tuple<string, ulong> file in comparisonInput)
             {
                 CurrentFileIdx++;
-                bool known = false;
-
-                for (int y = 0; y < comparedItems.Count; y++)
-                {
-                    var similarity = CompareHash.Similarity(file.Item2, comparedItems[y].Item2);
-                    if (similarity > 90)
-                    {
-                        known = true;
-                        break;
-                    }
-                }
+                bool known = comparedItems.Select(t => CompareHash.Similarity(file.Item2, t.Item2)).Any(similarity => similarity > 90);
 
                 if (known)
                 {
-                    SimilarItems++;
+                    _similarItems++;
                     continue;
                 }
 
@@ -355,7 +324,7 @@ namespace Pamaxie.ImageSorting
 
             doingWork = false;
             Console.Clear();
-            Console.WriteLine("Found roughly " + SimilarItems + " doupes or too similar items (likely recropped or not different enough to mattter).");
+            Console.WriteLine("Found roughly " + _similarItems + " dupes or too similar items (likely regrouped or not different enough to matter).");
             #endregion
 
             return comparedItems;
@@ -365,27 +334,27 @@ namespace Pamaxie.ImageSorting
         /// Copies the files to a new location and list
         /// </summary>
         /// <param name="fileList"></param>
+        /// <param name="targetDir"></param>
         /// <returns></returns>
-        public static List<Tuple<string, ulong>> CopyFiles(List<Tuple<string, ulong>> fileList, string targetDir)
+        private static List<Tuple<string, ulong>> CopyFiles(IEnumerable<Tuple<string, ulong>> fileList, string targetDir)
         {
-            var newFiles = new List<Tuple<string, ulong>>();
+            List<Tuple<string, ulong>> newFiles = new();
 
             targetDir = targetDir + "\\" + CopyFolderName;
 
             //Check if folder structure for this folder already exists.
-            if (!Directory.Exists(targetDir))
-                Directory.CreateDirectory(targetDir);
+            if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
 
-            foreach (var file in fileList)
+            foreach ((string item1, ulong item2) in fileList)
             {
-                var fileInfo = new FileInfo(file.Item1);
+                FileInfo fileInfo = new(item1);
                 //This should usually NEVER happen but we still check this.
                 if (!fileInfo.Exists) continue;
 
 
-                var newLocation = targetDir + "\\" + fileInfo.Name;
+                string newLocation = targetDir + "\\" + fileInfo.Name;
                 fileInfo.CopyTo(newLocation, true);
-                newFiles.Add(new Tuple<string, ulong>(newLocation, file.Item2));
+                newFiles.Add(new Tuple<string, ulong>(newLocation, item2));
             }
             return newFiles;
         }

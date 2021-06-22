@@ -267,7 +267,8 @@ namespace Pamaxie.Database.Sql.DataStructure
         {
             [Description("German")] DE = 1,
             [Description("English")] EN = 2,
-            [Description("Spanish")] ES = 3
+            [Description("Danish")] DK = 3,
+            [Description("Spanish")] ES = 4
         }
     }
 }

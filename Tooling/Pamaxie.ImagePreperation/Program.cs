@@ -1,17 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading.Tasks;
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Folder
 {
-    class Program
+    public static class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             string folder;
             while (true)
@@ -24,8 +24,8 @@ namespace Folder
 
             if (folder == string.Empty) return;
 
-            var files = Directory.GetFiles(folder).ToList();
-            Console.WriteLine("Found " + files.Count() + "Files");
+            List<string> files = Directory.GetFiles(folder ?? string.Empty).ToList();
+            Console.WriteLine("Found " + files.Count + "Files");
 
             while (true)
             {
@@ -36,16 +36,15 @@ namespace Folder
             }
             if (folder == string.Empty) return;
 
-
             Parallel.ForEach(files, (file) =>
             {
-                FileInfo fi = new FileInfo(file);
+                FileInfo fi = new(file);
                 try
                 {
-                    using var img = Image.Load(file);
-                    var ratio = (float) img.Height / (float) img.Width;
+                    using Image img = Image.Load(file);
+                    float ratio = (float) img.Height / (float) img.Width;
                     img.Mutate(x => x
-                        .Resize(450, (int) ratio * 450));
+                        .Resize(450, (int)ratio * 450));
                     img.Save(folder + "\\" + fi.Name, new JpegEncoder());
 
                     img.Mutate(x => x

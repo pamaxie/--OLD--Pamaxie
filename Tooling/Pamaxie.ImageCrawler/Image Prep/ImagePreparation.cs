@@ -1,25 +1,23 @@
-﻿using System;
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using System;
 using System.IO;
 using System.Net;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 
 namespace Pamaxie.ImageCrawler.Image_Prep
 {
-    public class ImagePreparation
+    public static class ImagePreparation
     {
-        public static readonly string TempImageDirectory =
+        private static readonly string TempImageDirectory =
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Pamaxie\\temp\\";
 
         /// <summary>
         /// Overload for FileStream
         /// </summary>
-        /// <param name="stream"></param>
+        /// <param name="fileLocation"></param>
         /// <returns></returns>
         public static FileInfo PrepareFile(string fileLocation)
         {
-            FileInfo file = null;
-
             //If the stream is empty just return the file as null.
             Guid imageNumber = Guid.NewGuid();
             string fileName = $"{TempImageDirectory}\\{imageNumber}.jpg";
@@ -29,7 +27,7 @@ namespace Pamaxie.ImageCrawler.Image_Prep
                 .Grayscale());
             img.Save(fileName);
 
-            file = new FileInfo(fileLocation);
+            FileInfo file = new(fileLocation);
             file.Delete();
             file = new FileInfo(fileName);
             return file;
@@ -43,7 +41,6 @@ namespace Pamaxie.ImageCrawler.Image_Prep
         #nullable enable
         public static FileInfo? DownloadFile(string downloadLocation)
         {
-            FileInfo? file = null;
             Guid imageNumber = Guid.NewGuid();
             WebRequest req = WebRequest.Create(downloadLocation);
             HttpWebRequest request = (HttpWebRequest)req;
@@ -61,7 +58,7 @@ namespace Pamaxie.ImageCrawler.Image_Prep
                  .Grayscale());
             img.Save(fileName);
             stream.Close();
-            file = new FileInfo(fileName);
+            FileInfo? file = new(fileName);
             return file;
         }
     #nullable disable

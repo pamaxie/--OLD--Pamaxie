@@ -28,7 +28,7 @@ namespace Pamaxie.Website.Pages
             string returnUrl = null, string remoteError = null)
         {
             // Get the information about the user from the external login provider
-            ClaimsIdentity? googleUser = User.Identities.FirstOrDefault();
+            ClaimsIdentity googleUser = User.Identities.FirstOrDefault();
             if (googleUser is {IsAuthenticated: true})
             {
                 AuthenticationProperties authProperties = new()
