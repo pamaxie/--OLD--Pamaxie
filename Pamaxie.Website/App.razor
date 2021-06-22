@@ -1,6 +1,6 @@
-﻿@inject AuthenticationStateProvider AuthenticationStateProvider
+﻿@inject AuthenticationStateProvider _authenticationStateProvider
 <!--Mud Blazor components for fancy schmancy UI-->
-<MudThemeProvider Theme="@darkTheme" />
+<MudThemeProvider Theme="@_darkTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -24,7 +24,7 @@
 
 @code{
 
-    MudTheme darkTheme = new MudTheme()
+    private readonly MudTheme _darkTheme = new()
     {
         Palette = new Palette()
         {

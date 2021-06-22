@@ -8,6 +8,14 @@
       },
       "applicationUrl": "http://0.0.0.0:80"
     },
+    "Pamaxie.Website.Localhost": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://127.0.0.1"
+    },
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,

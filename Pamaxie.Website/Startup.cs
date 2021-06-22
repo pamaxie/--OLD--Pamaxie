@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
 using Pamaxie.Database.Extensions;
 using Pamaxie.Website.Services;
+using System;
 
 namespace Pamaxie.Website
 
@@ -21,14 +21,14 @@ namespace Pamaxie.Website
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             IConfigurationSection dbConfigSection = Configuration.GetSection("Pamaxie");
-            var sqlConString =  dbConfigSection.GetValue<string>("PamaxieSqlDb");
+            string sqlConString =  dbConfigSection.GetValue<string>("PamaxieSqlDb");
             Environment.SetEnvironmentVariable("PamaxieSqlDb", sqlConString);
             Environment.SetEnvironmentVariable("ApplyMigrations", dbConfigSection.GetValue<string>("Apply Migrations"));
 
@@ -38,7 +38,7 @@ namespace Pamaxie.Website
             //Adds access to the HTTP Context
             services.AddHttpContextAccessor();
 
-            CookiePolicyOptions cookiePolicy = new CookiePolicyOptions()
+            CookiePolicyOptions cookiePolicy = new()
             {
                 Secure = CookieSecurePolicy.Always,
             };
@@ -63,7 +63,7 @@ namespace Pamaxie.Website
 
             services.AddApplicationInsightsTelemetry();
             
-            if (!DbExtensions.SqlDbCheckup(out var error))
+            if (!DbExtensions.SqlDbCheckup(out string error))
             {
                 Console.WriteLine(error);
                 Environment.Exit(501);
@@ -71,7 +71,7 @@ namespace Pamaxie.Website
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {

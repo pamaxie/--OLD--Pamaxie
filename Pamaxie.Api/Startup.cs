@@ -1,5 +1,3 @@
-using System;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Pamaxie.Database.Extensions;
 using PamaxieML.Api.Security;
+using System;
+using System.Text;
 
 namespace PamaxieML.Api
 {
@@ -19,10 +19,10 @@ namespace PamaxieML.Api
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        internal void ConfigureServices(IServiceCollection services)
         {
             //Load Data Storage Configuration from appsettings.json
             
@@ -55,15 +55,14 @@ namespace PamaxieML.Api
 
             services.AddTransient<TokenGenerator>();
 
-
             //Checking if the Redis and SQL Database is reachable and all dandy.
-            if (!DbExtensions.SqlDbCheckup(out var sqlErrors))
+            if (!DbExtensions.SqlDbCheckup(out string sqlErrors))
             {
                 Console.WriteLine(sqlErrors);
                 Environment.Exit(501);
             }
 
-            if (!DbExtensions.RedisDbCheckup(out var redisErrors))
+            if (!DbExtensions.RedisDbCheckup(out string redisErrors))
             {
                 Console.WriteLine(redisErrors);
                 Environment.Exit(501);
@@ -71,7 +70,7 @@ namespace PamaxieML.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 

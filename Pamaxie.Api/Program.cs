@@ -3,11 +3,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using PamaxieML.Model;
 using System;
-using System.Collections.Generic;
+using System.IO;
 
 namespace PamaxieML.Api
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -16,22 +16,21 @@ namespace PamaxieML.Api
             {
                 Console.WriteLine("We are testing if the neural network works. This may take a minute.");
 
-                var image = ImageProcessing.DownloadFile("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png");
+                FileInfo? image = ImageProcessing.DownloadFile("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png");
                 // Add input data
-                var input = new ModelInput
+                ModelInput input = new()
                 {
-                    ImageSource = image.FullName
+                    ImageSource = image?.FullName
                 };
 
-
                 // Load model and predict output of sample data
-                ConsumeModel.Predict(input, out var labelResult);
-                image.Delete();
+                ConsumeModel.Predict(input, out OutputProperties labelResult);
+                image?.Delete();
 
                 Console.WriteLine("Tested neural network successfully. Starting now!");
             }catch(Exception ex)
             {
-                Console.WriteLine("Hit an error while testing the Neural Network. Exeting...");
+                Console.WriteLine("Hit an error while testing the Neural Network. Exiting...");
                 Console.WriteLine(ex.Message);
                 Environment.Exit(502);
             }
@@ -39,9 +38,9 @@ namespace PamaxieML.Api
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args)
+        private static IHostBuilder CreateHostBuilder(string[] args)
         {
-            var configuration = new ConfigurationBuilder()
+            IConfigurationRoot configuration = new ConfigurationBuilder()
                 .AddCommandLine(args)
                 .Build();
 

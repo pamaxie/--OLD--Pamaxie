@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
-using PamaxieML.Api.Security;
-using PamaxieML.Api.Data;
 using Pamaxie.Database.Sql.DataClasses;
 using Pamaxie.Extensions;
-using System;
+using PamaxieML.Api.Security;
+using PamaxieML.Api.Data;
+using System.IO;
 
 namespace Pamaxie.Api.Controllers
 {
@@ -25,69 +22,55 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        /// Signs in a user via Basic authentication and returns a token.
+        ///     Signs in a user via Basic authentication and returns a token.
         /// </summary>
         /// <returns><see cref="AuthToken"/> Token for Authentication</returns>
         [AllowAnonymous]
         [HttpPost("login")]
         public ActionResult<AuthToken> LoginTask()
         {
-            StreamReader reader = new StreamReader(Request.Body);
+            StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
 
+            Application? appData = JsonConvert.DeserializeObject<Application>(result);
 
-            Application appData = JsonConvert.DeserializeObject<Application>(result);
-
-            if (string.IsNullOrEmpty(appData.AppToken) || default(long) == appData.ApplicationId)
+            if (string.IsNullOrEmpty(appData?.AppToken) || default == appData.ApplicationId)
                 return Unauthorized(ErrorHandler.UnAuthorized());
 
-            if (!appData.VerifyAuth())
-                return Unauthorized(ErrorHandler.UnAuthorized());
-
+            if (!appData.VerifyAuth()) return Unauthorized(ErrorHandler.UnAuthorized());
 
             AuthToken token = _generator.CreateToken(appData.ApplicationId.ToString());
-
-
-            if (token == null)
-                return StatusCode(500);
+            if (token == null) return StatusCode(500);
 
             return Ok(token);
         }
 
         /// <summary>
-        /// Refreshes an exiting oAuth Token
+        ///     Refreshes an exiting oAuth Token
         /// </summary>
         /// <returns><see cref="AuthToken"/> Refreshed Token</returns>
         [Authorize]
         [HttpPost("refresh")]
         public ActionResult<AuthToken> RefreshTask()
         {
-            StreamReader reader = new StreamReader(Request.Body);
+            StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             
-            if (string.IsNullOrEmpty(result)) 
-                return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))  return BadRequest(ErrorHandler.BadData());
             Application appData;
             try
             {
                 appData = JsonConvert.DeserializeObject<Application>(result);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(400);
-            }
+            catch { return StatusCode(400); }
             
-            
-
-            if (default(long) == appData.ApplicationId)
-                return BadRequest(ErrorHandler.UnAuthorized());
+            if (default == appData?.ApplicationId) return BadRequest(ErrorHandler.UnAuthorized());
 
             string userId = appData.ApplicationId.ToString();
             AuthToken token = _generator.CreateToken(userId);
 
-            if (token == null)
-                return StatusCode(500);
+            if (token == null) return StatusCode(500);
             return Ok(token);
         }
     }

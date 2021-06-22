@@ -1,10 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @inherits LayoutComponentBase
-@inject ProtectedLocalStorage ProtectedLocalStorage
-@inject ProtectedSessionStorage ProtectedSessionStorage
+@inject ProtectedLocalStorage _protectedLocalStorage
+@inject ProtectedSessionStorage _protectedSessionStorage
 
 <NavMenu>
-	<MudDialog @bind-IsVisible="ShowCookieDialog">
+	<MudDialog @bind-IsVisible="_showCookieDialog">
 		<TitleContent>
 			<MudText Typo="Typo.h6">
 				<MudIcon Icon="@Icons.Material.Filled.PrivacyTip" Class="mr-3" /> Use Cookies
@@ -24,29 +24,27 @@
 
 @code
 {
-	public bool ShowCookieDialog;
+	private bool _showCookieDialog;
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		try
 		{
-			var result = await ProtectedLocalStorage.GetAsync<bool>("useCookies");
-			var currentValue = (result.Success && result.Value);
-			ShowCookieDialog = !currentValue;
-			this.StateHasChanged();
-			base.OnInitialized();
+			ProtectedBrowserStorageResult<bool> result = await _protectedLocalStorage.GetAsync<bool>("useCookies");
+			bool currentValue = (result.Success && result.Value);
+			_showCookieDialog = !currentValue;
+			StateHasChanged();
+			await base.OnInitializedAsync();
 		}
-		catch(Exception ex)
+		catch
 		{
-			ProtectedLocalStorage.DeleteAsync("useCookies");
-			ShowCookieDialog = false;
+			await _protectedLocalStorage.DeleteAsync("useCookies");
+			_showCookieDialog = false;
 		}
-
-		return;
 	}
 
-	public async Task Save()
+	private async Task Save()
 	{
-		await ProtectedLocalStorage.SetAsync("useCookies", true);
+		await _protectedLocalStorage.SetAsync("useCookies", true);
 	}
 }

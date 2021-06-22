@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
-
-namespace PamaxieML.Api.Data
+﻿namespace PamaxieML.Api.Data
 {
-    public class ErrorHandler
+    public static class ErrorHandler
     {
         public static string Deleted()
         {

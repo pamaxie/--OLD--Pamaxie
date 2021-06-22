@@ -12,13 +12,13 @@ namespace Pamaxie.Website.Services
             _js = js;
         }
 
-        public async Task<BrowserDimension> GetDimensions()
+        internal async Task<BrowserDimension> GetDimensions()
         {
             return await _js.InvokeAsync<BrowserDimension>("getDimensions").ConfigureAwait(false); //Never gets past this
         }
     }
 
-    public class BrowserDimension
+    internal abstract class BrowserDimension
     {
         public int Width { get; set; }
         public int Height { get; set; }

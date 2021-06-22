@@ -1,4 +1,4 @@
-﻿using CryptSharp.Core;
+using CryptSharp.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -41,8 +41,6 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("createUser")]
         public ActionResult<string> CreateUserTask()
         {
-            
-
             return Ok("Success");
         }
 
@@ -55,7 +53,6 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("refresh")]
         public ActionResult<AuthToken> RefreshTask()
         {
-            
             return Ok("Success");
         }
     }

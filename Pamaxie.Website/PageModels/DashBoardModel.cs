@@ -1,26 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Pamaxie.Database.Extensions.Data;
 using Pamaxie.Database.Sql.DataClasses;
 using Pamaxie.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Pamaxie.Website.PageModels
 {
     public class DashBoardModel : ComponentBase
     {
 
-        protected List<Application> Applications { get; set; } = new List<Application>();
-        protected Application NewApplication { get; set; }
+        protected List<Application> Applications { get; set; } = new();
+        protected Application NewApplication { get; private set; }
         protected ProfileData Profile { get; set; }
         protected bool AcceptedTerms { get; set; }
         protected bool AcceptedTos { get; set; }
-        protected MudTextField<string> pwField1;
+        protected MudTextField<string> PwField1;
 
 
-        protected IEnumerable<string> PasswordStrength(string pw)
+        protected static IEnumerable<string> PasswordStrength(string pw)
         {
             if (string.IsNullOrWhiteSpace(pw))
             {
@@ -39,7 +39,7 @@ namespace Pamaxie.Website.PageModels
 
         protected string PasswordMatch(string arg)
         {
-            return pwField1.Value != arg ? "Passwords don't match" : null;
+            return PwField1.Value != arg ? "Passwords don't match" : null;
         }
         
         //Create a new application
@@ -57,12 +57,10 @@ namespace Pamaxie.Website.PageModels
 
         protected void CreateApplication()
         {
-            NewApplication.AppToken = pwField1.Value;
-            ApplicationExtensions.CreateApplication(NewApplication, out var createdApp);
+            NewApplication.AppToken = PwField1.Value;
+            ApplicationExtensions.CreateApplication(NewApplication, out Application createdApp);
             Applications.Add(createdApp);
             NewApplication = null;
         }
-
-
     }
 }

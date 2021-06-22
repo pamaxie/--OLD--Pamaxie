@@ -1,9 +1,10 @@
-﻿@using Microsoft.AspNetCore.Http
-@using Pamaxie.Website.Authentication
-@using Pamaxie.Website.Authentication.Data
-@using Microsoft.ApplicationInsights
+﻿@using Microsoft.ApplicationInsights
+@using Microsoft.AspNetCore.Http
 @using Pamaxie.Database.Extensions.Data
 @using Pamaxie.Extensions
+@using Pamaxie.Website.Authentication
+@using Pamaxie.Website.Authentication.Data
+@using System.Security.Claims
 @inject NavigationManager _navigationManager
 @inject AuthenticationStateProvider _authenticationStateProvider
 @inject IHttpContextAccessor _httpContextAccessor
@@ -88,7 +89,6 @@
 
 
 @code {
-
     [Inject]
     private IDialogService DialogService { get; set; }
 
@@ -111,8 +111,8 @@
 
     protected override Task OnInitializedAsync()
     {
-        var user = _httpContextAccessor?.HttpContext?.User;
-        Profile = user.GetGoogleAuthData(out var hasAccount)?.GetProfileData();
+        ClaimsPrincipal user = _httpContextAccessor?.HttpContext?.User;
+        Profile = user.GetGoogleAuthData(out bool hasAccount)?.GetProfileData();
         UserHasAccount = hasAccount;
         return base.OnInitializedAsync();
     }
@@ -129,7 +129,7 @@
         {
             ShowCreateAccount = false;
         }
-        this.StateHasChanged();
+        StateHasChanged();
         return base.OnAfterRenderAsync(firstRender);
     }
 
@@ -143,7 +143,7 @@
         _navigationManager.NavigateTo("/Logout", true);
     }
 
-    private void AccountManagment()
+    private void AccountManagement()
     {
         _navigationManager.NavigateTo("/account", true);
     }
@@ -156,5 +156,4 @@
         _navigationManager.NavigateTo(_navigationManager.Uri, forceLoad: true);
         UserHasAccount = true;
     }
-
 }

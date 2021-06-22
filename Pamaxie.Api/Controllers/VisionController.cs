@@ -1,16 +1,12 @@
-﻿using System;
-using System.Drawing;
-using System.IO;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Pamaxie.Database.Redis.DataClasses;
 using PamaxieML.Api.Data;
 using PamaxieML.Model;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace PamaxieML.Api.Controllers
 {
@@ -33,7 +29,7 @@ namespace PamaxieML.Api.Controllers
         /// <returns>oAuth Token</returns>
         [HttpGet("status")]
         [AllowAnonymous]
-        public ActionResult<string> ProbeApiTask()
+        public static ActionResult<string> ProbeApiTask()
         {
             return "API is available";
         }
@@ -46,33 +42,32 @@ namespace PamaxieML.Api.Controllers
         [HttpPost("scanImage")]
         public async Task<ActionResult<string>> ScanImageTask()
         {
-            var reader = new StreamReader(Request.Body);
-            var result = reader.ReadToEndAsync().GetAwaiter().GetResult();
+            StreamReader reader = new(Request.Body);
+            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
-            var filehash = await ImageProcessing.GetFileHash(result);
-            MediaPredictionData data = new MediaPredictionData(filehash);
-            if (data.TryLoadData(out var knownResult))
+            string filehash = await ImageProcessing.GetFileHash(result);
+            MediaPredictionData data = new(filehash);
+            if (data.TryLoadData(out MediaData knownResult))
             {
                 return JsonConvert.SerializeObject(knownResult);
             }
 
-
-            var image = ImageProcessing.DownloadFile(result);
+            FileInfo? image = ImageProcessing.DownloadFile(result);
             // Add input data
-            var input = new ModelInput
+            ModelInput input = new()
             {
-                ImageSource = image.FullName
+                ImageSource = image?.FullName
             };
             // Load model and predict output of sample data
-            ConsumeModel.Predict(input, out var labelResult);
+            ConsumeModel.Predict(input, out OutputProperties labelResult);
 
-            var predictionData = new MediaData()
+            MediaData predictionData = new()
             {
                 DetectedLabels = labelResult
             };
 
             data.Data = predictionData;
-            image.Delete();
+            image?.Delete();
             //scanFile.Dispose();
             // Create the response
             return JsonConvert.SerializeObject(labelResult);
