@@ -8,21 +8,31 @@ namespace Pamaxie.MediaDetection
     /// <summary>
     /// Class responsible for detecting the file type of a stream
     /// </summary>
-    public class FileDetection
+    public static class FileDetection
     {
         /// <summary>
         /// Stores the file types that we created
         /// </summary>
-        private readonly IEnumerable<FileType> _fileTypes;
+        private static readonly List<FileType> _fileTypes;
 
         /// <summary>
         /// Initialises the Format inspector with the included file formats
         /// </summary>
-        public FileDetection() : this(FileTypeLocator.GetFileTypes()) { }
-
-        public FileDetection(IEnumerable<FileType> fileTypes)
+        static FileDetection()
         {
-            _fileTypes = fileTypes ?? throw new ArgumentNullException(nameof(fileTypes), "File types cannot be null");
+            AddFileTypes(null);
+        }
+
+        /// <summary>
+        /// Add a number of file types to the list
+        /// </summary>
+        /// <param name="fileTypes"></param>
+        public static void AddFileTypes(IList<FileType> fileTypes)
+        {
+            var types = FileTypeLocator.GetFileTypes();
+            _fileTypes.AddRange(types);
+            if (fileTypes == null || fileTypes.Count == 0) return;
+            _fileTypes.AddRange(fileTypes);
         }
 
         /// <summary>
@@ -32,7 +42,7 @@ namespace Pamaxie.MediaDetection
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">Thrown is stream was reached in or if it was null</exception>
         /// <exception cref="ArgumentException">Thrown if the stream was not seekable or empty</exception>
-        public FileType DetermineFileType(Stream stream)
+        public static FileType DetermineFileType(this Stream stream)
         {
             if (stream == null)
             {
@@ -45,7 +55,7 @@ namespace Pamaxie.MediaDetection
                 throw new ArgumentException("The passed stream is not seekable or empty");
             }
 
-            var fileTypeMatches = FindFileTypes(stream);
+            var fileTypeMatches = stream.FindFileTypes();
 
             if (fileTypeMatches.Count > 1)
             {
@@ -60,16 +70,15 @@ namespace Pamaxie.MediaDetection
             return null;
         }
 
-
         /// <summary>
         /// Determine the possible file formats of a stream
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        internal List<FileType> FindFileTypes(Stream stream)
+        internal static List<FileType> FindFileTypes(this Stream stream)
         {
             var types = _fileTypes.OrderBy(t => t.HeaderLength).ToList();
-            for (int i = 0; i < types.Count; i++)
+            for (var i = 0; i < types.Count; i++)
             {
                 if (!types[i].IsMatch(stream))
                 {
@@ -80,16 +89,21 @@ namespace Pamaxie.MediaDetection
 
             if (types.Count > 1)
             {
-                var fileReaders = types.OfType<IFileTypeReader>().ToList();
+                var fileReaders = Enumerable.OfType<IFileTypeReader>(types).ToList();
 
                 if (fileReaders.Any())
                 {
                     var file = fileReaders[0].Read(stream);
                     foreach (var reader in fileReaders)
                     {
+                        if (reader is null) continue;
+
+                        // ReSharper disable once SuspiciousTypeConversion.Global
+                        if (reader is not FileType type) continue;
+
                         if (!reader.IsMatch(file))
                         {
-                            types.Remove((FileType) reader);
+                            types.Remove(type);
                         }
                     }
                 }
@@ -99,21 +113,20 @@ namespace Pamaxie.MediaDetection
             return types;
         }
 
-        private static void RemoveBaseTypes(List<FileType> canidates)
+        private static void RemoveBaseTypes(List<FileType> candidates)
         {
-            for (var i = 0; i < canidates.Count; i++)
+            for (var i = 0; i < candidates.Count; i++)
             {
-                for (var j = 0; j < canidates.Count; j++)
+                for (var j = 0; j < candidates.Count; j++)
                 {
-                    if (i != j && canidates[j].GetType().IsAssignableFrom(canidates[i].GetType()))
+                    if (i != j && candidates[j].GetType().IsAssignableFrom(candidates[i].GetType()))
                     {
-                        canidates.RemoveAt(j);
+                        candidates.RemoveAt(j);
                         i--;
                         j--;
                     }
                 }
             }
         }
-        
     }
 }

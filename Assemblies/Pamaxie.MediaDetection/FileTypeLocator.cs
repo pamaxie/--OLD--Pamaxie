@@ -5,20 +5,28 @@ using System.Reflection;
 
 namespace Pamaxie.MediaDetection
 {
-    public static class FileTypeLocator
+    internal static class FileTypeLocator
     {
-        public static IEnumerable<FileType> GetFileTypes()
+        /// <summary>
+        /// Used to Get the File types via Assembly Reflection
+        /// </summary>
+        /// <returns></returns>
+        internal static IEnumerable<FileType> GetFileTypes()
         {
             return GetFileTypes(typeof(FileTypeLocator).GetTypeInfo().Assembly);
         }
         
-        public static IEnumerable<FileType> GetFileTypes(Assembly assembly)
+        /// <summary>
+        /// Used to Get the File types via Assembly Reflection
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        internal static IEnumerable<FileType> GetFileTypes(Assembly assembly)
         {
             if (assembly == null)
-            {
                 throw new ArgumentNullException(nameof(assembly),
                     "Must send in an assembly to get the file types from");
-            }
 
             return assembly.GetTypes()
                 .Where(t => typeof(FileType).IsAssignableFrom(t))
@@ -28,19 +36,23 @@ namespace Pamaxie.MediaDetection
                 .OfType<FileType>();
         }
 
-        public static IEnumerable<FileType> GetFileTypes(Assembly assembly, bool includeDefaults)
+        /// <summary>
+        /// Used to Get the File types via Assembly Reflection
+        /// </summary>
+        /// <param name="assembly">The assembly to get</param>
+        /// <param name="includeLocal">if the ones from this assembly should be included as well</param>
+        /// <returns></returns>
+        internal static IEnumerable<FileType> GetFileTypes(Assembly assembly, bool includeLocal)
         {
             var typesInAssembly = GetFileTypes(assembly);
 
-            if (!includeDefaults)
-            {
-                return typesInAssembly;
-            }
-            else
+            if (includeLocal)
             {
                 var typesThisAssembly = GetFileTypes();
                 return typesInAssembly.Union(typesThisAssembly);
             }
+            
+            return typesInAssembly;
         }
     }
 }

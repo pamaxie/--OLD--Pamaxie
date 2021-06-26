@@ -10,12 +10,20 @@ using MudBlazor.Services;
 using Pamaxie.Database.Extensions;
 using Pamaxie.Website.Services;
 using System;
+using AspNetCoreRateLimit;
 
-namespace Pamaxie.Website
-
+namespace Pamaxie.Website 
 {
+    /// <summary>
+    /// Startup class, usually gets called by <see cref="Program"/>
+    /// </summary>
     public class Startup
     {
+        
+        /// <summary>
+        /// Initializer
+        /// </summary>
+        /// <param name="configuration">Configuration to use</param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -23,8 +31,12 @@ namespace Pamaxie.Website
 
         private IConfiguration Configuration { get; }
 
+        
         // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        /// <summary>
+        /// This method gets called by the runtime to add services to the container for dependency injection
+        /// </summary>
+        /// <param name="services">Service Collection to add services to</param>
         public void ConfigureServices(IServiceCollection services)
         {
             IConfigurationSection dbConfigSection = Configuration.GetSection("Pamaxie");
@@ -35,8 +47,7 @@ namespace Pamaxie.Website
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<BrowserService>();
-            //Adds access to the HTTP Context
-            services.AddHttpContextAccessor();
+
 
             CookiePolicyOptions cookiePolicy = new()
             {
@@ -45,6 +56,14 @@ namespace Pamaxie.Website
 
             //Add the Mudblazor Theme
             services.AddMudServices();
+
+            services.AddHsts(options =>
+            {
+                options.Preload = true;
+                options.IncludeSubDomains = false;
+                options.MaxAge = TimeSpan.FromDays(60);
+            });
+
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -63,6 +82,9 @@ namespace Pamaxie.Website
 
             services.AddApplicationInsightsTelemetry();
             
+            //Adds access to the HTTP Context
+            services.AddHttpContextAccessor();
+            
             if (!DbExtensions.SqlDbCheckup(out string error))
             {
                 Console.WriteLine(error);
@@ -70,7 +92,12 @@ namespace Pamaxie.Website
             }
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
+        /// <summary>
+        /// This is called by the runtime to configure the HTTP request pipeline
+        /// </summary>
+        /// <param name="app">Application Builder</param>
+        /// <param name="env">Web-host Environment</param>
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -88,6 +115,7 @@ namespace Pamaxie.Website
             {
                 MinimumSameSitePolicy = SameSiteMode.Lax
             });
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

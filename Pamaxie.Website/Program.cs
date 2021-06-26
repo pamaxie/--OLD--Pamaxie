@@ -5,6 +5,10 @@ namespace Pamaxie.Website
 {
     public class Program
     {
+        /// <summary>
+        /// Main entry point for the application
+        /// </summary>
+        /// <param name="args">Launch Parameters</param>
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();

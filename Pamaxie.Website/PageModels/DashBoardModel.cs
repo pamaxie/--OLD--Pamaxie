@@ -19,7 +19,11 @@ namespace Pamaxie.Website.PageModels
         protected bool AcceptedTos { get; set; }
         protected MudTextField<string> PwField1;
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pw"></param>
+        /// <returns></returns>
         protected static IEnumerable<string> PasswordStrength(string pw)
         {
             if (string.IsNullOrWhiteSpace(pw))
@@ -37,12 +41,19 @@ namespace Pamaxie.Website.PageModels
                 yield return "Password must contain at least one digit";
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         protected string PasswordMatch(string arg)
         {
             return PwField1.Value != arg ? "Passwords don't match" : null;
         }
         
-        //Create a new application
+        /// <summary>
+        /// Create a new application
+        /// </summary>
         protected void CreateEmptyApplication()
         {
             NewApplication = new Application()
@@ -55,6 +66,9 @@ namespace Pamaxie.Website.PageModels
             };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected void CreateApplication()
         {
             NewApplication.AppToken = PwField1.Value;

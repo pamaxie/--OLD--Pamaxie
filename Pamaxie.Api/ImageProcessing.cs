@@ -22,7 +22,7 @@ namespace PamaxieML.Api
 #nullable enable
         public static FileInfo? DownloadFile(string downloadUrl)
         {
-            Guid imageNumber = Guid.NewGuid();
+            var imageNumber = Guid.NewGuid();
             WebRequest req = WebRequest.Create(downloadUrl);
             HttpWebRequest request = (HttpWebRequest)req;
             request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0";
@@ -31,7 +31,7 @@ namespace PamaxieML.Api
             WebResponse response = request.GetResponse();
             Stream stream = response.GetResponseStream();
 
-            string? fileName = $"{TempImageDirectory}\\{imageNumber}.jpg";
+            var fileName = $"{TempImageDirectory}\\{imageNumber}.jpg";
 
             Image img = Image.Load(Configuration.Default, stream);
             img.Mutate(x => x
@@ -46,8 +46,8 @@ namespace PamaxieML.Api
 
         public static async Task<string> GetFileHash(string url)
         {
-            WebRequest req = WebRequest.Create(url);
-            HttpWebRequest request = (HttpWebRequest)req;
+            var req = WebRequest.Create(url);
+            var request = (HttpWebRequest)req;
             request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0";
             request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
             request.Headers.Add("Accept-Encoding", "gzip, deflate");
@@ -59,7 +59,7 @@ namespace PamaxieML.Api
         private static async Task<string> GetHashAsync<T>(Stream stream) where T : HashAlgorithm, new()
         {
             using T algo = new();
-            byte[] buffer = new byte[8192];
+            var buffer = new byte[8192];
             int bytesRead;
 
             // compute the hash on 8KiB blocks

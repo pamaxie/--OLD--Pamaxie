@@ -9,6 +9,7 @@ using Pamaxie.Database.Extensions;
 using PamaxieML.Api.Security;
 using System;
 using System.Text;
+using AspNetCoreRateLimit;
 
 namespace PamaxieML.Api
 {
@@ -22,7 +23,7 @@ namespace PamaxieML.Api
         private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        internal void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             //Load Data Storage Configuration from appsettings.json
             
@@ -74,6 +75,7 @@ namespace PamaxieML.Api
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
+            //app.UseClientRateLimiting();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
