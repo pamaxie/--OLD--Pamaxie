@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.IO;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Pamaxie.Api.Data;
 using Pamaxie.Database.Redis.DataClasses;
-using PamaxieML.Api.Data;
 using PamaxieML.Model;
-using System.IO;
-using System.Threading.Tasks;
 
-namespace PamaxieML.Api.Controllers
+namespace Pamaxie.Api.Controllers
 {
     [Authorize]
     [ApiController]

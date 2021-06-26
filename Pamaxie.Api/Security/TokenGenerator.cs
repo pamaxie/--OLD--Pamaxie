@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using PamaxieML.Api.Data;
-using System;
+﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Pamaxie.Api.Data;
 
-namespace PamaxieML.Api.Security
+namespace Pamaxie.Api.Security
 {
     public class TokenGenerator
     {

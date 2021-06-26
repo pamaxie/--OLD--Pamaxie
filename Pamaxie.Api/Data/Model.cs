@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace PamaxieML.Api.Data
+namespace Pamaxie.Api.Data
 {
     public class UserAuthDataLocation
     {

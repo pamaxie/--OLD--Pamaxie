@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Pamaxie.Database.Sql.DataClasses;
 using Pamaxie.Extensions;
-using PamaxieML.Api.Security;
-using PamaxieML.Api.Data;
 using System.IO;
+using Pamaxie.Api.Data;
+using Pamaxie.Api.Security;
 
 namespace Pamaxie.Api.Controllers
 {

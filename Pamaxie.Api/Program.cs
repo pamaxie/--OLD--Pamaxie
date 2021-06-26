@@ -1,11 +1,11 @@
+using System;
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using PamaxieML.Model;
-using System;
-using System.IO;
 
-namespace PamaxieML.Api
+namespace Pamaxie.Api
 {
     public static class Program
     {

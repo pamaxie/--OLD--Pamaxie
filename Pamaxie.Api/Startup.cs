@@ -1,3 +1,5 @@
+using System;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -5,13 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Pamaxie.Api.Security;
 using Pamaxie.Database.Extensions;
-using PamaxieML.Api.Security;
-using System;
-using System.Text;
-using AspNetCoreRateLimit;
 
-namespace PamaxieML.Api
+namespace Pamaxie.Api
 {
     public class Startup
     {

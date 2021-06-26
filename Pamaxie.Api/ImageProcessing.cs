@@ -1,14 +1,14 @@
-﻿using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 using Image = SixLabors.ImageSharp.Image;
 
-namespace PamaxieML.Api
+namespace Pamaxie.Api
 {
     public static class ImageProcessing
     {
