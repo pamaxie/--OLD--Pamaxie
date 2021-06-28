@@ -13,7 +13,7 @@ namespace Pamaxie.MediaDetection
         /// <summary>
         /// Stores the file types that we created
         /// </summary>
-        private static readonly List<FileType> _fileTypes;
+        private static readonly List<FileType> _fileTypes = new List<FileType>();
 
         /// <summary>
         /// Initialises the Format inspector with the included file formats
@@ -50,11 +50,26 @@ namespace Pamaxie.MediaDetection
                     "We require a stream to scan. Please ensure it is not null.");
             }
 
-            if (!stream.CanSeek || stream.Length == 0)
+            //Attempt to make stream seekable if it is not already.
+            if (stream.CanRead && !stream.CanSeek)
             {
-                throw new ArgumentException("The passed stream is not seekable or empty");
+                var ms = new MemoryStream();
+                stream.CopyTo(ms);
+                ms.Position = 0;
+                stream = ms;
             }
 
+            //Stream is still not seekable. just throw an exception at this point
+            if (!stream.CanSeek)
+            {
+                throw new ArgumentException("The passed stream is not seekable and couldn't be made seekable automatically or empty");
+            }
+
+            if (stream.Length == 0)
+            {
+                return null;
+            }
+            
             var fileTypeMatches = stream.FindFileTypes();
 
             if (fileTypeMatches.Count > 1)
@@ -64,7 +79,7 @@ namespace Pamaxie.MediaDetection
 
             if (fileTypeMatches.Count > 0)
             {
-                return fileTypeMatches.OrderByDescending(t => t.HeaderLength).FirstOrDefault();
+                return fileTypeMatches.OrderByDescending(t => t.Signatures.OrderByDescending(x => x.Count)).FirstOrDefault();
             }
 
             return null;
@@ -77,36 +92,12 @@ namespace Pamaxie.MediaDetection
         /// <returns></returns>
         internal static List<FileType> FindFileTypes(this Stream stream)
         {
-            var types = _fileTypes.OrderBy(t => t.HeaderLength).ToList();
-            for (var i = 0; i < types.Count; i++)
+            var types = new List<FileType>();
+            
+            foreach (var type in _fileTypes.OrderBy(t => t.Signatures.OrderBy(x => x.Count)).ToList())
             {
-                if (!types[i].IsMatch(stream))
-                {
-                    types.RemoveAt(i);
-                    i--;
-                }
-            }
-
-            if (types.Count > 1)
-            {
-                var fileReaders = Enumerable.OfType<IFileTypeReader>(types).ToList();
-
-                if (fileReaders.Any())
-                {
-                    var file = fileReaders[0].Read(stream);
-                    foreach (var reader in fileReaders)
-                    {
-                        if (reader is null) continue;
-
-                        // ReSharper disable once SuspiciousTypeConversion.Global
-                        if (reader is not FileType type) continue;
-
-                        if (!reader.IsMatch(file))
-                        {
-                            types.Remove(type);
-                        }
-                    }
-                }
+                if (!type.IsMatch(stream)) continue;
+                types.Add(type);
             }
 
             stream.Position = 0;

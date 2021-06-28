@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Pamaxie.MediaDetection;
 using PamaxieML.Model;
 
 namespace Pamaxie.Api
@@ -16,7 +17,7 @@ namespace Pamaxie.Api
             {
                 Console.WriteLine("We are testing if the neural network works. This may take a minute.");
 
-                FileInfo image = ImageProcessing.DownloadFile("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png");
+                FileInfo image = ImageProcessing.DownloadFile("https://cdn.discordapp.com/attachments/777425987914039296/858793909945368616/snes9x-x64.exe");
                 // Add input data
                 ModelInput input = new()
                 {
@@ -50,7 +51,7 @@ namespace Pamaxie.Api
                     webBuilder.UseStartup<Startup>()
                         .UseConfiguration(configuration)
                         .UseKestrel()
-                        .UseUrls("http://0.0.0.0:80")
+                        .UseUrls("http://0.0.0.0:8080")
                         .UseIISIntegration();
                 });
         }

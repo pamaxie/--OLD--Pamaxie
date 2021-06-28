@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Pamaxie.MediaDetection.FileTypes.Base
 {
     /// <summary>
@@ -9,27 +11,19 @@ namespace Pamaxie.MediaDetection.FileTypes.Base
     /// </remarks>
     public abstract class Image : FileType
     {
-        protected Image(byte[] signature, string mediaType, string extension) : base(signature, mediaType, extension)
+        protected Image(IList<byte[]> signatures, string mediaType, string extension) : base(signatures, mediaType, extension)
         {
         }
 
-        protected Image(byte[] signature, string mediaType, string extension, int offset) : base(signature, mediaType, extension, offset)
+        protected Image(IList<byte[]> signatures, string mediaType, string extension, int offset) : base(signatures, mediaType, extension, offset)
         {
         }
 
-        protected Image(byte[] signature, int headerLength, string mediaType, string extension) : base(signature, headerLength, mediaType, extension)
+        protected Image(IList<byte[]> signatures, string mediaType, string extension, int offset, string name) : base(signatures, mediaType, extension, offset, name)
         {
         }
 
-        protected Image(byte[] signature, int headerLength, string mediaType, string extension, int offset) : base(signature, headerLength, mediaType, extension, offset)
-        {
-        }
-
-        protected Image(byte[] signature, int headerLength, string mediaType, string extension, int offset, string name) : base(signature, headerLength, mediaType, extension, offset, name)
-        {
-        }
-
-        protected Image(byte[] signature, int headerLength, string mediaType, string extension, int offset, string name, string software) : base(signature, headerLength, mediaType, extension, offset, name, software)
+        protected Image(IList<byte[]> signatures, string mediaType, string extension, int offset, string name, string software) : base(signatures, mediaType, extension, offset, name, software)
         {
         }
     }

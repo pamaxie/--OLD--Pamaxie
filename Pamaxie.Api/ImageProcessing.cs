@@ -4,6 +4,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Pamaxie.MediaDetection;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using Image = SixLabors.ImageSharp.Image;
@@ -30,7 +31,7 @@ namespace Pamaxie.Api
             request.Headers.Add("Accept-Encoding", "gzip, deflate");
             WebResponse response = request.GetResponse();
             Stream stream = response.GetResponseStream();
-
+            var fileFormat = FileDetection.DetermineFileType(stream);
             var fileName = $"{TempImageDirectory}\\{imageNumber}.jpg";
 
             Image img = Image.Load(Configuration.Default, stream);

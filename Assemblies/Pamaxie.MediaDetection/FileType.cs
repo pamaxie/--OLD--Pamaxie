@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -8,83 +9,58 @@ namespace Pamaxie.MediaDetection
     public abstract class FileType : IEquatable<FileType>
     {
         /// <summary>
-        /// Initializes a new instance of the FileFormat class which has the specified signature and media type.
+        /// Initializes a new instance of the FileType class which has the specified signature and media type.
         /// </summary>
-        /// <param name="signature">The header signature of the type.</param>
+        /// <param name="signatures">The header signature of the type.</param>
         /// <param name="mediaType">The media type of the type.</param>
         /// <param name="extension">The appropriate file extension for the format.</param>
-        protected FileType(byte[] signature, string mediaType, string extension) : this(signature,
-            signature == null ? 0 : signature.Length, mediaType, extension, 0)
+        protected FileType(IList<byte[]> signatures, string mediaType, string extension) : this(signatures, mediaType, extension, 0)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the FileType class which has the specified signature and media type.
         /// </summary>
-        /// <param name="signature">The header signature of the type.</param>
-        /// <param name="mediaType">The media type of the type.</param>
-        /// <param name="extension">The appropriate file extension for the type.</param>
-        /// <param name="offset">The offset at which the signature is located.</param>
-        protected FileType(byte[] signature, string mediaType, string extension, int offset) : this(signature,
-            signature == null ? offset : signature.Length + offset, mediaType, extension, offset)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the FileType class which has the specified signature and media type.
-        /// </summary>
-        /// <param name="signature">The header signature of the type.</param>
-        /// <param name="headerLength">The number of bytes required to determine the type.</param>
-        /// <param name="mediaType">The media type of the type.</param>
-        /// <param name="extension">The appropriate file extension for the format.</param>
-        protected FileType(byte[] signature, int headerLength, string mediaType, string extension) : this(signature,
-            headerLength, mediaType, extension, 0)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the FileType class which has the specified signature and media type.
-        /// </summary>
-        /// <param name="signature">The header signature of the type.</param>
+        /// <param name="signatures">The header signature of the type.</param>
         /// <param name="headerLength">The number of bytes required to determine the type.</param>
         /// <param name="mediaType">The media type of the type.</param>
         /// <param name="extension">The appropriate file extension for the type.</param>
         /// <param name="offset">The offset at which the signature is located.</param>
-        protected FileType(byte[] signature, int headerLength, string mediaType, string extension, int offset) : this(
-            signature, headerLength, mediaType, extension, offset, String.Empty, String.Empty)
+        protected FileType(IList<byte[]> signatures, string mediaType, string extension, int offset) : this(
+            signatures, mediaType, extension, offset, String.Empty, String.Empty)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the FileType class which has the specified signature and media type.
         /// </summary>
-        /// <param name="signature">The header signature of the type.</param>
+        /// <param name="signatures">The header signature of the type.</param>
         /// <param name="headerLength">The number of bytes required to determine the type.</param>
         /// <param name="mediaType">The media type of the type.</param>
         /// <param name="extension">The appropriate file extension for the type.</param>
         /// <param name="offset">The offset at which the signature is located.</param>
         /// <param name="name">The normally used name of the file format</param>
-        protected FileType(byte[] signature, int headerLength, string mediaType, string extension, int offset,
-            string name) : this(signature, headerLength, mediaType, extension, offset, name, String.Empty)
+        protected FileType(IList<byte[]> signatures, string mediaType, string extension, int offset,
+            string name) : this(signatures, mediaType, extension, offset, name, String.Empty)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the FileType class which has the specified signature and media type.
         /// </summary>
-        /// <param name="signature">The header signature of the type.</param>
-        /// <param name="headerLength">The number of bytes required to determine the type. Determined via the <param name="signature"></param> if zero.</param>
+        /// <param name="signatures">The header signature of the type.</param>
+        /// <param name="headerLength">The number of bytes required to determine the type. Determined via the <param name="signatures"></param> if zero.</param>
         /// <param name="mediaType">The media type of the type.</param>
         /// <param name="extension">The appropriate file extension for the type.</param>
         /// <param name="offset">The offset at which the signature is located.</param>
         /// <param name="name">The normally used name of the file format</param>
         /// <param name="software">Software examples that this format is normally used with</param>
-        protected FileType(byte[] signature, int headerLength, string mediaType, string extension, int offset,
+        protected FileType(IList<byte[]> signatures, string mediaType, string extension, int offset,
             string name, string software)
         {
-            if (signature == null || signature.Length == 0)
+            if (signatures == null)
             {
-                throw new ArgumentNullException(nameof(signature),
+                throw new ArgumentNullException(nameof(signatures),
                     "The Signature of the filetype cannot be null or empty, please enter a signature for the new FileType");
             }
 
@@ -94,13 +70,14 @@ namespace Pamaxie.MediaDetection
                     "The type of media cannot be null, please enter a media type for the new FileType");
             }
 
-            if (headerLength == 0)
+            if (Signatures == null)
+                Signatures = new List<ReadOnlyCollection<byte>>();
+            
+            foreach (var signature in signatures)
             {
-                headerLength = signature.Length + offset;
+                Signatures.Add(new ReadOnlyCollection<byte>(signature));
             }
-
-            Signature = new ReadOnlyCollection<byte>(signature);
-            HeaderLength = headerLength;
+            
             HeaderOffset = offset;
             Extension = extension;
             MediaType = mediaType;
@@ -111,7 +88,7 @@ namespace Pamaxie.MediaDetection
         /// <summary>
         /// Byte signature to identify the file type
         /// </summary>
-        public ReadOnlyCollection<byte> Signature { get; }
+        public IList<ReadOnlyCollection<byte>> Signatures { get; } = new List<ReadOnlyCollection<byte>>();
 
         /// <summary>
         /// The extension of the file format
@@ -134,11 +111,6 @@ namespace Pamaxie.MediaDetection
         public string MediaType { get; }
 
         /// <summary>
-        /// The length of the FileType header
-        /// </summary>
-        public int HeaderLength { get; }
-
-        /// <summary>
         /// The Offset of the Header
         /// </summary>
         public int HeaderOffset { get; }
@@ -149,22 +121,32 @@ namespace Pamaxie.MediaDetection
         /// <returns></returns>
         public virtual bool IsMatch(Stream stream)
         {
-            if (stream == null || (stream.Length < HeaderLength && HeaderLength < int.MaxValue) ||
-                HeaderOffset > stream.Length)
+            //BUG: This needs to be rewritten completely
+
+            var matched = false;
+            
+            foreach (var signature in Signatures)
             {
-                return false;
+                if (stream == null || (stream.Length < signature.Count && signature.Count < int.MaxValue) ||
+                    HeaderOffset > stream.Length)
+                {
+                    continue;
+                }
+                
+                stream.Position = HeaderOffset;
+                for (var i = 0; i < signature.Count; i++)
+                {
+                    var b = stream.ReadByte();
+                    if (b == signature[i]) 
+                        matched = true;
+                    matched = false;
+                    break;
+                }
+
+                matched = true;
             }
 
-            stream.Position = HeaderOffset;
-
-            for (var i = 0; i < Signature.Count; i++)
-            {
-                var b = stream.ReadByte();
-                if (b == Signature[i]) return true;
-                return false;
-            }
-
-            return true;
+            return matched;
         }
 
         /// <summary>
@@ -173,7 +155,7 @@ namespace Pamaxie.MediaDetection
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(Signature, Extension, Name, Software, MediaType, HeaderLength, HeaderOffset);
+            return HashCode.Combine(Signatures, Extension, Name, Software, MediaType, HeaderOffset);
         }
 
         /// <summary>
@@ -210,7 +192,7 @@ namespace Pamaxie.MediaDetection
             if (fileType == null) return false;
             if (ReferenceEquals(this, fileType)) return true;
             if (GetType() != fileType.GetType()) return false;
-            return fileType.Signature.SequenceEqual(Signature);
+            return fileType.Signatures.SequenceEqual(Signatures);
         }
     }
 }
