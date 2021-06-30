@@ -6,11 +6,18 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
       <PackageReference Include="xunit" Version="2.4.1" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\Pamaxie.Api\Pamaxie.Api.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="appsettings.test.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
