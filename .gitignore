@@ -351,12 +351,12 @@ MigrationBackup/
 .ionide/
 
 #Ignore Specific configuration files or files that may contain private data (Disabled for this checkin since confugrations changed)
+Testing/Test.Pamaxie.API/appsettings.test.json
 Tooling/Pamaxie.Leecher/Database/SqlDbContext.cs
 Pamaxie.Blazor/appsettings.Development.json
 Pamaxie.Blazor/appsettings.json
 Pamaxie.Api/appsettings.json
 Pamaxie.Api/appsettings.Development.json
-Pamaxie/Testing/Test.Pamaxie.API/appsettings.test.json
 
 #END OF FILE
 
