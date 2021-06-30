@@ -356,6 +356,7 @@ Pamaxie.Blazor/appsettings.Development.json
 Pamaxie.Blazor/appsettings.json
 Pamaxie.Api/appsettings.json
 Pamaxie.Api/appsettings.Development.json
+Pamaxie/Testing/Test.Pamaxie.API/appsettings.test.json
 
 #END OF FILE
 
