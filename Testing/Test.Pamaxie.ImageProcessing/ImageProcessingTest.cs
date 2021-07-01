@@ -1,6 +1,5 @@
 ﻿using Xunit;
 using ImageProcessing = Pamaxie.ImageProcessing.ImageProcessing;
-//Change reference once ImageProcessing have been moved to it's own assembly and remove reference to Pamaxie.Api
 
 namespace Test.Pamaxie.ImageProcessing_UnitTesting
 {
@@ -32,12 +31,12 @@ namespace Test.Pamaxie.ImageProcessing_UnitTesting
         /// <param name="url">Url of the file you want to download</param>
         //[Theory]
         //[InlineData("https://cdn.discordapp.com/emojis/78196489451680563")]
-        public void DownloadFile_Failure(string url)
-        {
-            //This will be done by trying to send a url that is not a file.
-            var file = ImageProcessing.DownloadFile(url);
-            Assert.Null(file);
-        }
+        //public void DownloadFile_Failure(string url)
+        //{
+        //    //This will be done by trying to send a url that is not a file.
+        //    var file = ImageProcessing.DownloadFile(url);
+        //    Assert.Null(file);
+        //}
 
         /// <summary>
         /// Testing for succeeding in getting the file hash from a url file
