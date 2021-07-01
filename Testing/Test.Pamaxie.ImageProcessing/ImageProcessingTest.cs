@@ -1,5 +1,5 @@
 ﻿using Xunit;
-using ImageProcessing = Pamaxie.Api.ImageProcessing;
+using ImageProcessing = Pamaxie.ImageProcessing.ImageProcessing;
 //Change reference once ImageProcessing have been moved to it's own assembly and remove reference to Pamaxie.Api
 
 namespace Test.Pamaxie.ImageProcessing_UnitTesting

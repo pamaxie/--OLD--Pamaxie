@@ -1,12 +1,12 @@
-﻿using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Pamaxie.Api.Data;
 using Pamaxie.Database.Redis.DataClasses;
 using PamaxieML.Model;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Pamaxie.Api.Controllers
 {
@@ -45,21 +45,21 @@ namespace Pamaxie.Api.Controllers
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
-            string filehash = await ImageProcessing.GetFileHash(result);
+            string filehash = await ImageProcessing.ImageProcessing.GetFileHash(result);
             MediaPredictionData data = new(filehash);
-            if (data.TryLoadData(out MediaData knownResult))
+            if (data.TryLoadData(out var knownResult))
             {
                 return JsonConvert.SerializeObject(knownResult);
             }
 
-            FileInfo image = ImageProcessing.DownloadFile(result);
+            FileInfo image = ImageProcessing.ImageProcessing.DownloadFile(result);
             // Add input data
             ModelInput input = new()
             {
                 ImageSource = image?.FullName
             };
             // Load model and predict output of sample data
-            ConsumeModel.Predict(input, out OutputProperties labelResult);
+            ConsumeModel.Predict(input, out var labelResult);
 
             MediaData predictionData = new()
             {
