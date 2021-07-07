@@ -11,6 +11,9 @@ using PamaxieML.Model;
 
 namespace PamaxieML.Model
 {
+    /// <summary>
+    /// BUG: Rewrite all of this, this is auto generated currently and doesn't nessecarily fit our needs.
+    /// </summary>
     public class ConsumeModel
     {
         private static Lazy<PredictionEngine<ModelInput, ModelOutput>> PredictionEngine = new Lazy<PredictionEngine<ModelInput, ModelOutput>>(CreatePredictionEngine);
