@@ -11,9 +11,14 @@ namespace Pamaxie.MediaDetection
     public static class FileDetection
     {
         /// <summary>
-        /// Stores the file types that we created
+        /// Stores a sorted set of File Types
         /// </summary>
-        private static readonly List<FileType> _fileTypes = new List<FileType>();
+        private static readonly Dictionary<ulong, FileType> FileTypes = new Dictionary<ulong, FileType>();
+
+        /// <summary>
+        /// Stores a sorted set of File Specifications
+        /// </summary>
+        private static readonly SortedSet<FileSpecification> FileSpecifications = new SortedSet<FileSpecification>();
 
         /// <summary>
         /// Initialises the Format inspector with the included file formats
@@ -21,18 +26,7 @@ namespace Pamaxie.MediaDetection
         static FileDetection()
         {
             AddFileTypes(null);
-        }
-
-        /// <summary>
-        /// Add a number of file types to the list
-        /// </summary>
-        /// <param name="fileTypes"></param>
-        public static void AddFileTypes(IList<FileType> fileTypes)
-        {
-            var types = FileTypeLocator.GetFileTypes();
-            _fileTypes.AddRange(types);
-            if (fileTypes == null || fileTypes.Count == 0) return;
-            _fileTypes.AddRange(fileTypes);
+            AddFileSpecifications(null);
         }
 
         /// <summary>
@@ -42,7 +36,7 @@ namespace Pamaxie.MediaDetection
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">Thrown is stream was reached in or if it was null</exception>
         /// <exception cref="ArgumentException">Thrown if the stream was not seekable or empty</exception>
-        public static FileType DetermineFileType(this Stream stream)
+        public static KeyValuePair<FileSpecification, FileType>? DetermineFileType(this Stream stream)
         {
             if (stream == null)
             {
@@ -62,62 +56,95 @@ namespace Pamaxie.MediaDetection
             //Stream is still not seekable. just throw an exception at this point
             if (!stream.CanSeek)
             {
-                throw new ArgumentException("The passed stream is not seekable and couldn't be made seekable automatically or empty");
+                throw new ArgumentException(
+                    "The passed stream is not seekable and couldn't be made seekable automatically or empty");
             }
 
             if (stream.Length == 0)
             {
                 return null;
             }
-            
+
             var fileTypeMatches = stream.FindFileTypes();
+            fileTypeMatches.Reverse();
+            FileType detectedSpec;
 
-            if (fileTypeMatches.Count > 1)
+            for (var i = 0; i < fileTypeMatches.Count; i++)
             {
-                RemoveBaseTypes(fileTypeMatches);
-            }
-
-            if (fileTypeMatches.Count > 0)
-            {
-                return fileTypeMatches.OrderByDescending(t => t.Signatures.OrderByDescending(x => x.Count)).FirstOrDefault();
+                FileSpecification item = fileTypeMatches.FirstOrDefault();
+                if (item == null)
+                    continue;
+                
+                var type = FileTypes.FirstOrDefault(x => x.Key == item.ReferenceTypeId);
+                if (type.Value != null)
+                {
+                    return new KeyValuePair<FileSpecification, FileType>(item, type.Value);
+                }
             }
 
             return null;
         }
+        
+        /// <summary>
+        /// Add a number of file types to the list
+        /// </summary>
+        /// <param name="fileTypes"></param>
+        public static void AddFileTypes(IList<FileType> fileTypes)
+        {
+            List<FileType> types;
+            if (fileTypes != null)
+                types = fileTypes.Concat(FileTypeLocator.GetFileTypes()).ToList();
+            else
+                types = FileTypeLocator.GetFileTypes().ToList();
+            
+            foreach (FileType type in types)
+            {
+                if (type.Id == default(ulong))
+                    throw new Exception("We could find a filetype without an Id being defined, this should never happen");
+                FileTypes.Add(type.Id, type);
+            }
+        }
 
         /// <summary>
-        /// Determine the possible file formats of a stream
+        /// Add a list of specifications 
         /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
-        internal static List<FileType> FindFileTypes(this Stream stream)
+        /// <param name="specifications"></param>
+        public static void AddFileSpecifications(IList<FileSpecification> specifications)
         {
-            var types = new List<FileType>();
+            if (FileSpecifications.Any())
+                specifications = specifications.Concat(FileSpecifications).ToList();
+            else if (specifications != null)
+                specifications = specifications.Concat(FileSpecLocator.GetFileSpecs()).ToList();
+            else
+                specifications = FileSpecLocator.GetFileSpecs().ToList();
             
-            foreach (var type in _fileTypes.OrderBy(t => t.Signatures.OrderBy(x => x.Count)).ToList())
+            specifications = specifications.OrderBy(x => x.Signature.Length).ToList();
+            for (var index = 0; index < specifications.Count; index++)
             {
-                if (!type.IsMatch(stream)) continue;
-                types.Add(type);
+                if (!FileSpecifications.Add(specifications[index]))
+                {
+                    throw new Exception("Failed adding one of the filetypes to list");
+                }
+                
+            }
+        }
+
+        /// <summary>
+        /// Determine the possible file specifications of a stream
+        /// </summary>
+        /// <param name="stream">The stream to find the specifications of</param>
+        /// <returns></returns>
+        private static SortedSet<FileSpecification> FindFileTypes(this Stream stream)
+        {
+            var fileTypes = new SortedSet<FileSpecification>();
+            foreach (FileSpecification specification in FileSpecifications.ToList())
+            {
+                if (!specification.IsMatch(stream)) continue;
+                fileTypes.Add(specification);
             }
 
             stream.Position = 0;
-            return types;
-        }
-
-        private static void RemoveBaseTypes(List<FileType> candidates)
-        {
-            for (var i = 0; i < candidates.Count; i++)
-            {
-                for (var j = 0; j < candidates.Count; j++)
-                {
-                    if (i != j && candidates[j].GetType().IsAssignableFrom(candidates[i].GetType()))
-                    {
-                        candidates.RemoveAt(j);
-                        i--;
-                        j--;
-                    }
-                }
-            }
+            return fileTypes;
         }
     }
 }

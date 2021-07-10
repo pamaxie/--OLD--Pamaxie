@@ -28,7 +28,8 @@ namespace Pamaxie.Api
             services.AddControllers();
             IConfigurationSection section = Configuration.GetSection("AuthData");
             byte[] key = Encoding.ASCII.GetBytes(section.GetValue<string>("Secret"));
-            services.AddAuthentication(x =>
+            services
+                .AddAuthentication(x =>
                 {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;

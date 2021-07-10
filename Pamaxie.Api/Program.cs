@@ -16,7 +16,7 @@ namespace Pamaxie.Api
             {
                 Console.WriteLine("We are testing if the neural network works. This may take a minute.");
 
-                var image = ImageProcessing.ImageProcessing.DownloadFile("https://cdn.discordapp.com/attachments/777425987914039296/858793909945368616/snes9x-x64.exe");
+                FileInfo? image = ImageProcessing.ImageProcessing.DownloadFile("https://www.pinclipart.com/picdir/middle/9-93455_what-is-the-meaning-of-png-clipart-download.png");
                 // Add input data
                 ModelInput input = new()
                 {
