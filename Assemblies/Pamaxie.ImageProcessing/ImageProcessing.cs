@@ -31,6 +31,7 @@ namespace Pamaxie.ImageProcessing
             request.Headers.Add("Accept-Encoding", "gzip, deflate");
             WebResponse response = request.GetResponse();
             Stream stream = response.GetResponseStream();
+            var spec = stream.DetermineFileType();
             //var fileFormat = FileDetection.DetermineFileType(stream);
             var fileName = $"{TempImageDirectory}\\{imageNumber}.jpg";
 

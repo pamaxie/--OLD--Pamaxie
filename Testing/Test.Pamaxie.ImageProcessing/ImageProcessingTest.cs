@@ -1,10 +1,14 @@
-﻿using Xunit;
+﻿using System.Diagnostics;
+using Xunit;
 using ImageProcessing = Pamaxie.ImageProcessing.ImageProcessing;
 
 namespace Test.Pamaxie.ImageProcessing_UnitTesting
 {
     /// <summary>
     /// Testing class for ImageProcessing
+    ///BUG: we cannot test things with data on any external system that doesn't run dependent on the test. The test has to run no matter on external systems or servers.
+    /// A way to fix this would be to implement a test with a static stream of data and the hash it generates, this would be much more preferred.
+    /// The Download class has to be interfaced and a seperate interface implementation for testing would be nessecary.
     /// </summary>
     public class ImageProcessingTest
     {
@@ -17,6 +21,7 @@ namespace Test.Pamaxie.ImageProcessing_UnitTesting
         [InlineData("https://cdn.discordapp.com/emojis/781964894516805632.gif")]
         public void DownloadFile_Succeed(string url)
         {
+
             //Once FileDetection.DetermineFileType() have been fixed, then make this test method run through the
             //FileDetection.DetermineFileType() again to determine if the file have been saved to the original filetype
             //and can be loaded.
@@ -26,7 +31,7 @@ namespace Test.Pamaxie.ImageProcessing_UnitTesting
         
         /// <summary>
         /// Testing for failure in downloading a url file
-        /// BUG Currently crashes, since no file can be found.
+        /// BUG: Currently crashes, since no file can be found.
         /// </summary>
         /// <param name="url">Url of the file you want to download</param>
         //[Theory]

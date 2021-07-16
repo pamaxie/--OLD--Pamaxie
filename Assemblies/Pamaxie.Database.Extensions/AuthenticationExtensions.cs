@@ -62,7 +62,7 @@ namespace Pamaxie.Extensions
         /// Update the Application authentication or create a new one if the reached in one does not exist
         /// </summary>
         /// <param name="applicationAuthentication">The <see cref="Application"/> that should be created</param>
-        /// <param name="creationError">The reason the creation failed if it did not it will be <see cref="null"/></param>
+        /// <param name="creationError">The reason the creation failed</param>
         /// <param name="shouldThrow">Should the method throw exceptions or just output the error</param>
         /// <returns><see cref="bool"/> Has been created / altered?</returns>
         private static bool CreateValue(this Application applicationAuthentication, out string creationError, bool shouldThrow)

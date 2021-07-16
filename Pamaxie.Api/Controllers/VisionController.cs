@@ -33,8 +33,7 @@ namespace Pamaxie.Api.Controllers
         {
             return "API is available";
         }
-
-
+        
         /// <summary>
         ///     Verifies the content of a sent image
         /// </summary>

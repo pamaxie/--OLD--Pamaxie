@@ -21,6 +21,10 @@ namespace Pamaxie.Extensions
             return dbContext.Applications.Where(x => x.UserId == userId).ToList();
         }
 
+        /// <summary>
+        /// Get the last Id of the Application Extensions
+        /// </summary>
+        /// <returns><see cref="long"/> representing the last known Id</returns>
         public static long GetLastIndex()
         {
             using SqlDbContext dbContext = new();

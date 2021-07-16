@@ -63,7 +63,10 @@ namespace Pamaxie.Api.Controllers
             {
                 appData = JsonConvert.DeserializeObject<Application>(result);
             }
-            catch { return StatusCode(400); }
+            catch
+            {
+                return StatusCode(400);
+            }
             
             if (default == appData?.ApplicationId) return BadRequest(ErrorHandler.UnAuthorized());
 

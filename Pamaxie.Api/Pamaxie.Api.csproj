@@ -6,6 +6,7 @@
     <SccAuxPath></SccAuxPath>
     <SccLocalPath></SccLocalPath>
     <Configurations>Debug;Release;Blazor Release;Apply Migrations</Configurations>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>

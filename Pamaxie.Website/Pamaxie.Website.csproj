@@ -5,6 +5,7 @@
     <SccProvider></SccProvider>
     <SccAuxPath></SccAuxPath>
     <SccLocalPath></SccLocalPath>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
