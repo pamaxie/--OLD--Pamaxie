@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Xunit;
+﻿using Xunit;
 using ImageProcessing = Pamaxie.ImageProcessing.ImageProcessing;
 
 namespace Test.Pamaxie.ImageProcessing_UnitTesting

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using Pamaxie.Database.Sql.DataClasses;
+using Pamaxie.Data;
 using Pamaxie.Extensions;
 using Pamaxie.Website.Authentication.Data;
 

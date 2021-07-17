@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Pamaxie.Database.Extensions.Data;
-using Pamaxie.Database.Sql.DataClasses;
 using Pamaxie.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Pamaxie.Data;
 
 namespace Pamaxie.Website.PageModels
 {

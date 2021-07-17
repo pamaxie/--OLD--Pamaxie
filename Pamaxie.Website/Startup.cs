@@ -10,7 +10,6 @@ using MudBlazor.Services;
 using Pamaxie.Database.Extensions;
 using Pamaxie.Website.Services;
 using System;
-using AspNetCoreRateLimit;
 
 namespace Pamaxie.Website 
 {

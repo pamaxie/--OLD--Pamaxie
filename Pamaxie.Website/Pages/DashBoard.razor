@@ -2,7 +2,6 @@
 @inherits DashBoardModel
 @using Microsoft.AspNetCore.Http
 @using Pamaxie.Database.Extensions.Data
-@using Pamaxie.Database.Sql.DataClasses
 @using Pamaxie.Extensions
 @using Pamaxie.Website.Authentication
 @using Pamaxie.Website.Authentication.Data
@@ -11,6 +10,7 @@
 @using System.Security.Claims
 @using System.Text
 @using System.Text.RegularExpressions
+@using Pamaxie.Data
 @using InputType = MudBlazor.InputType
 @inject NavigationManager _navigationManager
 @inject AuthenticationStateProvider _authenticationStateProvider

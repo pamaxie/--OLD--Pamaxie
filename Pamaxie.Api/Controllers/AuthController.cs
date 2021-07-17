@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Pamaxie.Database.Sql.DataClasses;
-using Pamaxie.Extensions;
 using System.IO;
 using Pamaxie.Api.Data;
 using Pamaxie.Api.Security;
+using Pamaxie.Data;
+using Pamaxie.Extensions;
 
 namespace Pamaxie.Api.Controllers
 {

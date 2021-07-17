@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Pamaxie.Database.Sql.DataClasses
+namespace Pamaxie.Data
 {
     /// <summary>
     ///     Data for Application specific things
@@ -18,8 +18,7 @@ namespace Pamaxie.Database.Sql.DataClasses
         /// <summary>
         /// The App Token that is reached in to us for auth
         /// </summary>
-        [NotMapped]
-        public string AppToken { get; set; }
+        [NotMapped] public string AppToken { get; set; }
 
         /// <summary>
         /// The User who owns the application

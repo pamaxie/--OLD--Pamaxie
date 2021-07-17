@@ -1,9 +1,9 @@
 ﻿using Pamaxie.Database.Extensions.Data;
 using Pamaxie.Database.Sql;
-using Pamaxie.Database.Sql.DataClasses;
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using Pamaxie.Data;
 
 namespace Pamaxie.Extensions
 {

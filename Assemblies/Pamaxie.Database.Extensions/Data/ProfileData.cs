@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Pamaxie.Database.Extensions.Data
+﻿namespace Pamaxie.Database.Extensions.Data
 {
     public class ProfileData : IProfileData
     {
