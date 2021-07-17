@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Microsoft.Extensions.Configuration;
+using Pamaxie.Api.Data;
 using Xunit;
 using TokenGenerator = Pamaxie.Api.Security.TokenGenerator;
 
@@ -22,7 +23,7 @@ namespace Test.Pamaxie.API_UnitTesting
             IConfiguration configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.test.json").Build();
             TokenGenerator tokenGenerator = new(configuration);
-            var result = tokenGenerator.CreateToken(id);
+            AuthToken result = tokenGenerator.CreateToken(id);
             Assert.NotNull(result);
             Assert.NotEmpty(result.Token);
         }

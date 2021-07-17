@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System.IO;
 using Xunit;
 using ImageProcessing = Pamaxie.ImageProcessing.ImageProcessing;
 
@@ -21,14 +21,13 @@ namespace Test.Pamaxie.ImageProcessing_UnitTesting
         [InlineData("https://cdn.discordapp.com/emojis/781964894516805632.gif")]
         public void DownloadFile_Succeed(string url)
         {
-
             //Once FileDetection.DetermineFileType() have been fixed, then make this test method run through the
             //FileDetection.DetermineFileType() again to determine if the file have been saved to the original filetype
             //and can be loaded.
-            var file = ImageProcessing.DownloadFile(url);
+            FileInfo? file = ImageProcessing.DownloadFile(url);
             Assert.NotNull(file);
         }
-        
+
         /// <summary>
         /// Testing for failure in downloading a url file
         /// BUG: Currently crashes, since no file can be found.
@@ -55,7 +54,7 @@ namespace Test.Pamaxie.ImageProcessing_UnitTesting
             "b40b6558e145f1dd8f4671e5f6ddb826ea56a78cfad90e66e0393bfcea807dc2")]
         public void GetFileHash_Success(string url, string expected)
         {
-            var fileHash = ImageProcessing.GetFileHash(url).Result;
+            string fileHash = ImageProcessing.GetFileHash(url).Result;
             Assert.Equal(expected, fileHash);
         }
     }

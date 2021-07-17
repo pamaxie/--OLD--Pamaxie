@@ -15,7 +15,7 @@ namespace Pamaxie.MediaDetection
         {
             return GetFileTypes(typeof(FileTypeLocator).GetTypeInfo().Assembly);
         }
-        
+
         /// <summary>
         /// Used to Get the File types via Assembly Reflection
         /// </summary>
@@ -51,7 +51,7 @@ namespace Pamaxie.MediaDetection
                 var typesThisAssembly = GetFileTypes();
                 return typesInAssembly.Union(typesThisAssembly);
             }
-            
+
             return typesInAssembly;
         }
     }

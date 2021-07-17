@@ -2,7 +2,6 @@
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,7 +23,7 @@ namespace Folder
 
             if (folder == string.Empty) return;
 
-            List<string> files = Directory.GetFiles(folder ?? string.Empty).ToList();
+            var files = Directory.GetFiles(folder ?? string.Empty).ToList();
             Console.WriteLine("Found " + files.Count + "Files");
 
             while (true)
@@ -34,6 +33,7 @@ namespace Folder
                 if (Directory.Exists(folder)) break;
                 Console.WriteLine("Folder could not be found");
             }
+
             if (folder == string.Empty) return;
 
             Parallel.ForEach(files, (file) =>
@@ -44,7 +44,7 @@ namespace Folder
                     using Image img = Image.Load(file);
                     float ratio = (float) img.Height / (float) img.Width;
                     img.Mutate(x => x
-                        .Resize(450, (int)ratio * 450));
+                        .Resize(450, (int) ratio * 450));
                     img.Save(folder + "\\" + fi.Name, new JpegEncoder());
 
                     img.Mutate(x => x

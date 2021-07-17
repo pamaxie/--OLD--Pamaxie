@@ -39,11 +39,12 @@ namespace Pamaxie.Leecher
         public static bool UrlExists(string url, out string redirectUri)
         {
             redirectUri = Empty;
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+            var req = (HttpWebRequest) WebRequest.Create(url);
             req.AllowAutoRedirect = true;
             //Ignore certificate errors.
-            req.ServerCertificateValidationCallback += (sender, certificate, chain, errors) => errors == SslPolicyErrors.None;
-            HttpWebResponse res = (HttpWebResponse)req.GetResponse();
+            req.ServerCertificateValidationCallback +=
+                (sender, certificate, chain, errors) => errors == SslPolicyErrors.None;
+            var res = (HttpWebResponse) req.GetResponse();
             redirectUri = res.ResponseUri.AbsoluteUri;
             return res.StatusCode == HttpStatusCode.OK;
         }
@@ -68,7 +69,7 @@ namespace Pamaxie.Leecher
         /// <returns></returns>
         private static string GetTextsFromNode(HtmlNodeCollection nodes)
         {
-            string texts = "";
+            var texts = "";
             foreach (HtmlNode node in nodes)
             {
                 if (node.Name.ToLowerInvariant() == "style") continue;

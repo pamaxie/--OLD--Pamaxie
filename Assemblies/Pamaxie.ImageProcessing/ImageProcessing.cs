@@ -20,31 +20,36 @@ namespace Pamaxie.ImageProcessing
         /// </summary>
         /// <param name="downloadUrl"></param>
         /// <returns></returns>
-#nullable enable
-        public static FileInfo? DownloadFile(string downloadUrl)
+        public static FileInfo DownloadFile(string downloadUrl)
         {
-            var imageNumber = Guid.NewGuid();
+            Guid imageNumber = Guid.NewGuid();
             WebRequest req = WebRequest.Create(downloadUrl);
-            HttpWebRequest request = (HttpWebRequest)req;
+            HttpWebRequest request = (HttpWebRequest) req;
             request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0";
             request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
             request.Headers.Add("Accept-Encoding", "gzip, deflate");
             WebResponse response = request.GetResponse();
             Stream stream = response.GetResponseStream();
             var spec = stream.DetermineFileType();
+            if (spec == null)
+                throw new ArgumentException("Unrecognized filetype", nameof(downloadUrl));
+            
             //var fileFormat = FileDetection.DetermineFileType(stream);
             var fileName = $"{TempImageDirectory}\\{imageNumber}.jpg";
 
             Image img = Image.Load(Configuration.Default, stream);
             img.Mutate(x => x
-                 .Resize(400, 400)
-                 .Grayscale());
+                .Resize(400, 400)
+                .Grayscale());
             img.Save(fileName);
+            
+            
+            if (stream == null)
+                return null;
             stream.Close();
-            FileInfo? file = new(fileName);
+            FileInfo file = new(fileName);
             return file;
         }
-#nullable disable
 
         /// <summary>
         /// Get the file hash of a url file
@@ -53,13 +58,13 @@ namespace Pamaxie.ImageProcessing
         /// <returns></returns>
         public static async Task<string> GetFileHash(string url)
         {
-            var req = WebRequest.Create(url);
-            var request = (HttpWebRequest)req;
+            WebRequest req = WebRequest.Create(url);
+            HttpWebRequest request = (HttpWebRequest) req;
             request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0";
             request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
             request.Headers.Add("Accept-Encoding", "gzip, deflate");
-            var response = request.GetResponse();
-            var stream = response.GetResponseStream();
+            WebResponse response = request.GetResponse();
+            Stream stream = response.GetResponseStream();
             return await GetHashAsync<SHA256CryptoServiceProvider>(stream);
         }
 

@@ -1,9 +1,8 @@
 ﻿using Pamaxie.Database.Extensions.Data;
 using Pamaxie.Database.Sql;
-using Pamaxie.Database.Sql.DataClasses;
 using System.Linq;
 using System;
-using System.Collections.Generic;
+using Pamaxie.Data;
 
 namespace Pamaxie.Extensions
 {
@@ -12,14 +11,14 @@ namespace Pamaxie.Extensions
         /// <summary>
         /// Gets a user via their google User Id
         /// </summary>
-        /// <param name="userId">Id of the user to get the applications from</param>
+        /// <param name="googleUserId">Id of the user to get the applications from</param>
         /// <returns></returns>
-        public static User GetUser(string GoogleUserId)
+        public static User GetUser(string googleUserId)
         {
             using SqlDbContext dbContext = new();
-            return dbContext.Users.FirstOrDefault(x => x.GoogleUserId == GoogleUserId);
+            return dbContext.Users.FirstOrDefault(x => x.GoogleUserId == googleUserId);
         }
-        
+
         /// <summary>
         /// Creates a new Application via the reached in variable
         /// </summary>
@@ -41,13 +40,17 @@ namespace Pamaxie.Extensions
                     dbContext.SaveChanges();
                     return true;
                 }
-                
-                User user = new() { GoogleUserId = userProfile.GoogleClaimUserId, Email = userProfile.EmailAddress, Username = userProfile.UserName};
+
+                User user = new()
+                {
+                    GoogleUserId = userProfile.GoogleClaimUserId, Email = userProfile.EmailAddress,
+                    Username = userProfile.UserName
+                };
                 dbContext.Users.Add(user);
                 dbContext.SaveChanges();
                 return true;
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 Console.WriteLine(e);
                 return false;
@@ -57,19 +60,15 @@ namespace Pamaxie.Extensions
         /// <summary>
         /// Deletes all data associated with a user profile from our database
         /// </summary>
-        /// <param name="UserProfile">User profile to delete</param>
+        /// <param name="userProfile">User profile to delete</param>
         /// <returns><see cref="bool"/> was successful?</returns>
-        public static bool DeleteUserData(this IProfileData UserProfile)
+        public static bool DeleteUserData(this IProfileData userProfile)
         {
             using SqlDbContext dbContext = new();
-            User user = dbContext.Users.FirstOrDefault(x => x.Id == UserProfile.Id);
+            User user = dbContext.Users.FirstOrDefault(x => x.Id == userProfile.Id);
             if (user == null) return false;
-            List<Application> applications = ApplicationExtensions.GetApplications(UserProfile.Id);
-            foreach (Application application in applications)
-            {
-                application.DeleteApplication();
-
-            }
+            var applications = ApplicationExtensions.GetApplications(userProfile.Id);
+            foreach (Application application in applications) application.DeleteApplication();
 
             user.Email = string.Empty;
             user.Username = string.Empty;

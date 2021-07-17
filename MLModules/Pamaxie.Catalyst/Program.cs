@@ -12,7 +12,7 @@ namespace Pamaxie.Catalyst
             Pipeline.For(Language.English);
             Pipeline nlp = Pipeline.For(Language.English);
             Document doc = new Document("The person", Language.English);
-            IDocument process = nlp.ProcessSingle(doc);
+            nlp.ProcessSingle(doc);
             Console.WriteLine(doc.ToJson());
         }
     }

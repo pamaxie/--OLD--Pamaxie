@@ -13,12 +13,12 @@ namespace Pamaxie.MediaDetection
         /// <summary>
         /// Stores a sorted set of File Types
         /// </summary>
-        private static readonly Dictionary<ulong, FileType> FileTypes = new Dictionary<ulong, FileType>();
+        private static readonly Dictionary<ulong, FileType> FileTypes = new();
 
         /// <summary>
         /// Stores a sorted set of File Specifications
         /// </summary>
-        private static readonly SortedSet<FileSpecification> FileSpecifications = new SortedSet<FileSpecification>();
+        private static readonly SortedSet<FileSpecification> FileSpecifications = new();
 
         /// <summary>
         /// Initialises the Format inspector with the included file formats
@@ -39,10 +39,8 @@ namespace Pamaxie.MediaDetection
         public static KeyValuePair<FileSpecification, FileType>? DetermineFileType(this Stream stream)
         {
             if (stream == null)
-            {
                 throw new ArgumentNullException(nameof(stream),
                     "We require a stream to scan. Please ensure it is not null.");
-            }
 
             //Attempt to make stream seekable if it is not already.
             if (stream.CanRead && !stream.CanSeek)
@@ -55,40 +53,32 @@ namespace Pamaxie.MediaDetection
 
             //Stream is still not seekable. just throw an exception at this point
             if (!stream.CanSeek)
-            {
                 throw new ArgumentException(
                     "The passed stream is not seekable and couldn't be made seekable automatically or empty");
-            }
 
-            if (stream.Length == 0)
-            {
-                return null;
-            }
+            if (stream.Length == 0) return null;
 
             var fileTypeMatches = stream.FindFileTypes();
             fileTypeMatches.Reverse();
-            FileType detectedSpec;
 
             for (var i = 0; i < fileTypeMatches.Count; i++)
             {
                 FileSpecification item = fileTypeMatches.FirstOrDefault();
                 if (item == null)
                     continue;
-                
+
                 var type = FileTypes.FirstOrDefault(x => x.Key == item.ReferenceTypeId);
-                if (type.Value != null)
-                {
-                    return new KeyValuePair<FileSpecification, FileType>(item, type.Value);
-                }
+                if (type.Value != null) return new KeyValuePair<FileSpecification, FileType>(item, type.Value);
             }
 
             return null;
         }
-        
+
         /// <summary>
         /// Add a number of file types to the list
         /// </summary>
         /// <param name="fileTypes"></param>
+        // ReSharper disable once MemberCanBePrivate.Global
         public static void AddFileTypes(IList<FileType> fileTypes)
         {
             List<FileType> types;
@@ -96,11 +86,12 @@ namespace Pamaxie.MediaDetection
                 types = fileTypes.Concat(FileTypeLocator.GetFileTypes()).ToList();
             else
                 types = FileTypeLocator.GetFileTypes().ToList();
-            
+
             foreach (FileType type in types)
             {
-                if (type.Id == default(ulong))
-                    throw new Exception("We could find a filetype without an Id being defined, this should never happen");
+                if (type.Id == default)
+                    throw new Exception(
+                        "We could find a filetype without an Id being defined, this should never happen");
                 FileTypes.Add(type.Id, type);
             }
         }
@@ -109,6 +100,7 @@ namespace Pamaxie.MediaDetection
         /// Add a list of specifications 
         /// </summary>
         /// <param name="specifications"></param>
+        // ReSharper disable once MemberCanBePrivate.Global
         public static void AddFileSpecifications(IList<FileSpecification> specifications)
         {
             if (FileSpecifications.Any())
@@ -117,16 +109,11 @@ namespace Pamaxie.MediaDetection
                 specifications = specifications.Concat(FileSpecLocator.GetFileSpecs()).ToList();
             else
                 specifications = FileSpecLocator.GetFileSpecs().ToList();
-            
+
             specifications = specifications.OrderBy(x => x.Signature.Length).ToList();
             for (var index = 0; index < specifications.Count; index++)
-            {
                 if (!FileSpecifications.Add(specifications[index]))
-                {
                     throw new Exception("Failed adding one of the filetypes to list");
-                }
-                
-            }
         }
 
         /// <summary>

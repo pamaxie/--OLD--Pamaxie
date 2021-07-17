@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Pamaxie.Database.Redis\Pamaxie.Database.Redis.csproj" />
     <ProjectReference Include="..\Pamaxie.Database.SQL\Pamaxie.Database.Sql.csproj" />
+    <ProjectReference Include="..\Pamaxie.Data\Pamaxie.Data.csproj" />
   </ItemGroup>
 
 </Project>
