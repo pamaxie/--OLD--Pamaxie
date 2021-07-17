@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Pamaxie.Database.Sql;
 using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Pamaxie.Database.Extensions
@@ -21,19 +22,16 @@ namespace Pamaxie.Database.Extensions
             using SqlDbContext dbContext = new();
             if (!dbContext.Database.CanConnect())
             {
-                errorReason +=
-                    "SQL Connection was not possible. Please ensure the value is set. For configuration examples please view our documentation at https://wiki.pamaxie.com";
+                errorReason += "SQL Connection was not possible. Please ensure the value is set. For configuration examples please view our documentation at https://wiki.pamaxie.com";
                 return false;
             }
-
-            var migrationsAssembly = dbContext.GetService<IMigrationsAssembly>();
-            var historyRepository = dbContext.GetService<IHistoryRepository>();
-            var all = migrationsAssembly.Migrations.Keys;
-            var applied = historyRepository.GetAppliedMigrations().Select(r => r.MigrationId);
-            var pending = all.Except(applied).ToList();
+            IMigrationsAssembly migrationsAssembly = dbContext.GetService<IMigrationsAssembly>();
+            IHistoryRepository historyRepository = dbContext.GetService<IHistoryRepository>();
+            IEnumerable<string> all = migrationsAssembly.Migrations.Keys;
+            IEnumerable<string> applied = historyRepository.GetAppliedMigrations().Select(r => r.MigrationId);
+            List<string> pending = all.Except(applied).ToList();;
             Console.WriteLine("Checking if database exists...");
-            if (dbContext.Database.EnsureCreated())
-                Console.WriteLine("SQL Database was created and schemas were applied");
+            if (dbContext.Database.EnsureCreated()) Console.WriteLine("SQL Database was created and schemas were applied");
 
             string applyMigrations = Environment.GetEnvironmentVariable("ApplyMigrations");
             bool.TryParse(applyMigrations, out bool doMigration);
@@ -41,11 +39,9 @@ namespace Pamaxie.Database.Extensions
             Console.WriteLine($"{pending.Count} Pending Migrations were found.");
             if (!doMigration)
             {
-                errorReason =
-                    "Pending Migrations were found, but the \"Apply Migrations\" variable was either not set or set to false.\n";
+                errorReason = "Pending Migrations were found, but the \"Apply Migrations\" variable was either not set or set to false.\n";
                 return false;
             }
-
             try
             {
                 Console.WriteLine("Applying Migrations.");
@@ -56,8 +52,7 @@ namespace Pamaxie.Database.Extensions
             catch
             {
                 Console.WriteLine(string.Empty);
-                errorReason +=
-                    $"Failed automatically applying {pending.Count} migrations. Please ensure your database is properly configured.\n";
+                errorReason += $"Failed automatically applying {pending.Count} migrations. Please ensure your database is properly configured.\n";
                 return false;
             }
         }
@@ -72,8 +67,7 @@ namespace Pamaxie.Database.Extensions
             errorReason = string.Empty;
             ConnectionMultiplexer connectionMultiplexer =
 #if DEBUG
-                ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariable("PamaxiePublicRedisAddr") ??
-                                              string.Empty);
+            ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariable("PamaxiePublicRedisAddr") ?? string.Empty);
 #else
             ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariable("PamaxieRedisAddr") ?? string.Empty);
 #endif
@@ -83,31 +77,23 @@ namespace Pamaxie.Database.Extensions
 
                 if (!db.StringSet("testKey", "testValue"))
                 {
-                    errorReason +=
-                        "We tried setting a value but it didn't seem to get set. Please verify if your Redis Database is setup properly. The TTL for this key is 10 minutes. The key is: \"testKey\" the value should be \"testValue\"";
+                    errorReason += "We tried setting a value but it didn't seem to get set. Please verify if your Redis Database is setup properly. The TTL for this key is 10 minutes. The key is: \"testKey\" the value should be \"testValue\"";
                     return false;
                 }
-
                 if (db.StringGet("testKey") != "testValue")
                 {
-                    errorReason +=
-                        "We tried setting a value but it didn't seem to get set to the right value. Please verify if your Redis Database is setup properly. The TTL for this key is 10 minutes. The key is: \"testKey\" the value should be \"testValue\"";
+                    errorReason += "We tried setting a value but it didn't seem to get set to the right value. Please verify if your Redis Database is setup properly. The TTL for this key is 10 minutes. The key is: \"testKey\" the value should be \"testValue\"";
                     return false;
                 }
-
                 if (!db.KeyDelete("testKey"))
                 {
-                    errorReason +=
-                        "We deleting our test key but it didn't seem to happen. This should not be the case. Please verify if your Redis Database is setup properly. The TTL for this key is 10 minutes. The key is: \"testKey\" the value should be \"testValue\"";
+                    errorReason += "We deleting our test key but it didn't seem to happen. This should not be the case. Please verify if your Redis Database is setup properly. The TTL for this key is 10 minutes. The key is: \"testKey\" the value should be \"testValue\"";
                     return false;
                 }
-
                 db.KeyDelete("testKey");
                 return true;
             }
-
-            errorReason +=
-                "Redis Connection was not possible. Please ensure the value is set. For configuration examples please view our documentation at https://wiki.pamaxie.com";
+            errorReason += "Redis Connection was not possible. Please ensure the value is set. For configuration examples please view our documentation at https://wiki.pamaxie.com";
             return true;
         }
     }

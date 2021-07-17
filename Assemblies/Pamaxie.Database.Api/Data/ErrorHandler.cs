@@ -90,7 +90,7 @@
         internal static object BadBadDeveloper()
         {
             return "Never. EVER, EVER. Include your password in the refresh method. " +
-                   "We require you to be authenticated for it anyways and sending user passwords should only be done to gather the token";
+                "We require you to be authenticated for it anyways and sending user passwords should only be done to gather the token";
         }
     }
 }

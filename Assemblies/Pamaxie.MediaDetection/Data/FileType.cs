@@ -12,8 +12,7 @@ namespace Pamaxie.MediaDetection
         /// <param name="extension">The extension of the filetype (for example .png)</param>
         /// <param name="software">The software that can be used to open the filetype</param>
         /// <param name="mediaType">The MediaType is a specific subtype specification</param>
-        protected FileType(ulong id, string name, string extension, [Optional] string software,
-            [Optional] string mediaType)
+        protected FileType(ulong id, string name, string extension, [Optional] string software, [Optional] string mediaType)
         {
             Id = id;
             Name = name;
@@ -26,14 +25,14 @@ namespace Pamaxie.MediaDetection
         {
             return Name;
         }
-
+        
         public ulong Id { get; set; }
         public string Name { get; set; }
         public string Extension { get; set; }
         public string Software { get; set; }
         public string MediaType { get; set; }
-
-        public bool Equals(IFileType fileType)
+        
+        public bool Equals(IFileType? fileType)
         {
             if (fileType == null) return false;
             if (ReferenceEquals(this, fileType)) return true;

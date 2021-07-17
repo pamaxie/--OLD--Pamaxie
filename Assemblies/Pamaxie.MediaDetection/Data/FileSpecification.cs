@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace Pamaxie.MediaDetection
 {
     /// <inheritdoc />
     public abstract class FileSpecification : IFileSpecification
     {
-        protected FileSpecification(ulong referenceTypeId, byte[] signature, int headerOffset = 0,
-            string specialTypeIdentifier = "")
+        protected FileSpecification(ulong referenceTypeId, byte[] signature, int headerOffset = 0, string specialTypeIdentifier = "")
         {
             ReferenceTypeId = referenceTypeId;
             Signature = signature;
@@ -19,30 +19,30 @@ namespace Pamaxie.MediaDetection
         /// <inheritdoc/>
         /// </summary>
         public string SpecialTypeIdentifier { get; set; }
-
+        
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         public ulong ReferenceTypeId { get; set; }
-
+        
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         public byte[] Signature { get; set; }
-
+        
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         public int HeaderOffset { get; set; }
 
         /// <summary>
-        /// <inheritdoc cref="IFileSpecification.ToString" />
+        /// <inheritdoc/>
         /// </summary>
         public override string ToString()
         {
             return SpecialTypeIdentifier;
         }
-
+        
         /// <summary>
         /// Checks if the stream matches the specification
         /// </summary>
@@ -55,7 +55,7 @@ namespace Pamaxie.MediaDetection
 
             if (stream.Length < Signature.Length)
                 return false;
-
+            
             stream.Position = HeaderOffset;
             for (var i = 0; i < Signature.Length; i++)
             {
@@ -66,7 +66,7 @@ namespace Pamaxie.MediaDetection
 
             return true;
         }
-
+        
         /// <summary>
         /// Compare two file specifications for sorting
         /// </summary>
@@ -75,12 +75,12 @@ namespace Pamaxie.MediaDetection
         public int CompareTo(IFileSpecification fileSpecification)
         {
             if (fileSpecification.Signature == null)
-                throw new ArgumentNullException(nameof(fileSpecification),
-                    "The signature of the filetype that should be compared was not defined");
+                throw new ArgumentNullException(nameof(fileSpecification), "The signature of the filetype that should be compared was not defined");
             if (fileSpecification.Signature.Length == 0)
                 throw new ArgumentException("Please make sure the signature for the compared file type is valid");
 
             return 1;
         }
+        
     }
 }

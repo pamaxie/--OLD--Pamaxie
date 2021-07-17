@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -19,7 +20,7 @@ namespace ImageRenaming
 
             if (folder == string.Empty) return;
 
-            var files = Directory.GetFiles(folder ?? string.Empty).ToList();
+            List<string> files = Directory.GetFiles(folder ?? string.Empty).ToList();
             Console.WriteLine("Found " + files.Count + "Files");
 
             while (true)
@@ -29,14 +30,13 @@ namespace ImageRenaming
                 if (Directory.Exists(folder)) break;
                 Console.WriteLine("Folder could not be found");
             }
-
             if (folder == string.Empty) return;
 
 
             foreach (string file in files)
             {
                 FileInfo fi = new(file);
-                var guid = Guid.NewGuid();
+                Guid guid = Guid.NewGuid();
                 try
                 {
                     fi.CopyTo(folder + "\\" + guid + fi.Extension);
@@ -46,8 +46,8 @@ namespace ImageRenaming
                 {
                     Console.WriteLine("Failed to copy " + fi.Name);
                 }
-            }
 
+            }
             Console.WriteLine("=====================");
             Console.WriteLine("Copy Process complete press any key to exit");
             Console.ReadKey();

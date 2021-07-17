@@ -57,7 +57,7 @@ namespace Pamaxie.Api
         /// <param name="env">Hosting Enviorement</param>
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (env.IsDevelopment()) 
                 app.UseDeveloperExceptionPage();
 
             app.UseHttpsRedirection();

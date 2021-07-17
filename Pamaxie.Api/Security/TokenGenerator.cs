@@ -23,7 +23,7 @@ namespace Pamaxie.Api.Security
             JwtSecurityTokenHandler tokenHandler = new();
             var section = _configuration.GetSection("AuthData");
             byte[] key = Encoding.ASCII.GetBytes(section.GetValue<string>("Secret"));
-            DateTime expires = DateTime.UtcNow.AddMinutes(section.GetValue<int>("ExpiresInMinutes"));
+            var expires = DateTime.UtcNow.AddMinutes(section.GetValue<int>("ExpiresInMinutes"));
             SecurityTokenDescriptor tokenDescriptor = new()
             {
                 Subject = new ClaimsIdentity(new[]
@@ -37,7 +37,7 @@ namespace Pamaxie.Api.Security
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return new AuthToken {ExpirationUtc = expires, Token = tokenHandler.WriteToken(token)};
+            return new AuthToken { ExpirationUtc = expires, Token = tokenHandler.WriteToken(token) };
         }
     }
 }

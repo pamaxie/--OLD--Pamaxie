@@ -19,8 +19,8 @@ namespace Pamaxie.ImageCrawler.Image_Prep
         public static FileInfo PrepareFile(string fileLocation)
         {
             //If the stream is empty just return the file as null.
-            var imageNumber = Guid.NewGuid();
-            var fileName = $"{TempImageDirectory}\\{imageNumber}.jpg";
+            Guid imageNumber = Guid.NewGuid();
+            string fileName = $"{TempImageDirectory}\\{imageNumber}.jpg";
             Image img = Image.Load(Configuration.Default, fileLocation);
             img.Mutate(x => x
                 .Resize(400, 400)
@@ -38,29 +38,29 @@ namespace Pamaxie.ImageCrawler.Image_Prep
         /// </summary>
         /// <param name="downloadLocation"></param>
         /// <returns></returns>
-#nullable enable
+        #nullable enable
         public static FileInfo? DownloadFile(string downloadLocation)
         {
-            var imageNumber = Guid.NewGuid();
+            Guid imageNumber = Guid.NewGuid();
             WebRequest req = WebRequest.Create(downloadLocation);
-            HttpWebRequest request = (HttpWebRequest) req;
+            HttpWebRequest request = (HttpWebRequest)req;
             request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0";
             request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
             request.Headers.Add("Accept-Encoding", "gzip, deflate");
             WebResponse response = request.GetResponse();
             Stream stream = response.GetResponseStream();
 
-            var fileName = $"{TempImageDirectory}\\{imageNumber}.jpg";
+            string? fileName = $"{TempImageDirectory}\\{imageNumber}.jpg";
 
             Image img = Image.Load(Configuration.Default, stream);
             img.Mutate(x => x
-                .Resize(400, 400)
-                .Grayscale());
+                 .Resize(400, 400)
+                 .Grayscale());
             img.Save(fileName);
             stream.Close();
             FileInfo? file = new(fileName);
             return file;
         }
-#nullable disable
+    #nullable disable
     }
 }

@@ -10,7 +10,7 @@ namespace Pamaxie.Database.Extensions.Basic
         /// <returns></returns>
         public static int CalculateSaltCost()
         {
-            var cost = 5;
+            int cost = 5;
             Stopwatch sw = new();
             sw.Start();
             BCrypt.Net.BCrypt.HashPassword("microbenchmark", cost);

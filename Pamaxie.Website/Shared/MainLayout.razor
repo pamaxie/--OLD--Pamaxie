@@ -1,42 +1,50 @@
-<<<<<<< HEAD
-﻿@inherits LayoutComponentBase
+﻿@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inherits LayoutComponentBase
+@inject ProtectedLocalStorage _protectedLocalStorage
+@inject ProtectedSessionStorage _protectedSessionStorage
 
 <NavMenu>
-    <MudDialog @bind-IsVisible="_showCookieDialog">
-        <TitleContent>
-            <MudText Typo="Typo.h6">
-                <MudIcon Icon="@Icons.Material.Filled.PrivacyTip" Class="mr-3"/> Use Cookies
-            </MudText>
-        </TitleContent>
-        <DialogContent>
-            This website uses cookies but also does not work without them. If you want to continue you need
-            to agree to using cookies on this website. We never store any cookies to track users across websites and never
-            will in the future. Your privacy is our top concern.
-        </DialogContent>
-        <DialogActions>
-            <MudButton Variant="Variant.Outlined" Color="Color.Success" OnClick="Save" Class="px-10">Agree to using Cookies</MudButton>
-        </DialogActions>
-    </MudDialog>
-    @Body
-=======
-﻿@inherits LayoutComponentBase
-
-<NavMenu>
-    <MudDialog @bind-IsVisible="_showCookieDialog">
-        <TitleContent>
-            <MudText Typo="Typo.h6">
-                <MudIcon Icon="@Icons.Material.Filled.PrivacyTip" Class="mr-3"/> Use Cookies
-            </MudText>
-        </TitleContent>
-        <DialogContent>
-            This website uses cookies but also does not work without them. If you want to continue you need
-            to agree to using cookies on this website. We never store any cookies to track users across websites and never
-            will in the future. Your privacy is our top concern.
-        </DialogContent>
-        <DialogActions>
-            <MudButton Variant="Variant.Outlined" Color="Color.Success" OnClick="Save" Class="px-10">Agree to using Cookies</MudButton>
-        </DialogActions>
-    </MudDialog>
-    @Body
->>>>>>> dev
+	<MudDialog @bind-IsVisible="_showCookieDialog">
+		<TitleContent>
+			<MudText Typo="Typo.h6">
+				<MudIcon Icon="@Icons.Material.Filled.PrivacyTip" Class="mr-3" /> Use Cookies
+			</MudText>
+		</TitleContent>
+		<DialogContent>
+			This website uses cookies but also does not work without them. If you want to continue you need
+			to agree to using cookies on this website. We never store any cookies to track users across websites and never
+			will in the future. Your privacy is our top concern.
+		</DialogContent>
+		<DialogActions>
+			<MudButton Variant="Variant.Outlined" Color="Color.Success" OnClick="Save" Class="px-10">Agree to using Cookies</MudButton>
+		</DialogActions>
+	</MudDialog>
+	@Body
 </NavMenu>
+
+@code
+{
+	private bool _showCookieDialog;
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		try
+		{
+			ProtectedBrowserStorageResult<bool> result = await _protectedLocalStorage.GetAsync<bool>("useCookies");
+			bool currentValue = (result.Success && result.Value);
+			_showCookieDialog = !currentValue;
+			StateHasChanged();
+			await base.OnInitializedAsync();
+		}
+		catch
+		{
+			await _protectedLocalStorage.DeleteAsync("useCookies");
+			_showCookieDialog = false;
+		}
+	}
+
+	private async Task Save()
+	{
+		await _protectedLocalStorage.SetAsync("useCookies", true);
+	}
+}

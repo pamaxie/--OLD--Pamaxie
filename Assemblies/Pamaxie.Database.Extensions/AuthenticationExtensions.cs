@@ -1,8 +1,8 @@
 ﻿using Pamaxie.Database.Extensions.Basic;
 using Pamaxie.Database.Sql;
+using Pamaxie.Database.Sql.DataClasses;
 using System;
 using System.Linq;
-using Pamaxie.Data;
 
 namespace Pamaxie.Extensions
 {
@@ -16,9 +16,11 @@ namespace Pamaxie.Extensions
         public static bool VerifyAuth(this Application applicationAuth)
         {
             using SqlDbContext dbContext = new();
-            Application dbAppAuth =
-                dbContext.Applications.FirstOrDefault(x => x.ApplicationId == applicationAuth.ApplicationId);
-            if (dbAppAuth != null && (dbAppAuth is {Disabled: true} || dbAppAuth.Deleted)) return false;
+            Application dbAppAuth = dbContext.Applications.FirstOrDefault(x => x.ApplicationId == applicationAuth.ApplicationId);
+            if (dbAppAuth != null && (dbAppAuth is {Disabled: true} || dbAppAuth.Deleted))
+            {
+                return false;
+            }
 
             if (dbAppAuth != null)
             {
@@ -28,8 +30,7 @@ namespace Pamaxie.Extensions
             }
 
 
-            return dbAppAuth != null && BCrypt.Net.BCrypt.Verify(applicationAuth.AppToken, dbAppAuth.AppTokenHash) &&
-                   !dbAppAuth.Disabled;
+            return dbAppAuth != null && BCrypt.Net.BCrypt.Verify(applicationAuth.AppToken, dbAppAuth.AppTokenHash) && !dbAppAuth.Disabled;
         }
 
         /// <summary>
@@ -41,8 +42,7 @@ namespace Pamaxie.Extensions
         public static bool UpdateValue(this Application applicationAuthentication, bool createNew)
         {
             using SqlDbContext dbContext = new();
-            Application dbAppAuth =
-                dbContext.Applications.FirstOrDefault(x => x.ApplicationId == applicationAuthentication.ApplicationId);
+            Application dbAppAuth = dbContext.Applications.FirstOrDefault(x => x.ApplicationId == applicationAuthentication.ApplicationId);
             if (dbAppAuth == null && createNew) return ((Application) null).CreateValue(out _, false);
 
             //Creating the Hash and calculating the optimal hash cost automatically
@@ -65,8 +65,7 @@ namespace Pamaxie.Extensions
         /// <param name="creationError">The reason the creation failed</param>
         /// <param name="shouldThrow">Should the method throw exceptions or just output the error</param>
         /// <returns><see cref="bool"/> Has been created / altered?</returns>
-        private static bool CreateValue(this Application applicationAuthentication, out string creationError,
-            bool shouldThrow)
+        private static bool CreateValue(this Application applicationAuthentication, out string creationError, bool shouldThrow)
         {
             creationError = null;
             using SqlDbContext dbContext = new();
@@ -76,7 +75,7 @@ namespace Pamaxie.Extensions
                 if (shouldThrow) throw new InvalidOperationException(creationError);
                 return false;
             }
-
+                    
             if (string.IsNullOrEmpty(applicationAuthentication.AppToken))
             {
                 creationError = "You need to input an App Token to create a new Application";
@@ -86,16 +85,14 @@ namespace Pamaxie.Extensions
 
             if (string.IsNullOrEmpty(applicationAuthentication.AppTokenHash))
             {
-                creationError =
-                    "You cannot have a hash already for a non known application. The hashing is handled by us because we determine automatic optimal salt.";
+                creationError = "You cannot have a hash already for a non known application. The hashing is handled by us because we determine automatic optimal salt.";
                 if (shouldThrow) throw new InvalidOperationException(creationError);
                 return false;
             }
 
             //Creating the hash and calculating the optimal hash cost automatically
-            applicationAuthentication.AppTokenHash = BCrypt.Net.BCrypt.HashPassword(applicationAuthentication.AppToken,
-                ByCrptExt.CalculateSaltCost());
-            applicationAuthentication.AppToken = null;
+            applicationAuthentication.AppTokenHash = BCrypt.Net.BCrypt.HashPassword(applicationAuthentication.AppToken, ByCrptExt.CalculateSaltCost());
+            applicationAuthentication.AppToken = null;  
             dbContext.Applications.Add(applicationAuthentication);
             return true;
         }

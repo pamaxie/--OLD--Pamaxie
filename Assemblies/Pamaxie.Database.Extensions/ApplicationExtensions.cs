@@ -1,9 +1,10 @@
 ﻿using Pamaxie.Database.Extensions.Basic;
 using Pamaxie.Database.Sql;
+using Pamaxie.Database.Sql.DataClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Pamaxie.Data;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Pamaxie.Extensions
 {
@@ -44,11 +45,9 @@ namespace Pamaxie.Extensions
             try
             {
                 application.ApplicationId = default;
-                application.AppTokenHash =
-                    BCrypt.Net.BCrypt.HashPassword(application.AppToken, ByCrptExt.CalculateSaltCost());
+                application.AppTokenHash = BCrypt.Net.BCrypt.HashPassword(application.AppToken, ByCrptExt.CalculateSaltCost());
                 application.AppToken = string.Empty;
-                var dbApp = dbContext.Applications.Add(new Application
-                {
+                EntityEntry<Application> dbApp = dbContext.Applications.Add(new Application { 
                     ApplicationId = application.ApplicationId,
                     ApplicationName = application.ApplicationName,
                     AppTokenHash = application.AppTokenHash,
@@ -58,7 +57,7 @@ namespace Pamaxie.Extensions
                     RateLimited = false
                 });
                 createdApplication = dbApp.Entity;
-
+                
                 dbContext.SaveChanges();
                 return true;
             }
@@ -68,7 +67,7 @@ namespace Pamaxie.Extensions
                 return false;
             }
         }
-
+        
         /// <summary>
         /// Disables an application
         /// </summary>
@@ -76,8 +75,7 @@ namespace Pamaxie.Extensions
         public static bool SetApplicationStatus(this Application application, bool enabled)
         {
             using SqlDbContext dbContext = new();
-            Application dbApp =
-                dbContext.Applications.FirstOrDefault(x => x.ApplicationId == application.ApplicationId);
+            Application dbApp = dbContext.Applications.FirstOrDefault(x => x.ApplicationId == application.ApplicationId);
             if (dbApp == null) return false;
 
             //Sets the application to be disabled. This prevents login attempts 
@@ -93,8 +91,7 @@ namespace Pamaxie.Extensions
         public static bool DeleteApplication(this Application application)
         {
             using SqlDbContext dbContext = new();
-            Application dbApp =
-                dbContext.Applications.FirstOrDefault(x => x.ApplicationId == application.ApplicationId);
+            Application dbApp = dbContext.Applications.FirstOrDefault(x => x.ApplicationId == application.ApplicationId);
             if (dbApp == null) return false;
 
             //Set the column to deleted and clear / anonymize its values

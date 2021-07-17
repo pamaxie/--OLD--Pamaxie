@@ -13,9 +13,8 @@ namespace Pamaxie.ImageSorting
             Console.SetCursorPosition(0, 0);
             Console.CursorVisible = false;
             long tickPerObject = Program.Timer.ElapsedTicks / Program.CurrentFileIdx;
-            TimeSpan remainingTime =
-                TimeSpan.FromTicks(tickPerObject * (Program.OverallFiles - Program.CurrentFileIdx));
-            string progressBar = GetProgress((float) Program.CurrentFileIdx / Program.OverallFiles * 100, 100);
+            TimeSpan remainingTime = TimeSpan.FromTicks(tickPerObject * (Program.OverallFiles - Program.CurrentFileIdx));
+            string progressBar = GetProgress(((float)Program.CurrentFileIdx / Program.OverallFiles) * 100, 100);
             Console.WriteLine("Overall sweeping progress of Files\n" +
                               $"Currently we are: {Program.SweepingStep}\n" +
                               $"Remaining minutes: {remainingTime:c}\n" +
@@ -31,11 +30,11 @@ namespace Pamaxie.ImageSorting
             if (Program.CurrentFileIdx == 0) return;
             Console.SetCursorPosition(0, 0);
             Console.CursorVisible = false;
-            string progressBar = GetProgress((float) Program.CurrentFileIdx / Program.OverallFiles * 100, 100);
+            string progressBar = GetProgress(((float)Program.CurrentFileIdx / Program.OverallFiles) * 100, 100);
             long msPerObject = Program.Timer.ElapsedMilliseconds / Program.CurrentFileIdx;
             TimeSpan remainingTime = TimeSpan.FromTicks(msPerObject * (Program.OverallFiles - Program.CurrentFileIdx));
             //var runningThreads = WorkerThreadList.Count(x => x.IsAlive);
-            var currentRuntime = Program.Timer.Elapsed.ToString("g");
+            string currentRuntime = Program.Timer.Elapsed.ToString("g");
             Console.WriteLine("Overall analysis progress\n" +
                               $"Overall runtime is: {currentRuntime}\n" +
                               $"Runtime per object is: {msPerObject} ms/File\n" +
@@ -53,8 +52,8 @@ namespace Pamaxie.ImageSorting
         /// <returns></returns>
         private static string GetProgress(double currentProgress, int width)
         {
-            var progressBar = string.Empty;
-            for (var i = 0; i < width; i++)
+            string progressBar = string.Empty;
+            for (int i = 0; i < width; i++)
             {
                 if (currentProgress * 100 / width > 1)
                 {
@@ -65,7 +64,6 @@ namespace Pamaxie.ImageSorting
 
                 progressBar += "░";
             }
-
             progressBar += string.Empty;
             return progressBar;
         }

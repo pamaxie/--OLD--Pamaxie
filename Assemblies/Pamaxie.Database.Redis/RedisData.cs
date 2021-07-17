@@ -16,5 +16,6 @@ namespace Pamaxie.Database.Redis
 #else
             ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariable("PamaxieRedisAddr") ?? string.Empty);
 #endif
+
     }
 }

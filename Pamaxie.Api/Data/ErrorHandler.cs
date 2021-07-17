@@ -44,8 +44,7 @@
 
         internal static string InvalidFormat()
         {
-            return
-                "Image format of sent url is not supported. Please check the documentation for supported file types for image scans.";
+            return "Image format of sent url is not supported. Please check the documentation for supported file types for image scans.";
         }
     }
 }

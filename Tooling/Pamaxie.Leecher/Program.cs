@@ -51,11 +51,10 @@ namespace Pamaxie.Leecher
                     case {Key: ConsoleKey.Y}:
                         using (SqlDbContext dbContext = new())
                         {
-                            var items = dbContext.Label.ToList();
+                            List<LabelData> items = dbContext.Label.ToList();
                             dbContext.RemoveRange(items);
                             dbContext.SaveChanges();
                         }
-
                         break;
                     case {Key: ConsoleKey.N}:
                         break;
@@ -65,7 +64,6 @@ namespace Pamaxie.Leecher
                         Console.WriteLine("Unexpected input detected please try again.");
                         continue;
                 }
-
                 break;
             }
 
@@ -86,7 +84,6 @@ namespace Pamaxie.Leecher
                         Console.WriteLine("Unexpected input detected please try again.");
                         continue;
                 }
-
                 break;
             }
 
@@ -155,7 +152,6 @@ namespace Pamaxie.Leecher
                         Console.WriteLine("Unknown type please enter a type from the list above");
                         continue;
                 }
-
                 break;
             }
 
@@ -164,8 +160,10 @@ namespace Pamaxie.Leecher
             {
                 Console.WriteLine(
                     "Please enter an amount of Worker-Threads to use. Please remember that we do not recommend this to exceed your actual Threads on your machine.\n");
-                if (!int.TryParse(Console.ReadLine(), out int num))
+                if (!(int.TryParse(Console.ReadLine(), out int num)))
+                {
                     Console.WriteLine("Invalid number entered. Please enter a non floating point integer number");
+                }
                 _workerThreads = num;
                 break;
             }
@@ -177,7 +175,7 @@ namespace Pamaxie.Leecher
                 return;
             }
 
-            var text = File.ReadAllLines(_originFile).ToList();
+            List<string> text = File.ReadAllLines(_originFile).ToList();
             _overallUrls = text.Count;
             switch (_overallUrls)
             {
@@ -191,7 +189,7 @@ namespace Pamaxie.Leecher
                 //Ask user if they want to attempt to separate the data via CSV separation cause 1 URL seems quite low...
                 case 1:
                 {
-                    var attemptCsvSeparation = false;
+                    bool attemptCsvSeparation = false;
                     while (true)
                     {
                         Console.WriteLine("Only found a single line attempt to separate over commas (CSV File)? (Y/n)");
@@ -210,7 +208,6 @@ namespace Pamaxie.Leecher
                                 Console.WriteLine("Unexpected input detected please try again.");
                                 continue;
                         }
-
                         break;
                     }
 
@@ -219,7 +216,10 @@ namespace Pamaxie.Leecher
                         Console.WriteLine(
                             "Attempting to separate over commas. We do not recommend feeding CSV files into here.");
                         List<string> newTextList = new();
-                        foreach (string line in text.ToList()) newTextList.AddRange(line.Split(","));
+                        foreach (string line in text.ToList())
+                        {
+                            newTextList.AddRange(line.Split(","));
+                        }
 
                         while (true)
                         {
@@ -243,16 +243,14 @@ namespace Pamaxie.Leecher
                                     Console.WriteLine("Unexpected input detected please try again.");
                                     continue;
                             }
-
                             break;
                         }
                     }
-
                     break;
                 }
             }
 
-            var skipSweep = false;
+            bool skipSweep = false;
             //Ask the user if they want to do a sweeping of Urls before grabbing their content images as well
             while (true)
             {
@@ -272,43 +270,46 @@ namespace Pamaxie.Leecher
                         Console.WriteLine("Unexpected input detected please try again.");
                         continue;
                 }
-
                 break;
             }
 
-            var backgroundThreadRunning = true;
+            bool backgroundThreadRunning = true;
             Thread uiThread;
             List<string> sweptUrls = new();
             if (!skipSweep)
             {
                 _progressStopwatch = new Stopwatch();
                 _progressStopwatch.Start();
-
+                
                 Console.WriteLine("Starting multi step sweep");
-
-                for (var i = 0; i < 6; i++)
+                
+                for (int i = 0; i < 6; i++)
                 {
                     Console.Write(".");
                     Thread.Sleep(500);
                 }
 
-                uiThread = new Thread(() =>
+                uiThread = new Thread((() =>
                 {
                     Console.Clear();
-                    while (backgroundThreadRunning) DrawSweepProgress();
-                });
+                    while (backgroundThreadRunning)
+                    {
+                        DrawSweepProgress();
+                    }
+                }));
                 uiThread.Start();
 
                 //Check if DNS records exist
                 _sweepingStep = "checking each domains DNS Records";
                 Parallel.ForEach(text, (domain) =>
                 {
-                    var isIp = false;
+                    bool isIp = false;
                     _currentUrlIdx++;
 
                     if (IPAddress.TryParse(domain, out _)) isIp = true;
 
                     if (!isIp)
+                    {
                         try
                         {
                             LookupClient client = new();
@@ -329,6 +330,8 @@ namespace Pamaxie.Leecher
                         {
                             _failedUrls++;
                         }
+
+                    }
 
                     //Add if there are no host entries.
                     sweptUrls.Add(domain);
@@ -369,12 +372,11 @@ namespace Pamaxie.Leecher
                 //Waiting for threads to join again
                 Thread.Sleep(500);
                 Console.WriteLine("Starting scraping now");
-                for (var i = 0; i < 6; i++)
+                for (int i = 0; i < 6; i++)
                 {
                     Console.Write(".");
                     Thread.Sleep(500);
                 }
-
                 Thread.Sleep(500);
 
                 //Reset out Progress and the Worker Thread List
@@ -386,7 +388,7 @@ namespace Pamaxie.Leecher
             }
             else
             {
-                for (var index = 0; index < text.Count; index++)
+                for (int index = 0; index < text.Count; index++)
                 {
                     string url = text[index];
                     sweptUrls.Add($"http://{url}");
@@ -403,13 +405,15 @@ namespace Pamaxie.Leecher
             _workerThreadList = new List<Thread>();
             lists.Clear();
 
-            for (var i = 0; i < _overallUrls; i += listSize)
+            for (int i = 0; i < _overallUrls; i += listSize)
+            {
                 lists.Add(sweptUrls.GetRange(i, Math.Min(listSize, _overallUrls - i)));
+            }
             _workerThreadList.Clear();
             backgroundThreadRunning = true;
 
             //Runs a thread pool for the split up lists to basically gather all URLs and their respective website text.
-            foreach (var list in lists)
+            foreach (List<string> list in lists)
             {
                 Thread t = new(() =>
                 {
@@ -425,10 +429,9 @@ namespace Pamaxie.Leecher
                             if (_showErrors)
                             {
                                 Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine(@"Text is empty assuming website is down.");
+                                Console.WriteLine( @"Text is empty assuming website is down.");
                                 Console.ForegroundColor = ConsoleColor.Black;
                             }
-
                             continue;
                         }
 
@@ -438,29 +441,31 @@ namespace Pamaxie.Leecher
                             dbContext.Label.Add(new LabelData() {Content = webText, Url = url, UrlType = _type});
                             dbContext.SaveChangesAsync();
                         }
-                        catch (ObjectDisposedException)
-                        {
-                        }
+                        catch (ObjectDisposedException) { }
                     } //);
                 });
                 t.Start();
                 _workerThreadList.Add(t);
             }
 
-            uiThread = new Thread(() =>
+            uiThread = new Thread((() =>
             {
                 Console.Clear();
-                while (backgroundThreadRunning) DrawOverallProgress();
-            });
+                while (backgroundThreadRunning)
+                {
+                    DrawOverallProgress();
+                }
+            }));
             uiThread.Start();
 
             //Join threads back into main thread
             foreach (Thread thread in _workerThreadList)
+            {
                 do
                 {
                     thread.Join();
                 } while (thread.IsAlive);
-
+            }
             backgroundThreadRunning = false;
 
             //Waiting for everything to rejoin together and update threads to stop
@@ -469,7 +474,7 @@ namespace Pamaxie.Leecher
             Console.WriteLine("Finished scraping URLs. Press any key to exit...");
             Console.ReadKey();
         }
-
+        
         /// <summary>
         /// Displays the current sweeping progress to attach http and https to the urls
         /// </summary>
@@ -480,10 +485,10 @@ namespace Pamaxie.Leecher
             Console.CursorVisible = false;
             long tickPerObject = _progressStopwatch.ElapsedTicks / _currentUrlIdx;
             TimeSpan remainingTime = TimeSpan.FromTicks(tickPerObject * (_overallUrls - _currentUrlIdx));
-            string progressBar = GetProgress((float) _currentUrlIdx / (float) _overallUrls * 100 * 2, 200);
+            string progressBar = GetProgress((((float)_currentUrlIdx / (float)_overallUrls) * 100) *2, 200);
             Console.WriteLine("Overall sweeping progress of Urls\n" +
                               $"Currently we are: {_sweepingStep}\n" +
-                              $"Failed to validate: {(float) _failedUrls / (float) _overallUrls * 100}%\n" +
+                              $"Failed to validate: {((float)_failedUrls / (float)_overallUrls) * 100}%\n" +
                               $"Remaining minutes: {remainingTime:c}\n" +
                               $"Swept {_currentUrlIdx}/{_overallUrls} so far.\n" +
                               $"{progressBar}\n");
@@ -497,11 +502,11 @@ namespace Pamaxie.Leecher
             if (_currentUrlIdx == 0) return;
             Console.SetCursorPosition(0, 0);
             Console.CursorVisible = false;
-            string progressBar = GetProgress((float) _currentUrlIdx / _overallUrls * 100 * 2, 200);
+            string progressBar = GetProgress(((float)_currentUrlIdx / _overallUrls) * 100 * 2, 200);
             long tickPerObject = _progressStopwatch.ElapsedTicks / _currentUrlIdx;
             TimeSpan remainingTime = TimeSpan.FromTicks(tickPerObject * (_overallUrls - _currentUrlIdx));
             int runningThreads = _workerThreadList.Count(x => x.IsAlive);
-            var progressStopWatch = _progressStopwatch.Elapsed.ToString("g");
+            string progressStopWatch = _progressStopwatch.Elapsed.ToString("g");
             Console.WriteLine("Overall scraping progress\n" +
                               $"Overall runtime is: {progressStopWatch}\n" +
                               $"Runtime per object is: {tickPerObject} Ticks/Url\n" +
@@ -519,8 +524,8 @@ namespace Pamaxie.Leecher
         /// <returns></returns>
         private static string GetProgress(double currentProgress, int width)
         {
-            var progressBar = string.Empty;
-            for (var i = 0; i < width; i++)
+            string progressBar = string.Empty;
+            for (int i = 0; i < width; i++)
             {
                 if (currentProgress * 100 / width > 1)
                 {
@@ -531,7 +536,6 @@ namespace Pamaxie.Leecher
 
                 progressBar += "░";
             }
-
             progressBar += string.Empty;
             return progressBar;
         }
