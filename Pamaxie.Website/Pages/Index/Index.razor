@@ -1,0 +1,11 @@
+﻿@namespace Pamaxie.Website.Pages
+@page "/"
+
+<AuthorizeView>
+    <Authorized>
+        <Pamaxie.Website.Pages.Dashboard/>
+    </Authorized>
+    <NotAuthorized>
+        <Pamaxie.Website.Pages.About/>
+    </NotAuthorized>
+</AuthorizeView>
