@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Pamaxie.Api.Data;
+using Pamaxie.Api.Security;
+using Pamaxie.Database.Sql.DataClasses;
+using Pamaxie.Extensions;
 using Pamaxie.Data;
 using System.IO;
 using Pamaxie.Api.Data;
@@ -22,7 +26,7 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        ///     Signs in a user via Basic authentication and returns a token.
+        /// Signs in a user via Basic authentication and returns a token.
         /// </summary>
         /// <returns><see cref="AuthToken"/> Token for Authentication</returns>
         [AllowAnonymous]
@@ -41,11 +45,12 @@ namespace Pamaxie.Api.Controllers
             if (!appData.VerifyAuth()) return Unauthorized(ErrorHandler.UnAuthorized());
 
             AuthToken token = _generator.CreateToken(appData.ApplicationId.ToString());
+
             return Ok(token);
         }
 
         /// <summary>
-        ///     Refreshes an exiting oAuth Token
+        /// Refreshes an exiting oAuth Token
         /// </summary>
         /// <returns><see cref="AuthToken"/> Refreshed Token</returns>
         [Authorize]
