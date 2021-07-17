@@ -28,11 +28,11 @@ namespace Test.Pamaxie.ImageProcessing_UnitTesting
             Assert.NotNull(file);
         }
         
-        /// <summary>
-        /// Testing for failure in downloading a url file
-        /// BUG: Currently crashes, since no file can be found.
-        /// </summary>
-        /// <param name="url">Url of the file you want to download</param>
+        // <summary>
+        // Testing for failure in downloading a url file
+        // BUG: Currently crashes, since no file can be found.
+        // </summary>
+        // <param name="url">Url of the file you want to download</param>
         //[Theory]
         //[InlineData("https://cdn.discordapp.com/emojis/78196489451680563")]
         //public void DownloadFile_Failure(string url)

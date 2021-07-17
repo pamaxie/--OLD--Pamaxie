@@ -10,6 +10,7 @@ namespace Pamaxie.Api.Controllers
     [Route("[controller]")]
     public class AuthController : ControllerBase
     {
+        // ReSharper disable once NotAccessedField.Local
         private readonly TokenGenerator _generator;
 
         public AuthController(TokenGenerator generator)

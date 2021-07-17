@@ -15,6 +15,7 @@ namespace Pamaxie.Api.Controllers
     [Route("[controller]")]
     public class VisionController : ControllerBase
     {
+        // ReSharper disable once NotAccessedField.Local
         private readonly ILogger<VisionController> _logger;
 
         public VisionController(ILogger<VisionController> logger)
@@ -55,7 +56,7 @@ namespace Pamaxie.Api.Controllers
             // Add input data
             ModelInput input = new()
             {
-                ImageSource = image?.FullName
+                ImageSource = image.FullName
             };
             // Load model and predict output of sample data
             ConsumeModel.Predict(input, out var labelResult);
@@ -66,7 +67,7 @@ namespace Pamaxie.Api.Controllers
             };
 
             data.Data = predictionData;
-            image?.Delete();
+            image.Delete();
             //scanFile.Dispose();
             // Create the response
             return JsonConvert.SerializeObject(labelResult);

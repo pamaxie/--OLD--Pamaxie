@@ -39,7 +39,7 @@ namespace Pamaxie.ImageCrawler.Image_Prep
         /// <param name="downloadLocation"></param>
         /// <returns></returns>
         #nullable enable
-        public static FileInfo? DownloadFile(string downloadLocation)
+        public static FileInfo DownloadFile(string downloadLocation)
         {
             Guid imageNumber = Guid.NewGuid();
             WebRequest req = WebRequest.Create(downloadLocation);
@@ -50,7 +50,7 @@ namespace Pamaxie.ImageCrawler.Image_Prep
             WebResponse response = request.GetResponse();
             Stream stream = response.GetResponseStream();
 
-            string? fileName = $"{TempImageDirectory}\\{imageNumber}.jpg";
+            string fileName = $"{TempImageDirectory}\\{imageNumber}.jpg";
 
             Image img = Image.Load(Configuration.Default, stream);
             img.Mutate(x => x
@@ -58,7 +58,7 @@ namespace Pamaxie.ImageCrawler.Image_Prep
                  .Grayscale());
             img.Save(fileName);
             stream.Close();
-            FileInfo? file = new(fileName);
+            FileInfo file = new(fileName);
             return file;
         }
     #nullable disable

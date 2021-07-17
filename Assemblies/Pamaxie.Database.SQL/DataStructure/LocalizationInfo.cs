@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+// ReSharper disable InconsistentNaming
 
 namespace Pamaxie.Database.Sql.DataStructure
 {

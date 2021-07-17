@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+#pragma warning disable 8618
 
 namespace Pamaxie.Website.Pages
 {
@@ -11,9 +12,9 @@ namespace Pamaxie.Website.Pages
     {
         public string ReturnUrl { get; private set; }
         public async Task<IActionResult> OnGetAsync(
-            string returnUrl = null)
+            string? returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl ??= Url.Content("~/");
             // Clear the existing external cookie
             try
             {
@@ -21,10 +22,11 @@ namespace Pamaxie.Website.Pages
                     .SignOutAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string error = ex.Message;
+                // ignored
             }
+
             return LocalRedirect("/");
         }
     }

@@ -14,12 +14,12 @@
         <RedirectToLogin/>
     </NotAuthorized>
     <Authorized>
-        <MudText Class="dynamicPadding mg-10"Typo="Typo.h4">This is your account, @Profile.UserName</MudText>
+        <MudText Class="dynamicPadding mg-10"Typo="Typo.h4">This is your account, @Profile?.UserName</MudText>
         <MudForm Class="dynamicPadding dash-spacing">
-            <MudAvatar Image="@Profile.ProfilePictureAddress"/>
+            <MudAvatar Image="@Profile?.ProfilePictureAddress"/>
             <MudField Label="User Name" Variant="Variant.Text" Disabled="true">@Profile?.UserName</MudField>
-            <MudField Label="Email Address" Variant="Variant.Text" Disabled="true">@Profile.EmailAddress</MudField>
-            <MudField Label="User Id" Variant="Variant.Text" Disabled="true">@Profile.GoogleClaimUserId</MudField>
+            <MudField Label="Email Address" Variant="Variant.Text" Disabled="true">@Profile?.EmailAddress</MudField>
+            <MudField Label="User Id" Variant="Variant.Text" Disabled="true">@Profile?.GoogleClaimUserId</MudField>
             <MudButton Class="mg-20" Color="Color.Error" OnClick="OnDeleteButtonClicked" Disabled="@DisableDeleteData">Delete Account</MudButton>
         </MudForm>
 
@@ -40,7 +40,7 @@
 
     private bool DisableDeleteData { get; set; } = false;
 
-    private ProfileData Profile { get; set; }
+    private ProfileData? Profile { get; set; }
 
     private async void OnDeleteButtonClicked()
     {
@@ -65,8 +65,10 @@
             
             _navigationManager.NavigateTo("/Login", true);
         }
-        ClaimsPrincipal user = _httpContextAccessor?.HttpContext?.User;
-
+        ClaimsPrincipal? user = _httpContextAccessor?.HttpContext?.User;
+        if (user == null)
+            return Task.CompletedTask;
+        
         Profile = user.GetGoogleAuthData(out bool hasAccount)?.GetProfileData();
 
         //Disable the delete button. Not like it would affect anything but no need to have it active either.

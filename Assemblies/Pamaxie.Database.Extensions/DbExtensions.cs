@@ -29,7 +29,7 @@ namespace Pamaxie.Database.Extensions
             IHistoryRepository historyRepository = dbContext.GetService<IHistoryRepository>();
             IEnumerable<string> all = migrationsAssembly.Migrations.Keys;
             IEnumerable<string> applied = historyRepository.GetAppliedMigrations().Select(r => r.MigrationId);
-            List<string> pending = all.Except(applied).ToList();;
+            List<string> pending = all.Except(applied).ToList();
             Console.WriteLine("Checking if database exists...");
             if (dbContext.Database.EnsureCreated()) Console.WriteLine("SQL Database was created and schemas were applied");
 

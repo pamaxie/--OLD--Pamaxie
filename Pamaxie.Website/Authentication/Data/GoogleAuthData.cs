@@ -1,4 +1,5 @@
 ﻿using Pamaxie.Database.Extensions.Data;
+#pragma warning disable 8618
 
 namespace Pamaxie.Website.Authentication.Data
 {

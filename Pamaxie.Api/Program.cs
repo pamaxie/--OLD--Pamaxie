@@ -16,16 +16,16 @@ namespace Pamaxie.Api
             {
                 Console.WriteLine("We are testing if the neural network works. This may take a minute.");
 
-                FileInfo? image = ImageProcessing.ImageProcessing.DownloadFile("https://www.pinclipart.com/picdir/middle/9-93455_what-is-the-meaning-of-png-clipart-download.png");
+                FileInfo image = ImageProcessing.ImageProcessing.DownloadFile("https://www.pinclipart.com/picdir/middle/9-93455_what-is-the-meaning-of-png-clipart-download.png");
                 // Add input data
                 ModelInput input = new()
                 {
-                    ImageSource = image?.FullName
+                    ImageSource = image.FullName
                 };
 
                 // Load model and predict output of sample data
-                ConsumeModel.Predict(input, out OutputProperties labelResult);
-                image?.Delete();
+                ConsumeModel.Predict(input, out OutputProperties _);
+                image.Delete();
 
                 Console.WriteLine("Tested neural network successfully. Starting now!");
             }catch(Exception ex)

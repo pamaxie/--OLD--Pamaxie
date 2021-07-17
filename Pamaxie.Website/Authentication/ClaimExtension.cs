@@ -14,8 +14,8 @@ namespace Pamaxie.Website.Authentication
         /// </summary>
         /// <param name="principle"><see cref="ClaimsPrincipal"/> to get the google claims from</param>
         /// <param name="hasAccount"></param>
-        /// <returns><see cref="GoogleAuthData"/> that was created via the claim values. Is <see cref="null"/> if something went wrong.</returns>
-        internal static GoogleAuthData GetGoogleAuthData(this ClaimsPrincipal principle, out bool hasAccount)
+        /// <returns><see cref="GoogleAuthData"/> that was created via the claim values. Is null if something went wrong.</returns>
+        internal static GoogleAuthData? GetGoogleAuthData(this ClaimsPrincipal principle, out bool hasAccount)
         {
             hasAccount = false;
             if (principle.Identity == null)

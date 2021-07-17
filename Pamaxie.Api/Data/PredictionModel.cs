@@ -1,4 +1,5 @@
-﻿namespace Pamaxie.Api.Data
+﻿#pragma warning disable 8618
+namespace Pamaxie.Api.Data
 {
     public class PredictionModel
     {

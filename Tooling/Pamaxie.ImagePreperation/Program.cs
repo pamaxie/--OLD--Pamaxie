@@ -42,7 +42,7 @@ namespace Folder
                 try
                 {
                     using Image img = Image.Load(file);
-                    float ratio = (float) img.Height / (float) img.Width;
+                    float ratio = img.Height / (float) img.Width;
                     img.Mutate(x => x
                         .Resize(450, (int)ratio * 450));
                     img.Save(folder + "\\" + fi.Name, new JpegEncoder());

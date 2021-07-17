@@ -18,9 +18,9 @@ namespace Pamaxie.Leecher
         private static string _type;
         private static int _overallUrls;
         private static int _currentUrlIdx;
-        private static int _failedUrls = 0;
+        private static int _failedUrls;
         private static int _workerThreads = 10;
-        private static bool _showErrors = false;
+        private static bool _showErrors;
         private static List<Thread> _workerThreadList;
         private static Stopwatch _progressStopwatch;
         private static string _sweepingStep;
@@ -485,10 +485,10 @@ namespace Pamaxie.Leecher
             Console.CursorVisible = false;
             long tickPerObject = _progressStopwatch.ElapsedTicks / _currentUrlIdx;
             TimeSpan remainingTime = TimeSpan.FromTicks(tickPerObject * (_overallUrls - _currentUrlIdx));
-            string progressBar = GetProgress((((float)_currentUrlIdx / (float)_overallUrls) * 100) *2, 200);
+            string progressBar = GetProgress(((_currentUrlIdx / (float)_overallUrls) * 100) *2, 200);
             Console.WriteLine("Overall sweeping progress of Urls\n" +
                               $"Currently we are: {_sweepingStep}\n" +
-                              $"Failed to validate: {((float)_failedUrls / (float)_overallUrls) * 100}%\n" +
+                              $"Failed to validate: {(_failedUrls / (float)_overallUrls) * 100}%\n" +
                               $"Remaining minutes: {remainingTime:c}\n" +
                               $"Swept {_currentUrlIdx}/{_overallUrls} so far.\n" +
                               $"{progressBar}\n");

@@ -35,7 +35,7 @@ namespace Pamaxie.MediaDetection
         public int HeaderOffset { get; set; }
 
         /// <summary>
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IFileSpecification.ToString" />
         /// </summary>
         public override string ToString()
         {

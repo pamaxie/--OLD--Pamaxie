@@ -21,7 +21,7 @@ namespace Pamaxie.ImageProcessing
         /// <param name="downloadUrl"></param>
         /// <returns></returns>
 #nullable enable
-        public static FileInfo? DownloadFile(string downloadUrl)
+        public static FileInfo DownloadFile(string downloadUrl)
         {
             var imageNumber = Guid.NewGuid();
             WebRequest req = WebRequest.Create(downloadUrl);
@@ -32,6 +32,9 @@ namespace Pamaxie.ImageProcessing
             WebResponse response = request.GetResponse();
             Stream stream = response.GetResponseStream();
             var spec = stream.DetermineFileType();
+            if (spec == null)
+                throw new ArgumentException("Unknown filetype detected. Can't analyze filetypes without a specification");
+
             //var fileFormat = FileDetection.DetermineFileType(stream);
             var fileName = $"{TempImageDirectory}\\{imageNumber}.jpg";
 
@@ -41,7 +44,7 @@ namespace Pamaxie.ImageProcessing
                  .Grayscale());
             img.Save(fileName);
             stream.Close();
-            FileInfo? file = new(fileName);
+            FileInfo file = new(fileName);
             return file;
         }
 #nullable disable

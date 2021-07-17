@@ -33,7 +33,7 @@ namespace Pamaxie.Api.Controllers
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
 
-            Application appData = JsonConvert.DeserializeObject<Application>(result);
+            Application? appData = JsonConvert.DeserializeObject<Application>(result);
 
             if (string.IsNullOrEmpty(appData?.AppToken) || default == appData.ApplicationId)
                 return Unauthorized(ErrorHandler.UnAuthorized());
@@ -41,8 +41,6 @@ namespace Pamaxie.Api.Controllers
             if (!appData.VerifyAuth()) return Unauthorized(ErrorHandler.UnAuthorized());
 
             AuthToken token = _generator.CreateToken(appData.ApplicationId.ToString());
-            if (token == null) return StatusCode(500);
-
             return Ok(token);
         }
 
@@ -58,7 +56,7 @@ namespace Pamaxie.Api.Controllers
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             
             if (string.IsNullOrEmpty(result))  return BadRequest(ErrorHandler.BadData());
-            Application appData;
+            Application? appData;
             try
             {
                 appData = JsonConvert.DeserializeObject<Application>(result);
@@ -72,8 +70,6 @@ namespace Pamaxie.Api.Controllers
 
             string userId = appData.ApplicationId.ToString();
             AuthToken token = _generator.CreateToken(userId);
-
-            if (token == null) return StatusCode(500);
             return Ok(token);
         }
     }

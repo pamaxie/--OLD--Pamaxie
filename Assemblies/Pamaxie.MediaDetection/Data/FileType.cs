@@ -32,7 +32,7 @@ namespace Pamaxie.MediaDetection
         public string Software { get; set; }
         public string MediaType { get; set; }
         
-        public bool Equals(IFileType? fileType)
+        public bool Equals(IFileType fileType)
         {
             if (fileType == null) return false;
             if (ReferenceEquals(this, fileType)) return true;

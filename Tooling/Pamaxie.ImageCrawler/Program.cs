@@ -73,7 +73,7 @@ namespace ImageCrawler
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(@"Download of images over http failed reattempting with https");
-                Console.ForegroundColor = ConsoleColor.Black;;
+                Console.ForegroundColor = ConsoleColor.Black;
             }
 
             Parallel.ForEach(links, (link) =>

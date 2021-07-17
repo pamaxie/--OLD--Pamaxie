@@ -12,7 +12,7 @@ namespace Pamaxie.Website.Pages
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        public IActionResult OnGetAsync(string returnUrl = null)
+        public IActionResult OnGetAsync(string? returnUrl = null)
         {
             string provider = "Google";
             // Request a redirect to the external login provider.
@@ -25,22 +25,20 @@ namespace Pamaxie.Website.Pages
             return new ChallengeResult(provider, authenticationProperties);
         }
         public async Task<IActionResult> OnGetCallbackAsync(
-            string returnUrl = null, string remoteError = null)
+            string? returnUrl = null, string? remoteError = null)
         {
             // Get the information about the user from the external login provider
-            ClaimsIdentity googleUser = User.Identities.FirstOrDefault();
-            if (googleUser is {IsAuthenticated: true})
+            ClaimsIdentity? googleUser = User.Identities.FirstOrDefault();
+            if (googleUser is not {IsAuthenticated: true}) return LocalRedirect("/");
+            AuthenticationProperties authProperties = new()
             {
-                AuthenticationProperties authProperties = new()
-                {
-                    IsPersistent = true,
-                    RedirectUri = Request.Host.Value
-                };
-                await HttpContext.SignInAsync(
+                IsPersistent = true,
+                RedirectUri = Request.Host.Value
+            };
+            await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(googleUser),
                 authProperties);
-            }
             return LocalRedirect("/");
         }
     }

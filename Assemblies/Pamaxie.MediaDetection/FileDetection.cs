@@ -67,7 +67,6 @@ namespace Pamaxie.MediaDetection
 
             var fileTypeMatches = stream.FindFileTypes();
             fileTypeMatches.Reverse();
-            FileType detectedSpec;
 
             for (var i = 0; i < fileTypeMatches.Count; i++)
             {

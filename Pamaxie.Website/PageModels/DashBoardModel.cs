@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Pamaxie.Data;
+#pragma warning disable 8618
 
 namespace Pamaxie.Website.PageModels
 {
@@ -46,7 +47,7 @@ namespace Pamaxie.Website.PageModels
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        protected string PasswordMatch(string arg)
+        protected string? PasswordMatch(string arg)
         {
             return PwField1.Value != arg ? "Passwords don't match" : null;
         }
@@ -74,7 +75,7 @@ namespace Pamaxie.Website.PageModels
             NewApplication.AppToken = PwField1.Value;
             ApplicationExtensions.CreateApplication(NewApplication, out Application createdApp);
             Applications.Add(createdApp);
-            NewApplication = null;
+            NewApplication = new Application();
         }
     }
 }

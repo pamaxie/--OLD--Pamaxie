@@ -48,6 +48,7 @@ namespace Pamaxie.Website
             services.AddScoped<BrowserService>();
 
 
+            // ReSharper disable once UnusedVariable
             CookiePolicyOptions cookiePolicy = new()
             {
                 Secure = CookieSecurePolicy.Always,

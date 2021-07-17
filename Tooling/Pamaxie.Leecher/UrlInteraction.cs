@@ -42,7 +42,7 @@ namespace Pamaxie.Leecher
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
             req.AllowAutoRedirect = true;
             //Ignore certificate errors.
-            req.ServerCertificateValidationCallback += (sender, certificate, chain, errors) => errors == SslPolicyErrors.None;
+            req.ServerCertificateValidationCallback += (_, _, _, errors) => errors == SslPolicyErrors.None;
             HttpWebResponse res = (HttpWebResponse)req.GetResponse();
             redirectUri = res.ResponseUri.AbsoluteUri;
             return res.StatusCode == HttpStatusCode.OK;
