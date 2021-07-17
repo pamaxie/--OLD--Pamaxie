@@ -13,7 +13,7 @@ namespace Pamaxie.Website.Pages
         [Inject] private NavigationManager NavigationManager { get; set; }
         [Inject] private IHttpContextAccessor HttpContextAccessor { get; set; }
         [Inject] private IDialogService DialogService { get; set; }
-        private bool DisableDeleteData { get; set; } = false;
+        private bool DisableDeleteData { get; set; }
         private ProfileData? Profile { get; set; }
     }
 }

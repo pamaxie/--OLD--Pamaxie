@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using MudBlazor;
+﻿using MudBlazor;
 #pragma warning disable 8618
 
 namespace Pamaxie.Website

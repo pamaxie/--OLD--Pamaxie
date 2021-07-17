@@ -1,28 +1,23 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-#pragma warning disable 8618
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace Pamaxie.Website.Pages
 {
     public class LogoutModel : PageModel
     {
-        public string ReturnUrl { get; private set; }
-        public async Task<IActionResult> OnGetAsync(
-            string? returnUrl = null)
+        [SuppressMessage("ReSharper", "UnusedMember.Global")]
+        public async Task<IActionResult> OnGetAsync()
         {
-            returnUrl ??= Url.Content("~/");
             // Clear the existing external cookie
             try
             {
-                await HttpContext
-                    .SignOutAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             }
-            catch (Exception)
+            catch
             {
                 // ignored
             }

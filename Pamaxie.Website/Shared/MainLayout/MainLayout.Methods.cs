@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Pamaxie.Website.Shared
@@ -10,11 +11,10 @@ namespace Pamaxie.Website.Shared
         {
             try
             {
-                var result = await ProtectedLocalStorage.GetAsync<bool>("useCookies");
+                ProtectedBrowserStorageResult<bool> result = await ProtectedLocalStorage.GetAsync<bool>("useCookies");
                 bool currentValue = result.Success && result.Value;
                 _showCookieDialog = !currentValue;
-                if (firstRender)
-                    StateHasChanged();
+                StateHasChanged();
             }
             catch
             {

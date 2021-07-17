@@ -30,7 +30,7 @@
                                           RequiredError="AppToken is required!"/>
                             <MudTextField T="string"
                                           Label="AppToken" HelperText="Repeat the Token" InputType="InputType.Password"
-                                          Validation="@(new Func<string, string>(DoPasswordsMatch))"/>
+                                          Validation="@(new Func<string, string>(DoPasswordsMatch!))"/>
                             <MudSpacer></MudSpacer>
                             <MudCheckBox @bind-Checked="@NewApplication.Disabled">Disable Application (This can be changed later)</MudCheckBox> <br/>
                             <MudCheckBox @bind-Checked="@AcceptedTos" Required="true">I've read and agree to the <a href="https://wiki.pamaxie.com/en/tos" target="_blank">Terms of Service</a> </MudCheckBox><br/>

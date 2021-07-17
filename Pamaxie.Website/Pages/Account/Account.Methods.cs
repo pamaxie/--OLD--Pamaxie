@@ -27,11 +27,11 @@ namespace Pamaxie.Website.Pages
 
         protected override Task OnInitializedAsync()
         {
-            if (HttpContextAccessor?.HttpContext?.User == null)
+            if (HttpContextAccessor.HttpContext?.User == null)
             {
                 NavigationManager.NavigateTo("/Login", true);
             }
-            ClaimsPrincipal? user = HttpContextAccessor?.HttpContext?.User;
+            ClaimsPrincipal? user = HttpContextAccessor.HttpContext?.User;
             if (user == null)
                 return Task.CompletedTask;
         

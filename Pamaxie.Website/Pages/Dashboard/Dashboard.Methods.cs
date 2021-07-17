@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
-using Pamaxie.Data;
+﻿using Pamaxie.Data;
 using Pamaxie.Extensions;
 using Pamaxie.Website.Authentication;
 using System;
@@ -17,7 +15,7 @@ namespace Pamaxie.Website.Pages
     {
         protected override Task OnInitializedAsync()
         {
-            ClaimsPrincipal? user = HttpContextAccessor?.HttpContext?.User;
+            ClaimsPrincipal? user = HttpContextAccessor.HttpContext?.User;
             if (user == null)
                 return Task.CompletedTask;
 
@@ -88,9 +86,9 @@ namespace Pamaxie.Website.Pages
                 yield return "Password must contain at least one digit";
         }
 
-        private string DoPasswordsMatch(string arg)
+        private string? DoPasswordsMatch(string arg)
         {
-            return PwField1?.Value != arg ? "Passwords don't match" : string.Empty;
+            return PwField1.Value != arg ? "Passwords don't match" : null;
         }
 
         private void CreateEmptyApplication()
@@ -113,7 +111,7 @@ namespace Pamaxie.Website.Pages
             if (NewApplication == null)
                 return;
 
-            NewApplication.AppToken = PwField1?.Value;
+            NewApplication.AppToken = PwField1.Value;
             ApplicationExtensions.CreateApplication(NewApplication, out Application createdApp);
             Applications.Add(createdApp);
             NewApplication = null;

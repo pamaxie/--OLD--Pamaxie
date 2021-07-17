@@ -2,7 +2,7 @@
 @inherits LayoutComponentBase
 
 <Pamaxie.Website.Shared.NavMenu>
-    <MudDialog>
+    <MudDialog @bind-IsVisible="_showCookieDialog">
         <TitleContent>
             <MudText Typo="Typo.h6">
                 <MudIcon Icon="@Icons.Material.Filled.PrivacyTip" Class="mr-3"/> Use Cookies
