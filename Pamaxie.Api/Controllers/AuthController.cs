@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Pamaxie.Api.Data;
 using Pamaxie.Api.Security;
-using Pamaxie.Database.Sql.DataClasses;
 using Pamaxie.Extensions;
 using Pamaxie.Data;
 using System.IO;
