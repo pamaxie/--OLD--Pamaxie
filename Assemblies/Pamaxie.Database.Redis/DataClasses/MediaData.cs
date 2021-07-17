@@ -10,7 +10,6 @@ namespace Pamaxie.Database.Redis.DataClasses
     /// </summary>
     public class MediaPredictionData
     {
-
         /// <summary>
         /// Creating a new Medida Pediction Data instance
         /// </summary>
@@ -38,20 +37,19 @@ namespace Pamaxie.Database.Redis.DataClasses
             {
                 if (_data != null) return _data;
 
-                if (MediaHash == null) throw new InvalidOperationException("Cannot get Data when image hash is null or not set");
+                if (MediaHash == null)
+                    throw new InvalidOperationException("Cannot get Data when image hash is null or not set");
 
                 IDatabase db = RedisData.Redis.GetDatabase();
                 RedisValue rawData = db.StringGet(MediaHash);
-                MediaData data = JsonConvert.DeserializeObject<MediaData>(rawData);
+                var data = JsonConvert.DeserializeObject<MediaData>(rawData);
                 _data = data;
                 return data;
             }
             set
             {
                 if (string.IsNullOrEmpty(MediaHash))
-                {
                     throw new InvalidOperationException("Cannot set Data when image Hash is null or not set");
-                }
                 if (Equals(_data, value)) return;
 
                 IDatabase db = RedisData.Redis.GetDatabase();
@@ -59,7 +57,8 @@ namespace Pamaxie.Database.Redis.DataClasses
 
                 //Delete database data after 90 days because accessing the data is not really relevant to use anymore
                 //(we don't wanna build a database on peoples pictures after all) if you do feel free to remove the flags.
-                db.StringSet(MediaHash, mediaData, new TimeSpan(90, 0, 0, 0, 0), When.Always, CommandFlags.FireAndForget);
+                db.StringSet(MediaHash, mediaData, new TimeSpan(90, 0, 0, 0, 0), When.Always,
+                    CommandFlags.FireAndForget);
                 _data = value;
             }
         }

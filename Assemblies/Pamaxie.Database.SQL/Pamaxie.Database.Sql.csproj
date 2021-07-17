@@ -27,7 +27,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DataInterfaces\" />
+    <Folder Include="DataClasses" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Pamaxie.Data\Pamaxie.Data.csproj" />
   </ItemGroup>
 
 </Project>

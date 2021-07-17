@@ -8,7 +8,8 @@ namespace Pamaxie.Leecher.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseSqlServer("Data Source=localhost;Initial Catalog=PamaxieFilter;User Id=sa;Password=pass; MultipleActiveResultSets=True");
+            options.UseSqlServer(
+                "Data Source=localhost;Initial Catalog=PamaxieFilter;User Id=sa;Password=pass; MultipleActiveResultSets=True");
         }
     }
 }

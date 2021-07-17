@@ -17,7 +17,10 @@ namespace Pamaxie.ImageSorting
     public static class Program
     {
         private const string CopyFolderName = "Compared Files";
-        private static readonly IEnumerable<ImagePredictionResult> OutputDirectories = Enum.GetValues(typeof(ImagePredictionResult)).Cast<ImagePredictionResult>();
+
+        private static readonly IEnumerable<ImagePredictionResult> OutputDirectories =
+            Enum.GetValues(typeof(ImagePredictionResult)).Cast<ImagePredictionResult>();
+
         private static string _sourceDir = string.Empty;
         private static string _targetDir = string.Empty;
         internal static int CurrentFileIdx;
@@ -25,15 +28,16 @@ namespace Pamaxie.ImageSorting
         private static int _similarItems;
         internal static string SweepingStep;
         internal static Stopwatch Timer;
-        
+
         ///Sorts out images beforehand by predicted label and accuracy for said label.
         public static void Main(string[] args)
         {
-            bool compareFiles = false;
+            var compareFiles = false;
 
             while (true)
             {
-                Console.WriteLine("Do you want to verify images are duplicates or not or do you want to go straight up to training?");
+                Console.WriteLine(
+                    "Do you want to verify images are duplicates or not or do you want to go straight up to training?");
                 ConsoleKeyInfo key = Console.ReadKey();
                 switch (key)
                 {
@@ -48,19 +52,20 @@ namespace Pamaxie.ImageSorting
                         Console.WriteLine("Unexpected input detected please try again.");
                         continue;
                 }
+
                 break;
             }
 
             if (compareFiles)
-            {
                 while (true)
                 {
-                    Console.WriteLine("Please enter the folder which contains the images you want to predict the values of.");
+                    Console.WriteLine(
+                        "Please enter the folder which contains the images you want to predict the values of.");
                     _sourceDir = Console.ReadLine();
                     if (Directory.Exists(_sourceDir)) break;
-                    Console.WriteLine("Invalid or Unknown Folder was entered. Folder could not be found. Please try again.");
+                    Console.WriteLine(
+                        "Invalid or Unknown Folder was entered. Folder could not be found. Please try again.");
                 }
-            }
 
             while (true)
             {
@@ -76,21 +81,23 @@ namespace Pamaxie.ImageSorting
             Console.WriteLine("Getting all files in the directory. Can take a very very long time.");
             string[] files = Directory.GetFiles(_sourceDir ?? string.Empty);
 
-            List<Tuple<string, ulong>> items = compareFiles ? GetSimilarItems(files) : MoveToSubDir(files);
+            var items = compareFiles ? GetSimilarItems(files) : MoveToSubDir(files);
             Console.Clear();
 
             Console.Write("Finished work on detecting similar items.");
-            for (int i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++)
             {
                 Console.Write(".");
                 Thread.Sleep(500);
             }
+
             Console.Clear();
 
-            bool copyItems = false;
+            var copyItems = false;
             while (true)
             {
-                Console.WriteLine("Do you want to copy the files to the output directory? (Highly recommended, if you abort this during the Neural Network process all data will be lost.)");
+                Console.WriteLine(
+                    "Do you want to copy the files to the output directory? (Highly recommended, if you abort this during the Neural Network process all data will be lost.)");
                 ConsoleKeyInfo key = Console.ReadKey();
                 switch (key)
                 {
@@ -105,6 +112,7 @@ namespace Pamaxie.ImageSorting
                         Console.WriteLine("Unexpected input detected please try again.");
                         continue;
                 }
+
                 break;
             }
 
@@ -112,7 +120,7 @@ namespace Pamaxie.ImageSorting
             {
                 items = CopyFiles(items, _targetDir);
                 Console.Write("Finished copying items");
-                for (int i = 0; i < 6; i++)
+                for (var i = 0; i < 6; i++)
                 {
                     Console.Write(".");
                     Thread.Sleep(250);
@@ -120,7 +128,7 @@ namespace Pamaxie.ImageSorting
             }
 
             Console.Write("Setting up folder structure now...");
-            for (int i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++)
             {
                 Console.Write(".");
                 Thread.Sleep(250);
@@ -133,23 +141,17 @@ namespace Pamaxie.ImageSorting
                 string newDir = _targetDir + "\\" + directory;
                 if (Directory.Exists(newDir)) continue;
                 Directory.CreateDirectory(newDir);
-                for (int i = 0; i < 10; i++)
-                {
-                    Directory.CreateDirectory(newDir + "\\" + i * 10 + "%");
-                }
+                for (var i = 0; i < 10; i++) Directory.CreateDirectory(newDir + "\\" + i * 10 + "%");
             }
 
 
             Console.WriteLine("Finished creating directories.");
-            bool doingWork = true;
-            new Thread((() =>
+            var doingWork = true;
+            new Thread(() =>
             {
                 Console.Clear();
-                while (doingWork)
-                {
-                    Other.DrawOverallProgress();
-                }
-            })).Start();
+                while (doingWork) Other.DrawOverallProgress();
+            }).Start();
 
             CurrentFileIdx = 0;
             OverallFiles = items.Count;
@@ -160,7 +162,7 @@ namespace Pamaxie.ImageSorting
                 CurrentFileIdx++;
 
                 // Add input data
-                ModelInput input = new ModelInput
+                var input = new ModelInput
                 {
                     ImageSource = item1
                 };
@@ -181,10 +183,7 @@ namespace Pamaxie.ImageSorting
                     _ => throw new ArgumentOutOfRangeException()
                 };
 
-                if (CurrentFileIdx < 4)
-                {
-                    Console.Clear();
-                }
+                if (CurrentFileIdx < 4) Console.Clear();
                 FileInfo fi = new(item1);
                 fi.CopyTo(_targetDir + "\\" + labelResult.PredictedLabel + "\\" + folder + "\\" + fi.Name, true);
             }
@@ -204,11 +203,8 @@ namespace Pamaxie.ImageSorting
         private static string GetLikelihoodFolder(float likelihood)
         {
             likelihood *= 100;
-            float num = likelihood  - likelihood % 10;
-            if (num >= 100)
-            {
-                num -= 10;
-            }
+            float num = likelihood - likelihood % 10;
+            if (num >= 100) num -= 10;
             return num.ToString(CultureInfo.InvariantCulture);
         }
 
@@ -221,10 +217,8 @@ namespace Pamaxie.ImageSorting
         {
             List<Tuple<string, ulong>> items = new();
             foreach (string file in files)
-            {
                 //TODO: implement this
                 throw new NotImplementedException();
-            }
             return items;
         }
 
@@ -236,13 +230,16 @@ namespace Pamaxie.ImageSorting
         private static List<Tuple<string, ulong>> GetSimilarItems(string[] files)
         {
             //Calculate MD5 Hashes
+
             #region GetMd5Hashes
+
             Console.Write("Starting to compute MD5 hashes for all files");
-            for (int i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++)
             {
                 Console.Write(".");
                 Thread.Sleep(500);
             }
+
             DifferenceHash hashAlgorithm = new();
 
             SweepingStep = "Calculating MD5 Hashes";
@@ -250,15 +247,12 @@ namespace Pamaxie.ImageSorting
             CurrentFileIdx = 0;
             Timer = new Stopwatch();
             Timer.Start();
-            bool doingWork = true;
-            new Thread((() =>
+            var doingWork = true;
+            new Thread(() =>
             {
                 Console.Clear();
-                while (doingWork)
-                {
-                    Other.DrawSweepProgress();
-                }
-            })).Start();
+                while (doingWork) Other.DrawSweepProgress();
+            }).Start();
 
             ConcurrentBag<Tuple<string, ulong>> fileWithHash = new();
             Parallel.ForEach(files, file =>
@@ -282,36 +276,38 @@ namespace Pamaxie.ImageSorting
             Console.WriteLine("Going through roughly " + files.Length + " took around: " + Timer.Elapsed.ToString("g"));
 
             Console.Write("Starting to compare hashes and find direct duplicates");
-            for (int i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++)
             {
                 Console.Write(".");
                 Thread.Sleep(500);
             }
+
             Timer.Reset();
+
             #endregion
 
             //Compare the Calculated MD5 hashes and never store dupes.
+
             #region CompareMD5Hashes
-            Tuple<string, ulong>[] comparisonInput = fileWithHash.ToArray();
+
+            var comparisonInput = fileWithHash.ToArray();
             List<Tuple<string, ulong>> comparedItems = new();
             SweepingStep = "Detecting direct MD5 Similarities and ignoring items with too high similarity.";
             CurrentFileIdx = 0;
             OverallFiles = fileWithHash.Count;
             doingWork = true;
             Timer.Start();
-            new Thread((() =>
+            new Thread(() =>
             {
                 Console.Clear();
-                while (doingWork)
-                {
-                    Other.DrawSweepProgress();
-                }
-            })).Start();
+                while (doingWork) Other.DrawSweepProgress();
+            }).Start();
 
-            foreach (Tuple<string, ulong> file in comparisonInput)
+            foreach (var file in comparisonInput)
             {
                 CurrentFileIdx++;
-                bool known = comparedItems.Select(t => CompareHash.Similarity(file.Item2, t.Item2)).Any(similarity => similarity > 90);
+                bool known = comparedItems.Select(t => CompareHash.Similarity(file.Item2, t.Item2))
+                    .Any(similarity => similarity > 90);
 
                 if (known)
                 {
@@ -324,7 +320,9 @@ namespace Pamaxie.ImageSorting
 
             doingWork = false;
             Console.Clear();
-            Console.WriteLine("Found roughly " + _similarItems + " dupes or too similar items (likely regrouped or not different enough to matter).");
+            Console.WriteLine("Found roughly " + _similarItems +
+                              " dupes or too similar items (likely regrouped or not different enough to matter).");
+
             #endregion
 
             return comparedItems;
@@ -336,7 +334,8 @@ namespace Pamaxie.ImageSorting
         /// <param name="fileList"></param>
         /// <param name="targetDir"></param>
         /// <returns></returns>
-        private static List<Tuple<string, ulong>> CopyFiles(IEnumerable<Tuple<string, ulong>> fileList, string targetDir)
+        private static List<Tuple<string, ulong>> CopyFiles(IEnumerable<Tuple<string, ulong>> fileList,
+            string targetDir)
         {
             List<Tuple<string, ulong>> newFiles = new();
 
@@ -356,6 +355,7 @@ namespace Pamaxie.ImageSorting
                 fileInfo.CopyTo(newLocation, true);
                 newFiles.Add(new Tuple<string, ulong>(newLocation, item2));
             }
+
             return newFiles;
         }
     }

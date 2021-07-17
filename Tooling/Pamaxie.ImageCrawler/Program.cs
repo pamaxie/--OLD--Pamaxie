@@ -1,7 +1,6 @@
 ﻿using Pamaxie.ImageCrawler;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,6 +31,7 @@ namespace ImageCrawler
                     ImageDestinationDir = imageDestination;
                     break;
                 }
+
                 Console.WriteLine(@"File could not be found please validate it exists");
             }
 
@@ -46,6 +46,7 @@ namespace ImageCrawler
                     BaseUrl = imageDestination;
                     break;
                 }
+
                 Console.WriteLine(@"Url could not be validated and is probably incorrect.");
             }
 
@@ -60,11 +61,13 @@ namespace ImageCrawler
                     _maxImages = intImageAmount;
                     break;
                 }
+
                 Console.WriteLine(@"Entered value is not a correct integer. Please make sure its a positive int");
             }
 
             List<string> links = new();
-            Console.WriteLine("Doing an initial sweep to see how many links and other things we can find on the main page.");
+            Console.WriteLine(
+                "Doing an initial sweep to see how many links and other things we can find on the main page.");
             try
             {
                 links = UrlInteraction.ParseLinks(BaseUrl);
@@ -74,7 +77,8 @@ namespace ImageCrawler
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(@"Download of images over http failed reattempting with https");
-                Console.ForegroundColor = ConsoleColor.Black;;
+                Console.ForegroundColor = ConsoleColor.Black;
+                ;
             }
 
             Parallel.ForEach(links, (link) =>
@@ -82,18 +86,18 @@ namespace ImageCrawler
                 Queue<string> inputList = new();
                 inputList.Enqueue(link);
 
-                while(inputList.Any())
+                while (inputList.Any())
                 {
                     if (CurrentImgCount == _maxImages) return;
                     string currentLink = inputList.Dequeue();
                     CrawlUrl(currentLink, inputList);
                 }
             });
-            
+
             Console.WriteLine("Done the work");
             Console.ReadKey();
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -101,11 +105,8 @@ namespace ImageCrawler
         /// <param name="inputList">THIS VALUE IS MODIFIED IN HERE!!!</param>
         private static void CrawlUrl(string url, Queue<string> inputList)
         {
-            List<string> links = UrlInteraction.ParseLinks(url);
-            foreach (string link in links.Where(link => !inputList.Contains(link)))
-            {
-                inputList.Enqueue(link);
-            }
+            var links = UrlInteraction.ParseLinks(url);
+            foreach (string link in links.Where(link => !inputList.Contains(link))) inputList.Enqueue(link);
             UrlInteraction.GrabAllImages(url);
         }
 
@@ -127,8 +128,8 @@ namespace ImageCrawler
         /// <returns></returns>
         public static string GetProgress(double currentProgress, int width)
         {
-            string progressBar = string.Empty;
-            for (int i = 0; i < width; i++)
+            var progressBar = string.Empty;
+            for (var i = 0; i < width; i++)
             {
                 if (currentProgress * 100 / width > 1)
                 {
@@ -136,8 +137,10 @@ namespace ImageCrawler
                     currentProgress--;
                     continue;
                 }
+
                 progressBar += "░";
             }
+
             progressBar += string.Empty;
             return progressBar;
         }

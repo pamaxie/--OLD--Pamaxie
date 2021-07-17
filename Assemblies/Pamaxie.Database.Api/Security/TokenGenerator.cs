@@ -20,7 +20,7 @@ namespace Pamaxie.Api.Security
         public AuthToken CreateToken(string userId)
         {
             // authentication successful so generate jwt token
-            JwtSecurityTokenHandler tokenHandler = new ();
+            JwtSecurityTokenHandler tokenHandler = new();
             IConfigurationSection section = _configuration.GetSection("AuthData");
             byte[] key = Encoding.ASCII.GetBytes(section.GetValue<string>("Secret"));
             DateTime expires = DateTime.UtcNow.AddMinutes(section.GetValue<int>("ExpiresInMinutes"));

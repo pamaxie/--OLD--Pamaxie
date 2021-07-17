@@ -33,7 +33,7 @@ namespace Pamaxie.Api.Controllers
         {
             return "API is available";
         }
-        
+
         /// <summary>
         ///     Verifies the content of a sent image
         /// </summary>
@@ -46,10 +46,7 @@ namespace Pamaxie.Api.Controllers
             if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
             string filehash = await ImageProcessing.ImageProcessing.GetFileHash(result);
             MediaPredictionData data = new(filehash);
-            if (data.TryLoadData(out var knownResult))
-            {
-                return JsonConvert.SerializeObject(knownResult);
-            }
+            if (data.TryLoadData(out var knownResult)) return JsonConvert.SerializeObject(knownResult);
 
             FileInfo image = ImageProcessing.ImageProcessing.DownloadFile(result);
             // Add input data

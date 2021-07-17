@@ -21,9 +21,9 @@ namespace Pamaxie.ImageCrawler
         {
             try
             {
-                string data = string.Empty;
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlToCrawl);
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                var data = string.Empty;
+                var request = (HttpWebRequest) WebRequest.Create(urlToCrawl);
+                var response = (HttpWebResponse) request.GetResponse();
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -72,7 +72,7 @@ namespace Pamaxie.ImageCrawler
         /// <returns></returns>
         private static string GetAbsoluteUrlString(string baseUrl, string url)
         {
-            Uri uri = new Uri(url, UriKind.RelativeOrAbsolute);
+            var uri = new Uri(url, UriKind.RelativeOrAbsolute);
             if (!uri.IsAbsoluteUri) uri = new Uri(new Uri(baseUrl), uri);
             return uri.ToString();
         }
@@ -93,13 +93,9 @@ namespace Pamaxie.ImageCrawler
             if (imageUrls.Length == 0) return;
             // now showing all images from web page one by one
             foreach (string item in imageUrls)
-            {
                 try
                 {
-                    if (Program.DownloadedImageUrls.Contains(url))
-                    {
-                        continue;
-                    }
+                    if (Program.DownloadedImageUrls.Contains(url)) continue;
 
                     FileInfo file = ImagePreparation.DownloadFile(item);
                     ImagePreparation.PrepareFile(file?.FullName).MoveTo(Program.ImageDestinationDir + "/" +
@@ -114,7 +110,6 @@ namespace Pamaxie.ImageCrawler
                 {
                     // ignored
                 }
-            }
         }
     }
 }
