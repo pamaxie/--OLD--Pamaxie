@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Pamaxie.Api.Data;
+using Pamaxie.Api.Security;
 using Pamaxie.Database.Sql.DataClasses;
 using Pamaxie.Extensions;
 using System.IO;
-using Pamaxie.Api.Data;
-using Pamaxie.Api.Security;
 
 namespace Pamaxie.Api.Controllers
 {
@@ -22,7 +22,7 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        ///     Signs in a user via Basic authentication and returns a token.
+        /// Signs in a user via Basic authentication and returns a token.
         /// </summary>
         /// <returns><see cref="AuthToken"/> Token for Authentication</returns>
         [AllowAnonymous]
@@ -33,7 +33,7 @@ namespace Pamaxie.Api.Controllers
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
 
-            Application appData = JsonConvert.DeserializeObject<Application>(result);
+            Application? appData = JsonConvert.DeserializeObject<Application>(result);
 
             if (string.IsNullOrEmpty(appData?.AppToken) || default == appData.ApplicationId)
                 return Unauthorized(ErrorHandler.UnAuthorized());
@@ -41,13 +41,12 @@ namespace Pamaxie.Api.Controllers
             if (!appData.VerifyAuth()) return Unauthorized(ErrorHandler.UnAuthorized());
 
             AuthToken token = _generator.CreateToken(appData.ApplicationId.ToString());
-            if (token == null) return StatusCode(500);
 
             return Ok(token);
         }
 
         /// <summary>
-        ///     Refreshes an exiting oAuth Token
+        /// Refreshes an exiting oAuth Token
         /// </summary>
         /// <returns><see cref="AuthToken"/> Refreshed Token</returns>
         [Authorize]
@@ -58,7 +57,7 @@ namespace Pamaxie.Api.Controllers
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             
             if (string.IsNullOrEmpty(result))  return BadRequest(ErrorHandler.BadData());
-            Application appData;
+            Application? appData;
             try
             {
                 appData = JsonConvert.DeserializeObject<Application>(result);
@@ -73,7 +72,6 @@ namespace Pamaxie.Api.Controllers
             string userId = appData.ApplicationId.ToString();
             AuthToken token = _generator.CreateToken(userId);
 
-            if (token == null) return StatusCode(500);
             return Ok(token);
         }
     }

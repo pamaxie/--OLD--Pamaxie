@@ -23,8 +23,8 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        ///     Probes if the API is available, will probably be expanded with more option later, 
-        ///     mostly used for now for load balancers to check if everything is working
+        /// Probes if the API is available, will probably be expanded with more option later,
+        /// mostly used for now for load balancers to check if everything is working
         /// </summary>
         /// <returns>oAuth Token</returns>
         [HttpGet("status")]
@@ -35,7 +35,7 @@ namespace Pamaxie.Api.Controllers
         }
         
         /// <summary>
-        ///     Verifies the content of a sent image
+        /// Verifies the content of a sent image
         /// </summary>
         /// <returns>oAuth Token</returns>
         [HttpPost("scanImage")]
@@ -46,19 +46,19 @@ namespace Pamaxie.Api.Controllers
             if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
             string filehash = await ImageProcessing.ImageProcessing.GetFileHash(result);
             MediaPredictionData data = new(filehash);
-            if (data.TryLoadData(out var knownResult))
+            if (data.TryLoadData(out MediaData? knownResult))
             {
                 return JsonConvert.SerializeObject(knownResult);
             }
 
-            FileInfo image = ImageProcessing.ImageProcessing.DownloadFile(result);
-            // Add input data
+            FileInfo? image = ImageProcessing.ImageProcessing.DownloadFile(result);
+            //Add input data
             ModelInput input = new()
             {
                 ImageSource = image?.FullName
             };
-            // Load model and predict output of sample data
-            ConsumeModel.Predict(input, out var labelResult);
+            //Load model and predict output of sample data
+            ConsumeModel.Predict(input, out OutputProperties? labelResult);
 
             MediaData predictionData = new()
             {
@@ -68,7 +68,7 @@ namespace Pamaxie.Api.Controllers
             data.Data = predictionData;
             image?.Delete();
             //scanFile.Dispose();
-            // Create the response
+            //Create the response
             return JsonConvert.SerializeObject(labelResult);
         }
     }
