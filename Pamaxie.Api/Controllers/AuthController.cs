@@ -55,19 +55,12 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            
             if (string.IsNullOrEmpty(result))  return BadRequest(ErrorHandler.BadData());
-            Application? appData;
-            try
-            {
-                appData = JsonConvert.DeserializeObject<Application>(result);
-            }
-            catch
-            {
-                return StatusCode(400);
-            }
             
-            if (default == appData?.ApplicationId) return BadRequest(ErrorHandler.UnAuthorized());
+            Application? appData = JsonConvert.DeserializeObject<Application>(result);
+            
+            if (string.IsNullOrEmpty(appData?.AppToken) || default == appData.ApplicationId)
+                return Unauthorized(ErrorHandler.UnAuthorized());
 
             string userId = appData.ApplicationId.ToString();
             AuthToken token = _generator.CreateToken(userId);
