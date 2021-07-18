@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http;
 using MudBlazor;
-using Pamaxie.Database.Extensions.Data;
+using Pamaxie.Database.Extensions.Sql.Data;
 using System.Diagnostics.CodeAnalysis;
 #pragma warning disable 8618
 

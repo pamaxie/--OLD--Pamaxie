@@ -23,7 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Assemblies\Pamaxie.Database.Extensions\Pamaxie.Database.Extensions.csproj" />
+    <ProjectReference Include="..\Assemblies\Pamaxie.Database.Extensions.Redis\Pamaxie.Database.Extensions.Redis.csproj" />
+    <ProjectReference Include="..\Assemblies\Pamaxie.Database.Extensions.Sql\Pamaxie.Database.Extensions.Sql.csproj" />
     <ProjectReference Include="..\Assemblies\Pamaxie.ImageProcessing\Pamaxie.ImageProcessing.csproj" />
     <ProjectReference Include="..\Assemblies\Pamaxie.MediaDetection\Pamaxie.MediaDetection.csproj" />
     <ProjectReference Include="..\MLModules\PamaxieML.Model\PamaxieML.Model.csproj" />

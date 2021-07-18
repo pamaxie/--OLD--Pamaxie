@@ -8,7 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Pamaxie.Api.Security;
-using Pamaxie.Database.Extensions;
+using Pamaxie.Database.Extensions.Redis;
+using Pamaxie.Database.Extensions.Sql;
 
 namespace Pamaxie.Api
 {
@@ -56,13 +57,13 @@ namespace Pamaxie.Api
             services.AddTransient<TokenGenerator>();
 
             //Checking if the Redis and SQL Database is reachable and all dandy.
-            if (!DbExtensions.SqlDbCheckup(out string sqlErrors))
+            if (!Database.Extensions.Sql.DbExtensions.SqlDbCheckup(out string sqlErrors))
             {
                 Console.WriteLine(sqlErrors);
                 Environment.Exit(501);
             }
 
-            if (!DbExtensions.RedisDbCheckup(out string redisErrors))
+            if (!Database.Extensions.Redis.DbExtensions.RedisDbCheckup(out string redisErrors))
             {
                 Console.WriteLine(redisErrors);
                 Environment.Exit(501);

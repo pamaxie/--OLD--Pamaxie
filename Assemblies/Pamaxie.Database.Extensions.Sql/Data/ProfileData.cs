@@ -1,6 +1,6 @@
-﻿namespace Pamaxie.Database.Extensions.Data
+﻿namespace Pamaxie.Database.Extensions.Sql.Data
 {
-    public interface IProfileData
+    public class ProfileData : IProfileData
     {
         public long Id { get; set; }
         public string GoogleClaimUserId { get; set; }
@@ -8,6 +8,6 @@
         public string EmailAddress { get; set; }
         public string ProfilePictureAddress { get; set; }
         public bool Deleted { get; set; }
-        public ProfileData GetProfileData();
+        public ProfileData GetProfileData() => this;
     }
 }

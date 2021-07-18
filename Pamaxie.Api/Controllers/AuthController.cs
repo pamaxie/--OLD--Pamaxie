@@ -5,7 +5,7 @@ using System.IO;
 using Pamaxie.Api.Data;
 using Pamaxie.Api.Security;
 using Pamaxie.Data;
-using Pamaxie.Extensions;
+using Pamaxie.Extensions.Sql;
 
 namespace Pamaxie.Api.Controllers
 {
@@ -22,7 +22,7 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        ///     Signs in a user via Basic authentication and returns a token.
+        /// Signs in a user via Basic authentication and returns a token.
         /// </summary>
         /// <returns><see cref="AuthToken"/> Token for Authentication</returns>
         [AllowAnonymous]
@@ -45,7 +45,7 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        ///     Refreshes an exiting oAuth Token
+        /// Refreshes an exiting oAuth Token
         /// </summary>
         /// <returns><see cref="AuthToken"/> Refreshed Token</returns>
         [Authorize]

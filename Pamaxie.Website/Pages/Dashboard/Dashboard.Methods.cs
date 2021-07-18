@@ -1,9 +1,10 @@
 ﻿using Pamaxie.Data;
-using Pamaxie.Extensions;
+using Pamaxie.Extensions.Sql;
 using Pamaxie.Website.Authentication;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace Pamaxie.Website.Pages
             if (!hasAccount)
                 return Task.CompletedTask;
 
-            Applications = ApplicationExtensions.GetApplications(Profile.Id);
+            Applications = ApplicationExtensions.GetApplications(Profile.Id).ToList();
             StateHasChanged();
             return Task.CompletedTask;
         }
@@ -46,7 +47,7 @@ namespace Pamaxie.Website.Pages
             if (result is true && Profile is not null)
             {
                 application.DeleteApplication();
-                Applications = ApplicationExtensions.GetApplications(Profile.Id);
+                Applications = ApplicationExtensions.GetApplications(Profile.Id).ToList();
                 StateHasChanged();
             }
         }
@@ -63,7 +64,7 @@ namespace Pamaxie.Website.Pages
                 application.SetApplicationStatus(application.Disabled);
 
                 if (Profile != null)
-                    Applications = ApplicationExtensions.GetApplications(Profile.Id);
+                    Applications = ApplicationExtensions.GetApplications(Profile.Id).ToList();
                 StateHasChanged();
             }
         }

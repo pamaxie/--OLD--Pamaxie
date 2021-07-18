@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Pamaxie.Extensions;
+using Pamaxie.Extensions.Sql;
 using Pamaxie.Website.Authentication;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;

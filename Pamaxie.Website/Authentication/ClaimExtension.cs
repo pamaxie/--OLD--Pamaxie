@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 using Pamaxie.Data;
-using Pamaxie.Extensions;
+using Pamaxie.Extensions.Sql;
 using Pamaxie.Website.Authentication.Data;
 
 namespace Pamaxie.Website.Authentication

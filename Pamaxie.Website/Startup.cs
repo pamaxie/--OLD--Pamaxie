@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
-using Pamaxie.Database.Extensions;
+using Pamaxie.Database.Extensions.Sql;
 using Pamaxie.Website.Services;
 using System;
 
