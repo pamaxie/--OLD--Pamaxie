@@ -5,7 +5,7 @@
     {
         protected override void OnInitialized()
         {
-            NavigationManager.NavigateTo($"/Logout?returnUrl={ReturnUrl}", true);
+            NavigationManager.NavigateTo($"/Logout?returnUrl=~/{ReturnUrl}", true);
         }
     }
 }
