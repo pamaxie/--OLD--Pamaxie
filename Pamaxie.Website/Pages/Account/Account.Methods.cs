@@ -1,12 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Pamaxie.Extensions.Sql;
+using Pamaxie.Website.Authentication;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Pamaxie.Extensions.Sql;
-using Pamaxie.Website.Authentication;
 
 namespace Pamaxie.Website.Pages
 {
-    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+    // ReSharper disable once ClassNeverInstantiated.Global
     public partial class Account
     {
         private async void OnDeleteButtonClicked()

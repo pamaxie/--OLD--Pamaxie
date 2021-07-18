@@ -3,12 +3,11 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http;
 using MudBlazor;
 using Pamaxie.Database.Extensions.Sql.Data;
-using System.Diagnostics.CodeAnalysis;
 #pragma warning disable 8618
 
 namespace Pamaxie.Website.Shared
 {
-    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+    // ReSharper disable once ClassNeverInstantiated.Global
     public partial class NavMenu
     {
         [Inject] private NavigationManager NavigationManager { get; set; }

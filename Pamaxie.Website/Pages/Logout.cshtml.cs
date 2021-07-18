@@ -2,16 +2,16 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Pamaxie.Website.Pages
 {
     public class LogoutModel : PageModel
     {
-        [SuppressMessage("ReSharper", "UnusedMember.Global")]
-        public async Task<IActionResult> OnGetAsync()
+        // ReSharper disable once UnusedMember.Global
+        public async Task<IActionResult> OnGetAsync(string? returnUrl = null)
         {
+            returnUrl ??= Url.Content("~/");
             // Clear the existing external cookie
             try
             {
@@ -22,7 +22,7 @@ namespace Pamaxie.Website.Pages
                 // ignored
             }
 
-            return LocalRedirect("/");
+            return LocalRedirect(returnUrl);
         }
     }
 }

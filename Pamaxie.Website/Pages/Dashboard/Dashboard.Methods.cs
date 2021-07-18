@@ -3,7 +3,6 @@ using Pamaxie.Extensions.Sql;
 using Pamaxie.Website.Authentication;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
@@ -11,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Pamaxie.Website.Pages
 {
-    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+    // ReSharper disable once ClassNeverInstantiated.Global
     public partial class Dashboard
     {
         protected override Task OnInitializedAsync()

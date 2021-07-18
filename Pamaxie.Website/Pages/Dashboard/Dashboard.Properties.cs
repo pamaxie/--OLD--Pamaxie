@@ -4,12 +4,11 @@ using MudBlazor;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Sql.Data;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 #pragma warning disable 8618
 
 namespace Pamaxie.Website.Pages
 {
-    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+    // ReSharper disable once ClassNeverInstantiated.Global
     public partial class Dashboard
     {
         [Inject] private NavigationManager NavigationManager { get; set; }

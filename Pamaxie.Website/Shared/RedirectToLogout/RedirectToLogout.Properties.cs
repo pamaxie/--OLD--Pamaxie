@@ -4,7 +4,7 @@
 namespace Pamaxie.Website.Shared
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public partial class RedirectToLogin
+    public partial class RedirectToLogout
     {
         [Inject] private NavigationManager NavigationManager { get; set; }
         [Parameter] public string ReturnUrl {get; set;}

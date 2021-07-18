@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
 using MudBlazor;
 using Pamaxie.Database.Extensions.Sql.Data;
@@ -7,7 +6,7 @@ using Pamaxie.Database.Extensions.Sql.Data;
 
 namespace Pamaxie.Website.Pages
 {
-    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+    // ReSharper disable once ClassNeverInstantiated.Global
     public partial class Account 
     {
         [Inject] private NavigationManager NavigationManager { get; set; }

@@ -1,11 +1,11 @@
 ﻿namespace Pamaxie.Website.Shared
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public partial class RedirectToLogin
+    public partial class RedirectToLogout
     {
         protected override void OnInitialized()
         {
-            NavigationManager.NavigateTo($"/Login?returnUrl={ReturnUrl}", true);
+            NavigationManager.NavigateTo($"/Logout?returnUrl={ReturnUrl}", true);
         }
     }
 }

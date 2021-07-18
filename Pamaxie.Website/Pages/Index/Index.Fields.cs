@@ -1,8 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Pamaxie.Website.Pages
+﻿namespace Pamaxie.Website.Pages
 {
-    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+    // ReSharper disable once ClassNeverInstantiated.Global
     public partial class Index
     {
         

@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Pamaxie.Website.Shared
 {
-    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+    // ReSharper disable once ClassNeverInstantiated.Global
     public partial class Dialog
     {
         [CascadingParameter] internal MudDialogInstance? MudDialog { get; set; }

@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Pamaxie.Extensions.Sql;
 using Pamaxie.Website.Authentication;
-using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Pamaxie.Website.Shared
 {
-    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+    // ReSharper disable once ClassNeverInstantiated.Global
     public partial class NavMenu
     {
         private void DrawerToggle()
@@ -52,7 +51,7 @@ namespace Pamaxie.Website.Shared
      
          private void AccountManagement()
          {
-             NavigationManager.NavigateTo("/account", true);
+             NavigationManager.NavigateTo("/Account", true);
          }
      
          private void CreateAccount()

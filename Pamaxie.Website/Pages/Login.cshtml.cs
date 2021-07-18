@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -13,7 +12,7 @@ namespace Pamaxie.Website.Pages
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        [SuppressMessage("ReSharper", "UnusedMember.Global")]
+        // ReSharper disable once UnusedMember.Global
         public IActionResult OnGetAsync(string? returnUrl = null)
         {
             const string provider = "Google";
@@ -25,7 +24,7 @@ namespace Pamaxie.Website.Pages
             return new ChallengeResult(provider, authenticationProperties);
         }
         
-        [SuppressMessage("ReSharper", "UnusedMember.Global")]
+        // ReSharper disable once UnusedMember.Global
         public async Task<IActionResult> OnGetCallbackAsync()
         {
             // Get the information about the user from the external login provider

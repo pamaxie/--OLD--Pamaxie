@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Pamaxie.Website.Shared
 {
-    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+    // ReSharper disable once ClassNeverInstantiated.Global
     public partial class MainLayout
     {
         protected override async Task OnAfterRenderAsync(bool firstRender)
