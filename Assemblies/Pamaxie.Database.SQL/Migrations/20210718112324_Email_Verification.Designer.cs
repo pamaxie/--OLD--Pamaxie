@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pamaxie.Database.Sql;
 
 namespace Pamaxie.Database.Sql.Migrations
 {
     [DbContext(typeof(SqlDbContext))]
-    partial class SqlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210718112324_Email_Verification")]
+    partial class Email_Verification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,8 +82,8 @@ namespace Pamaxie.Database.Sql.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("EmailVerified")
-                        .HasColumnType("bit");
+                    b.Property<string>("EmailVerified")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GoogleUserId")
                         .IsRequired()

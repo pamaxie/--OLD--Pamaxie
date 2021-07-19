@@ -30,7 +30,7 @@ namespace Pamaxie.Website.Pages
             //Has no Account has to create one first before accessing this.
             if (!hasAccount)
                 return Task.CompletedTask;
-
+            
             Applications = ApplicationExtensions.GetApplications(Profile.Id).ToList();
             StateHasChanged();
             return Task.CompletedTask;
@@ -95,6 +95,12 @@ namespace Pamaxie.Website.Pages
         {
             if (Profile == null)
                 return;
+
+            if (!UserService.IsEmailOfCurrentUserVerified())
+            {
+                UserService.ShowVerifyEmailDialog();
+                return;
+            }
 
             NewApplication = new Application()
             {

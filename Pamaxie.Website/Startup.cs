@@ -18,7 +18,6 @@ namespace Pamaxie.Website
     /// </summary>
     public class Startup
     {
-        
         /// <summary>
         /// Initializer
         /// </summary>
@@ -46,7 +45,8 @@ namespace Pamaxie.Website
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<BrowserService>();
-
+            services.AddScoped<UserService>();
+            services.AddScoped<EmailSender>();
 
             // ReSharper disable once UnusedVariable
             CookiePolicyOptions cookiePolicy = new()

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http;
 using MudBlazor;
 using Pamaxie.Database.Extensions.Sql.Data;
+using Pamaxie.Website.Services;
+
 #pragma warning disable 8618
 
 namespace Pamaxie.Website.Shared
@@ -14,6 +16,7 @@ namespace Pamaxie.Website.Shared
         [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
         [Inject] private IHttpContextAccessor HttpContextAccessor { get; set; }
         [Inject] private IDialogService DialogService { get; set; }
+        [Inject] private EmailSender EmailSender { get; set; }
 
         //Render Frag for rendering the child content of the Website
         [Parameter] public RenderFragment ChildContent { get; set; }

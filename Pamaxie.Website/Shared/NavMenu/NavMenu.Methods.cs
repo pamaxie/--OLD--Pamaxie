@@ -2,7 +2,12 @@
 using Pamaxie.Extensions.Sql;
 using Pamaxie.Website.Authentication;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
+using Pamaxie.Database.Extensions.Sql.Data;
+using Pamaxie.Website.Services;
 
 namespace Pamaxie.Website.Shared
 {
@@ -57,8 +62,11 @@ namespace Pamaxie.Website.Shared
          private void CreateAccount()
          {
              UserExtensions.CreateUser(Profile);
-     
-         //Forcefully reload after creating the new user to make sure everything is a - ok
+             
+             //TODO Send email confirmation to user and navigate to a "please confirm email address page"
+             if (Profile != null) EmailSender.SendConfirmationEmail(Profile);
+
+             //Forcefully reload after creating the new user to make sure everything is a - ok
              NavigationManager.NavigateTo(NavigationManager.Uri, true);
              UserHasAccount = true;
          }
