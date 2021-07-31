@@ -8,8 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Pamaxie.Api.Security;
-using Pamaxie.Database.Extensions.Redis;
-using Pamaxie.Database.Extensions.Sql;
 
 namespace Pamaxie.Api
 {

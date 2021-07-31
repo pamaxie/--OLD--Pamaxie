@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Assemblies\Pamaxie.Wpf\Pamaxie.Wpf.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ViewModels\MainView\ImagePreparationViewModel.Commands.cs">
+      <DependentUpon>ImagePreparationViewModel.cs</DependentUpon>
+    </Compile>
+    <Compile Update="ViewModels\MainView\ImagePreparationViewModel.Fields.cs">
+      <DependentUpon>ImagePreparationViewModel.cs</DependentUpon>
+    </Compile>
+    <Compile Update="ViewModels\MainView\ImagePreparationViewModel.Methods.cs">
+      <DependentUpon>ImagePreparationViewModel.cs</DependentUpon>
+    </Compile>
+    <Compile Update="ViewModels\MainView\ImagePreparationViewModel.Properties.cs">
+      <DependentUpon>ImagePreparationViewModel.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="2.4.7" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
+  </ItemGroup>
+
+</Project>
