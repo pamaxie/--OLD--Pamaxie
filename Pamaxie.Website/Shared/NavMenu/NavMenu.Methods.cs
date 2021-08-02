@@ -62,9 +62,9 @@ namespace Pamaxie.Website.Shared
          private void CreateAccount()
          {
              UserExtensions.CreateUser(Profile);
-             
-             //TODO Send email confirmation to user and navigate to a "please confirm email address page"
-             if (Profile != null) EmailSender.SendConfirmationEmail(Profile);
+
+             if (Profile != null)
+                 EmailSender.SendConfirmationEmail(Profile);
 
              //Forcefully reload after creating the new user to make sure everything is a - ok
              NavigationManager.NavigateTo(NavigationManager.Uri, true);

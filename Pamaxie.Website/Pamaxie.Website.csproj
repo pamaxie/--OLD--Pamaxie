@@ -17,6 +17,7 @@
 
   <ItemGroup>
 	  <PackageReference Include="AspNetCoreRateLimit" Version="4.0.1" />
+	  <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
 	  <PackageReference Include="FluentValidation" Version="10.2.3" />
 	  <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.18.0-beta2" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.7" />

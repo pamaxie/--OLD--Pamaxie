@@ -53,6 +53,22 @@ namespace Pamaxie.Extensions.Sql
                 return false;
             }
         }
+        
+        /// <summary>
+        /// Verifies the user profile from our database
+        /// </summary>
+        /// <param name="userProfile">User profile to verify</param>
+        /// <returns><see cref="bool"/> was successful?</returns>
+        public static bool VerifyUser(this IProfileData userProfile)
+        {
+            using SqlDbContext dbContext = new();
+            User user = dbContext.Users.FirstOrDefault(x => x.Id == userProfile.Id);
+            if (user == null) return false;
+            user.EmailVerified = true;
+            dbContext.Users.Update(user);
+            dbContext.SaveChanges();
+            return true;
+        }
 
         /// <summary>
         /// Deletes all data associated with a user profile from our database
@@ -73,6 +89,7 @@ namespace Pamaxie.Extensions.Sql
 
             user.Email = string.Empty;
             user.Username = string.Empty;
+            user.EmailVerified = false;
             user.DeletedAccount = true;
             dbContext.Users.Update(user);
             dbContext.SaveChanges();
