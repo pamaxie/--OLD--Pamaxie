@@ -36,12 +36,19 @@ namespace Pamaxie.Wpf.Command
 
         public async void Execute(object cancellationToken)
         {
-            if (cancellationToken is CancellationToken token)
+            try
             {
-                await ExecuteAsync(token);
-            }
+                if (cancellationToken is CancellationToken token)
+                {
+                    await ExecuteAsync(token);
+                }
 
-            await ExecuteAsync(new CancellationToken());
+                await ExecuteAsync(new CancellationToken());
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
         }
 
         protected virtual async Task ExecuteAsync(CancellationToken cancellationToken)

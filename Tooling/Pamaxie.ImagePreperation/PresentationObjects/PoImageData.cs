@@ -8,7 +8,6 @@ namespace Pamaxie.ImagePreparation.PresentationObjects
         private string _name;
         private string _fileLocation;
         private string _assumedLabel;
-        private string _fileExtension;
 
         public string Name
         {
@@ -26,12 +25,6 @@ namespace Pamaxie.ImagePreparation.PresentationObjects
         {
             get => _assumedLabel;
             set => SetProperty(ref _assumedLabel, value);
-        }
-
-        public string FileExtension
-        {
-            get => _fileExtension;
-            set => SetProperty(ref _fileExtension, value);
         }
     }
 }

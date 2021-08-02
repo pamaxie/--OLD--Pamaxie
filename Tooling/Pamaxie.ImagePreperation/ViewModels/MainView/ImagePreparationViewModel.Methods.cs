@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -6,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Threading;
 using Accessibility;
 using Framework.ComponentModel;
@@ -22,6 +26,9 @@ namespace Pamaxie.ImagePreparation.ViewModels
     {
         private async Task LoadImagesFromDataSourceAsyncCommandCallback(CancellationToken cancellationToken)
         {
+
+
+
             if (string.IsNullOrEmpty(_sourceFolderName))
             {
                 await this._dialogCoordinator.ShowMessageAsync(this, "Error",
@@ -36,57 +43,103 @@ namespace Pamaxie.ImagePreparation.ViewModels
                 return;
             }
 
-
+            CancellationTokenSource tokenSource = new CancellationTokenSource();
             LoadingFiles = true;
             double currentProgress = 0;
-            DispatcherOperation addingFilesOperation = null;
-            var progress = await this._dialogCoordinator.ShowProgressAsync(this, "Loading Files",
+            var progressDialogController = await this._dialogCoordinator.ShowProgressAsync(this, "Loading Files",
                 "Please wait while we are loading data", true,
                 new MetroDialogSettings()
-                    { CancellationToken = cancellationToken }
+                    { CancellationToken = tokenSource.Token }
             );
-            progress.Minimum = 0;
-            await Task.Run(() =>
+            progressDialogController.Minimum = 0;
+            await Task.Run(async () =>
             {
-                try
+                ParallelOptions po = new ParallelOptions
                 {
-                    var subDirs = Directory.GetDirectories(_sourceFolderName);
-                    foreach (var dir in subDirs)
-                    {
+                    CancellationToken = tokenSource.Token, 
+                    MaxDegreeOfParallelism = System.Environment.ProcessorCount
+                };
 
-                        var files = new DirectoryInfo(dir).GetFiles();
-                        foreach (var file in files)
+                //Creating a new list and adding the already existing images to it right away
+                PoImageData[] imageQueue;
+                bool working = true;
+
+                new Thread(async () =>
+                {
+                    var files = System.IO.Directory.GetFiles(_sourceFolderName, "*", SearchOption.AllDirectories);
+
+                    //Set the capacity of our Queue
+                    imageQueue = new PoImageData[files.Length + 20];
+
+                    //Get the amount of files in the directory, this includes files we potentially aren't interested in but better safe than sorry
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        progressDialogController.Maximum = files.Length;
+                    });
+
+                    try
+                    {
+                        for (var index = 0; index < files.Length; index++)
                         {
-                            progress.Maximum++;
-                            addingFilesOperation = Application.Current.Dispatcher.BeginInvoke(() =>
+                            var file = files[index];
+                            FileInfo fi = new FileInfo(file);
+                            if (fi.Directory == null)
+                                return;
+
+                            var imageData = new PoImageData()
                             {
-                                LoadedImages.Add(new PoImageData()
-                                {
-                                    AssumedLabel = dir.Split("\\").LastOrDefault(), 
-                                    FileLocation = file.FullName,
-                                    FileExtension = "." + file.Extension,
-                                    Name = file.Name
-                                });
-                                currentProgress++;
-                                progress.SetProgress(currentProgress);
-                            }, DispatcherPriority.Background);
+                                AssumedLabel = fi.Directory.Name,
+                                FileLocation = file,
+                                Name = fi.Name
+                            };
+                            imageQueue[index] = imageData;
+                            po.CancellationToken.ThrowIfCancellationRequested();
+                            currentProgress++;
                         }
                     }
-                }
-                catch (IOException ex)
+                    catch (IOException ex)
+                    {
+                        await this._dialogCoordinator.ShowMessageAsync(this, "Error",
+                            "Something went wrong while loading in the files. The error was: \n" + ex.Message);
+                    }
+                    catch (System.OperationCanceledException)
+                    {
+
+                    }
+                    catch (AggregateException)
+                    {
+;
+                    }
+                    finally
+                    {
+                        LoadingFiles = false;
+                        working = false;
+                        await progressDialogController.CloseAsync();
+                    }
+
+                    LoadedImages = new ObservableCollection<PoImageData>(imageQueue.Where(x => x != null));
+
+                    working = false;
+                }).Start();
+
+
+
+                while (working)
                 {
-                    this._dialogCoordinator.ShowMessageAsync(this, "Error",
-                        "Something went wrong while loading in the files. The error was: \n" + ex.Message).ConfigureAwait(false);
+                    //Update the Ui / Progress
+                    await Task.Delay(200, tokenSource.Token);
+                    await Application.Current.Dispatcher.InvokeAsync(() =>
+                    {
+                        if (progressDialogController.IsCanceled)
+                            tokenSource.Cancel();
+                        if (progressDialogController.IsOpen)
+                            progressDialogController.SetProgress(currentProgress);
+                    });
                 }
 
-            }, cancellationToken);
-
-            //wait for the operation to finish.
-            if (addingFilesOperation != null)
-            {
-                await addingFilesOperation;
-                await progress.CloseAsync();
-            }
+                if (progressDialogController.IsOpen)
+                    await progressDialogController.CloseAsync();
+            }, tokenSource.Token);
 
             await this._dialogCoordinator.ShowMessageAsync(this, "Success", "All files were successfully loaded");
             SourceFolderName = string.Empty;
@@ -146,94 +199,150 @@ namespace Pamaxie.ImagePreparation.ViewModels
             var processingFilesProgressView = await this._dialogCoordinator.ShowProgressAsync(this, "Processing Files",
                 "Please wait while we are processing your files", true,
                 new MetroDialogSettings()
-                    { CancellationToken = _workToken.Token }
+                {
+                    CancellationToken = _workToken.Token,
+                    DialogResultOnCancel = MessageDialogResult.Canceled
+                }
             );
             processingFilesProgressView.Minimum = 0;
             processingFilesProgressView.Maximum = LoadedImages.Count;
 
-            await Task.Run(() =>
+            //TODO: I see optimization potential here, sadly don't have any idea how to implement this and keep the progress visible. Help is wanted.
+            await Task.Run(async () =>
             {
-                Parallel.ForEach(LoadedImages, (file) =>
+                bool working = true;
+                ParallelOptions po = new ParallelOptions
+                {
+                    CancellationToken = _workToken.Token, 
+                    MaxDegreeOfParallelism = System.Environment.ProcessorCount
+                };
+
+                new Thread(() =>
                 {
                     try
                     {
-                        var assumedDestinationDirectory = DestinationFolderName + "\\" + file.AssumedLabel;
-                        if (!Directory.Exists(assumedDestinationDirectory))
-                            Directory.CreateDirectory(assumedDestinationDirectory);
-
-                        var output = assumedDestinationDirectory + "\\" + Guid.NewGuid().ToString();
-
-                        using var img = Image.Load(file.FileLocation);
-
-                        var ratio = (float)img.Height / (float)img.Width;
-                        if (width > 0 && height > 0)
+                        Parallel.ForEach(LoadedImages, po, (file) =>
                         {
-                            img.Mutate(x => x
-                                .Resize(width, height));
-                            img.Save(output, new JpegEncoder());
-                        }
-                        else if (width > 0)
-                        {
-                            img.Mutate(x => x
-                                .Resize(width, (int)(ratio * width)));
-                            img.Save(output, new JpegEncoder());
-                        }
-                        else if (height > 0)
-                        {
-                            img.Mutate(x => x
-                                .Resize((int)(ratio * height), height));
-                            img.Save(output, new JpegEncoder());
-                        }
+                            try
+                            {
+                                var assumedDestinationDirectory = DestinationFolderName + "\\" + file.AssumedLabel;
+                                if (!Directory.Exists(assumedDestinationDirectory))
+                                    Directory.CreateDirectory(assumedDestinationDirectory);
 
-                        if (ProcessingSettings.MirrorImages)
-                        {
-                            img.Mutate(x => x
-                                .Flip(FlipMode.Horizontal));
-                            img.Save(output + "2" + file.Name + file.FileExtension, new JpegEncoder());
+                                var output = assumedDestinationDirectory + "\\" + Guid.NewGuid().ToString();
+                                using var img = Image.Load(file.FileLocation);
 
-                            img.Mutate(x => x
-                                .Flip(FlipMode.Vertical));
-                            img.Save(output + "3" + file.Name + file.FileExtension, new JpegEncoder());
-                        }
+                                var ratio = (float) img.Height / (float) img.Width;
+                                if (width > 0 && height > 0)
+                                {
+                                    img.Mutate(x => x
+                                        .Resize(width, height));
+                                    img.Save(output + ".jpeg", new JpegEncoder());
+                                }
+                                else if (width > 0)
+                                {
+                                    img.Mutate(x => x
+                                        .Resize(width, (int) (ratio * width)));
+                                    img.Save(output + ".jpeg", new JpegEncoder());
+                                }
+                                else if (height > 0)
+                                {
+                                    img.Mutate(x => x
+                                        .Resize((int) (ratio * height), height));
+                                    img.Save(output + ".jpeg", new JpegEncoder());
+                                }
 
-                        if (ProcessingSettings.ColorChange)
-                        {
-                            img.Mutate(x => x
-                                .ColorBlindness(ColorBlindnessMode.Achromatomaly));
-                            img.Save(output + "4" + file.Name + file.FileExtension, new JpegEncoder());
-                        }
+                                if (ProcessingSettings.MirrorImages)
+                                {
+                                    img.Mutate(x => x
+                                        .Flip(FlipMode.Horizontal));
+                                    img.Save(output + "2" + ".jpeg", new JpegEncoder());
 
-                        processingProgress++;
+                                    img.Mutate(x => x
+                                        .Flip(FlipMode.Vertical));
+                                    img.Save(output + "3" + ".jpeg", new JpegEncoder());
+                                }
 
-                        Application.Current.Dispatcher.InvokeAsync(() =>
-                        {
-                            processingFilesProgressView.SetProgress(processingProgress);
+                                if (ProcessingSettings.ColorChange)
+                                {
+                                    img.Mutate(x => x
+                                        .ColorBlindness(ColorBlindnessMode.Achromatomaly));
+                                    img.Save(output + "4" + ".jpeg", new JpegEncoder());
+                                }
+
+                                processingProgress++;
+
+                                img.Dispose();
+                                po.CancellationToken.ThrowIfCancellationRequested();
+                            }
+                            catch (IOException)
+                            {
+                                if (ProcessingSettings.StopOnError)
+                                {
+                                    _workToken.Cancel();
+                                }
+
+                                errors += file.Name;
+                            }
+                            catch (NullReferenceException)
+                            {
+                                if (ProcessingSettings.StopOnError)
+                                    _workToken.Cancel();
+
+                                errors += file.Name;
+                            }
+                            catch (UnknownImageFormatException)
+                            {
+                                if (ProcessingSettings.StopOnError)
+                                    _workToken.Cancel();
+
+                                errors += file.Name;
+                            }
                         });
                     }
-                    catch(Exception ex)
+                    catch (System.OperationCanceledException)
                     {
-                        if (ProcessingSettings.StopOnError)
-                        {
-                            _workToken.Cancel();
-                        }
 
-                        errors += file.Name;
                     }
-                });
+                    catch (AggregateException)
+                    {
 
-                
+                    }
+                    finally
+                    {
+                        LoadingFiles = false;
+                        working = false;
+                        processingFilesProgressView.CloseAsync();
+                    }
+
+                    working = false;
+                }).Start();
+                while (working)
+                {
+                    //Update the Ui / Progress
+                    await Task.Delay(200, arg);
+                    await Application.Current.Dispatcher.InvokeAsync(() =>
+                    {
+                        if (processingFilesProgressView.IsCanceled)
+                            _workToken.Cancel();
+                        processingFilesProgressView.SetProgress(processingProgress);
+                    });
+                }
             }, _workToken.Token);
 
             //wait for the operation to finish.
             await processingFilesProgressView.CloseAsync();
-            if (errors.Any())
+            if (errors.Any() && !_workToken.IsCancellationRequested)
             {
                 await this._dialogCoordinator.ShowMessageAsync(this, "Partial Success",
                     "Some files failed during processing. These files were: " + errors);
+            }else if (_workToken.IsCancellationRequested)
+            {
+                await this._dialogCoordinator.ShowMessageAsync(this, "Aborted", "The operation was cancelled by the end user.");
             }
             else
             {
-                await this._dialogCoordinator.ShowMessageAsync(this, "Success", "All files were sucessfully processed");
+                await this._dialogCoordinator.ShowMessageAsync(this, "Success", "All files were successfully processed");
             }
 
             LoadingFiles = false;
