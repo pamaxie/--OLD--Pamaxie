@@ -54,7 +54,7 @@ namespace Pamaxie.Website.Services
         public string GenerateEmailConfirmationToken(ProfileData profileData)
         {
             IBody body = new ConfirmEmailBody(profileData);
-            return JsonWebToken.Encode(body, _secret, JwtHashAlgorithm.HS512);
+            return JsonWebToken.Encode(body, _secret);
         }
         
         /// <summary>

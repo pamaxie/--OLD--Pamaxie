@@ -9,9 +9,7 @@ namespace Pamaxie.Website.Pages
     {
         protected override Task OnInitializedAsync()
         {
-            string code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Token));
-            
-            if (UserService.ConfirmEmail(code));
+            if (UserService.ConfirmEmail(Token));
             {
                 NavigationManager.NavigateTo(NavigationManager.BaseUri);
             }

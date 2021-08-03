@@ -8,54 +8,23 @@ using System.Text;
 
 namespace Pamaxie.Website.Services
 {
-    public enum JwtHashAlgorithm
-    {
-        RS256,
-        HS384,
-        HS512
-    }
-
     public static class JsonWebToken
     {
-        private static readonly Dictionary<JwtHashAlgorithm, Func<byte[], byte[], byte[]>> HashAlgorithms;
-
-        static JsonWebToken()
+        private static readonly Func<byte[], byte[], byte[]> Rs256 = (key, value) =>
         {
-            HashAlgorithms = new Dictionary<JwtHashAlgorithm, Func<byte[], byte[], byte[]>>
-            {
-                {
-                    JwtHashAlgorithm.RS256, (key, value) =>
-                    {
-                        using HMACSHA256 sha = new(key);
-                        return sha.ComputeHash(value);
-                    }
-                },
-                {
-                    JwtHashAlgorithm.HS384, (key, value) =>
-                    {
-                        using HMACSHA384 sha = new(key);
-                        return sha.ComputeHash(value);
-                    }
-                },
-                {
-                    JwtHashAlgorithm.HS512, (key, value) =>
-                    {
-                        using HMACSHA512 sha = new(key);
-                        return sha.ComputeHash(value);
-                    }
-                }
-            };
-        }
-            
-        public static string Encode(IBody body, string secret, JwtHashAlgorithm algorithm)
+            using HMACSHA256 sha = new(key);
+            return sha.ComputeHash(value);
+        };
+        
+        public static string Encode(IBody body, string secret)
         {
-            return Encode(body, Encoding.UTF8.GetBytes(secret), algorithm);
+            return Base64UrlEncode(Encoding.UTF8.GetBytes(Encode(body, Encoding.UTF8.GetBytes(secret))));
         }
 
-        private static string Encode(IBody body, byte[] secretBytes, JwtHashAlgorithm algorithm)
+        private static string Encode(IBody body, byte[] secretBytes)
         {
             List<string> segments = new();
-            var header = new { alg = algorithm.ToString(), typ = "Jwt" };
+            var header = new { name = "Pamaxie", typ = "Jwt" };
 
             byte[] headerBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(header, Formatting.None));
             byte[] bodyBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(body, Formatting.None));
@@ -67,51 +36,53 @@ namespace Pamaxie.Website.Services
 
             byte[] bytesToSign = Encoding.UTF8.GetBytes(stringToSign);
 
-            byte[] signature = HashAlgorithms[algorithm](secretBytes, bytesToSign);
+            byte[] signature = Rs256(secretBytes, bytesToSign);
+            
             segments.Add(Base64UrlEncode(signature));
-
             return string.Join(".", segments.ToArray());
         }
 
         public static IBody? Decode<T>(string token, string secret)
         {
-            return Decode<T>(token, secret, true);
+            return Decode<T>(Encoding.UTF8.GetString(Base64UrlDecode(token)), secret, true);
         }
 
         private static IBody? Decode<T>(string token, string secret, bool verify)
         {
-            string[] parts = token.Split('.');
-            string header = parts[0];
-            string body = parts[1];
-            byte[] crypto = Base64UrlDecode(parts[2]);
-
-            string headerJson = Encoding.UTF8.GetString(Base64UrlDecode(header));
-            JObject headerData = JObject.Parse(headerJson);
-            string bodyJson = Encoding.UTF8.GetString(Base64UrlDecode(body));
-            IBody? bodyObject = JsonConvert.DeserializeObject<T>(bodyJson) as IBody;
-
-            if (!verify) return bodyObject;
-            
-            byte[] bytesToSign = Encoding.UTF8.GetBytes(string.Concat(header, ".", body));
-            byte[] secretBytes = Encoding.UTF8.GetBytes(secret);
-            string algorithm = (string)headerData["alg"]!;
-
-            byte[] signature = HashAlgorithms[GetHashAlgorithm(algorithm)](secretBytes, bytesToSign);
-            string decodedCrypto = Convert.ToBase64String(crypto);
-            string decodedSignature = Convert.ToBase64String(signature);
-
-            return decodedCrypto != decodedSignature ? default : bodyObject;
-        }
-
-        private static JwtHashAlgorithm GetHashAlgorithm(string algorithm)
-        {
-            return algorithm switch
+            try
             {
-                "RS256" => JwtHashAlgorithm.RS256,
-                "HS384" => JwtHashAlgorithm.HS384,
-                "HS512" => JwtHashAlgorithm.HS512,
-                _ => throw new InvalidOperationException("Algorithm not supported.")
-            };
+                string[] parts = token.Split('.');
+                string header = parts[0];
+                string body = parts[1];
+                byte[] crypto = Base64UrlDecode(parts[2]);
+
+                string headerJson = Encoding.UTF8.GetString(Base64UrlDecode(header));
+                JObject headerData = JObject.Parse(headerJson);
+                string bodyJson = Encoding.UTF8.GetString(Base64UrlDecode(body));
+                IBody? bodyObject = JsonConvert.DeserializeObject<T>(bodyJson) as IBody;
+
+                if (!verify)
+                    return bodyObject;
+                if (DateTime.UtcNow > bodyObject?.Expiration)
+                    return default;
+                
+                byte[] bytesToSign = Encoding.UTF8.GetBytes(string.Concat(header, ".", body));
+                byte[] secretBytes = Encoding.UTF8.GetBytes(secret);
+                string name = (string)headerData["name"]!;
+                string type = (string)headerData["type"]!;
+
+                if (name is not "Pamaxie" && type is not "Jwt") return default;
+                
+                byte[] signature = Rs256(secretBytes, bytesToSign);
+                string decodedCrypto = Base64UrlEncode(crypto);
+                string decodedSignature = Base64UrlEncode(signature);
+
+                return decodedCrypto != decodedSignature ? default : bodyObject;
+            }
+            catch
+            {
+                return default;
+            }
         }
 
         private static string Base64UrlEncode(byte[] input)

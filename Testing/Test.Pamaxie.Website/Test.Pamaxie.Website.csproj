@@ -9,4 +9,9 @@
       <PackageReference Include="xunit" Version="2.4.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Assemblies\Pamaxie.Data\Pamaxie.Data.csproj" />
+      <ProjectReference Include="..\..\Pamaxie.Website\Pamaxie.Website.csproj" />
+    </ItemGroup>
+
 </Project>
