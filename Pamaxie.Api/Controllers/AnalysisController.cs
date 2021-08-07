@@ -32,6 +32,7 @@ namespace Pamaxie.Api.Controllers
         [AllowAnonymous]
         public static ActionResult<string> ProbeApiTask()
         {
+            //TODO: Check if the API is fully functional in an efficient way to prevent overload attacks via this request.
             return "Analysis API is available";
         }
         
