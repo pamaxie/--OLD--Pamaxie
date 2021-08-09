@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Pamaxie.ImagePreparation.Properties {
+namespace Pamaxie.ImageTooling.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

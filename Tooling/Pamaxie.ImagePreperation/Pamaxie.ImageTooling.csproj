@@ -62,16 +62,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Update="ViewModels\MainView\ImagePreparationViewModel.Commands.cs">
+    <Compile Update="ViewModels\ImagePreperationViewModel\ImagePreparationViewModel.Commands.cs">
       <DependentUpon>ImagePreparationViewModel.cs</DependentUpon>
     </Compile>
-    <Compile Update="ViewModels\MainView\ImagePreparationViewModel.Fields.cs">
+    <Compile Update="ViewModels\ImagePreperationViewModel\ImagePreparationViewModel.Fields.cs">
       <DependentUpon>ImagePreparationViewModel.cs</DependentUpon>
     </Compile>
-    <Compile Update="ViewModels\MainView\ImagePreparationViewModel.Methods.cs">
+    <Compile Update="ViewModels\ImagePreperationViewModel\ImagePreparationViewModel.Methods.cs">
       <DependentUpon>ImagePreparationViewModel.cs</DependentUpon>
     </Compile>
-    <Compile Update="ViewModels\MainView\ImagePreparationViewModel.Properties.cs">
+    <Compile Update="ViewModels\ImagePreperationViewModel\ImagePreparationViewModel.Properties.cs">
       <DependentUpon>ImagePreparationViewModel.cs</DependentUpon>
     </Compile>
   </ItemGroup>
