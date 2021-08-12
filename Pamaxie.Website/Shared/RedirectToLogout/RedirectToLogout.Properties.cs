@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+
 #pragma warning disable 8618
 
 namespace Pamaxie.Website.Shared

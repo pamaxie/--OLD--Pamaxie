@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Http;
 using Pamaxie.Database.Extensions.Sql.Data;
+
 #pragma warning disable 8618
 
 namespace Pamaxie.Website.Shared

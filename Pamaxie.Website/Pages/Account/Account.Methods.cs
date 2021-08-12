@@ -1,7 +1,7 @@
-﻿using Pamaxie.Extensions.Sql;
-using Pamaxie.Website.Authentication;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using Pamaxie.Extensions.Sql;
+using Pamaxie.Website.Authentication;
 
 namespace Pamaxie.Website.Pages
 {

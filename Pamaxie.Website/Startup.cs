@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -9,7 +10,6 @@ using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
 using Pamaxie.Database.Extensions.Sql;
 using Pamaxie.Website.Services;
-using System;
 
 namespace Pamaxie.Website 
 {

@@ -1,4 +1,5 @@
 ﻿using MudBlazor;
+
 #pragma warning disable 8618
 
 namespace Pamaxie.Website

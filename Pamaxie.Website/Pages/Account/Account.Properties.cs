@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using MudBlazor;
 using Pamaxie.Database.Extensions.Sql.Data;
+
 #pragma warning disable 8618
 
 namespace Pamaxie.Website.Pages

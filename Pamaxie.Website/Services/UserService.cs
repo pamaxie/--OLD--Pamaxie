@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using MudBlazor;
 using Pamaxie.Data;
@@ -6,7 +7,6 @@ using Pamaxie.Database.Extensions.Sql.Data;
 using Pamaxie.Extensions.Sql;
 using Pamaxie.Website.Authentication;
 using Pamaxie.Website.Models;
-using System.Security.Claims;
 
 namespace Pamaxie.Website.Services
 {
