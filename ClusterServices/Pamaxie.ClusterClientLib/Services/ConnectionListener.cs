@@ -71,7 +71,8 @@ namespace Pamaxie.ClusterClient.Services
 
 
 
-           
+           //Added a return value to temporarily fix build issues - PKoldborg
+            return true;
         }
     }
 }
