@@ -54,10 +54,10 @@ namespace Pamaxie.Website.Services
         /// <returns></returns>
         public static IBody? Decode<T>(string token, string secret)
         {
-            return Decode<T>(Encoding.UTF8.GetString(Base64UrlDecode(token)), secret, true);
+            return Decode<T>(Encoding.UTF8.GetString(Base64UrlDecode(token)), Encoding.UTF8.GetBytes(secret), true);
         }
 
-        private static IBody? Decode<T>(string token, string secret, bool verify)
+        private static IBody? Decode<T>(string token, byte[] secretBytes, bool verify)
         {
             try
             {
@@ -77,7 +77,6 @@ namespace Pamaxie.Website.Services
                     return default;
                 
                 byte[] bytesToSign = Encoding.UTF8.GetBytes(string.Concat(header, ".", body));
-                byte[] secretBytes = Encoding.UTF8.GetBytes(secret);
                 string name = (string)headerData["name"]!;
                 string type = (string)headerData["type"]!;
 

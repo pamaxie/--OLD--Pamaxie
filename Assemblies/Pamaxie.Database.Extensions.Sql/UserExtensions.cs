@@ -62,7 +62,7 @@ namespace Pamaxie.Extensions.Sql
         public static bool VerifyUser(this IProfileData userProfile)
         {
             using SqlDbContext dbContext = new();
-            User user = dbContext.Users.FirstOrDefault(x => x.Id == userProfile.Id);
+            User user = dbContext.Users.FirstOrDefault(x => x.GoogleUserId == userProfile.GoogleClaimUserId);
             if (user == null) return false;
             user.EmailVerified = true;
             dbContext.Users.Update(user);

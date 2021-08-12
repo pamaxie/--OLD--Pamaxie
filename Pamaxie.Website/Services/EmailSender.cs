@@ -39,7 +39,6 @@ namespace Pamaxie.Website.Services
         public async void SendConfirmationEmail(ProfileData profile)
         {
             string code = _userService.GenerateEmailConfirmationToken(profile);
-            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
             string callbackUrl = _navigationManager.ToAbsoluteUri($"ConfirmEmail/{code}/").ToString();
             await SendEmailAsync(profile.EmailAddress, "Confirm Your Email",
                 EmailBody.EmailConfirmationBody(callbackUrl)).ConfigureAwait(false);

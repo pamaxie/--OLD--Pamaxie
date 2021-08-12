@@ -68,10 +68,7 @@ namespace Pamaxie.Website.Services
             if (body?.Purpose is not EmailPurpose.EMAIL_CONFIRMATION)
                 return false;
             User user = UserExtensions.GetUser(body.ProfileData.GoogleClaimUserId);
-            if (user.Email != body.ProfileData.EmailAddress)
-                return false;
-            body.ProfileData.VerifyUser();
-            return true;
+            return user.Email == body.ProfileData.EmailAddress && body.ProfileData.VerifyUser();
         }
         
         /// <summary>
