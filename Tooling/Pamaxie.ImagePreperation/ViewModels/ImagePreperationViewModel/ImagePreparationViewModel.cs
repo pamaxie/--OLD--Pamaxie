@@ -2,10 +2,10 @@
 using System.Threading;
 using Framework.ComponentModel;
 using MahApps.Metro.Controls.Dialogs;
-using Pamaxie.ImagePreparation.PresentationObjects;
+using Pamaxie.ImageTooling.PresentationObjects;
 using Pamaxie.Wpf.Command;
 
-namespace Pamaxie.ImagePreparation.ViewModels
+namespace Pamaxie.ImageTooling.ViewModels
 {
     public partial class ImagePreparationViewModel : NotifyPropertyChanges
     {
@@ -25,7 +25,6 @@ namespace Pamaxie.ImagePreparation.ViewModels
             SelectInputDirectoryCommand =
                 new AsyncDelegateCommand(token => SelectDirectoryDialogAsyncCommandCallback(token, false), a => !LoadingFiles || IsBusy);
 
-            OpenHelpPageCommand = new DelegateCommand(OpenHelpPageCommandCallback);
             StartImagePerpetrationAsync = new AsyncDelegateCommand(StartImagePerpetrationAsyncCommandCallback);
 
             ProcessingSettings = new PoProcessingSettings();

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 using Framework.ComponentModel;
-using Pamaxie.ImagePreparation.PresentationObjects.Interfaces;
+using Pamaxie.ImageTooling.PresentationObjects.Interfaces;
 
-namespace Pamaxie.ImagePreparation.PresentationObjects
+namespace Pamaxie.ImageTooling.PresentationObjects
 {
     public class PoProcessingSettings : NotifyPropertyChanges, IPoProcessingSettings
     {

@@ -1,4 +1,4 @@
-﻿namespace Pamaxie.ImagePreparation.PresentationObjects.Interfaces
+﻿namespace Pamaxie.ImageTooling.PresentationObjects.Interfaces
 {
     interface IPoImageData
     {

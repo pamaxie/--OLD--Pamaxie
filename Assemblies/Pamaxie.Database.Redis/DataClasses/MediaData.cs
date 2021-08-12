@@ -39,10 +39,19 @@ namespace Pamaxie.Database.Redis.DataClasses
                 if (_data != null) return _data;
 
                 if (MediaHash == null) throw new InvalidOperationException("Cannot get Data when image hash is null or not set");
-
+                
                 IDatabase db = RedisData.Redis.GetDatabase();
+
+                //The hash set does not exist in the Database.
+                if (!db.KeyExists(MediaHash)) return null;
+                
+
+
                 RedisValue rawData = db.StringGet(MediaHash);
                 MediaData data = JsonConvert.DeserializeObject<MediaData>(rawData);
+
+                //Reset the expiration of the key to 90 days.
+                db.KeyExpire(MediaHash, new TimeSpan(90, 0, 0, 0, 0), CommandFlags.FireAndForget);
                 _data = data;
                 return data;
             }
@@ -55,10 +64,10 @@ namespace Pamaxie.Database.Redis.DataClasses
                 if (Equals(_data, value)) return;
 
                 IDatabase db = RedisData.Redis.GetDatabase();
+                value.LastUpdated = DateTime.Now;
                 string mediaData = JsonConvert.SerializeObject(value);
 
-                //Delete database data after 90 days because accessing the data is not really relevant to use anymore
-                //(we don't wanna build a database on peoples pictures after all) if you do feel free to remove the flags.
+                //Delete the cached files after 90 days to increase performance and prevent bloating
                 db.StringSet(MediaHash, mediaData, new TimeSpan(90, 0, 0, 0, 0), When.Always, CommandFlags.FireAndForget);
                 _data = value;
             }
@@ -91,7 +100,20 @@ namespace Pamaxie.Database.Redis.DataClasses
 
     public class MediaData
     {
+
+        /// <summary>
+        /// Specifies the detected properties in an image / file
+        /// </summary>
         public OutputProperties DetectedLabels { get; set; }
+
+        /// <summary>
+        /// Set when the key gets updated
+        /// </summary>
+        public DateTime LastUpdated { get; internal set; }
+
+        /// <summary>
+        /// Specifies the version of the neural network / AI used for scanning
+        /// </summary>
         public ushort NetworkVersion { get; private set; } = 1;
     }
 }

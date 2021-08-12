@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using Framework.ComponentModel;
-using Pamaxie.ImagePreparation.PresentationObjects;
+using Pamaxie.ImageTooling.PresentationObjects;
 
-namespace Pamaxie.ImagePreparation.ViewModels
+namespace Pamaxie.ImageTooling.ViewModels
 {
     public partial class ImagePreparationViewModel : NotifyPropertyChanges
     {

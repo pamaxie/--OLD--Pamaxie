@@ -1,26 +1,20 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Threading;
-using Accessibility;
 using Framework.ComponentModel;
 using MahApps.Metro.Controls.Dialogs;
-using Newtonsoft.Json;
-using Pamaxie.ImagePreparation.PresentationObjects;
+using Pamaxie.ImageTooling.PresentationObjects;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
 
-namespace Pamaxie.ImagePreparation.ViewModels
+namespace Pamaxie.ImageTooling.ViewModels
 {
     public partial class ImagePreparationViewModel : NotifyPropertyChanges
     {
@@ -151,16 +145,7 @@ namespace Pamaxie.ImagePreparation.ViewModels
             return !string.IsNullOrEmpty(_destinationFolderName) && LoadedImages.Count > 0;
         }
 
-        private void OpenHelpPageCommandCallback(object obj)
-        {
-            System.Diagnostics.Process.Start(new ProcessStartInfo
-            {
-                FileName = "https://wiki.pamaxie.com/en/tooling/image-preperation",
-                UseShellExecute = true
-            });
-        }
-
-        private async Task SelectDirectoryDialogAsyncCommandCallback(CancellationToken arg, bool IsOutput)
+        private async Task SelectDirectoryDialogAsyncCommandCallback(CancellationToken arg, bool isOutput)
         {
             var folderPicker = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
             var result = folderPicker.ShowDialog();
@@ -170,7 +155,7 @@ namespace Pamaxie.ImagePreparation.ViewModels
             await Dispatcher.CurrentDispatcher.InvokeAsync((() =>
             {
                 var selectedPath = folderPicker.SelectedPath;
-                if (IsOutput)
+                if (isOutput)
                 {
                     DestinationFolderName = selectedPath;
                     return;
@@ -178,6 +163,7 @@ namespace Pamaxie.ImagePreparation.ViewModels
                 SourceFolderName = selectedPath;
             }));
         }
+
         private Task CancelImagePreparationCommandCallback(CancellationToken arg)
         {
             _workToken.Cancel();

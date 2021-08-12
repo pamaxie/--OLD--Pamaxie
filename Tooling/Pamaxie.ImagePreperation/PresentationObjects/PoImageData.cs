@@ -1,7 +1,7 @@
 ﻿using Framework.ComponentModel;
-using Pamaxie.ImagePreparation.PresentationObjects.Interfaces;
+using Pamaxie.ImageTooling.PresentationObjects.Interfaces;
 
-namespace Pamaxie.ImagePreparation.PresentationObjects
+namespace Pamaxie.ImageTooling.PresentationObjects
 {
     public class PoImageData : NotifyPropertyChanges, IPoImageData
     {

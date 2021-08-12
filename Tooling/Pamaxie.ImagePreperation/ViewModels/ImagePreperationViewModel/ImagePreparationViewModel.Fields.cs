@@ -2,9 +2,9 @@
 using System.Threading;
 using Framework.ComponentModel;
 using MahApps.Metro.Controls.Dialogs;
-using Pamaxie.ImagePreparation.PresentationObjects;
+using Pamaxie.ImageTooling.PresentationObjects;
 
-namespace Pamaxie.ImagePreparation.ViewModels
+namespace Pamaxie.ImageTooling.ViewModels
 {
     public partial class ImagePreparationViewModel : NotifyPropertyChanges
     {

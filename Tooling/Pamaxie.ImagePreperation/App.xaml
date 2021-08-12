@@ -1,7 +1,7 @@
-﻿<Application x:Class="Pamaxie.ImagePreparation.App"
+﻿<Application x:Class="Pamaxie.ImageTooling.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Pamaxie.ImagePreparation"
+             xmlns:local="clr-namespace:Pamaxie.ImageTooling"
              xmlns:converters="clr-namespace:Pamaxie.Wpf.Converters;assembly=Pamaxie.Wpf"
              StartupUri="MainWindow.xaml">
     <Application.Resources>

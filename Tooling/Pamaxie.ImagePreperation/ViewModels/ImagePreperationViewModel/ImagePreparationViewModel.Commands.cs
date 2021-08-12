@@ -1,7 +1,7 @@
 ﻿using Framework.ComponentModel;
 using Pamaxie.Wpf.Command;
 
-namespace Pamaxie.ImagePreparation.ViewModels
+namespace Pamaxie.ImageTooling.ViewModels
 {
     public partial class ImagePreparationViewModel : NotifyPropertyChanges
     {
@@ -10,6 +10,5 @@ namespace Pamaxie.ImagePreparation.ViewModels
         public AsyncDelegateCommand LoadImagesFromDataSourceAsync { get; set; }
         public AsyncDelegateCommand CancelImagePerpetrationAsync { get; set; }
         public AsyncDelegateCommand StartImagePerpetrationAsync { get; set; }
-        public DelegateCommand OpenHelpPageCommand { get; set; }
     }
 }
