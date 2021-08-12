@@ -16,6 +16,12 @@ namespace Pamaxie.Website.Services
             return sha.ComputeHash(value);
         };
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="body"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static string Encode(IBody body, string secret)
         {
             return Base64UrlEncode(Encoding.UTF8.GetBytes(Encode(body, Encoding.UTF8.GetBytes(secret))));
@@ -32,16 +38,20 @@ namespace Pamaxie.Website.Services
             segments.Add(Base64UrlEncode(headerBytes));
             segments.Add(Base64UrlEncode(bodyBytes));
 
-            string stringToSign = string.Join(".", segments.ToArray());
-
-            byte[] bytesToSign = Encoding.UTF8.GetBytes(stringToSign);
-
+            byte[] bytesToSign = Encoding.UTF8.GetBytes(string.Join(".", segments.ToArray()));
             byte[] signature = Rs256(secretBytes, bytesToSign);
             
             segments.Add(Base64UrlEncode(signature));
             return string.Join(".", segments.ToArray());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="secret"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static IBody? Decode<T>(string token, string secret)
         {
             return Decode<T>(Encoding.UTF8.GetString(Base64UrlDecode(token)), secret, true);
@@ -51,10 +61,10 @@ namespace Pamaxie.Website.Services
         {
             try
             {
-                string[] parts = token.Split('.');
-                string header = parts[0];
-                string body = parts[1];
-                byte[] crypto = Base64UrlDecode(parts[2]);
+                string[] segments = token.Split('.');
+                string header = segments[0];
+                string body = segments[1];
+                byte[] signature = Base64UrlDecode(segments[2]);
 
                 string headerJson = Encoding.UTF8.GetString(Base64UrlDecode(header));
                 JObject headerData = JObject.Parse(headerJson);
@@ -73,11 +83,11 @@ namespace Pamaxie.Website.Services
 
                 if (name is not "Pamaxie" && type is not "Jwt") return default;
                 
-                byte[] signature = Rs256(secretBytes, bytesToSign);
-                string decodedCrypto = Base64UrlEncode(crypto);
+                byte[] compareSignature = Rs256(secretBytes, bytesToSign);
                 string decodedSignature = Base64UrlEncode(signature);
+                string decodedCompareSignature = Base64UrlEncode(compareSignature);
 
-                return decodedCrypto != decodedSignature ? default : bodyObject;
+                return !Equals(decodedSignature, decodedCompareSignature) ? default : bodyObject;
             }
             catch
             {

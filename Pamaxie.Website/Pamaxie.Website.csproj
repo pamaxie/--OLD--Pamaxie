@@ -23,6 +23,7 @@
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.7" />
 	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
     <PackageReference Include="MudBlazor" Version="5.0.13" />
+    <PackageReference Include="WebMarkupMin.Core" Version="2.9.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,5 +35,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Assemblies\Pamaxie.Database.Extensions.Sql\Pamaxie.Database.Extensions.Sql.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="EmailLayouts\EmailConfirmation.xhtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
