@@ -1,11 +1,9 @@
 ﻿using System.IO;
 using System.Net;
 using System.Net.Mail;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Pamaxie.Database.Extensions.Sql.Data;
 using WebMarkupMin.Core;

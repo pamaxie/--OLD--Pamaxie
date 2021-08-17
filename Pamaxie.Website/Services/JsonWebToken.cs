@@ -17,7 +17,7 @@ namespace Pamaxie.Website.Services
         };
         
         /// <summary>
-        /// 
+        /// Encodes a IBody into a base64Url string through Rs256 encryption.
         /// </summary>
         /// <param name="body"></param>
         /// <param name="secret"></param>
@@ -46,7 +46,7 @@ namespace Pamaxie.Website.Services
         }
 
         /// <summary>
-        /// 
+        /// Decodes a Base64Url string into a IBody using the same secret as encoded with.
         /// </summary>
         /// <param name="token"></param>
         /// <param name="secret"></param>

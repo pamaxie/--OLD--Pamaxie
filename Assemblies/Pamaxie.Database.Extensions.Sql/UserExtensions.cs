@@ -1,14 +1,16 @@
-﻿using Pamaxie.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Sql.Data;
 using Pamaxie.Database.Sql;
-using System.Linq;
-using System;
-using System.Collections.Generic;
 
 namespace Pamaxie.Extensions.Sql
 {
     public static class UserExtensions
     {
+        public static SqlDbContext DbContext { private get; set; } = new();
+        
         /// <summary>
         /// Gets a user via their google User Id
         /// </summary>
@@ -16,8 +18,8 @@ namespace Pamaxie.Extensions.Sql
         /// <returns></returns>
         public static User GetUser(string googleUserId)
         {
-            using SqlDbContext dbContext = new();
-            return dbContext.Users.FirstOrDefault(x => x.GoogleUserId == googleUserId);
+            using (DbContext)
+                return DbContext.Users.FirstOrDefault(x => x.GoogleUserId == googleUserId);
         }
         
         /// <summary>
@@ -27,30 +29,32 @@ namespace Pamaxie.Extensions.Sql
         /// <returns><see cref="bool"/> was success?</returns>
         public static bool CreateUser(IProfileData userProfile)
         {
-            using SqlDbContext dbContext = new();
-            try
+            using (DbContext)
             {
-                User existingDbUser =
-                    dbContext.Users.FirstOrDefault(x => x.GoogleUserId == userProfile.GoogleClaimUserId);
-                if (existingDbUser != null)
+                try
                 {
-                    existingDbUser.DeletedAccount = false;
-                    existingDbUser.Email = userProfile.EmailAddress;
-                    existingDbUser.Username = userProfile.UserName;
-                    dbContext.Update(existingDbUser);
-                    dbContext.SaveChanges();
+                    User existingDbUser =
+                        DbContext.Users.FirstOrDefault(x => x.GoogleUserId == userProfile.GoogleClaimUserId);
+                    if (existingDbUser != null)
+                    {
+                        existingDbUser.DeletedAccount = false;
+                        existingDbUser.Email = userProfile.EmailAddress;
+                        existingDbUser.Username = userProfile.UserName;
+                        DbContext.Update(existingDbUser);
+                        DbContext.SaveChanges();
+                        return true;
+                    }
+                
+                    User user = new() { GoogleUserId = userProfile.GoogleClaimUserId, Email = userProfile.EmailAddress, Username = userProfile.UserName};
+                    DbContext.Users.Add(user);
+                    DbContext.SaveChanges();
                     return true;
                 }
-                
-                User user = new() { GoogleUserId = userProfile.GoogleClaimUserId, Email = userProfile.EmailAddress, Username = userProfile.UserName};
-                dbContext.Users.Add(user);
-                dbContext.SaveChanges();
-                return true;
-            }
-            catch (Exception e) 
-            {
-                Console.WriteLine(e);
-                return false;
+                catch (Exception e) 
+                {
+                    Console.WriteLine(e);
+                    return false;
+                }
             }
         }
         
@@ -61,13 +65,15 @@ namespace Pamaxie.Extensions.Sql
         /// <returns><see cref="bool"/> was successful?</returns>
         public static bool VerifyUser(this IProfileData userProfile)
         {
-            using SqlDbContext dbContext = new();
-            User user = dbContext.Users.FirstOrDefault(x => x.GoogleUserId == userProfile.GoogleClaimUserId);
-            if (user == null) return false;
-            user.EmailVerified = true;
-            dbContext.Users.Update(user);
-            dbContext.SaveChanges();
-            return true;
+            using (DbContext)
+            {
+                User user = DbContext.Users.FirstOrDefault(x => x.GoogleUserId == userProfile.GoogleClaimUserId);
+                if (user == null) return false;
+                user.EmailVerified = true;
+                DbContext.Users.Update(user);
+                DbContext.SaveChanges();
+                return true;
+            }
         }
 
         /// <summary>
@@ -77,23 +83,25 @@ namespace Pamaxie.Extensions.Sql
         /// <returns><see cref="bool"/> was successful?</returns>
         public static bool DeleteUserData(this IProfileData userProfile)
         {
-            using SqlDbContext dbContext = new();
-            User user = dbContext.Users.FirstOrDefault(x => x.Id == userProfile.Id);
-            if (user == null) return false;
-            IEnumerable<Application> applications = ApplicationExtensions.GetApplications(userProfile.Id);
-            foreach (Application application in applications)
+            using (DbContext)
             {
-                application.DeleteApplication();
+                User user = DbContext.Users.FirstOrDefault(x => x.Id == userProfile.Id);
+                if (user == null) return false;
+                IEnumerable<Application> applications = ApplicationExtensions.GetApplications(userProfile.Id);
+                foreach (Application application in applications)
+                {
+                    application.DeleteApplication();
 
+                }
+
+                user.Email = string.Empty;
+                user.Username = string.Empty;
+                user.EmailVerified = false;
+                user.DeletedAccount = true;
+                DbContext.Users.Update(user);
+                DbContext.SaveChanges();
+                return true;
             }
-
-            user.Email = string.Empty;
-            user.Username = string.Empty;
-            user.EmailVerified = false;
-            user.DeletedAccount = true;
-            dbContext.Users.Update(user);
-            dbContext.SaveChanges();
-            return true;
         }
     }
 }

@@ -13,16 +13,17 @@ namespace Pamaxie.Website.Services
     public class UserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ISnackbar _snackbar;
+        private readonly ISnackbar? _snackbar;
         
         private readonly string _secret;
         
-        public UserService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ISnackbar snackbar)
+        public UserService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ISnackbar? snackbar)
         {
             IConfigurationSection jwtTokenSection = configuration.GetSection("JwtToken");
             _secret = jwtTokenSection.GetValue<string>("Secret");
             _httpContextAccessor = httpContextAccessor;
             _snackbar = snackbar;
+            if (_snackbar == null) return;
             _snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
             _snackbar.Configuration.PreventDuplicates = true;
             _snackbar.Configuration.VisibleStateDuration = 10000;
@@ -76,7 +77,7 @@ namespace Pamaxie.Website.Services
         /// </summary>
         public void ShowVerifyEmailDialog()
         {
-            _snackbar.Add("Please verify your email before using our service", Severity.Info, config =>
+            _snackbar?.Add("Please verify your email before using our service", Severity.Info, config =>
             {
                 config.HideIcon = true;
                 config.SnackbarVariant = Variant.Filled;
