@@ -12,7 +12,7 @@ namespace Test.Pamaxie.Website
         {
             Id = 1,
             GoogleClaimUserId = "101963629560135630792",
-            EmailAddress = Configuration.GetSection("ProfileData").GetValue<string>("Email"),
+            EmailAddress = Configuration.GetSection("UserData").GetValue<string>("Email"),
             UserName = "PersonalUser",
             ProfilePictureAddress = "https://lh3.googleusercontent.com/-K6jEW8D8F4E/YRy0Zw8i-OI/AAAAAAAAAMQ/pJE0bflfklI1iGnB5zqUspjINcPo1yJ3wCMICGAYYCw/s96-c",
             Deleted = false
