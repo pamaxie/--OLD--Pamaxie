@@ -11,24 +11,6 @@ namespace Test.Pamaxie.Website
     /// </summary>
     internal static class TestGoogleClaimData
     {
-        // This is how your appsettings.test.json file should look like if you want to add personal testing data, for example,
-        // if you want to test out the email sender.
-        /*
-        {
-            "GoogleClaim": {
-                "NameIdentifier": "109999999999999999999", 
-                "Name": "Username",
-                "GivenName": "Firstname",
-                "Surname": "Lastname,
-                "Email": "username@fakemail.com",
-                "Image": ""
-            }
-        }
-        */
-        // Only the NameIdentifier and Email are the important ones, the rest can be left blank if you truly wish to.
-        // I recommend adding a email that you have access to, or you will not be able to see if the EmailSender sent a email.
-        // Remember to change properties on the appsettings.test.json file to Copy to output directory.
-
         /// <summary>
         /// List of Google user principle claims.
         /// Used to act as a user being logged into the website.
