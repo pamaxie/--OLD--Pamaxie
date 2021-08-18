@@ -10,11 +10,11 @@ namespace Test.Pamaxie.Website
         
         internal static ProfileData Profile { get; } = new()
         {
-            Id = Configuration.GetSection("ProfileData").GetValue<int>("Id"),
-            GoogleClaimUserId = Configuration.GetSection("ProfileData").GetValue<string>("GoogleClaimUserId"),
+            Id = 1,
+            GoogleClaimUserId = "101963629560135630792",
             EmailAddress = Configuration.GetSection("ProfileData").GetValue<string>("Email"),
-            UserName = "Hello",
-            ProfilePictureAddress = "",
+            UserName = "PersonalUser",
+            ProfilePictureAddress = "https://lh3.googleusercontent.com/-K6jEW8D8F4E/YRy0Zw8i-OI/AAAAAAAAAMQ/pJE0bflfklI1iGnB5zqUspjINcPo1yJ3wCMICGAYYCw/s96-c",
             Deleted = false
         };
     }

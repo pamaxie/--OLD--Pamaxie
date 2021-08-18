@@ -15,6 +15,5 @@ namespace Test.Pamaxie.Website
         {
             TestOutputHelper = testOutputHelper;
         }
-
     }
 }

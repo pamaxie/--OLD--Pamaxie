@@ -1,15 +1,21 @@
 ﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Moq;
 using Pamaxie.Data;
 using Pamaxie.Database.Sql;
 
 namespace Test.Pamaxie.Website
 {
+    /// <summary>
+    /// Class containing method for mocking SqlDbContext.
+    /// </summary>
     internal static class MockSqlDbContext
     {
-        internal static SqlDbContext Mock(IConfiguration configuration)
+        /// <summary>
+        /// Mocks the Sql Database and adds test users from TestUserData.
+        /// </summary>
+        /// <returns>Mocked SqlDbContext</returns>
+        internal static SqlDbContext Mock()
         {
             IQueryable<User> data = TestUserData.Users;
 

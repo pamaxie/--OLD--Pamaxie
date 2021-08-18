@@ -1,15 +1,23 @@
-﻿using System.Security.Claims;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Moq;
 
 namespace Test.Pamaxie.Website
 {
+    /// <summary>
+    /// Class containing method for mocking IHttpContextAccessor.
+    /// </summary>
     internal static class MockIHttpContextAccessor
     {
-        internal static IHttpContextAccessor Mock(IConfiguration configuration)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userClaims">Claims of the user who is logged in</param>
+        /// <returns>Mocked IHttpContextAccessor</returns>
+        internal static IHttpContextAccessor Mock(IEnumerable<Claim> userClaims)
         {
-            ClaimsPrincipal user = new(new ClaimsIdentity(TestGoogleClaimData.GoogleUserPrincipleClaims));
+            ClaimsPrincipal user = new(new ClaimsIdentity(userClaims));
 
             DefaultHttpContext context = new()
             {
