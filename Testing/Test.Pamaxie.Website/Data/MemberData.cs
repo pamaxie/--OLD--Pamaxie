@@ -8,7 +8,7 @@ namespace Test.Pamaxie.Website
     /// <summary>
     /// Contains all data members that will be used for inline data in the testing methods.
     /// </summary>
-    public static class TestMemberData
+    public static class MemberData
     {
         public static IEnumerable<object[]> AllGoogleClaimUsers
         {
