@@ -19,7 +19,7 @@ namespace Test.Pamaxie.Website
     public class UserServiceTest : Test
     {
         public static IEnumerable<object[]> AllVerifiedUsers => TestMemberData.AllVerifiedGoogleClaimUsers;
-        public static IEnumerable<object[]> AllUnverifiedUsers => TestMemberData.AllUnerifiedGoogleClaimUsers;
+        public static IEnumerable<object[]> AllUnverifiedUsers => TestMemberData.AllUnverifiedGoogleClaimUsers;
         
         public UserServiceTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {

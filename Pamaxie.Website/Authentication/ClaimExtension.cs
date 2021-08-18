@@ -7,7 +7,7 @@ using Pamaxie.Website.Authentication.Data;
 
 namespace Pamaxie.Website.Authentication
 {
-    internal static class ClaimExtension
+    public static class ClaimExtension
     {
         /// <summary>
         /// Gets the Google Authentication claim via the claims principle
@@ -15,7 +15,7 @@ namespace Pamaxie.Website.Authentication
         /// <param name="principle"><see cref="ClaimsPrincipal"/> to get the google claims from</param>
         /// <param name="hasAccount"></param>
         /// <returns><see cref="GoogleAuthData"/> that was created via the claim values. Is null if something went wrong.</returns>
-        internal static GoogleAuthData? GetGoogleAuthData(this ClaimsPrincipal principle, out bool hasAccount)
+        public static GoogleAuthData? GetGoogleAuthData(this ClaimsPrincipal principle, out bool hasAccount)
         {
             hasAccount = false;
             if (principle.Identity == null)

@@ -45,7 +45,7 @@ namespace Test.Pamaxie.Website
             }
         }
         
-        public static IEnumerable<object[]> AllUnerifiedGoogleClaimUsers
+        public static IEnumerable<object[]> AllUnverifiedGoogleClaimUsers
         {
             get
             {
