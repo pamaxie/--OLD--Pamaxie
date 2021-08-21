@@ -151,7 +151,7 @@
                       Content="Compare Files" 
                       ToolTip="This will do a hash comparison of all files before sorting through them, this prevents the same items being scanned twice. We generally do not recommend this due to scanning taking a lot longer."/>
 
-            <CheckBox Grid.Row="2" 
+            <CheckBox Grid.Row="3" 
                       Grid.Column="0" 
                       Margin="5" 
                       IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInverterConverter}}"  
