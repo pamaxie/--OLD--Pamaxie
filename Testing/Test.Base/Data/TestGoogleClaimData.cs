@@ -4,19 +4,19 @@ using System.Linq;
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 
-namespace Test.Pamaxie.Website
+namespace Test.Base
 {
     /// <summary>
     /// Contains randomly generated Google Claims Data
     /// </summary>
-    internal static class TestGoogleClaimData
+    public static class TestGoogleClaimData
     {
         /// <summary>
         /// List of Google user principle claims.
         /// Used to act as a user being logged into the website.
         /// </summary>
 
-        internal static readonly List<Claim[]> ListOfGoogleUserPrincipleClaims = new()
+        public static readonly List<Claim[]> ListOfGoogleUserPrincipleClaims = new()
         {
             new[]
             {

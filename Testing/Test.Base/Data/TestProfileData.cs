@@ -3,12 +3,12 @@ using Pamaxie.Database.Extensions.Sql.Data;
 
 namespace Test.Pamaxie.Website
 {
-    internal static class TestProfileData
+    public static class TestProfileData
     {
         private static IConfiguration Configuration { get; } =
             new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
         
-        internal static ProfileData Profile { get; } = new()
+        public static ProfileData Profile { get; } = new()
         {
             Id = 1,
             GoogleClaimUserId = "101963629560135630792",

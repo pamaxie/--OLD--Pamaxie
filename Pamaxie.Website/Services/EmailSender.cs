@@ -23,7 +23,7 @@ namespace Pamaxie.Website.Services
 
         public EmailSender(IConfiguration configuration, NavigationManager navigationManager, UserService userService)
         {
-            IConfigurationSection emailConfigSection = configuration.GetSection("Email");
+            IConfigurationSection emailConfigSection = configuration.GetSection("EmailSender");
             _email = emailConfigSection.GetValue<string>("EmailAddress");
             _password = emailConfigSection.GetValue<string>("Password");
             _navigationManager = navigationManager;

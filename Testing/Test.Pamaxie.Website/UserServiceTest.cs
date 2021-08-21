@@ -8,6 +8,7 @@ using Pamaxie.Database.Sql;
 using Pamaxie.Extensions.Sql;
 using Pamaxie.Website.Authentication;
 using Pamaxie.Website.Services;
+using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -16,7 +17,7 @@ namespace Test.Pamaxie.Website
     /// <summary>
     /// Testing class for UserService
     /// </summary>
-    public class UserServiceTest : Test
+    public class UserServiceTest : Base.Test
     {
         public static IEnumerable<object[]> AllVerifiedUsers => MemberData.AllVerifiedGoogleClaimUsers;
         public static IEnumerable<object[]> AllUnverifiedUsers => MemberData.AllUnverifiedGoogleClaimUsers;

@@ -4,19 +4,17 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Pamaxie.Data;
 
-namespace Test.Pamaxie.Website
+namespace Test.Base
 {
     /// <summary>
     /// Contains randomly generated User Data
     /// </summary>
-    internal static class TestUserData
+    public static class TestUserData
     {
         /// <summary>
         /// List of Users for the SqlDbContext.
         /// </summary>
-        internal static IQueryable<User> Users => ListOfUsers.AsQueryable();
-
-        private static readonly List<User> ListOfUsers = new()
+        public static readonly List<User> ListOfUsers = new()
         {
             new User
             {
@@ -98,7 +96,7 @@ namespace Test.Pamaxie.Website
             ListOfUsers.Add(new User()
             {
                 GoogleUserId = "101963629560135630792",
-                Id = 0,
+                Id = 1,
                 Username = "",
                 Email = "",
                 EmailVerified = false,

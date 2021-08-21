@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Xunit.Abstractions;
 
-namespace Test.Pamaxie.Website
+namespace Test.Base
 {
     public class Test
     {
-        internal ITestOutputHelper TestOutputHelper { get; }
+        protected ITestOutputHelper TestOutputHelper { get; }
 
-        internal static IConfiguration Configuration { get; } =
+        protected static IConfiguration Configuration { get; } =
             new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
 
         // ReSharper disable once MemberCanBeProtected.Global //Must be Public!

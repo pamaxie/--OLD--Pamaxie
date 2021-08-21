@@ -3,7 +3,7 @@ using System.Linq;
 using Pamaxie.Database.Sql;
 using Pamaxie.Extensions.Sql;
 
-namespace Test.Pamaxie.Website
+namespace Test.Base
 {
     /// <summary>
     /// Contains all data members that will be used for inline data in the testing methods.
@@ -15,7 +15,7 @@ namespace Test.Pamaxie.Website
             get
             {
                 List<object[]> list = new List<object[]>();
-                foreach (string googleUserId in TestUserData.Users.Select(_ => _.GoogleUserId))
+                foreach (string googleUserId in TestUserData.ListOfUsers.Select(_ => _.GoogleUserId))
                 {
                     list.Add(new object[]
                     {
@@ -31,7 +31,7 @@ namespace Test.Pamaxie.Website
             get
             {
                 List<object[]> list = new List<object[]>();
-                foreach (string googleUserId in TestUserData.Users.Select(_ => _.GoogleUserId))
+                foreach (string googleUserId in TestUserData.ListOfUsers.Select(_ => _.GoogleUserId))
                 {
                     SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
                     UserExtensions.DbContext = sqlDbContext;
@@ -50,7 +50,7 @@ namespace Test.Pamaxie.Website
             get
             {
                 List<object[]> list = new List<object[]>();
-                foreach (string googleUserId in TestUserData.Users.Select(_ => _.GoogleUserId))
+                foreach (string googleUserId in TestUserData.ListOfUsers.Select(_ => _.GoogleUserId))
                 {
                     SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
                     UserExtensions.DbContext = sqlDbContext;
@@ -60,6 +60,16 @@ namespace Test.Pamaxie.Website
                         googleUserId
                     });
                 }
+                return list.AsEnumerable();
+            }
+        }
+        
+        public static IEnumerable<object[]> AllApplications
+        {
+            get
+            {
+                List<object[]> list = TestApplicationData.ListOfApplications.Select(_ => _.ApplicationId)
+                    .Select(applicationId => new object[] {applicationId}).ToList();
                 return list.AsEnumerable();
             }
         }

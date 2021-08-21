@@ -1,15 +1,21 @@
 ﻿using System.IO;
 using Microsoft.Extensions.Configuration;
+using Pamaxie.Api.Data;
+using Pamaxie.Api.Security;
 using Xunit;
-using TokenGenerator = Pamaxie.Api.Security.TokenGenerator;
+using Xunit.Abstractions;
 
 namespace Test.Pamaxie.API_UnitTesting
 {
     /// <summary>
     /// Testing class for AuthController
     /// </summary>
-    public class TokenTest
+    public class TokenTest : Base.Test
     {
+        public TokenTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        {
+        }
+        
         /// <summary>
         /// Testing for succeeding in generating a new token from a id
         /// </summary>
@@ -22,7 +28,7 @@ namespace Test.Pamaxie.API_UnitTesting
             IConfiguration configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.test.json").Build();
             TokenGenerator tokenGenerator = new(configuration);
-            var result = tokenGenerator.CreateToken(id);
+            AuthToken result = tokenGenerator.CreateToken(id);
             Assert.NotNull(result);
             Assert.NotEmpty(result.Token);
         }

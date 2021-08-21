@@ -10,7 +10,7 @@ namespace Pamaxie.Database.Sql
         public virtual DbSet<User> Users { get; set; }
         
         //Tables of all our Registered Applications
-        public DbSet<Application> Applications { get; set; }
+        public virtual DbSet<Application> Applications { get; set; }
 
         //Tables related to things for URL Filters.
         public DbSet<AdvertisingUrl> AdvertisingUrls { get; set; }

@@ -12,7 +12,7 @@ namespace Test.Pamaxie.Website
     /// <summary>
     /// Testing class for JsonWebToken
     /// </summary>
-    public class JsonWebTokenTest : Test
+    public class JsonWebTokenTest : Base.Test
     {
         private readonly string _secret;
 

@@ -10,6 +10,8 @@ namespace Pamaxie.Extensions.Sql
 {
     public static class ApplicationExtensions
     {
+        public static SqlDbContext DbContext { private get; set; } = new();
+
         /// <summary>
         /// Verify the Authentication of the User via the reached in applicationAuth
         /// </summary>
@@ -17,8 +19,8 @@ namespace Pamaxie.Extensions.Sql
         /// <returns></returns>
         public static IEnumerable<Application> GetApplications(long userId)
         {
-            using SqlDbContext dbContext = new();
-            return dbContext.Applications.Where(x => x.UserId == userId).ToList();
+            using (DbContext)
+                return DbContext.Applications.Where(x => x.UserId == userId).ToList();
         }
 
         /// <summary>
@@ -27,9 +29,12 @@ namespace Pamaxie.Extensions.Sql
         /// <returns><see cref="long"/> representing the last known Id</returns>
         public static long GetLastIndex()
         {
-            using SqlDbContext dbContext = new();
-            long? application = dbContext.Applications.OrderBy(key => key.ApplicationId).LastOrDefault()?.ApplicationId;
-            return application ?? 1;
+            using (DbContext)
+            {
+                long? application = DbContext.Applications.OrderBy(key => key.ApplicationId).LastOrDefault()
+                    ?.ApplicationId;
+                return application ?? 1;
+            }
         }
 
         /// <summary>
@@ -41,30 +46,34 @@ namespace Pamaxie.Extensions.Sql
         public static bool CreateApplication(Application application, out Application createdApplication)
         {
             createdApplication = null;
-            using SqlDbContext dbContext = new();
-            try
+            using (DbContext)
             {
-                application.ApplicationId = default;
-                application.AppTokenHash = BCrypt.Net.BCrypt.HashPassword(application.AppToken, ByCrptExt.CalculateSaltCost());
-                application.AppToken = string.Empty;
-                EntityEntry<Application> dbApp = dbContext.Applications.Add(new Application { 
-                    ApplicationId = application.ApplicationId,
-                    ApplicationName = application.ApplicationName,
-                    AppTokenHash = application.AppTokenHash,
-                    Disabled = application.Disabled,
-                    UserId = application.UserId,
-                    LastAuth = application.LastAuth,
-                    RateLimited = false
-                });
-                createdApplication = dbApp.Entity;
-                
-                dbContext.SaveChanges();
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return false;
+                try
+                {
+                    application.ApplicationId = default;
+                    application.AppTokenHash =
+                        BCrypt.Net.BCrypt.HashPassword(application.AppToken, ByCrptExt.CalculateSaltCost());
+                    application.AppToken = string.Empty;
+                    EntityEntry<Application> dbApp = DbContext.Applications.Add(new Application
+                    {
+                        ApplicationId = application.ApplicationId,
+                        ApplicationName = application.ApplicationName,
+                        AppTokenHash = application.AppTokenHash,
+                        Disabled = application.Disabled,
+                        UserId = application.UserId,
+                        LastAuth = application.LastAuth,
+                        RateLimited = false
+                    });
+                    createdApplication = dbApp.Entity;
+
+                    DbContext.SaveChanges();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    return false;
+                }
             }
         }
         
@@ -74,14 +83,17 @@ namespace Pamaxie.Extensions.Sql
         /// <returns><see cref="bool"/> if operation was successful</returns>
         public static bool SetApplicationStatus(this Application application, bool enabled)
         {
-            using SqlDbContext dbContext = new();
-            Application dbApp = dbContext.Applications.FirstOrDefault(x => x.ApplicationId == application.ApplicationId);
-            if (dbApp == null) return false;
+            using (DbContext)
+            {
+                Application dbApp =
+                    DbContext.Applications.FirstOrDefault(x => x.ApplicationId == application.ApplicationId);
+                if (dbApp == null) return false;
 
-            //Sets the application to be disabled. This prevents login attempts 
-            dbApp.Disabled = !enabled;
-            dbContext.SaveChanges();
-            return true;
+                //Sets the application to be disabled. This prevents login attempts 
+                dbApp.Disabled = !enabled;
+                DbContext.SaveChanges();
+                return true;
+            }
         }
 
         /// <summary>
@@ -90,19 +102,22 @@ namespace Pamaxie.Extensions.Sql
         /// <returns><see cref="bool"/> if operation was successful</returns>
         public static bool DeleteApplication(this Application application)
         {
-            using SqlDbContext dbContext = new();
-            Application dbApp = dbContext.Applications.FirstOrDefault(x => x.ApplicationId == application.ApplicationId);
-            if (dbApp == null) return false;
+            using (DbContext)
+            {
+                Application dbApp =
+                    DbContext.Applications.FirstOrDefault(x => x.ApplicationId == application.ApplicationId);
+                if (dbApp == null) return false;
 
-            //Set the column to deleted and clear / anonymize its values
-            dbApp.LastAuth = DateTime.MinValue;
-            dbApp.ApplicationName = string.Empty;
-            dbApp.AppTokenHash = string.Empty;
-            dbApp.Disabled = false;
-            dbApp.Deleted = true;
-            dbApp.UserId = 0;
-            dbContext.SaveChanges();
-            return true;
+                //Set the column to deleted and clear / anonymize its values
+                dbApp.LastAuth = DateTime.MinValue;
+                dbApp.ApplicationName = string.Empty;
+                dbApp.AppTokenHash = string.Empty;
+                dbApp.Disabled = false;
+                dbApp.Deleted = true;
+                dbApp.UserId = 0;
+                DbContext.SaveChanges();
+                return true;
+            }
         }
     }
 }

@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace Test.Pamaxie.Website
+namespace Test.Base
 {
     /// <summary>
     /// Class containing method for mocking NavigationManager.
     /// </summary>
-    internal static class MockNavigationManager
+    public static class MockNavigationManager
     {
         /// <summary>
         /// Mocks the NavigationManager so a url can be made for the EmailSender.
         /// </summary>
         /// <returns>Mocked NavigationManager</returns>
-        internal static NavigationManager Mock()
+        public static NavigationManager Mock()
         {
             return new MockedNavigationManager();
         }

@@ -1,5 +1,6 @@
 ﻿using Pamaxie.Database.Extensions.Sql.Data;
 using Pamaxie.Website.Services;
+using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -8,7 +9,7 @@ namespace Test.Pamaxie.Website
     /// <summary>
     /// Testing class for EmailSender
     /// </summary>
-    public class EmailSenderTest : Test
+    public class EmailSenderTest : Base.Test
     {
         public EmailSenderTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
