@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading;
 using Framework.ComponentModel;
 using MahApps.Metro.Controls.Dialogs;
@@ -14,7 +15,7 @@ namespace Pamaxie.ImageTooling.ViewModels
         private ObservableCollection<PoImageData> _imageData;
         private string _sourceDirectoryName;
         private string _outputDirectoryName;
-
+        private Stopwatch processingTimeStopwatch;
 
         private bool _isBusy;
         private bool _isReady;

@@ -234,6 +234,11 @@ namespace Pamaxie.ImageTooling.ViewModels
                 if (processingFilesProgressView.IsCanceled)
                     _workToken.Cancel();
                 processingFilesProgressView.SetProgress(currentProgress);
+
+                if (processingTimeStopwatch != null)
+                {
+                    SetProcessingMessage(processingFilesProgressView, "Analyzing Files, Current speed: " + Math.Round((processingTimeStopwatch.Elapsed.TotalMilliseconds / currentProgress), 2) + "ms Per file").ConfigureAwait(false);
+                }
             });
             _progressUpdateTimer.Change(300, Timeout.Infinite);
         }
@@ -312,7 +317,8 @@ namespace Pamaxie.ImageTooling.ViewModels
                         "Analyzing files");
                     processingProgress = 0;
 
-
+                    processingTimeStopwatch = new Stopwatch();
+                    processingTimeStopwatch.Start();
                     foreach (var file in LoadedImages)
                     {
                         try
@@ -396,6 +402,12 @@ namespace Pamaxie.ImageTooling.ViewModels
                 }
 
             }, _workToken.Token);
+
+            if (processingTimeStopwatch != null)
+            {
+                processingTimeStopwatch.Stop();
+                processingTimeStopwatch = null;
+            }
 
             if (_progressUpdateTimer != null)
             {
