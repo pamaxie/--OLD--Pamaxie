@@ -7,18 +7,22 @@ namespace Pamaxie.Data
     /// <summary>
     ///     Data for Application specific things
     /// </summary>
-    public class Application
+    public class Application : IDatabaseObject
     {
         /// <summary>
-        /// The ID of the application
+        /// <inheritdoc/>
         /// </summary>
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long ApplicationId { get; set; }
+        public string Key { get; set; }
         
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public DateTime TTL { get; set; }
+
         /// <summary>
         /// The App Token that is reached in to us for auth
         /// </summary>
-        [NotMapped] public string AppToken { get; set; }
+        public string AppToken { get; set; }
 
         /// <summary>
         /// The User who owns the application
