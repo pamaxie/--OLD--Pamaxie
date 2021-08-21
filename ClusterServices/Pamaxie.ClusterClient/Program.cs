@@ -9,7 +9,7 @@ namespace Pamaxie.ClusterClient
     {
         static async Task Main(string[] args)
         {
-            var input = new HelloRequest() {Name = "Tim"};
+            var input = new HelloRequest() {Authentication = "Tim"};
             var channel = GrpcChannel.ForAddress("https://localhost:5001");
             var client = new Greeter.GreeterClient(channel);
 

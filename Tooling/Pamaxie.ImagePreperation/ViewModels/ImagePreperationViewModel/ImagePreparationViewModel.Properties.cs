@@ -18,12 +18,6 @@ namespace Pamaxie.ImageTooling.ViewModels
             set => SetProperty(ref _selectedItem, value);
         }
 
-        public ObservableCollection<PoImageData> SelectedGroup
-        {
-            get => _selectedGroup;
-            set => SetProperty(ref _selectedGroup, value);
-        }
-
         public ObservableCollection<PoImageData> LoadedImages
         {
             get => _imageData;

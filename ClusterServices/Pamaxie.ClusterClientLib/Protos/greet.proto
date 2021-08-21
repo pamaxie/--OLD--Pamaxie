@@ -10,12 +10,23 @@ service Greeter {
   rpc SayHello (HelloRequest) returns (HelloReply);
 }
 
-// The request message containing the user's name.
+// The request message containing the image as well as .
 message HelloRequest {
-  string name = 1;
+  string authentication = 1;
+  string image = 2;
+  bool wantFormat = 3;
 }
 
 // The response message containing the greetings.
 message HelloReply {
+	enum MediaType{
+		UNKNOWN = 0;
+		IMAGE = 1;
+		VIDEO = 2;
+	}
   string message = 1;
+  string foundLabels = 2;
+  MediaType mediaType = 3;
+  string format = 4;
+
 }

@@ -21,5 +21,6 @@ namespace Pamaxie.ImageTooling.ViewModels
         private PoProcessingSettings _processingSettings;
         private PoImageData _selectedItem;
         private ObservableCollection<PoImageData> _selectedGroup;
+        private System.Threading.Timer _progressUpdateTimer;
     }
 }

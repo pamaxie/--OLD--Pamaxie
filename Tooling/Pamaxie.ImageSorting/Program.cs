@@ -166,20 +166,8 @@ namespace Pamaxie.ImageSorting
                 };
                 // Load model and predict output of sample data
                 ConsumeModel.Predict(input, out OutputProperties labelResult);
-                string folder = labelResult.PredictedLabel switch
-                {
-                    ImagePredictionResult.Gore =>
-                        GetLikelihoodFolder(labelResult.GoreLikelihood) + "%",
-                    ImagePredictionResult.None =>
-                        GetLikelihoodFolder(labelResult.NoneLikelihood) + "%",
-                    ImagePredictionResult.Pornographic => GetLikelihoodFolder(labelResult
-                        .PornographicLikelihood) + "%",
-                    ImagePredictionResult.Racy =>
-                        GetLikelihoodFolder(labelResult.RacyLikelihood) + "%",
-                    ImagePredictionResult.Violence => GetLikelihoodFolder(labelResult
-                        .ViolenceLikelihood) + "%",
-                    _ => throw new ArgumentOutOfRangeException()
-                };
+                
+                string folder = labelResult.PredictedLabel.ToString();
 
                 if (CurrentFileIdx < 4)
                 {

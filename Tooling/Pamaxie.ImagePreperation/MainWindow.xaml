@@ -26,8 +26,8 @@
             <TabItem Header="Image Preparation">
                 <views:ImagePreperationControl/>
             </TabItem>
-            <TabItem Header="Accuracy Validation">
-
+            <TabItem Header="Accuracy Validation and Comparison">
+                <views:ImageComparisonControl/>
             </TabItem>
         </TabControl>
     </Grid>

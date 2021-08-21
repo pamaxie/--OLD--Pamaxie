@@ -88,13 +88,31 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="20" FontWeight="Bold" Foreground="#9D6BFF" HorizontalAlignment="Left" Content="Output Settings"/>
-            <CheckBox Grid.Row="1" Grid.Column="0" Margin="5" IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInverterConverter}}"  IsChecked="{Binding ProcessingSettings.StopOnError}" Content="Stop on Error" ToolTip="This will stop the ENTIRE preparation process if a SINGLE error occurs. We don't recommend this on big data-sets."/>
-            <CheckBox Grid.Row="2" Grid.Column="0" Margin="5" IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInverterConverter}}"  IsChecked="{Binding ProcessingSettings.MirrorImages}" Content="Mirror Images" ToolTip="This will flip and rotate images to inflate data and ensure that images are not reliant on certain perspectives (This is usually not an issue with big data-sets)."/>
-            <CheckBox Grid.Row="3" Grid.Column="0" Margin="5" IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInverterConverter}}"  IsChecked="{Binding ProcessingSettings.ColorChange}" Content="Change Color" ToolTip="This will artificially apply color filters to the image to inflate data and ensure that colors aren't weighted too much."/>
+            <CheckBox Grid.Row="1" Grid.Column="0" Margin="5" 
+                      IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInverterConverter}}"  
+                      IsChecked="{Binding ProcessingSettings.StopOnError}" 
+                      Content="Stop on Error" 
+                      ToolTip="This will stop the ENTIRE preparation process if a SINGLE error occurs. We don't recommend this on big data-sets."/>
+            <CheckBox Grid.Row="2" Grid.Column="0" Margin="5" 
+                      IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInverterConverter}}"  
+                      IsChecked="{Binding ProcessingSettings.MirrorImages}" 
+                      Content="Mirror Images" 
+                      ToolTip="This will flip and rotate images to inflate data and ensure that images are not reliant on certain perspectives (This is usually not an issue with big data-sets)."/>
+            <CheckBox Grid.Row="3" Grid.Column="0" Margin="5" 
+                      IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInverterConverter}}"  
+                      IsChecked="{Binding ProcessingSettings.ColorChange}" 
+                      Content="Change Color" 
+                      ToolTip="This will artificially apply color filters to the image to inflate data and ensure that colors aren't weighted too much."/>
             <Label Grid.Row="4" Grid.Column="0"  Content="Width"></Label>
             <Label Grid.Row="4" Grid.Column="1"  Content="Height"></Label>
-            <TextBox Grid.Row="5" Grid.Column="0" Margin="5, 0, 0, 0" MaxLength="6" IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInverterConverter}}"  Text="{Binding ProcessingSettings.Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ToolTip="This specifies the width Images will be resized to when they get exported. If Height is empty we will scale it appropriately to preserve aspect."/>
-            <TextBox Grid.Row="5" Grid.Column="1" MaxLength="6" IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInverterConverter}}" Text="{Binding ProcessingSettings.Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ToolTip="This specifies the height Images will be resized to when they get exported. If the Width is empty we will scale it appropriately to preserve aspect ratio."/>
+            <TextBox Grid.Row="5" Grid.Column="0" Margin="5, 0, 0, 0" MaxLength="6" 
+                     IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInverterConverter}}"  
+                     Text="{Binding ProcessingSettings.Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                     ToolTip="This specifies the width Images will be resized to when they get exported. If Height is empty we will scale it appropriately to preserve aspect."/>
+            <TextBox Grid.Row="5" Grid.Column="1" MaxLength="6" 
+                     IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInverterConverter}}" 
+                     Text="{Binding ProcessingSettings.Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                    ToolTip="This specifies the height Images will be resized to when they get exported. If the Width is empty we will scale it appropriately to preserve aspect ratio."/>
         </Grid>
 
         <!-- Selected Image Preview -->
@@ -112,7 +130,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <ProgressBar Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" Margin="5" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"></ProgressBar>
+            <ProgressBar Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" Margin="5" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"/>
             <Button Grid.Row="2" Grid.Column="0" Command="{Binding StartImagePerpetrationAsync}" Margin="10, 5, 5, 5" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="MediumPurple" IsEnabled="{Binding IsReady, FallbackValue=true}">Start Prep</Button>
         </Grid>
 
