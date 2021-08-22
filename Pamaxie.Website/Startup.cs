@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
-using Pamaxie.Database.Extensions.Sql;
+using Pamaxie.Database.Extensions.DatabaseExtensions;
 using Pamaxie.Website.Services;
 
 namespace Pamaxie.Website 
@@ -85,11 +85,7 @@ namespace Pamaxie.Website
             //Adds access to the HTTP Context
             services.AddHttpContextAccessor();
             
-            if (!DbExtensions.SqlDbCheckup(out string error))
-            {
-                Console.WriteLine(error);
-                Environment.Exit(501);
-            }
+            //TODO Validate connection to Redis
         }
 
 

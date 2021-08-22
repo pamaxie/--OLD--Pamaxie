@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Pamaxie.Database.Sql;
-using Pamaxie.Extensions.Sql;
 
 namespace Test.Base
 {
@@ -15,7 +13,7 @@ namespace Test.Base
             get
             {
                 List<object[]> list = new List<object[]>();
-                foreach (string googleUserId in TestUserData.ListOfUsers.Select(_ => _.GoogleUserId))
+                foreach (string googleUserId in TestUserData.ListOfUsers.Select(_ => _.Key))
                 {
                     list.Add(new object[]
                     {
@@ -31,7 +29,7 @@ namespace Test.Base
             get
             {
                 List<object[]> list = new List<object[]>();
-                foreach (string googleUserId in TestUserData.ListOfUsers.Select(_ => _.GoogleUserId))
+                foreach (string googleUserId in TestUserData.ListOfUsers.Select(_ => _.Key))
                 {
                     SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
                     UserExtensions.DbContext = sqlDbContext;
@@ -50,7 +48,7 @@ namespace Test.Base
             get
             {
                 List<object[]> list = new List<object[]>();
-                foreach (string googleUserId in TestUserData.ListOfUsers.Select(_ => _.GoogleUserId))
+                foreach (string googleUserId in TestUserData.ListOfUsers.Select(_ => _.Key))
                 {
                     SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
                     UserExtensions.DbContext = sqlDbContext;
@@ -68,7 +66,7 @@ namespace Test.Base
         {
             get
             {
-                List<object[]> list = TestApplicationData.ListOfApplications.Select(_ => _.ApplicationId)
+                List<object[]> list = TestApplicationData.ListOfApplications.Select(_ => _.Key)
                     .Select(applicationId => new object[] {applicationId}).ToList();
                 return list.AsEnumerable();
             }

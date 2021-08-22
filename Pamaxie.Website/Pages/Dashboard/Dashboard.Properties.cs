@@ -17,8 +17,8 @@ namespace Pamaxie.Website.Pages
         [Inject] private IHttpContextAccessor HttpContextAccessor { get; set; }
         [Inject] private IDialogService DialogService { get; set; }
         [Inject] private UserService UserService { get; set; }
-        private List<Application> Applications { get; set; } = new();
-        private Application? NewApplication { get; set; } = null;
+        private List<PamaxieApplication> Applications { get; set; } = new();
+        private PamaxieApplication? NewApplication { get; set; } = null;
         private ProfileData? Profile { get; set; }
         private bool AcceptedTerms { get; set; }
         private bool AcceptedTos { get; set; }

@@ -5,7 +5,6 @@ using System.IO;
 using Pamaxie.Api.Data;
 using Pamaxie.Api.Security;
 using Pamaxie.Data;
-using Pamaxie.Extensions.Sql;
 
 namespace Pamaxie.Api.Controllers
 {
@@ -24,7 +23,7 @@ namespace Pamaxie.Api.Controllers
         /// <summary>
         /// Signs in a user via Basic authentication and returns a token.
         /// </summary>
-        /// <returns><see cref="AuthToken"/> Token for Authentication</returns>
+        /// <returns><see cref="AuthToken"/> Token for AppAuthCredentials</returns>
         [AllowAnonymous]
         [HttpPost("login")]
         public ActionResult<AuthToken> LoginTask()
@@ -33,7 +32,7 @@ namespace Pamaxie.Api.Controllers
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
 
-            Application? appData = JsonConvert.DeserializeObject<Application>(result);
+            PamaxieApplication? appData = JsonConvert.DeserializeObject<PamaxieApplication>(result);
 
             if (string.IsNullOrEmpty(appData?.AppToken) || default == appData.ApplicationId)
                 return Unauthorized(ErrorHandler.UnAuthorized());
@@ -56,10 +55,10 @@ namespace Pamaxie.Api.Controllers
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             
             if (string.IsNullOrEmpty(result))  return BadRequest(ErrorHandler.BadData());
-            Application? appData;
+            PamaxieApplication? appData;
             try
             {
-                appData = JsonConvert.DeserializeObject<Application>(result);
+                appData = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             }
             catch
             {

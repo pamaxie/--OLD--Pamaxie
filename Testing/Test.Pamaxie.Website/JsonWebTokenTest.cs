@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using Pamaxie.Database.Extensions.Sql.Data;
 using Pamaxie.Website.Models;
 using Pamaxie.Website.Services;
 using Xunit;

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Pamaxie.Api.Data;
-using Pamaxie.Database.Redis.DataClasses;
 using PamaxieML.Model;
 using System.IO;
 using System.Threading.Tasks;

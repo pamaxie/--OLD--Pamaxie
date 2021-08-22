@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Pamaxie.Data;
+using Pamaxie.Data.Interfaces;
 
 namespace Test.Base
 {
@@ -14,52 +15,47 @@ namespace Test.Base
         /// <summary>
         /// List of Users for the SqlDbContext.
         /// </summary>
-        public static readonly List<User> ListOfUsers = new()
+        public static readonly List<IPamaxieUser> ListOfUsers = new()
         {
-            new User
+            new PamaxieUser
             {
-                GoogleUserId = "108533958726952849891",
-                Id = 2,
-                Username = "Xystosie",
-                Email = "Saxy@fakemail.com",
+                Key = "108533958726952849891",
+                UserName = "Xystosie",
+                EmailAddress = "Saxy@fakemail.com",
                 EmailVerified = false,
-                DeletedAccount = false
+                Deleted = false
             },
-            new User
+            new PamaxieUser
             {
-                GoogleUserId = "102617494281791801620",
-                Id = 3,
-                Username = "Indrakitten",
-                Email = "Inar@fakemail.com",
+                Key = "102617494281791801620",
+                UserName = "Indrakitten",
+                EmailAddress = "Inar@fakemail.com",
                 EmailVerified = true,
-                DeletedAccount = false
+                Deleted = false
             },
-            new User
+            new PamaxieUser
             {
-                GoogleUserId = "103932469084294046511",
-                Id = 4,
-                Username = "Maxster",
-                Email = "Osma@fakemail.com",
+                Key = "103932469084294046511",
+                UserName = "Maxster",
+                EmailAddress = "Osma@fakemail.com",
                 EmailVerified = false,
-                DeletedAccount = false
+                Deleted = false
             },
-            new User
+            new PamaxieUser
             {
-                GoogleUserId = "104669818103955818761",
-                Id = 5,
-                Username = "Paulo",
-                Email = "Pafe@fakemail.com",
+                Key = "104669818103955818761",
+                UserName = "Paulo",
+                EmailAddress = "Pafe@fakemail.com",
                 EmailVerified = true,
-                DeletedAccount = false
+                Deleted = false
             },
-            new User
+            new PamaxieUser
             {
-                GoogleUserId = "101321258707856828644",
-                Id = 6,
-                Username = "Mana",
-                Email = "Maje@fakemail.com",
+                Key = "101321258707856828644",
+                UserName = "Mana",
+                EmailAddress = "Maje@fakemail.com",
                 EmailVerified = false,
-                DeletedAccount = false
+                Deleted = false
             }
         };
 
@@ -79,28 +75,26 @@ namespace Test.Base
                     if (!string.IsNullOrEmpty(email))
                     {
                         //Add the user to the list of users
-                        User user = new()
+                        PamaxieUser pamaxieUser = new()
                         {
-                            GoogleUserId = "101963629560135630792",
-                            Id = 1,
-                            Username = "PersonalUser",
-                            Email = email,
+                            Key = "101963629560135630792",
+                            UserName = "PersonalUser",
+                            EmailAddress = email,
                             EmailVerified = false,
-                            DeletedAccount = false
+                            Deleted = false
                         };
-                        ListOfUsers.Add(user);
+                        ListOfUsers.Add(pamaxieUser);
                         return;
                     }
                 }
             }
-            ListOfUsers.Add(new User()
+            ListOfUsers.Add(new PamaxieUser()
             {
-                GoogleUserId = "101963629560135630792",
-                Id = 1,
-                Username = "",
-                Email = "",
+                Key = "101963629560135630792",
+                UserName = "",
+                EmailAddress = "",
                 EmailVerified = false,
-                DeletedAccount = true
+                Deleted = true
             });
         }
     }

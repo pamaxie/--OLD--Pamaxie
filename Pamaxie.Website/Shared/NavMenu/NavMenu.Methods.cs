@@ -17,7 +17,7 @@ namespace Pamaxie.Website.Shared
          {
              bool hasAccount = false;
              ClaimsPrincipal? user = HttpContextAccessor.HttpContext?.User;
-             Profile = user?.GetGoogleAuthData(out hasAccount)?.GetProfileData();
+             Profile = user?.GetGoogleAuthData(out hasAccount)?;
              UserHasAccount = hasAccount;
              return base.OnInitializedAsync();
          }

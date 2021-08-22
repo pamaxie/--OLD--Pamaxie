@@ -3,9 +3,6 @@ using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Pamaxie.Data;
-using Pamaxie.Database.Extensions.Sql.Data;
-using Pamaxie.Database.Sql;
-using Pamaxie.Extensions.Sql;
 using Pamaxie.Website.Authentication;
 using Pamaxie.Website.Services;
 using Test.Base;
@@ -30,10 +27,6 @@ namespace Test.Pamaxie.Website
         [MemberData(nameof(AllVerifiedUsers))]
         public void IsEmailOfCurrentUserVerified_Success(string googleUserId)
         {
-            //Mock Database
-            SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
-            UserExtensions.DbContext = sqlDbContext;
-
             //Get Google Claims from the googleUserId
             Claim[] googleClaims = TestGoogleClaimData.ListOfGoogleUserPrincipleClaims.FirstOrDefault(_ => _[0].Value == googleUserId);
             Assert.NotNull(googleClaims);
@@ -104,15 +97,15 @@ namespace Test.Pamaxie.Website
             ProfileData profile = httpContextAccessor.HttpContext?.User.GetGoogleAuthData(out bool _)?.GetProfileData();
             Assert.NotNull(profile);
 
-            User unverifiedUser = UserExtensions.GetUser(googleUserId);
-            TestOutputHelper.WriteLine("Email verified: " + unverifiedUser.EmailVerified);
+            PamaxieUser unverifiedPamaxieUser = UserExtensions.GetUser(googleUserId);
+            TestOutputHelper.WriteLine("Email verified: " + unverifiedPamaxieUser.EmailVerified);
 
             UserService userService = new(Configuration, httpContextAccessor, null);
             string token = userService.GenerateEmailConfirmationToken(profile);
             Assert.True(userService.ConfirmEmail(token));
             
-            User verifiedUser = UserExtensions.GetUser(googleUserId);
-            TestOutputHelper.WriteLine("Email verified: " + verifiedUser.EmailVerified);
+            PamaxieUser verifiedPamaxieUser = UserExtensions.GetUser(googleUserId);
+            TestOutputHelper.WriteLine("Email verified: " + verifiedPamaxieUser.EmailVerified);
             Assert.True(userService.IsEmailOfCurrentUserVerified());
         }
     }

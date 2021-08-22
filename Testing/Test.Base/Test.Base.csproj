@@ -23,6 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Assemblies\Pamaxie.Database.Extensions.Sql\Pamaxie.Database.Extensions.Sql.csproj" />
+      <ProjectReference Include="..\..\Assemblies\Pamaxie.Database.Design\Pamaxie.Database.Design.csproj" />
       <ProjectReference Include="..\..\Assemblies\Pamaxie.Database.SQL\Pamaxie.Database.Sql.csproj" />
       <ProjectReference Include="..\..\Assemblies\Pamaxie.Data\Pamaxie.Data.csproj" />
     </ItemGroup>

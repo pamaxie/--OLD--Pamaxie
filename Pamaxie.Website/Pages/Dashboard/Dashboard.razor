@@ -51,7 +51,7 @@
                 @if (Applications.Any())
                 {
                     <MudExpansionPanels Class="dynamicPadding">
-                        @foreach (Application application in Applications)
+                        @foreach (PamaxieApplication application in Applications)
                         {
                             <MudExpansionPanel Text="@application.ApplicationName">
                                 <MudTextField T="string" Label="Application Id" Text="@application.ApplicationId.ToString()" Disabled="true"></MudTextField>

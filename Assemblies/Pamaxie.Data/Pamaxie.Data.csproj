@@ -5,7 +5,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Data\Urls" />
+      <Compile Remove="Data\Urls\**" />
+      <EmbeddedResource Remove="Data\Urls\**" />
+      <None Remove="Data\Urls\**" />
     </ItemGroup>
 
 </Project>

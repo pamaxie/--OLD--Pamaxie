@@ -36,31 +36,31 @@ namespace Pamaxie.Website.Pages
             return Task.CompletedTask;
         }
 
-        private async Task DeleteApplication(Application application)
+        private async Task DeleteApplication(PamaxieApplication pamaxieApplication)
         {
             bool? result = await DialogService.ShowMessageBox(
-                $"Do you really wanna delete {application.ApplicationName}?",
+                $"Do you really wanna delete {pamaxieApplication.ApplicationName}?",
                 "Deleting your applications can't be undone! It will join the dark side of our data and be gone forever! " +
                 "(Like seriously we delete it entirely from all of our services and wipe it from existence, there is nothing we can do once its gone.)",
                 "Jep", cancelText: "Nope");
             if (result is true && Profile is not null)
             {
-                application.DeleteApplication();
+                pamaxieApplication.DeleteApplication();
                 Applications = ApplicationExtensions.GetApplications(Profile.Id).ToList();
                 StateHasChanged();
             }
         }
 
-        private async Task SwitchIfApplicationEnabled(Application application)
+        private async Task SwitchIfApplicationEnabled(PamaxieApplication pamaxieApplication)
         {
             bool? result = await DialogService.ShowMessageBox(
-                $"Do you really wanna disable {application.ApplicationName}?",
+                $"Do you really wanna disable {pamaxieApplication.ApplicationName}?",
                 "Disabling your application will block anyone from accessing it. You can re-enable it any time however! " +
                 "This will just block access to it if you suspect issues with your token and want to validate everything is ok.",
                 "Jep", cancelText: "Nope");
             if (result is true)
             {
-                application.SetApplicationStatus(application.Disabled);
+                pamaxieApplication.SetApplicationStatus(pamaxieApplication.Disabled);
 
                 if (Profile != null)
                     Applications = ApplicationExtensions.GetApplications(Profile.Id).ToList();
@@ -102,7 +102,7 @@ namespace Pamaxie.Website.Pages
                 return;
             }
 
-            NewApplication = new Application()
+            NewApplication = new PamaxieApplication()
             {
                 ApplicationId = ApplicationExtensions.GetLastIndex(),
                 UserId = Profile.Id,
@@ -118,7 +118,7 @@ namespace Pamaxie.Website.Pages
                 return;
 
             NewApplication.AppToken = PwField1.Value;
-            ApplicationExtensions.CreateApplication(NewApplication, out Application createdApp);
+            ApplicationExtensions.CreateApplication(NewApplication, out PamaxieApplication createdApp);
             Applications.Add(createdApp);
             NewApplication = null;
         }

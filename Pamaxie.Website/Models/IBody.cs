@@ -1,5 +1,4 @@
 ﻿using System;
-using Pamaxie.Database.Extensions.Sql.Data;
 
 namespace Pamaxie.Website.Models
 {

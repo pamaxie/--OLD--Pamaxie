@@ -2,11 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Pamaxie.Database.Extensions</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="BaseInterfaces\" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Pamaxie.Data\Pamaxie.Data.csproj" />

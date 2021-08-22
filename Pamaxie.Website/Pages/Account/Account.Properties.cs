@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
 using MudBlazor;
-using Pamaxie.Database.Extensions.Sql.Data;
 
 #pragma warning disable 8618
 

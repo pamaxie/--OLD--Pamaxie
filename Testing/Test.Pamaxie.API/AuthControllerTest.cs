@@ -8,8 +8,6 @@ using Pamaxie.Api.Controllers;
 using Pamaxie.Api.Data;
 using Pamaxie.Api.Security;
 using Pamaxie.Data;
-using Pamaxie.Database.Sql;
-using Pamaxie.Extensions.Sql;
 using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
@@ -35,8 +33,8 @@ namespace Test.Pamaxie.API_UnitTesting
         public void Login_Succeed(long applicationId)
         {
             //Get application
-            Application application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.ApplicationId == applicationId);
-            Assert.NotNull(application);
+            PamaxieApplication pamaxieApplication = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.ApplicationId == applicationId);
+            Assert.NotNull(pamaxieApplication);
             
             //Mock Database
             SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
@@ -49,7 +47,7 @@ namespace Test.Pamaxie.API_UnitTesting
             };
 
             //Parse the application to a request body and send it to the controller
-            Stream body = CreateStream(application);
+            Stream body = CreateStream(pamaxieApplication);
             authController.Request.Body = body;
             
             ActionResult<AuthToken> result = authController.LoginTask();

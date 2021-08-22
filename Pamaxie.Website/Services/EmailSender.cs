@@ -5,7 +5,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
-using Pamaxie.Database.Extensions.Sql.Data;
+using Pamaxie.Data.Interfaces;
 using WebMarkupMin.Core;
 
 namespace Pamaxie.Website.Services
@@ -34,7 +34,7 @@ namespace Pamaxie.Website.Services
         /// Sends a confirmation email to the registered user.
         /// </summary>
         /// <param name="profile"></param>
-        public async void SendConfirmationEmail(ProfileData profile)
+        public async void SendConfirmationEmail(IPamaxieUser profile)
         {
             string code = _userService.GenerateEmailConfirmationToken(profile);
             string callbackUrl = _navigationManager.ToAbsoluteUri($"ConfirmEmail/{code}/").ToString();

@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using MudBlazor;
 using Pamaxie.Data;
-using Pamaxie.Database.Extensions.Sql.Data;
-using Pamaxie.Extensions.Sql;
 using Pamaxie.Website.Authentication;
 using Pamaxie.Website.Models;
 
@@ -43,8 +41,8 @@ namespace Pamaxie.Website.Services
             ProfileData? profile = claimUser.GetGoogleAuthData(out _)?.GetProfileData();
             if (profile is null)
                 return false;
-            User user = UserExtensions.GetUser(profile.GoogleClaimUserId);
-            return user is {EmailVerified: true};
+            PamaxieUser pamaxieUser = UserExtensions.GetUser(profile.GoogleClaimUserId);
+            return pamaxieUser is {EmailVerified: true};
         }
         
         /// <summary>
@@ -68,8 +66,8 @@ namespace Pamaxie.Website.Services
             ConfirmEmailBody? body = JsonWebToken.Decode<ConfirmEmailBody>(token, _secret) as ConfirmEmailBody;
             if (body?.Purpose is not EmailPurpose.EMAIL_CONFIRMATION)
                 return false;
-            User user = UserExtensions.GetUser(body.ProfileData.GoogleClaimUserId);
-            return user.Email == body.ProfileData.EmailAddress && body.ProfileData.VerifyUser();
+            PamaxieUser pamaxieUser = UserExtensions.GetUser(body.ProfileData.GoogleClaimUserId);
+            return pamaxieUser.Email == body.ProfileData.EmailAddress && body.ProfileData.VerifyUser();
         }
         
         /// <summary>

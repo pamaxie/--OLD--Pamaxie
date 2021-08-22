@@ -4,7 +4,7 @@
 namespace Pamaxie.Data
 {
     /// <summary>
-    /// All Countries and Regions
+    /// All Countries and Regions that we use for our service
     /// </summary>
     public enum Countries
     {

@@ -55,7 +55,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Base", "Testing\Test.B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.Database.Extensions.Server", "Assemblies\Pamaxie.Database.Extensions.Server\Pamaxie.Database.Extensions.Server.csproj", "{53F922F3-BD84-49C8-95FA-D7E4FE78398C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.Database.Extensions", "Assemblies\Pamaxie.Database.Extensions\Pamaxie.Database.Extensions.csproj", "{3C115888-2DF8-4536-AFF2-698FA6FF04FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.Database.Design", "Assemblies\Pamaxie.Database.Design\Pamaxie.Database.Design.csproj", "{3C115888-2DF8-4536-AFF2-698FA6FF04FE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.Database.Extensions.Client", "Pamaxie.Database.Extensions.Client\Pamaxie.Database.Extensions.Client.csproj", "{24091411-AB44-4860-97E0-D74800EF7024}"
 EndProject

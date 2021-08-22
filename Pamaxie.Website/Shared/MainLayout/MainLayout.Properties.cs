@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Http;
-using Pamaxie.Database.Extensions.Sql.Data;
+using Pamaxie.Data.Interfaces;
 
 #pragma warning disable 8618
 
@@ -13,6 +13,6 @@ namespace Pamaxie.Website.Shared
         [Inject] private NavigationManager NavigationManager { get; set; }
         [Inject] private IHttpContextAccessor HttpContextAccessor { get; set; }
         [Inject] private ProtectedLocalStorage ProtectedLocalStorage { get; set; }
-        private ProfileData? Profile { get; set; }
+        private IPamaxieUser? Profile { get; set; }
     }
 }

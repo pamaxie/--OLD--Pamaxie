@@ -1,5 +1,4 @@
-﻿using Pamaxie.Database.Extensions.Sql.Data;
-using Pamaxie.Website.Services;
+﻿using Pamaxie.Website.Services;
 using Test.Base;
 using Xunit;
 using Xunit.Abstractions;

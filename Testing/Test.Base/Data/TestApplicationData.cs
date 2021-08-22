@@ -13,9 +13,9 @@ namespace Test.Base
         /// <summary>
         /// List of Users for the SqlDbContext.
         /// </summary>
-        public static readonly List<Application> ListOfApplications = new()
+        public static readonly List<PamaxieApplication> ListOfApplications = new()
         {
-            new Application()
+            new PamaxieApplication()
             {
                 ApplicationId = 2,
                 AppToken = "Apple",
@@ -26,7 +26,7 @@ namespace Test.Base
                 Disabled = false,
                 Deleted = false
             },
-            new Application()
+            new PamaxieApplication()
             {
                 ApplicationId = 3,
                 AppToken = "Pie",
@@ -37,7 +37,7 @@ namespace Test.Base
                 Disabled = false,
                 Deleted = false
             },
-            new Application()
+            new PamaxieApplication()
             {
                 ApplicationId = 4,
                 AppToken = "Orange",
@@ -48,7 +48,7 @@ namespace Test.Base
                 Disabled = false,
                 Deleted = false
             },
-            new Application()
+            new PamaxieApplication()
             {
                 ApplicationId = 5,
                 AppToken = "Pear",
@@ -59,7 +59,7 @@ namespace Test.Base
                 Disabled = false,
                 Deleted = false
             },
-            new Application()
+            new PamaxieApplication()
             {
                 ApplicationId = 6,
                 AppToken = "Cake",
@@ -88,7 +88,7 @@ namespace Test.Base
                     if (!string.IsNullOrEmpty(appToken))
                     {
                         //Add the user to the list of users
-                        Application application = new()
+                        PamaxieApplication pamaxieApplication = new()
                         {
                             ApplicationId = 1,
                             AppToken = appToken,
@@ -99,12 +99,12 @@ namespace Test.Base
                             Disabled = false,
                             Deleted = false
                         };
-                        ListOfApplications.Add(application);
+                        ListOfApplications.Add(pamaxieApplication);
                         return;
                     }
                 }
             }
-            ListOfApplications.Add(new Application()
+            ListOfApplications.Add(new PamaxieApplication()
             {
                 ApplicationId = 1,
                 AppToken = "qwerty",

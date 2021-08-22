@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Security.Claims;
 using Pamaxie.Data;
-using Pamaxie.Extensions.Sql;
 using Pamaxie.Website.Authentication.Data;
 
 namespace Pamaxie.Website.Authentication
@@ -10,7 +9,7 @@ namespace Pamaxie.Website.Authentication
     public static class ClaimExtension
     {
         /// <summary>
-        /// Gets the Google Authentication claim via the claims principle
+        /// Gets the Google AppAuthCredentials claim via the claims principle
         /// </summary>
         /// <param name="principle"><see cref="ClaimsPrincipal"/> to get the google claims from</param>
         /// <param name="hasAccount"></param>
@@ -55,10 +54,10 @@ namespace Pamaxie.Website.Authentication
             }
 
             //Check if user exists if yes get their id if no create one!
-            User user = UserExtensions.GetUser(googleClaim.GoogleClaimUserId);
-            if (user is not {DeletedAccount: false}) return googleClaim;
+            PamaxieUser pamaxieUser = UserExtensions.GetUser(googleClaim.GoogleClaimUserId);
+            if (pamaxieUser is not {DeletedAccount: false}) return googleClaim;
             hasAccount = true;
-            googleClaim.Id = user.Id;
+            googleClaim.Id = pamaxieUser.Id;
             return googleClaim;
         }
     }

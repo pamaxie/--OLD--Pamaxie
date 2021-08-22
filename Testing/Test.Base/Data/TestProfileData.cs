@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Pamaxie.Database.Extensions.Sql.Data;
+using Pamaxie.Data;
+using Pamaxie.Data.Interfaces;
 
 namespace Test.Pamaxie.Website
 {
@@ -8,10 +9,9 @@ namespace Test.Pamaxie.Website
         private static IConfiguration Configuration { get; } =
             new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
         
-        public static ProfileData Profile { get; } = new()
+        public static IPamaxieUser PamaxieUser { get; } = new PamaxieUser()
         {
-            Id = 1,
-            GoogleClaimUserId = "101963629560135630792",
+            Key = "101963629560135630792",
             EmailAddress = Configuration.GetSection("UserData").GetValue<string>("Email"),
             UserName = "PersonalUser",
             ProfilePictureAddress = "https://lh3.googleusercontent.com/-K6jEW8D8F4E/YRy0Zw8i-OI/AAAAAAAAAMQ/pJE0bflfklI1iGnB5zqUspjINcPo1yJ3wCMICGAYYCw/s96-c",

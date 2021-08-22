@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Pamaxie.Data;
+using Pamaxie.Database.Extensions;
 using Xunit.Abstractions;
 
 namespace Test.Base
@@ -9,7 +11,7 @@ namespace Test.Base
 
         protected static IConfiguration Configuration { get; } =
             new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
-
+        
         // ReSharper disable once MemberCanBeProtected.Global //Must be Public!
         public Test(ITestOutputHelper testOutputHelper)
         {
