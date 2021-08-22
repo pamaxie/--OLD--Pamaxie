@@ -15,10 +15,13 @@ using Xunit.Abstractions;
 namespace Test.Pamaxie.API_UnitTesting
 {
     /// <summary>
-    /// Testing class for AuthController
+    /// Testing class for <see cref="AuthController"/>
     /// </summary>
     public class AuthControllerTest : Base.Test
     {
+        /// <summary>
+        /// <inheritdoc cref="MemberData.AllApplications"/>
+        /// </summary>
         public static IEnumerable<object[]> AllApplications => MemberData.AllApplications;
         
         public AuthControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
@@ -26,15 +29,16 @@ namespace Test.Pamaxie.API_UnitTesting
         }
         
         /// <summary>
-        /// 
+        /// TODO
         /// </summary>
+        /// <param name="applicationKey">The application key from inlined data</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void Login_Succeed(long applicationId)
+        public void Login_Succeed(string applicationKey)
         {
             //Get application
-            PamaxieApplication pamaxieApplication = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.ApplicationId == applicationId);
-            Assert.NotNull(pamaxieApplication);
+            PamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            Assert.NotNull(application);
             
             //Mock Database
             SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
@@ -47,7 +51,7 @@ namespace Test.Pamaxie.API_UnitTesting
             };
 
             //Parse the application to a request body and send it to the controller
-            Stream body = CreateStream(pamaxieApplication);
+            Stream body = CreateStream(application);
             authController.Request.Body = body;
             
             ActionResult<AuthToken> result = authController.LoginTask();

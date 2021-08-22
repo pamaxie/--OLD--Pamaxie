@@ -7,7 +7,7 @@ namespace Test.Base
     public class MockUserInteraction : IUserInteraction
     {
         
-        public PamaxieApplication Get(string key)
+        public PamaxieUser Get(string key)
         {
             throw new System.NotImplementedException();
         }

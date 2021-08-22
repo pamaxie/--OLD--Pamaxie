@@ -6,12 +6,12 @@ using Moq;
 namespace Test.Base
 {
     /// <summary>
-    /// Class containing method for mocking IHttpContextAccessor.
+    /// Class containing method for mocking <see cref="IHttpContextAccessor"/>.
     /// </summary>
     public static class MockIHttpContextAccessor
     {
         /// <summary>
-        /// 
+        /// Mocks the <see cref="IHttpContextAccessor"/> for testing usage
         /// </summary>
         /// <param name="userClaims">Claims of the user who is logged in</param>
         /// <returns>Mocked IHttpContextAccessor</returns>

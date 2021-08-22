@@ -15,7 +15,6 @@ namespace Test.Base
         /// List of Google user principle claims.
         /// Used to act as a user being logged into the website.
         /// </summary>
-
         public static readonly List<Claim[]> ListOfGoogleUserPrincipleClaims = new()
         {
             new[]
@@ -55,7 +54,7 @@ namespace Test.Base
             {
                 new Claim(ClaimTypes.NameIdentifier, "104669818103955818761", ClaimValueTypes.String, "Google"),
                 new(ClaimTypes.Name, "Paulo", ClaimValueTypes.String, "Google"),
-                new(ClaimTypes.GivenName, "Paulusz", ClaimValueTypes.String, "Google"),
+                new(ClaimTypes.GivenName, "Paulus", ClaimValueTypes.String, "Google"),
                 new(ClaimTypes.Surname, "Ferdinand", ClaimValueTypes.String, "Google"),
                 new(ClaimTypes.Email, "Pafe@fakemail.com", ClaimValueTypes.String, "Google"),
                 new("urn:google:image",
