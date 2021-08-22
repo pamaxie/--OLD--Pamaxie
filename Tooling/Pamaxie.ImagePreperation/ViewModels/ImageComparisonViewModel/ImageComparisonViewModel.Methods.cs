@@ -319,6 +319,8 @@ namespace Pamaxie.ImageTooling.ViewModels
 
                     processingTimeStopwatch = new Stopwatch();
                     processingTimeStopwatch.Start();
+                    // Add input data
+                    ModelInput input = new ModelInput();
                     foreach (var file in LoadedImages)
                     {
                         try
@@ -326,13 +328,9 @@ namespace Pamaxie.ImageTooling.ViewModels
                             if (imagesToUse != null && !imagesToUse.Contains(file.FileLocation))
                                 continue;
 
-                            // Add input data
-                            ModelInput input = new ModelInput
-                            {
-                                ImageSource = file.FileLocation
-                            };
+                            input.ImageSource = file.FileLocation;
                             // Load model and predict output of sample data
-                            ConsumeModel.Predict(input, out OutputProperties labelResult);
+                            input.Predict(out OutputProperties labelResult);
                             string folder = labelResult.PredictedLabel.ToString();
                             if (ComparisonSettings.PercentileFolders)
                             {
