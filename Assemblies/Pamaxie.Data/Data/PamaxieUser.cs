@@ -40,6 +40,11 @@ namespace Pamaxie.Data
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        public bool EmailVerified { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public string ProfilePictureAddress { get; set; }
 
         /// <summary>
@@ -51,10 +56,5 @@ namespace Pamaxie.Data
         /// <inheritdoc/>
         /// </summary>
         public bool Deleted { get; set; }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public bool EmailVerified { get; set; }
     }
 }

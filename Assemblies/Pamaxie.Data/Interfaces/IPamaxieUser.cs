@@ -24,6 +24,11 @@
         /// The Email-Address the user used to register with our services
         /// </summary>
         public string EmailAddress { get; set; }
+        
+        /// <summary>
+        /// Was the email of the user verified
+        /// </summary>
+        public bool EmailVerified { get; set; }
 
         /// <summary>
         /// The url / address where the profile picture of the user resides
@@ -41,10 +46,5 @@
         /// If the user was deleted by request
         /// </summary>
         public bool Deleted { get; set; }
-        
-        /// <summary>
-        /// Was the email of the user verified
-        /// </summary>
-        public bool EmailVerified { get; set; }
     }
 }

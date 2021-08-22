@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Pamaxie.Data;
 
 namespace Test.Base
 {
@@ -8,23 +9,16 @@ namespace Test.Base
     /// </summary>
     public static class MemberData
     {
-        public static IEnumerable<object[]> AllGoogleClaimUsers
-        {
-            get
-            {
-                List<object[]> list = new List<object[]>();
-                foreach (string googleUserId in TestUserData.ListOfUsers.Select(_ => _.Key))
-                {
-                    list.Add(new object[]
-                    {
-                        googleUserId
-                    });
-                }
-                return list.AsEnumerable();
-            }
-        }
-        
-        public static IEnumerable<object[]> AllVerifiedGoogleClaimUsers
+        /// <summary>
+        /// TODO
+        /// </summary>
+        public static IEnumerable<object[]> AllUsers => TestUserData.ListOfUsers.Select(_ => _.Key)
+            .Select(googleUserId => new object[] {googleUserId}).AsEnumerable();
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        public static IEnumerable<object[]> AllVerifiedUsers
         {
             get
             {
@@ -33,17 +27,21 @@ namespace Test.Base
                 {
                     SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
                     UserExtensions.DbContext = sqlDbContext;
-                    if(!UserExtensions.GetUser(googleUserId).EmailVerified) continue;
+                    if (!UserExtensions.GetUser(googleUserId).EmailVerified) continue;
                     list.Add(new object[]
                     {
                         googleUserId
                     });
                 }
+
                 return list.AsEnumerable();
             }
         }
-        
-        public static IEnumerable<object[]> AllUnverifiedGoogleClaimUsers
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        public static IEnumerable<object[]> AllUnverifiedUsers
         {
             get
             {
@@ -52,16 +50,26 @@ namespace Test.Base
                 {
                     SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
                     UserExtensions.DbContext = sqlDbContext;
-                    if(UserExtensions.GetUser(googleUserId).EmailVerified) continue;
+                    if (UserExtensions.GetUser(googleUserId).EmailVerified) continue;
                     list.Add(new object[]
                     {
                         googleUserId
                     });
                 }
+
                 return list.AsEnumerable();
             }
         }
-        
+
+        /// <summary>
+        /// Contains the ID of the personal testing user
+        /// </summary>
+        public static IEnumerable<object[]> PersonalUser =>
+            new List<object[]> {new object[] {"101963629560135630792"}}.AsEnumerable();
+
+        /// <summary>
+        /// TODO
+        /// </summary>
         public static IEnumerable<object[]> AllApplications
         {
             get
