@@ -1,4 +1,4 @@
-﻿namespace Pamaxie.Data.Interfaces
+﻿namespace Pamaxie.Data
 {
     /// <summary>
     /// This designs the basic implementation of a user to be stored inside the Database

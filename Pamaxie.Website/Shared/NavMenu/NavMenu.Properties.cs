@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http;
 using MudBlazor;
-using Pamaxie.Data.Interfaces;
-using Pamaxie.Database.Extensions.Sql.Data;
+using Pamaxie.Data;
 using Pamaxie.Website.Services;
 
 #pragma warning disable 8618
@@ -22,7 +21,7 @@ namespace Pamaxie.Website.Shared
         //Render Frag for rendering the child content of the Website
         [Parameter] public RenderFragment ChildContent { get; set; }
 
-        private IPamaxieUser? Profile { get; set; }
+        private IPamaxieUser? User { get; set; }
         private bool UserHasAccount { get; set; } = true;
         private bool ShowCreateAccount { get; set; }
 

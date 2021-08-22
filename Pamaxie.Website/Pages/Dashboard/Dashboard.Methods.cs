@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Pamaxie.Data;
-using Pamaxie.Extensions.Sql;
 using Pamaxie.Website.Authentication;
 
 namespace Pamaxie.Website.Pages
@@ -19,9 +17,9 @@ namespace Pamaxie.Website.Pages
             if (user == null)
                 return Task.CompletedTask;
 
-            Profile = user.GetGoogleAuthData(out bool hasAccount)?.GetProfileData();
+            User = user.GetGoogleAuthData(out bool hasAccount);
             //Something weird is going on. Logout the user to make sure we are not de-syncing or anything.
-            if (Profile == null)
+            if (User == null)
             {
                 NavigationManager.NavigateTo("/Logout", true);
                 return Task.CompletedTask;
@@ -31,27 +29,27 @@ namespace Pamaxie.Website.Pages
             if (!hasAccount)
                 return Task.CompletedTask;
             
-            Applications = ApplicationExtensions.GetApplications(Profile.Id).ToList();
+            Applications = ApplicationExtensions.GetApplications(User.Key).ToList();
             StateHasChanged();
             return Task.CompletedTask;
         }
 
-        private async Task DeleteApplication(PamaxieApplication pamaxieApplication)
+        private async Task DeleteApplication(IPamaxieApplication pamaxieApplication)
         {
             bool? result = await DialogService.ShowMessageBox(
                 $"Do you really wanna delete {pamaxieApplication.ApplicationName}?",
                 "Deleting your applications can't be undone! It will join the dark side of our data and be gone forever! " +
                 "(Like seriously we delete it entirely from all of our services and wipe it from existence, there is nothing we can do once its gone.)",
                 "Jep", cancelText: "Nope");
-            if (result is true && Profile is not null)
+            if (result is true && User is not null)
             {
                 pamaxieApplication.DeleteApplication();
-                Applications = ApplicationExtensions.GetApplications(Profile.Id).ToList();
+                Applications = ApplicationExtensions.GetApplications(User.Key).ToList();
                 StateHasChanged();
             }
         }
 
-        private async Task SwitchIfApplicationEnabled(PamaxieApplication pamaxieApplication)
+        private async Task SwitchIfApplicationEnabled(IPamaxieApplication pamaxieApplication)
         {
             bool? result = await DialogService.ShowMessageBox(
                 $"Do you really wanna disable {pamaxieApplication.ApplicationName}?",
@@ -62,8 +60,8 @@ namespace Pamaxie.Website.Pages
             {
                 pamaxieApplication.SetApplicationStatus(pamaxieApplication.Disabled);
 
-                if (Profile != null)
-                    Applications = ApplicationExtensions.GetApplications(Profile.Id).ToList();
+                if (User != null)
+                    Applications = ApplicationExtensions.GetApplications(User.Key).ToList();
                 StateHasChanged();
             }
         }
@@ -93,7 +91,7 @@ namespace Pamaxie.Website.Pages
 
         private void CreateEmptyApplication()
         {
-            if (Profile == null)
+            if (User == null)
                 return;
 
             if (!UserService.IsEmailOfCurrentUserVerified())
@@ -104,8 +102,8 @@ namespace Pamaxie.Website.Pages
 
             NewApplication = new PamaxieApplication()
             {
-                ApplicationId = ApplicationExtensions.GetLastIndex(),
-                UserId = Profile.Id,
+                Key = ApplicationExtensions.GetLastIndex(),
+                OwnerKey = User.Key,
                 Disabled = false,
                 LastAuth = DateTime.Now,
                 RateLimited = false
@@ -118,7 +116,7 @@ namespace Pamaxie.Website.Pages
                 return;
 
             NewApplication.AppToken = PwField1.Value;
-            ApplicationExtensions.CreateApplication(NewApplication, out PamaxieApplication createdApp);
+            ApplicationExtensions.CreateApplication(NewApplication, out IPamaxieApplication createdApp);
             Applications.Add(createdApp);
             NewApplication = null;
         }

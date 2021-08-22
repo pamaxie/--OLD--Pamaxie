@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Http;
-using Pamaxie.Data.Interfaces;
+using Pamaxie.Data;
 
 #pragma warning disable 8618
 

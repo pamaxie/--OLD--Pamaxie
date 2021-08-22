@@ -1,4 +1,5 @@
 ﻿using System;
+using Pamaxie.Data;
 
 namespace Pamaxie.Website.Models
 {
@@ -6,11 +7,11 @@ namespace Pamaxie.Website.Models
     {
         public EmailPurpose Purpose => EmailPurpose.EMAIL_CONFIRMATION;
         public DateTime Expiration { get; set; } = DateTime.UtcNow.AddDays(10);
-        public ProfileData ProfileData { get; }
+        public IPamaxieUser User { get; }
 
-        public ConfirmEmailBody(ProfileData profileData)
+        public ConfirmEmailBody(IPamaxieUser user)
         {
-            ProfileData = profileData;
+            User = user;
         }
     }
 }

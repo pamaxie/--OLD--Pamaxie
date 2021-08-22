@@ -1,4 +1,5 @@
 ﻿using System;
+using Pamaxie.Data;
 
 namespace Pamaxie.Website.Models
 {
@@ -6,6 +7,6 @@ namespace Pamaxie.Website.Models
     {
         EmailPurpose Purpose { get; }
         DateTime Expiration { get; set; }
-        ProfileData ProfileData { get; }
+        IPamaxieUser User { get; }
     }
 }

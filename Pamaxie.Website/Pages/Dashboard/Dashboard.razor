@@ -5,7 +5,7 @@
     <Authorized>
         <div class="dash-layout dash-spacing" Style="padding-bottom: 20px" >
             <div>
-                <MudText Class="dynamicPadding" Typo="Typo.h4">Welcome back, @Profile?.UserName</MudText>
+                <MudText Class="dynamicPadding" Typo="Typo.h4">Welcome back, @User?.UserName</MudText>
 
                 @if (NewApplication == null)
                 {
@@ -22,7 +22,7 @@
                     <MudText Class="dynamicPadding" Typo="Typo.h6">Create new Application</MudText>
                     <div style="text-align: left">
                         <MudForm Class="dynamicPadding mg-10">
-                            <MudField Label="Application Id" Variant="Variant.Text">@NewApplication.ApplicationId</MudField>
+                            <MudField Label="Application Id" Variant="Variant.Text">@NewApplication.Key</MudField>
                             <MudTextField T="string" Label="Application Name" Required="true" RequiredError="Application Name is required!" ValueChanged="s => NewApplication.ApplicationName = s"/>
                             <MudTextField T="string" Label="Application Token" HelperText="Choose an AppToken" @ref="PwField1"
                                           InputType="InputType.Password"
@@ -51,10 +51,10 @@
                 @if (Applications.Any())
                 {
                     <MudExpansionPanels Class="dynamicPadding">
-                        @foreach (PamaxieApplication application in Applications)
+                        @foreach (IPamaxieApplication application in Applications)
                         {
                             <MudExpansionPanel Text="@application.ApplicationName">
-                                <MudTextField T="string" Label="Application Id" Text="@application.ApplicationId.ToString()" Disabled="true"></MudTextField>
+                                <MudTextField T="string" Label="Application Id" Text="@application.Key.ToString()" Disabled="true"></MudTextField>
                                 <MudTextField T="string" Label="Application Name" Text="@application.ApplicationName" Disabled="true"></MudTextField>
                                 <MudTextField T="string" Label="Last Accessed" Text="@application.LastAuth.ToString("f")" Disabled="true"></MudTextField>
                                 <MudTextField T="string" Label="Is Disabled?" Text="@application.Disabled.ToString()" Disabled="true"></MudTextField>

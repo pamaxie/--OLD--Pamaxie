@@ -31,17 +31,17 @@
                     <MudCard Style="width: 100%">
                         <MudCardHeader>
                             <CardHeaderAvatar>
-                                <MudAvatar Image="@Profile?.ProfilePictureAddress"/>
+                                <MudAvatar Image="@User?.ProfilePictureAddress"/>
                             </CardHeaderAvatar>
                             <CardHeaderContent>
                                 <MudText Typo="Typo.subtitle1" Style="font-size: 14px; line-height: 14px;">
-                                    @Profile?.UserName <br/>
+                                    @User?.UserName <br/>
                                 </MudText>
                                 <MudText Typo="Typo.subtitle2" Style="font-size: 10px; line-height: 10px;">
-                                    @Profile?.EmailAddress
+                                    @User?.EmailAddress
                                 </MudText>
                                 <MudText Typo="Typo.subtitle2" Style="font-size: 10px; line-height: 10px;">
-                                    @Profile?.GoogleClaimUserId
+                                    @User?.Key
                                 </MudText>
                             </CardHeaderContent>
                         </MudCardHeader>

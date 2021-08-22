@@ -1,5 +1,5 @@
 ﻿using System;
-using Pamaxie.Data.Interfaces;
+using Pamaxie.Data;
 
 #pragma warning disable 8618
 
@@ -51,5 +51,10 @@ namespace Pamaxie.Website.Authentication.Data
         /// <inheritdoc/>
         /// </summary>
         public bool Deleted { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public bool EmailVerified { get; set; }
     }
 }

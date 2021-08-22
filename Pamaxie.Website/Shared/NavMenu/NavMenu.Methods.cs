@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
-using Pamaxie.Extensions.Sql;
 using Pamaxie.Website.Authentication;
 
 namespace Pamaxie.Website.Shared
@@ -17,16 +16,16 @@ namespace Pamaxie.Website.Shared
          {
              bool hasAccount = false;
              ClaimsPrincipal? user = HttpContextAccessor.HttpContext?.User;
-             Profile = user?.GetGoogleAuthData(out hasAccount)?;
+             User = user?.GetGoogleAuthData(out hasAccount);
              UserHasAccount = hasAccount;
              return base.OnInitializedAsync();
          }
      
          protected override Task OnAfterRenderAsync(bool firstRender)
          {
-             if (Profile == null)
+             if (User == null)
                  return Task.CompletedTask;
-             if (!UserHasAccount || Profile is {Deleted: true })
+             if (!UserHasAccount || User is {Deleted: true })
              {
                  ShowCreateAccount = true;
              }
@@ -55,10 +54,10 @@ namespace Pamaxie.Website.Shared
      
          private void CreateAccount()
          {
-             UserExtensions.CreateUser(Profile);
+             UserExtensions.CreateUser(User);
 
-             if (Profile != null)
-                 EmailSender.SendConfirmationEmail(Profile);
+             if (User != null)
+                 EmailSender.SendConfirmationEmail(User);
 
              //Forcefully reload after creating the new user to make sure everything is a - ok
              NavigationManager.NavigateTo(NavigationManager.Uri, true);

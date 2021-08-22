@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
-using Pamaxie.Database.Extensions.DatabaseExtensions;
 using Pamaxie.Website.Services;
 
 namespace Pamaxie.Website 
@@ -29,7 +28,6 @@ namespace Pamaxie.Website
 
         private IConfiguration Configuration { get; }
 
-        
         // This method gets called by the runtime. Use this method to add services to the container.
         /// <summary>
         /// This method gets called by the runtime to add services to the container for dependency injection
@@ -88,7 +86,6 @@ namespace Pamaxie.Website
             //TODO Validate connection to Redis
         }
 
-
         /// <summary>
         /// This is called by the runtime to configure the HTTP request pipeline
         /// </summary>
@@ -111,7 +108,6 @@ namespace Pamaxie.Website
             {
                 MinimumSameSitePolicy = SameSiteMode.Lax
             });
-
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

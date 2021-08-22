@@ -1,5 +1,4 @@
 ﻿using System;
-using Pamaxie.Data.Interfaces;
 
 namespace Pamaxie.Data
 {
