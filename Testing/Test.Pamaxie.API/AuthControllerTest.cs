@@ -29,7 +29,7 @@ namespace Test.Pamaxie.API_UnitTesting
         }
         
         /// <summary>
-        /// TODO
+        /// Test for login of a application
         /// </summary>
         /// <param name="applicationKey">The application key from inlined data</param>
         [Theory]
@@ -40,9 +40,7 @@ namespace Test.Pamaxie.API_UnitTesting
             PamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             
-            //Mock Database
-            SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
-            AuthenticationExtensions.DbContext = sqlDbContext;
+            //TODO Mock AuthenticationInteractionExtensions, as it will be used in the AuthController
             
             //Instantiate the controller and add a default HttpContext
             AuthController authController = new(new TokenGenerator(Configuration))

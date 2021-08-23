@@ -21,9 +21,9 @@ namespace Pamaxie.Api.Security
         {
             // authentication successful so generate jwt token
             JwtSecurityTokenHandler tokenHandler = new();
-            var section = _configuration.GetSection("AuthData");
+            IConfigurationSection? section = _configuration.GetSection("AuthData");
             byte[] key = Encoding.ASCII.GetBytes(section.GetValue<string>("Secret"));
-            var expires = DateTime.UtcNow.AddMinutes(section.GetValue<int>("ExpiresInMinutes"));
+            DateTime expires = DateTime.UtcNow.AddMinutes(section.GetValue<int>("ExpiresInMinutes"));
             SecurityTokenDescriptor tokenDescriptor = new()
             {
                 Subject = new ClaimsIdentity(new[]
@@ -35,7 +35,7 @@ namespace Pamaxie.Api.Security
                     SecurityAlgorithms.HmacSha256Signature)
             };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+            SecurityToken? token = tokenHandler.CreateToken(tokenDescriptor);
 
             return new AuthToken { ExpirationUtc = expires, Token = tokenHandler.WriteToken(token) };
         }

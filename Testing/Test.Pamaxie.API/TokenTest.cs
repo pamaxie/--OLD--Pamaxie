@@ -1,4 +1,5 @@
-﻿using Pamaxie.Api.Data;
+﻿using System.Collections.Generic;
+using Pamaxie.Api.Data;
 using Pamaxie.Api.Security;
 using Test.Base;
 using Xunit;
@@ -11,21 +12,25 @@ namespace Test.Pamaxie.API_UnitTesting
     /// </summary>
     public class TokenTest : Base.Test
     {
+        /// <summary>
+        /// <inheritdoc cref="MemberData.AllUsers"/>
+        /// </summary>
+        public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
+
         public TokenTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
         
         /// <summary>
-        /// Testing for succeeding in generating a new token from a id
-        /// TODO makes it use testing data from <see cref="MemberData"/>
+        /// Testing for succeeding in generating a new token from a user key
         /// </summary>
+        /// <param name="userKey">The user key from inlined data</param>
         [Theory]
-        [InlineData("mc2cc3_1x9132cx_3474nv")]
-        [InlineData("c43354_c5c3412c_2c423t")]
-        public void GenerateToken_Succeed(string id)
+        [MemberData(nameof(AllUsers))]
+        public void GenerateToken_Succeed(string userKey)
         {
             TokenGenerator tokenGenerator = new(Configuration);
-            AuthToken result = tokenGenerator.CreateToken(id);
+            AuthToken result = tokenGenerator.CreateToken(userKey);
             Assert.NotNull(result);
             Assert.NotEmpty(result.Token);
         }
