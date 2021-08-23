@@ -27,7 +27,7 @@ namespace Pamaxie.Database.Extensions.InteractionObjects.BaseInterfaces
         /// </summary>
         /// <param name="value">The value that should be created</param>
         /// <param name="createdValue">How the value looks like inside the database</param>
-        /// <returns><see cref="bool"/>If the operation was successful and the entry was created</returns>
+        /// <returns><see cref="bool"/> if the operation was successful and the entry was created</returns>
         public bool TryCreate(T value, out T createdValue);
         
         /// <summary>
@@ -44,7 +44,7 @@ namespace Pamaxie.Database.Extensions.InteractionObjects.BaseInterfaces
         /// </summary>
         /// <param name="value">The value that should be updated</param>
         /// <param name="updatedValue">The updated value of the database</param>
-        /// <returns><see cref="bool"/>If the operation was successful and the entry was updated</returns>
+        /// <returns><see cref="bool"/> if the operation was successful and the entry was updated</returns>
         public bool TryUpdate(T value, out T updatedValue);
 
         /// <summary>
@@ -53,8 +53,16 @@ namespace Pamaxie.Database.Extensions.InteractionObjects.BaseInterfaces
         /// </summary>
         /// <param name="value"></param>
         /// <param name="databaseValue"></param>
-        /// <returns><see cref="bool"/>If a new value was created</returns>
+        /// <returns><see cref="bool"/> if a new value was created</returns>
         /// <exception cref="ArgumentException">if <see cref="value"/> did not contain a valid key</exception>
         public bool UpdateOrCreate(T value, out T databaseValue);
+
+        /// <summary>
+        /// Deletes a value inside the database,
+        /// returns a <see cref="bool"/> depending if the value was created or not
+        /// </summary>
+        /// <param name="value">The value that should be deleted</param>
+        /// <returns><see cref="bool"/> if the operation was successful and the value was deleted</returns>
+        public bool Delete(T value);
     }
 }

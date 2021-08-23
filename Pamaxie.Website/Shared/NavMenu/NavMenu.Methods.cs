@@ -1,10 +1,14 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using Pamaxie.Database.Extensions.Client;
 using Pamaxie.Website.Authentication;
 
 namespace Pamaxie.Website.Shared
 {
     // ReSharper disable once ClassNeverInstantiated.Global
+    /// <summary>
+    /// Class for the Navigation Menu
+    /// </summary>
     public partial class NavMenu
     {
         private void DrawerToggle()
@@ -54,7 +58,7 @@ namespace Pamaxie.Website.Shared
      
          private void CreateAccount()
          {
-             UserExtensions.CreateUser(User);
+             User.Create();
 
              if (User != null)
                  EmailSender.SendConfirmationEmail(User);

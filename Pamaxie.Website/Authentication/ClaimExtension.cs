@@ -2,19 +2,23 @@
 using System.Linq;
 using System.Security.Claims;
 using Pamaxie.Data;
+using Pamaxie.Database.Extensions.Client;
 using Pamaxie.Website.Authentication.Data;
 
 namespace Pamaxie.Website.Authentication
 {
+    /// <summary>
+    /// Extension method for <see cref="ClaimsPrincipal"/>
+    /// </summary>
     public static class ClaimExtension
     {
         /// <summary>
         /// Gets the Google AppAuthCredentials claim via the claims principle
         /// </summary>
         /// <param name="principle"><see cref="ClaimsPrincipal"/> to get the google claims from</param>
-        /// <param name="hasAccount"></param>
+        /// <param name="hasAccount">If the google user have a account on the website</param>
         /// <returns><see cref="GoogleAuthData"/> that was created via the claim values. Is null if something went wrong.</returns>
-        public static GoogleAuthData? GetGoogleAuthData(this ClaimsPrincipal principle, out bool hasAccount)
+        public static IPamaxieUser? GetGoogleAuthData(this ClaimsPrincipal principle, out bool hasAccount)
         {
             hasAccount = false;
             if (principle.Identity == null)
@@ -54,7 +58,7 @@ namespace Pamaxie.Website.Authentication
             }
 
             //Check if user exists if yes get their id if no create one!
-            IPamaxieUser pamaxieUser = UserExtensions.GetUser(googleClaim.Key);
+            IPamaxieUser pamaxieUser = UserInteractionExtensions.Get(googleClaim.Key);
             if (pamaxieUser is not {Deleted: false}) return googleClaim;
             hasAccount = true;
             googleClaim.Key = pamaxieUser.Key;

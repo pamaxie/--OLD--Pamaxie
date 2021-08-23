@@ -1,54 +1,61 @@
-﻿using Pamaxie.Data;
+﻿using System.Collections.Generic;
+using Pamaxie.Data;
 using Pamaxie.Database.Extensions.InteractionObjects;
 
 namespace Pamaxie.Database.Extensions.Server
 {
-    public class UserInteraction : IUserInteraction
+    public class ApplicationInteraction : IApplicationInteraction
     {
         /// <inheritdoc/>
-        public IPamaxieUser Get(string key)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <inheritdoc/>
-        public IPamaxieUser Create(IPamaxieUser value)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <inheritdoc/>
-        public bool TryCreate(IPamaxieUser value, out IPamaxieUser createdValue)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <inheritdoc/>
-        public IPamaxieUser Update(IPamaxieUser value)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <inheritdoc/>
-        public bool TryUpdate(IPamaxieUser value, out IPamaxieUser updatedValue)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <inheritdoc/>
-        public bool UpdateOrCreate(IPamaxieUser value, out IPamaxieUser databaseValue)
+        public IPamaxieApplication Get(string key)
         {
             throw new System.NotImplementedException();
         }
         
         /// <inheritdoc/>
-        public bool Delete(IPamaxieUser value)
+        public IEnumerable<IPamaxieApplication> GetFromUser(string userKey)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public IPamaxieApplication Create(IPamaxieApplication value)
         {
             throw new System.NotImplementedException();
         }
         
         /// <inheritdoc/>
-        public bool VerifyEmail(IPamaxieUser value)
+        public bool TryCreate(IPamaxieApplication value, out IPamaxieApplication createdValue)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public IPamaxieApplication Update(IPamaxieApplication value)
+        {
+            throw new System.NotImplementedException();
+        }
+        
+        /// <inheritdoc/>
+        public bool TryUpdate(IPamaxieApplication value, out IPamaxieApplication updatedValue)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public bool UpdateOrCreate(IPamaxieApplication value, out IPamaxieApplication databaseValue)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public bool Delete(IPamaxieApplication value)
+        {
+            throw new System.NotImplementedException();
+        }
+        
+        /// <inheritdoc/>
+        public bool EnableOrDisable(IPamaxieApplication value)
         {
             throw new System.NotImplementedException();
         }

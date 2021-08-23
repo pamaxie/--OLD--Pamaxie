@@ -2,7 +2,10 @@
 
 namespace Pamaxie.Website.Pages
 {
-    // ReSharper disable once ClassNeverInstantiated.Global
+    // ReSharper disable once ClassNeverInstantiated.Global¨'
+    /// <summary>
+    /// Class for the Email Confirmation page
+    /// </summary>
     public partial class ConfirmEmail
     {
         protected override Task OnInitializedAsync()

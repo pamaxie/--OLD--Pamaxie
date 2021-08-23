@@ -33,7 +33,7 @@ namespace Pamaxie.Website.Services
         /// <summary>
         /// Sends a confirmation email to the registered user.
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="user">The <see cref="IPamaxieUser"/> the email will be sent to</param>
         public async void SendConfirmationEmail(IPamaxieUser user)
         {
             string code = _userService.GenerateEmailConfirmationToken(user);
@@ -86,6 +86,11 @@ namespace Pamaxie.Website.Services
                 EmailConfirmationHtml = MinifyHtmlPage(File.ReadAllText(emailConfirmationPath));
         }
 
+        /// <summary>
+        /// Email body for the email confirmation emails
+        /// </summary>
+        /// <param name="callbackUrl">Return URL to the website</param>
+        /// <returns>A email body, used for the EmailSender</returns>
         public static string EmailConfirmationBody(string callbackUrl)
         {
             return EmailConfirmationHtml.Replace("CALLBACKURL", HtmlEncoder.Default.Encode(callbackUrl));

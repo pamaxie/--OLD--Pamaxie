@@ -8,6 +8,10 @@ using Pamaxie.Website.Models;
 
 namespace Pamaxie.Website.Services
 {
+    /// <summary>
+    /// Custom JsonWebToken service for our website
+    /// Used for email links
+    /// </summary>
     public static class JsonWebToken
     {
         private static readonly Func<byte[], byte[], byte[]> Rs256 = (key, value) =>
@@ -19,9 +23,9 @@ namespace Pamaxie.Website.Services
         /// <summary>
         /// Encodes a IBody into a base64Url string through Rs256 encryption.
         /// </summary>
-        /// <param name="body"></param>
-        /// <param name="secret"></param>
-        /// <returns></returns>
+        /// <param name="body">Email body</param>
+        /// <param name="secret">JWT Secret</param>
+        /// <returns>Encoded JWT Token</returns>
         public static string Encode(IBody body, string secret)
         {
             return Base64UrlEncode(Encoding.UTF8.GetBytes(Encode(body, Encoding.UTF8.GetBytes(secret))));
@@ -48,10 +52,10 @@ namespace Pamaxie.Website.Services
         /// <summary>
         /// Decodes a Base64Url string into a IBody using the same secret as encoded with.
         /// </summary>
-        /// <param name="token"></param>
-        /// <param name="secret"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <param name="token">JWT Token</param>
+        /// <param name="secret">JWT Secret</param>
+        /// <typeparam name="T">Class inheriting <see cref="IBody"/></typeparam>
+        /// <returns><see cref="IBody"/> of T</returns>
         public static IBody? Decode<T>(string token, string secret)
         {
             return Decode<T>(Encoding.UTF8.GetString(Base64UrlDecode(token)), Encoding.UTF8.GetBytes(secret), true);

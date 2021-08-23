@@ -42,7 +42,6 @@ namespace Pamaxie.Website
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddScoped<BrowserService>();
             services.AddScoped<UserService>();
             services.AddScoped<EmailSender>();
 

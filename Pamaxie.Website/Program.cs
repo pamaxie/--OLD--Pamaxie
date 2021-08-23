@@ -3,6 +3,9 @@ using Microsoft.Extensions.Hosting;
 
 namespace Pamaxie.Website
 {
+    /// <summary>
+    /// Class for the Main entry point
+    /// </summary>
     public class Program
     {
         /// <summary>

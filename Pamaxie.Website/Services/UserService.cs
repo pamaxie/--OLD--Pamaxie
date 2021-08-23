@@ -3,11 +3,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using MudBlazor;
 using Pamaxie.Data;
+using Pamaxie.Database.Extensions.Client;
 using Pamaxie.Website.Authentication;
 using Pamaxie.Website.Models;
 
 namespace Pamaxie.Website.Services
 {
+    /// <summary>
+    /// A service for User interactions on the website
+    /// </summary>
     public class UserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -32,7 +36,7 @@ namespace Pamaxie.Website.Services
         /// <summary>
         /// Checks if the current logged-in user have their email verified.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>If the email of the current user is verified</returns>
         public bool IsEmailOfCurrentUserVerified()
         {
             ClaimsPrincipal? claimUser = _httpContextAccessor.HttpContext?.User;
@@ -41,7 +45,7 @@ namespace Pamaxie.Website.Services
             IPamaxieUser? googleUser = claimUser.GetGoogleAuthData(out _);
             if (googleUser is null)
                 return false;
-            IPamaxieUser pamaxieUser = UserExtensions.GetUser(googleUser.Key);
+            IPamaxieUser pamaxieUser = UserInteractionExtensions.Get(googleUser.Key);
             return pamaxieUser is {EmailVerified: true};
         }
         
@@ -49,7 +53,7 @@ namespace Pamaxie.Website.Services
         /// Generates a token for EmailConfirmation for a User
         /// </summary>
         /// <param name="user"></param>
-        /// <returns>Token</returns>
+        /// <returns>Email Confirmation Token</returns>
         public string GenerateEmailConfirmationToken(IPamaxieUser user)
         {
             IBody body = new ConfirmEmailBody(user);
@@ -66,8 +70,8 @@ namespace Pamaxie.Website.Services
             ConfirmEmailBody? body = JsonWebToken.Decode<ConfirmEmailBody>(token, _secret) as ConfirmEmailBody;
             if (body?.Purpose is not EmailPurpose.EMAIL_CONFIRMATION)
                 return false;
-            IPamaxieUser pamaxieUser = UserExtensions.GetUser(body.User.Key);
-            return pamaxieUser.EmailAddress == body.User.EmailAddress && body.User.VerifyUser();
+            IPamaxieUser pamaxieUser = UserInteractionExtensions.Get(body.User.Key);
+            return pamaxieUser.EmailAddress == body.User.EmailAddress && body.User.VerifyEmail();
         }
         
         /// <summary>

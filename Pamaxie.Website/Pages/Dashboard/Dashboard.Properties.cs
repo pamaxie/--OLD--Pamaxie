@@ -10,12 +10,16 @@ using Pamaxie.Website.Services;
 namespace Pamaxie.Website.Pages
 {
     // ReSharper disable once ClassNeverInstantiated.Global
+    /// <summary>
+    /// <inheritdoc cref="Dashboard"/>
+    /// </summary>
     public partial class Dashboard
     {
         [Inject] private NavigationManager NavigationManager { get; set; }
         [Inject] private IHttpContextAccessor HttpContextAccessor { get; set; }
         [Inject] private IDialogService DialogService { get; set; }
         [Inject] private UserService UserService { get; set; }
+        
         private List<IPamaxieApplication> Applications { get; set; } = new();
         private IPamaxieApplication? NewApplication { get; set; } = null;
         private IPamaxieUser? User { get; set; }

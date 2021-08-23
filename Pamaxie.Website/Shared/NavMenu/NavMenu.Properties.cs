@@ -10,6 +10,9 @@ using Pamaxie.Website.Services;
 namespace Pamaxie.Website.Shared
 {
     // ReSharper disable once ClassNeverInstantiated.Global
+    /// <summary>
+    /// <inheritdoc cref="NavMenu"/>
+    /// </summary>
     public partial class NavMenu
     {
         [Inject] private NavigationManager NavigationManager { get; set; }
@@ -18,7 +21,9 @@ namespace Pamaxie.Website.Shared
         [Inject] private IDialogService DialogService { get; set; }
         [Inject] private EmailSender EmailSender { get; set; }
 
-        //Render Frag for rendering the child content of the Website
+        /// <summary>
+        /// Render Frag for rendering the child content of the Website
+        /// </summary>
         [Parameter] public RenderFragment ChildContent { get; set; }
 
         private IPamaxieUser? User { get; set; }

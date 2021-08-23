@@ -1,4 +1,5 @@
-﻿using Pamaxie.Data;
+﻿using System.Collections.Generic;
+using Pamaxie.Data;
 using Pamaxie.Database.Extensions.InteractionObjects;
 using Pamaxie.Database.Extensions.InteractionObjects.BaseInterfaces;
 
@@ -9,39 +10,57 @@ namespace Pamaxie.Database.Extensions.Client
         private static readonly IApplicationInteraction ApplicationInteraction = new ApplicationInteraction();
         
         /// <inheritdoc cref="IDatabaseInteraction{T}.Get"/>
-        public static PamaxieApplication Get(string key)
+        public static IPamaxieApplication Get(string key)
         {
             return ApplicationInteraction.Get(key);
         }
-
-        /// <inheritdoc cref="IDatabaseInteraction{T}.UpdateOrCreate"/>
-        public static bool UpdateOrCreate(this PamaxieApplication value, out PamaxieApplication databaseValue)
+        
+        /// <inheritdoc cref="IApplicationInteraction.GetFromUser"/>
+        public static IEnumerable<IPamaxieApplication> GetFromUser(string value)
         {
-            return ApplicationInteraction.UpdateOrCreate(value, out databaseValue);
+            return ApplicationInteraction.GetFromUser(value);
         }
-
-        /// <inheritdoc cref="IDatabaseInteraction{T}.TryUpdate"/>
-        public static bool TryUpdate(this PamaxieApplication value, out PamaxieApplication updatedValue)
+        
+        /// <inheritdoc cref="IDatabaseInteraction{T}.Create"/>
+        public static IPamaxieApplication Create(this IPamaxieApplication value)
         {
-            return ApplicationInteraction.TryUpdate(value, out updatedValue);
+            return ApplicationInteraction.Create(value);
         }
-
-        /// <inheritdoc cref="IDatabaseInteraction{T}.Update"/>
-        public static PamaxieApplication Update(this PamaxieApplication value)
-        {
-            return ApplicationInteraction.Update(value);
-        }
-
+        
         /// <inheritdoc cref="IDatabaseInteraction{T}.TryCreate"/>
-        public static bool TryCreate(this PamaxieApplication value, out PamaxieApplication createdValue)
+        public static bool TryCreate(this IPamaxieApplication value, out IPamaxieApplication createdValue)
         {
             return ApplicationInteraction.TryCreate(value, out createdValue);
         }
 
-        /// <inheritdoc cref="IDatabaseInteraction{T}.Create"/>
-        public static PamaxieApplication Create(this PamaxieApplication value)
+        /// <inheritdoc cref="IDatabaseInteraction{T}.Update"/>
+        public static IPamaxieApplication Update(this IPamaxieApplication value)
         {
-            return ApplicationInteraction.Create(value);
+            return ApplicationInteraction.Update(value);
+        }
+
+        /// <inheritdoc cref="IDatabaseInteraction{T}.TryUpdate"/>
+        public static bool TryUpdate(this IPamaxieApplication value, out IPamaxieApplication updatedValue)
+        {
+            return ApplicationInteraction.TryUpdate(value, out updatedValue);
+        }
+
+        /// <inheritdoc cref="IDatabaseInteraction{T}.UpdateOrCreate"/>
+        public static bool UpdateOrCreate(this IPamaxieApplication value, out IPamaxieApplication databaseValue)
+        {
+            return ApplicationInteraction.UpdateOrCreate(value, out databaseValue);
+        }
+
+        /// <inheritdoc cref="IDatabaseInteraction{T}.Delete"/>
+        public static bool Delete(this IPamaxieApplication value)
+        {
+            return ApplicationInteraction.Delete(value);
+        }
+        
+        /// <inheritdoc cref="IApplicationInteraction.EnableOrDisable"/>
+        public static bool EnableOrDisable(this IPamaxieApplication value)
+        {
+            return ApplicationInteraction.EnableOrDisable(value);
         }
     }
 }

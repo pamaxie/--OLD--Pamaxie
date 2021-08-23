@@ -9,10 +9,18 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Pamaxie.Website.Pages
 {
+    /// <summary>
+    /// Class for the Login ViewModel page
+    /// </summary>
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
         // ReSharper disable once UnusedMember.Global
+        /// <summary>
+        /// Log in the user with a Google Account
+        /// </summary>
+        /// <param name="returnUrl">Page to return to</param>
+        /// <returns><see cref="IActionResult"/></returns>
         public IActionResult OnGetAsync(string? returnUrl = null)
         {
             const string provider = "Google";
@@ -25,6 +33,10 @@ namespace Pamaxie.Website.Pages
         }
         
         // ReSharper disable once UnusedMember.Global
+        /// <summary>
+        /// Gets the Google Account <see cref="ClaimsIdentity"/> after using Google's login page
+        /// </summary>
+        /// <returns><see cref="IActionResult"/></returns>
         public async Task<IActionResult> OnGetCallbackAsync()
         {
             // Get the information about the user from the external login provider

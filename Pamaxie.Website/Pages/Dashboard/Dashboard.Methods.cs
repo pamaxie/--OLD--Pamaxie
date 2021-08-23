@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Pamaxie.Data;
+using Pamaxie.Database.Extensions.Client;
 using Pamaxie.Website.Authentication;
 
 namespace Pamaxie.Website.Pages
 {
     // ReSharper disable once ClassNeverInstantiated.Global
+    /// <summary>
+    /// Class for the Dashboard page
+    /// </summary>
     public partial class Dashboard
     {
         protected override Task OnInitializedAsync()
@@ -29,7 +34,7 @@ namespace Pamaxie.Website.Pages
             if (!hasAccount)
                 return Task.CompletedTask;
             
-            Applications = ApplicationExtensions.GetApplications(User.Key).ToList();
+            Applications = ApplicationInteractionExtension.GetFromUser(User.Key).ToList();
             StateHasChanged();
             return Task.CompletedTask;
         }
@@ -43,25 +48,27 @@ namespace Pamaxie.Website.Pages
                 "Jep", cancelText: "Nope");
             if (result is true && User is not null)
             {
-                pamaxieApplication.DeleteApplication();
-                Applications = ApplicationExtensions.GetApplications(User.Key).ToList();
+                pamaxieApplication.Delete();
+                Applications = ApplicationInteractionExtension.GetFromUser(User.Key).ToList();
                 StateHasChanged();
             }
         }
 
-        private async Task SwitchIfApplicationEnabled(IPamaxieApplication pamaxieApplication)
+        private async Task EnableOrDisableApplication(IPamaxieApplication pamaxieApplication)
         {
-            bool? result = await DialogService.ShowMessageBox(
-                $"Do you really wanna disable {pamaxieApplication.ApplicationName}?",
-                "Disabling your application will block anyone from accessing it. You can re-enable it any time however! " +
-                "This will just block access to it if you suspect issues with your token and want to validate everything is ok.",
-                "Jep", cancelText: "Nope");
+            bool? result = true;
+            if (!pamaxieApplication.Disabled) 
+                result = await DialogService.ShowMessageBox(
+                    $"Do you really wanna disable {pamaxieApplication.ApplicationName}?",
+                    "Disabling your application will block anyone from accessing it. You can re-enable it any time however! " +
+                    "This will just block access to it if you suspect issues with your token and want to validate everything is ok.",
+                    "Jep", cancelText: "Nope");
             if (result is true)
             {
-                pamaxieApplication.SetApplicationStatus(pamaxieApplication.Disabled);
+                pamaxieApplication.EnableOrDisable();
 
                 if (User != null)
-                    Applications = ApplicationExtensions.GetApplications(User.Key).ToList();
+                    Applications = ApplicationInteractionExtension.GetFromUser(User.Key).ToList();
                 StateHasChanged();
             }
         }
@@ -102,7 +109,6 @@ namespace Pamaxie.Website.Pages
 
             NewApplication = new PamaxieApplication()
             {
-                Key = ApplicationExtensions.GetLastIndex(),
                 OwnerKey = User.Key,
                 Disabled = false,
                 LastAuth = DateTime.Now,
@@ -115,8 +121,8 @@ namespace Pamaxie.Website.Pages
             if (NewApplication == null)
                 return;
 
-            NewApplication.AppToken = PwField1.Value;
-            ApplicationExtensions.CreateApplication(NewApplication, out IPamaxieApplication createdApp);
+            NewApplication.Credentials.AuthorizationToken = PwField1.Value; //TODO
+            IPamaxieApplication createdApp = NewApplication.Create();
             Applications.Add(createdApp);
             NewApplication = null;
         }

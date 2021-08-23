@@ -4,6 +4,9 @@
 
 namespace Pamaxie.Website
 {
+    /// <summary>
+    /// Class for the root component
+    /// </summary>
     public partial class App
     {
         private readonly MudTheme _darkTheme = new()

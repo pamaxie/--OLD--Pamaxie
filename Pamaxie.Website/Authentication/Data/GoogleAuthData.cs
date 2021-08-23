@@ -5,6 +5,9 @@ using Pamaxie.Data;
 
 namespace Pamaxie.Website.Authentication.Data
 {
+    /// <summary>
+    /// Google User Class
+    /// </summary>
     public class GoogleAuthData : IPamaxieUser
     {
         /// <summary>

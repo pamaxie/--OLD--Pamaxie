@@ -13,23 +13,11 @@ namespace Pamaxie.Database.Extensions.Client
         {
             return AuthenticationInteraction.Get(key);
         }
-
-        /// <inheritdoc cref="IDatabaseInteraction{T}.UpdateOrCreate"/>
-        public static bool UpdateOrCreate(this AppAuthCredentials value, out AppAuthCredentials databaseValue)
+        
+        /// <inheritdoc cref="IDatabaseInteraction{T}.Create"/>
+        public static AppAuthCredentials Create(this AppAuthCredentials value)
         {
-            return AuthenticationInteraction.UpdateOrCreate(value, out databaseValue);
-        }
-
-        /// <inheritdoc cref="IDatabaseInteraction{T}.TryUpdate"/>
-        public static bool TryUpdate(this AppAuthCredentials value, out AppAuthCredentials updatedValue)
-        {
-            return AuthenticationInteraction.TryUpdate(value, out updatedValue);
-        }
-
-        /// <inheritdoc cref="IDatabaseInteraction{T}.Update"/>
-        public static AppAuthCredentials Update(this AppAuthCredentials value)
-        {
-            return AuthenticationInteraction.Update(value);
+            return AuthenticationInteraction.Create(value);
         }
 
         /// <inheritdoc cref="IDatabaseInteraction{T}.TryCreate"/>
@@ -38,10 +26,22 @@ namespace Pamaxie.Database.Extensions.Client
             return AuthenticationInteraction.TryCreate(value, out createdValue);
         }
 
-        /// <inheritdoc cref="IDatabaseInteraction{T}.Create"/>
-        public static AppAuthCredentials Create(this AppAuthCredentials value)
+        /// <inheritdoc cref="IDatabaseInteraction{T}.Update"/>
+        public static AppAuthCredentials Update(this AppAuthCredentials value)
         {
-            return AuthenticationInteraction.Create(value);
+            return AuthenticationInteraction.Update(value);
+        }
+
+        /// <inheritdoc cref="IDatabaseInteraction{T}.TryUpdate"/>
+        public static bool TryUpdate(this AppAuthCredentials value, out AppAuthCredentials updatedValue)
+        {
+            return AuthenticationInteraction.TryUpdate(value, out updatedValue);
+        }
+        
+        /// <inheritdoc cref="IDatabaseInteraction{T}.UpdateOrCreate"/>
+        public static bool UpdateOrCreate(this AppAuthCredentials value, out AppAuthCredentials databaseValue)
+        {
+            return AuthenticationInteraction.UpdateOrCreate(value, out databaseValue);
         }
     }
 }

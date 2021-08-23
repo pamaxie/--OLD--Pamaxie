@@ -1,7 +1,10 @@
 ﻿namespace Pamaxie.Website.Shared
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public partial class RedirectToLogin
+    /// <summary>
+    /// <inheritdoc cref="RedirectToLogout"/>
+    /// </summary>
+    public partial class RedirectToLogout
     {
 
     }

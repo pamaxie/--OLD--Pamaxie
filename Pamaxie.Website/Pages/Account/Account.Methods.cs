@@ -1,10 +1,15 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using Pamaxie.Data;
 using Pamaxie.Website.Authentication;
+using Pamaxie.Database.Extensions.Client;
 
 namespace Pamaxie.Website.Pages
 {
     // ReSharper disable once ClassNeverInstantiated.Global
+    /// <summary>
+    /// Class for the Account page
+    /// </summary>
     public partial class Account
     {
         private async void OnDeleteButtonClicked()
@@ -17,7 +22,7 @@ namespace Pamaxie.Website.Pages
 
             if (result != null && result.Value)
             {
-                User.DeleteUserData();
+                User.Delete();
                 NavigationManager.NavigateTo("/Logout", true);
             }
             StateHasChanged();

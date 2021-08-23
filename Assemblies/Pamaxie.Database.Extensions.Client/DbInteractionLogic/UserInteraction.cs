@@ -6,37 +6,49 @@ namespace Pamaxie.Database.Extensions.Client
     public class UserInteraction : IUserInteraction
     {
         /// <inheritdoc/>
-        public PamaxieUser Get(string key)
+        public IPamaxieUser Get(string key)
         {
             throw new System.NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public PamaxieUser Create(PamaxieUser value)
+        public IPamaxieUser Create(IPamaxieUser value)
         {
             throw new System.NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public bool TryCreate(PamaxieUser value, out PamaxieUser createdValue)
+        public bool TryCreate(IPamaxieUser value, out IPamaxieUser createdValue)
         {
             throw new System.NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public PamaxieUser Update(PamaxieUser value)
+        public IPamaxieUser Update(IPamaxieUser value)
         {
             throw new System.NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public bool TryUpdate(PamaxieUser value, out PamaxieUser updatedValue)
+        public bool TryUpdate(IPamaxieUser value, out IPamaxieUser updatedValue)
         {
             throw new System.NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public bool UpdateOrCreate(PamaxieUser value, out PamaxieUser databaseValue)
+        public bool UpdateOrCreate(IPamaxieUser value, out IPamaxieUser databaseValue)
+        {
+            throw new System.NotImplementedException();
+        }
+        
+        /// <inheritdoc/>
+        public bool Delete(IPamaxieUser value)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public bool VerifyEmail(IPamaxieUser value)
         {
             throw new System.NotImplementedException();
         }

@@ -6,9 +6,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Pamaxie.Website.Pages
 {
+    /// <summary>
+    /// Class for the Logout ViewModel page
+    /// </summary>
     public class LogoutModel : PageModel
     {
         // ReSharper disable once UnusedMember.Global
+        /// <summary>
+        /// Log out the user
+        /// </summary>
+        /// <param name="returnUrl">Page to return to</param>
+        /// <returns><see cref="IActionResult"/></returns>
         public async Task<IActionResult> OnGetAsync(string? returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");

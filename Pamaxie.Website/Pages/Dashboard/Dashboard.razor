@@ -54,17 +54,16 @@
                         @foreach (IPamaxieApplication application in Applications)
                         {
                             <MudExpansionPanel Text="@application.ApplicationName">
-                                <MudTextField T="string" Label="Application Id" Text="@application.Key.ToString()" Disabled="true"></MudTextField>
                                 <MudTextField T="string" Label="Application Name" Text="@application.ApplicationName" Disabled="true"></MudTextField>
                                 <MudTextField T="string" Label="Last Accessed" Text="@application.LastAuth.ToString("f")" Disabled="true"></MudTextField>
                                 <MudTextField T="string" Label="Is Disabled?" Text="@application.Disabled.ToString()" Disabled="true"></MudTextField>
                                 @if (application.Disabled)
                                 {
-                                    <MudButton Variant="Variant.Outlined" Style="margin: 20px;" Color="Color.Success" OnClick="@(() => SwitchIfApplicationEnabled(application))">Enable Application</MudButton>
+                                    <MudButton Variant="Variant.Outlined" Style="margin: 20px;" Color="Color.Success" OnClick="@(() => EnableOrDisableApplication(application))">Enable Application</MudButton>
                                 }
                                 else
                                 {
-                                    <MudButton Variant="Variant.Outlined" Style="margin: 20px;" Color="Color.Warning" OnClick="@(() => SwitchIfApplicationEnabled(application))">Disable Application</MudButton>
+                                    <MudButton Variant="Variant.Outlined" Style="margin: 20px;" Color="Color.Warning" OnClick="@(() => EnableOrDisableApplication(application))">Disable Application</MudButton>
                                 }
 
                                 <MudButton Variant="Variant.Outlined" Style="margin: 20px;" Color="Color.Error" OnClick="@(() => DeleteApplication(application))">Delete Application</MudButton>

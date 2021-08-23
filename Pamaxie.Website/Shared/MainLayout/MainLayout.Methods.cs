@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 namespace Pamaxie.Website.Shared
 {
     // ReSharper disable once ClassNeverInstantiated.Global
+    /// <summary>
+    /// Class for the main layout design
+    /// </summary>
     public partial class MainLayout
     {
         protected override async Task OnAfterRenderAsync(bool firstRender)
