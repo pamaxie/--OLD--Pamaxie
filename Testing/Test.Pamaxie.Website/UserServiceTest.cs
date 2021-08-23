@@ -31,7 +31,7 @@ namespace Test.Pamaxie.Website
         }
         
         /// <summary>
-        /// TODO
+        /// Goes through all verified users from the testing data, and tests the IsEmailOfCurrentUserVerified succeeds
         /// </summary>
         /// <param name="userKey">The user key from inlined data</param>
         [Theory]
@@ -50,7 +50,7 @@ namespace Test.Pamaxie.Website
         }
         
         /// <summary>
-        /// TODO
+        /// Goes through all unverified users from the testing data, and tests the IsEmailOfCurrentUserVerified fails
         /// </summary>
         /// <param name="userKey">The user key from inlined data</param>
         [Theory]
@@ -71,7 +71,7 @@ namespace Test.Pamaxie.Website
         }
 
         /// <summary>
-        /// TODO
+        /// Goes through all unverified users and generates a email confirmation token
         /// </summary>
         /// <param name="userKey">The user key from inlined data</param>
         [Theory]
@@ -96,7 +96,7 @@ namespace Test.Pamaxie.Website
         }
         
         /// <summary>
-        /// TODO
+        /// Goes through all unverified users and confirms their email out of a generated email confirmation token
         /// </summary>
         /// <param name="userKey">The user key from inlined data</param>
         [Theory]
