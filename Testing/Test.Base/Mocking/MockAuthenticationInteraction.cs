@@ -42,5 +42,11 @@ namespace Test.Base
         {
             throw new System.NotImplementedException();
         }
+
+        /// <inheritdoc/>
+        public bool Delete(AppAuthCredentials value)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

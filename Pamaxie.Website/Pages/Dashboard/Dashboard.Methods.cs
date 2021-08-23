@@ -121,7 +121,7 @@ namespace Pamaxie.Website.Pages
             if (NewApplication == null)
                 return;
 
-            NewApplication.Credentials.AuthorizationToken = PwField1.Value; //TODO
+            NewApplication.Credentials.AuthorizationToken = PwField1.Value;
             IPamaxieApplication createdApp = NewApplication.Create();
             Applications.Add(createdApp);
             NewApplication = null;

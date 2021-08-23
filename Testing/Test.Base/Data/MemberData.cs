@@ -10,56 +10,24 @@ namespace Test.Base
     public static class MemberData
     {
         /// <summary>
-        /// TODO
+        /// Contains a list of all testing users
         /// </summary>
         public static IEnumerable<object[]> AllUsers => TestUserData.ListOfUsers.Select(_ => _.Key)
             .Select(googleUserId => new object[] {googleUserId}).AsEnumerable();
 
         /// <summary>
-        /// TODO
+        /// Contains a list of all testing users that have their email verified
         /// </summary>
-        public static IEnumerable<object[]> AllVerifiedUsers
-        {
-            get
-            {
-                List<object[]> list = new List<object[]>();
-                foreach (string googleUserId in TestUserData.ListOfUsers.Select(_ => _.Key))
-                {
-                    SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
-                    UserExtensions.DbContext = sqlDbContext;
-                    if (!UserExtensions.GetUser(googleUserId).EmailVerified) continue;
-                    list.Add(new object[]
-                    {
-                        googleUserId
-                    });
-                }
-
-                return list.AsEnumerable();
-            }
-        }
+        public static IEnumerable<object[]> AllVerifiedUsers =>
+            (from user in TestUserData.ListOfUsers where user.EmailVerified select new object[] {user.Key})
+            .AsEnumerable();
 
         /// <summary>
-        /// TODO
+        /// Contains a list of all testing users that does not have their email verified
         /// </summary>
-        public static IEnumerable<object[]> AllUnverifiedUsers
-        {
-            get
-            {
-                List<object[]> list = new List<object[]>();
-                foreach (string googleUserId in TestUserData.ListOfUsers.Select(_ => _.Key))
-                {
-                    SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
-                    UserExtensions.DbContext = sqlDbContext;
-                    if (UserExtensions.GetUser(googleUserId).EmailVerified) continue;
-                    list.Add(new object[]
-                    {
-                        googleUserId
-                    });
-                }
-
-                return list.AsEnumerable();
-            }
-        }
+        public static IEnumerable<object[]> AllUnverifiedUsers =>
+            (from user in TestUserData.ListOfUsers where !user.EmailVerified select new object[] {user.Key})
+            .AsEnumerable();
 
         /// <summary>
         /// Contains the ID of the personal testing user
@@ -68,16 +36,9 @@ namespace Test.Base
             new List<object[]> {new object[] {"101963629560135630792"}}.AsEnumerable();
 
         /// <summary>
-        /// TODO
+        /// Contains a list of all applications
         /// </summary>
-        public static IEnumerable<object[]> AllApplications
-        {
-            get
-            {
-                List<object[]> list = TestApplicationData.ListOfApplications.Select(_ => _.Key)
-                    .Select(applicationId => new object[] {applicationId}).ToList();
-                return list.AsEnumerable();
-            }
-        }
+        public static IEnumerable<object[]> AllApplications => TestApplicationData.ListOfApplications.Select(_ => _.Key)
+            .Select(applicationId => new object[] {applicationId}).AsEnumerable();
     }
 }

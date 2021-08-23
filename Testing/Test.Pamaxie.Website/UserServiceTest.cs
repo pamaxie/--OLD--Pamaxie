@@ -57,10 +57,8 @@ namespace Test.Pamaxie.Website
         [MemberData(nameof(AllUnverifiedUsers))]
         public void IsEmailOfCurrentUserVerified_Failure(string userKey)
         {
-            //Mock Database
-            SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
-            UserExtensions.DbContext = sqlDbContext;
-
+            //TODO Mock UserInteractionExtension, as it will be used in UserService
+            
             //Get Google Claims from the googleUserId
             Claim[] googleClaims = TestGoogleClaimData.ListOfGoogleUserPrincipleClaims.FirstOrDefault(_ => _[0].Value == userKey);
             Assert.NotNull(googleClaims);
@@ -109,9 +107,8 @@ namespace Test.Pamaxie.Website
             Claim[] googleClaims = TestGoogleClaimData.ListOfGoogleUserPrincipleClaims.FirstOrDefault(_ => _[0].Value == userKey);
             Assert.NotNull(googleClaims);
             
-            //Mock Database
-            SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
-            UserExtensions.DbContext = sqlDbContext;
+            //TODO Mock UserInteractionExtension, as it will be used in UserService
+            MockUserInteraction mockedUserInteraction = new(); //Delete this once a mocking implementation have been added
             
             //Mock HttpContext with principle claims
             IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);
@@ -119,14 +116,14 @@ namespace Test.Pamaxie.Website
             //Check if the user is the current logged in
             Assert.NotNull(httpContextAccessor.HttpContext?.User.GetGoogleAuthData(out bool _));
 
-            IPamaxieUser unverifiedPamaxieUser = UserExtensions.GetUser(userKey);
+            IPamaxieUser unverifiedPamaxieUser = mockedUserInteraction.Get(userKey);
             TestOutputHelper.WriteLine("Email verified: " + unverifiedPamaxieUser.EmailVerified);
 
             UserService userService = new(Configuration, httpContextAccessor, null);
             string token = userService.GenerateEmailConfirmationToken(unverifiedPamaxieUser);
             Assert.True(userService.ConfirmEmail(token));
             
-            IPamaxieUser verifiedPamaxieUser = UserExtensions.GetUser(userKey);
+            IPamaxieUser verifiedPamaxieUser = mockedUserInteraction.Get(userKey);
             TestOutputHelper.WriteLine("Email verified: " + verifiedPamaxieUser.EmailVerified);
             Assert.True(userService.IsEmailOfCurrentUserVerified());
         }
