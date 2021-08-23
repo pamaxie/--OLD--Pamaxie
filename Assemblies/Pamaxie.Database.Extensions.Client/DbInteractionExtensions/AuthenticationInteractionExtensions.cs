@@ -43,5 +43,11 @@ namespace Pamaxie.Database.Extensions.Client
         {
             return AuthenticationInteraction.UpdateOrCreate(value, out databaseValue);
         }
+
+        /// <inheritdoc cref="IAuthenticationInteraction.VerifyAuthentication"/>
+        public static bool VerifyAuthentication(this AppAuthCredentials value)
+        {
+            return AuthenticationInteraction.VerifyAuthentication(value);
+        }
     }
 }

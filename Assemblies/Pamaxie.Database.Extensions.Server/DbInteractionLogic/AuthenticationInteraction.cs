@@ -46,5 +46,11 @@ namespace Pamaxie.Database.Extensions.Server
         {
             throw new System.NotImplementedException();
         }
+
+        /// <inheritdoc/>
+        public bool VerifyAuthentication(AppAuthCredentials value)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

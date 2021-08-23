@@ -6,6 +6,7 @@ using Pamaxie.Api.Data;
 using PamaxieML.Model;
 using System.IO;
 using System.Threading.Tasks;
+using Pamaxie.Database.Redis.DataClasses;
 
 namespace Pamaxie.Api.Controllers
 {

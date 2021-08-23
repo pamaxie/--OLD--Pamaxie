@@ -5,6 +5,7 @@ using System.IO;
 using Pamaxie.Api.Data;
 using Pamaxie.Api.Security;
 using Pamaxie.Data;
+using Pamaxie.Database.Extensions.Client;
 
 namespace Pamaxie.Api.Controllers
 {
@@ -34,12 +35,12 @@ namespace Pamaxie.Api.Controllers
 
             PamaxieApplication? appData = JsonConvert.DeserializeObject<PamaxieApplication>(result);
 
-            if (string.IsNullOrEmpty(appData?.AppToken) || default == appData.ApplicationId)
+            if (string.IsNullOrEmpty(appData?.Credentials.AuthorizationToken) || default == appData.Key)
                 return Unauthorized(ErrorHandler.UnAuthorized());
 
-            if (!appData.VerifyAuth()) return Unauthorized(ErrorHandler.UnAuthorized());
+            if (!appData.Credentials.VerifyAuthentication()) return Unauthorized(ErrorHandler.UnAuthorized());
 
-            AuthToken token = _generator.CreateToken(appData.ApplicationId.ToString());
+            AuthToken token = _generator.CreateToken(appData.Key);
             return Ok(token);
         }
 
@@ -65,9 +66,9 @@ namespace Pamaxie.Api.Controllers
                 return StatusCode(400);
             }
             
-            if (default == appData?.ApplicationId) return BadRequest(ErrorHandler.UnAuthorized());
+            if (default == appData?.Key) return BadRequest(ErrorHandler.UnAuthorized());
 
-            string userId = appData.ApplicationId.ToString();
+            string userId = appData.Key;
             AuthToken token = _generator.CreateToken(userId);
             return Ok(token);
         }

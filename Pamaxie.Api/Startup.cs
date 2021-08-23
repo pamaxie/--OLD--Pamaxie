@@ -54,18 +54,11 @@ namespace Pamaxie.Api
 
             services.AddTransient<TokenGenerator>();
 
-            //Checking if the Redis and SQL Database is reachable and all dandy.
-            if (!Database.Extensions.Sql.DbExtensions.SqlDbCheckup(out string sqlErrors))
-            {
-                Console.WriteLine(sqlErrors);
-                Environment.Exit(501);
-            }
-
-            if (!Database.Extensions.Redis.DbExtensions.RedisDbCheckup(out string redisErrors))
-            {
-                Console.WriteLine(redisErrors);
-                Environment.Exit(501);
-            }
+            //if (TODO Validate connection to Redis)
+            //{
+            //    Console.WriteLine(redisErrors);
+            //    Environment.Exit(501);
+            //}
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
