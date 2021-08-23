@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.IO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.IO;
 using Pamaxie.Api.Data;
 using Pamaxie.Api.Security;
 using Pamaxie.Data;
@@ -9,6 +9,9 @@ using Pamaxie.Database.Extensions.Client;
 
 namespace Pamaxie.Api.Controllers
 {
+    /// <summary>
+    /// Controller to handle application authentication
+    /// </summary>
     [Authorize]
     [ApiController]
     [Route("[controller]")]

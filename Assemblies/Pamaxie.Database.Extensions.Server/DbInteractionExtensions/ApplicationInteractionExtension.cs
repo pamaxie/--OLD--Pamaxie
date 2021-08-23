@@ -5,6 +5,9 @@ using Pamaxie.Database.Extensions.InteractionObjects.BaseInterfaces;
 
 namespace Pamaxie.Database.Extensions.Server
 {
+    /// <summary>
+    /// Extension methods for <see cref="PamaxieApplication"/>
+    /// </summary>
     public static class ApplicationInteractionExtension
     {
         private static readonly IApplicationInteraction ApplicationInteraction = new ApplicationInteraction();

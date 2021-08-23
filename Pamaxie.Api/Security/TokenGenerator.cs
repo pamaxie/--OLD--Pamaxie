@@ -8,6 +8,9 @@ using Pamaxie.Api.Data;
 
 namespace Pamaxie.Api.Security
 {
+    /// <summary>
+    /// Authentication token generator
+    /// </summary>
     public class TokenGenerator
     {
         private readonly IConfiguration _configuration;
@@ -17,9 +20,14 @@ namespace Pamaxie.Api.Security
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Creates a token object through JWT encoding
+        /// </summary>
+        /// <param name="userId">User id of the user that will be contained in the token</param>
+        /// <returns>A authentication token object</returns>
         public AuthToken CreateToken(string userId)
         {
-            // authentication successful so generate jwt token
+            //Authentication successful so generate JWT Token
             JwtSecurityTokenHandler tokenHandler = new();
             IConfigurationSection? section = _configuration.GetSection("AuthData");
             byte[] key = Encoding.ASCII.GetBytes(section.GetValue<string>("Secret"));

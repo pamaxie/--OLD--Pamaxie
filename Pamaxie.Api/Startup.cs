@@ -11,8 +11,15 @@ using Pamaxie.Api.Security;
 
 namespace Pamaxie.Api
 {
+    /// <summary>
+    /// Startup class, usually gets called by <see cref="Program"/>
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Initializer
+        /// </summary>
+        /// <param name="configuration">Configuration to use</param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -20,7 +27,10 @@ namespace Pamaxie.Api
 
         private IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// This method gets called by the runtime to add services to the container for dependency injection
+        /// </summary>
+        /// <param name="services">Service Collection to add services to</param>
         public void ConfigureServices(IServiceCollection services)
         {
             //Load Data Storage Configuration from appsettings.json
@@ -61,7 +71,11 @@ namespace Pamaxie.Api
             //}
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This is called by the runtime to configure the HTTP request pipeline
+        /// </summary>
+        /// <param name="app">Application Builder</param>
+        /// <param name="env">Web-host Environment</param>
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();

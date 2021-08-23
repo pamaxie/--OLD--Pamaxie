@@ -24,19 +24,19 @@
         /// <summary>
         /// Attempts a connection with the redis instance
         /// </summary>
-        /// <returns><see cref="bool"/>If the connection attempt was successful</returns>
+        /// <returns><see cref="bool"/> if the connection attempt was successful</returns>
         public bool Connect();
         
         /// <summary>
         /// Validates if the database is available
         /// </summary>
-        /// <returns><see cref="bool"/>If the database is available</returns>
+        /// <returns><see cref="bool"/> if the database is available</returns>
         public bool IsDatabaseAvailable();
         
         /// <summary>
         /// Validates the roundtrip latency to the database
         /// </summary>
-        /// <returns><inheritdoc cref="ushort"/>Denoting the latency to the database</returns>
+        /// <returns><inheritdoc cref="ushort"/> Denoting the latency to the database</returns>
         public ushort DatabaseLatency();
     }
 }

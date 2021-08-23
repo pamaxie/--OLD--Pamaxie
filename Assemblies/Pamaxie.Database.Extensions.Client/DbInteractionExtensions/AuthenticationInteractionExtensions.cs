@@ -4,6 +4,9 @@ using Pamaxie.Database.Extensions.InteractionObjects.BaseInterfaces;
 
 namespace Pamaxie.Database.Extensions.Client
 {
+    /// <summary>
+    /// Extension methods for <see cref="AppAuthCredentials"/>
+    /// </summary>
     public static class AuthenticationInteractionExtensions
     {
         private static readonly IAuthenticationInteraction AuthenticationInteraction = new AuthenticationInteraction();

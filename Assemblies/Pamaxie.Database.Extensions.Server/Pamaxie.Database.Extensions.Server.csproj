@@ -9,7 +9,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DbValidationLogic" />
+    <Compile Remove="DbValidationLogic\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="DbValidationLogic\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="DbValidationLogic\**" />
   </ItemGroup>
 
 </Project>

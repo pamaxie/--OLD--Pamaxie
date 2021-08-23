@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.IO;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Pamaxie.Api.Data;
-using PamaxieML.Model;
-using System.IO;
-using System.Threading.Tasks;
 using Pamaxie.Database.Redis.DataClasses;
+using PamaxieML.Model;
 
 namespace Pamaxie.Api.Controllers
 {
+    /// <summary>
+    /// Controller to analyse images
+    /// </summary>
     [Authorize]
     [ApiController]
     [Route("[controller]")]
@@ -24,8 +27,8 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        ///     Probes if the API is available, will probably be expanded with more option later, 
-        ///     mostly used for now for load balancers to check if everything is working
+        /// Probes if the API is available, will probably be expanded with more option later, 
+        /// mostly used for now for load balancers to check if everything is working
         /// </summary>
         /// <returns>oAuth Token</returns>
         [HttpGet("status")]
@@ -37,7 +40,7 @@ namespace Pamaxie.Api.Controllers
         }
         
         /// <summary>
-        ///     Verifies the content of a sent image
+        /// Verifies the content of a sent image
         /// </summary>
         /// <returns>oAuth Token</returns>
         [HttpPost("scanImage")]
@@ -54,12 +57,12 @@ namespace Pamaxie.Api.Controllers
             }
 
             FileInfo image = ImageProcessing.ImageProcessing.DownloadFile(result);
-            // Add input data
+            //Add input data
             ModelInput input = new()
             {
                 ImageSource = image.FullName
             };
-            // Load model and predict output of sample data
+            //Load model and predict output of sample data
             ConsumeModel.Predict(input, out var labelResult);
 
             MediaData predictionData = new()
@@ -75,7 +78,7 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        ///     Gets any existing data already present in the database, if none exist we return 404 to tell the user it doesn't exist.
+        /// Gets any existing data already present in the database, if none exist we return 404 to tell the user it doesn't exist.
         /// </summary>
         /// <returns>oAuth Token</returns>
         [HttpPost("getExistingData")]
@@ -95,7 +98,7 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        ///     Gets the Files File Hash
+        /// Gets the Files File Hash
         /// </summary>
         /// <returns>oAuth Token</returns>
         [HttpPost("getHash")]

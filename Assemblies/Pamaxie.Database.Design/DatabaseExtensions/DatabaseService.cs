@@ -1,42 +1,35 @@
-﻿namespace Pamaxie.Database.Extensions.DatabaseExtensions
+﻿using System;
+
+namespace Pamaxie.Database.Extensions.DatabaseExtensions
 {
+    /// <inheritdoc/>
     public class DatabaseService : IDatabaseService
     {
-        private string _redisInstances;
-        private string _password;
-        private int _reconnectionAttempts;
+        /// <inheritdoc/>
+        string IDatabaseService.RedisInstances { get; set; }
 
-        string IDatabaseService.RedisInstances
-        {
-            get => _redisInstances;
-            set => _redisInstances = value;
-        }
+        /// <inheritdoc/>
+        string IDatabaseService.Password { get; set; }
 
-        string IDatabaseService.Password
-        {
-            get => _password;
-            set => _password = value;
-        }
+        /// <inheritdoc/>
+        int IDatabaseService.ReconnectionAttempts { get; set; }
 
-        int IDatabaseService.ReconnectionAttempts
-        {
-            get => _reconnectionAttempts;
-            set => _reconnectionAttempts = value;
-        }
-
+        /// <inheritdoc/>
         public bool Connect()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public bool IsDatabaseAvailable()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public ushort DatabaseLatency()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

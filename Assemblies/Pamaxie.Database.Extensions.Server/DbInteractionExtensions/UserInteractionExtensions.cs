@@ -4,6 +4,9 @@ using Pamaxie.Database.Extensions.InteractionObjects.BaseInterfaces;
 
 namespace Pamaxie.Database.Extensions.Server
 {
+    /// <summary>
+    /// Extension methods for <see cref="IPamaxieUser"/>
+    /// </summary>
     public static class UserInteractionExtensions
     {
         private static readonly IUserInteraction UserInteraction = new UserInteraction();

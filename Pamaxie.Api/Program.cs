@@ -7,8 +7,15 @@ using PamaxieML.Model;
 
 namespace Pamaxie.Api
 {
+    /// <summary>
+    /// Class for the Main entry point
+    /// </summary>
     public static class Program
     {
+        /// <summary>
+        /// Main entry point for the application
+        /// </summary>
+        /// <param name="args">Launch Parameters</param>
         public static void Main(string[] args)
         {
             //Testing the prediction engine. We test this very early to ensure everything is working properly.

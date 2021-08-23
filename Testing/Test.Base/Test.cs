@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Pamaxie.Data;
-using Pamaxie.Database.Extensions;
 using Xunit.Abstractions;
 
 namespace Test.Base

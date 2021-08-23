@@ -8,12 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DbValidationLogic" />
+    <ProjectReference Include="..\Pamaxie.Database.Design\Pamaxie.Database.Design.csproj" />
+    <ProjectReference Include="..\Pamaxie.Data\Pamaxie.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Pamaxie.Database.Design\Pamaxie.Database.Design.csproj" />
-    <ProjectReference Include="..\Pamaxie.Data\Pamaxie.Data.csproj" />
+    <Compile Remove="DbValidationLogic\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="DbValidationLogic\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="DbValidationLogic\**" />
   </ItemGroup>
 
 </Project>
