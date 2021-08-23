@@ -3,7 +3,7 @@ using Pamaxie.Database.Extensions.InteractionObjects;
 
 namespace Pamaxie.Database.Extensions.Server
 {
-    public class UserInteraction : IUserInteraction
+    internal class UserInteraction : IUserInteraction
     {
         /// <inheritdoc/>
         public IPamaxieUser Get(string key)

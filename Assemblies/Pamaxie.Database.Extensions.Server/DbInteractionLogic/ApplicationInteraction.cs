@@ -4,7 +4,7 @@ using Pamaxie.Database.Extensions.InteractionObjects;
 
 namespace Pamaxie.Database.Extensions.Server
 {
-    public class ApplicationInteraction : IApplicationInteraction
+    internal class ApplicationInteraction : IApplicationInteraction
     {
         /// <inheritdoc/>
         public IPamaxieApplication Get(string key)

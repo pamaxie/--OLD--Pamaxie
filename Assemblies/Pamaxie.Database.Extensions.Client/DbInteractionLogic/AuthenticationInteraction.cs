@@ -3,7 +3,7 @@ using Pamaxie.Database.Extensions.InteractionObjects;
 
 namespace Pamaxie.Database.Extensions.Client
 {
-    public class AuthenticationInteraction : IAuthenticationInteraction
+    internal class AuthenticationInteraction : IAuthenticationInteraction
     {
         /// <inheritdoc/>
         public AppAuthCredentials Get(string key)
