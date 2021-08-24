@@ -35,8 +35,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Assemblies\Pamaxie.Database.Extensions.Client\Pamaxie.Database.Extensions.Client.csproj" />
-    <ProjectReference Include="..\Assemblies\Pamaxie.Database.Extensions.Sql\Pamaxie.Database.Extensions.Sql.csproj" />
-    <ProjectReference Include="..\Pamaxie.Database.Extensions.Client\Pamaxie.Database.Extensions.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>
