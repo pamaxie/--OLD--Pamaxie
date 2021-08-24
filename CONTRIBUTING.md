@@ -64,7 +64,7 @@ Pamaxie uses a consistent structure for commit messages with the following patte
 - No unnecessary whitespace. Check for whitespace with ``git diff --check`` and ``git diff --cached --check`` before commit.
 - Double check, to make sure everything is right.
 
-###Submit pull request
+### Submit pull request
 **Prerequisites:**<br>
 - You are making commits in a issue branch.
 - All code should compile without errors or warnings.
@@ -77,7 +77,7 @@ Pamaxie uses a consistent structure for commit messages with the following patte
 - Once a pull request is in, do not delete the branch or close the pull request.
 - One of the core Pamaxie team members will evaluate it within a reasonable time period. Some things get evaluated faster or fast tracked. We are human and we have active lives outside of open source so don't fret if you haven't seen any activity on your pull request within a month or two. We don't have a Service Level Agreement (SLA) for pull requests. Just know that we will evaluate your pull request.
 
-###Respond to feedback on pull request
+### Respond to feedback on pull request
 There may be feedback for you to fix or change. These changes must be pushed against the same branch, the pull request will automatically get updated.
 
 If comments or questions have not received any response, it will eventually mean the pull request will be closed and not accepted. This does not mean that your contribution is not appreciated, just that things go stale. If you want to pick it back up, feel free to address the concerns, questions or feedback and reopen the pull request referencing the old one.
