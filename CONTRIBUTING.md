@@ -11,10 +11,10 @@ Only work on problems that are documented. If you find a new issue create an iss
 
 Planning is key. If a issue is flagged as a "Complex Problem" it usually requires planning and we expect contributors to have done that planning and explain their train of thought as a comment in the issue. We will then agree or disagree with the implementation. After that, a contribution can be done.
 
-When working on a issue, create a branch for the issue with the format ``dev/IssueNumber/SumUp``<br>
+When working on a issue, create a branch for the issue with the format ``dev/issue/summary``<br>
 Example:
 ```
-dev/2/Test_For_API
+dev/2/test_for_api
 ```
 
 ### Code Style
@@ -23,18 +23,6 @@ Normal .NET coding guidelines apply. See the [Framework Design Guidelines](https
 ### Unit Tests
 Make sure to run all unit tests before creating a pull request. Any new code should also have reasonable unit test coverage.
 
-### Commit Messages
-Pamaxie uses a consistent structure for commit messages with the following pattern:
-```
-#ISSUE Sum_Up_Of_Current_Change
-```
-
-#### Example
-```
-#1 Fixed Bug in AuthController.cs where a null reference was not checked for.
-#2 Implemented Unit Tests for Pamaxie.API.
-#3 Improved run-time for the method DownloadFile in ImageProcessing.cs.
-```
 ## How To Contribute
 
 ### Preparation
@@ -57,20 +45,26 @@ Pamaxie uses a consistent structure for commit messages with the following patte
 Pamaxie uses a consistent structure for commit messages with the following pattern:
 ```
 #ISSUE Sum_Up_Of_Current_Change
+
+Example:
+#1 Fixed Bug in AuthController.cs where a null reference was not checked for.
+#2 Implemented Unit Tests for Pamaxie.API.
+#3 Improved run-time for the method DownloadFile in ImageProcessing.cs.
 ```
-**Before commiting:**
+
+#### Before commiting:
 - Should include new or changed tests relevant to the changes you are making.
 - Everything should follow the Code Style. (See guideline)
 - No unnecessary whitespace. Check for whitespace with ``git diff --check`` and ``git diff --cached --check`` before commit.
 - Double check, to make sure everything is right.
 
 ### Submit pull request
-**Prerequisites:**<br>
+#### Prerequisites:
 - You are making commits in a issue branch.
 - All code should compile without errors or warnings.
 - All tests should be passing.
 
-**Submitting Pull Request:**
+#### Submitting Pull Request:
 - Once you feel it is ready, submit the pull request to the pamaxie/Pamaxie repository against the dev branch unless specifically requested to submit it against another branch.
   - In the case of a larger change that is going to require more discussion, please submit a pull request sooner. Waiting until you are ready may mean more changes than you are interested in if the changes are taking things in a direction the maintainers do not want to go.
 - In the pull request, outline what you did and point to specific conversations, with a url, and issues that you are resolving. This is a tremendous help for the evaluation and acceptance.
