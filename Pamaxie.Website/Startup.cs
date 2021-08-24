@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -53,6 +55,45 @@ namespace Pamaxie.Website
             {
                 Secure = CookieSecurePolicy.Always,
             };
+
+            //Add rate limit
+            services.AddMemoryCache();
+            services.AddInMemoryRateLimiting();
+            services.Configure<ClientRateLimitOptions>(option =>
+            {
+                option.EnableEndpointRateLimiting = false;
+                option.StackBlockedRequests = true;
+                option.HttpStatusCode = 429;
+                option.ClientWhitelist = new List<string> {"", ""};
+                option.GeneralRules = new List<RateLimitRule>
+                {
+                    new()
+                    {
+                        Endpoint = "*",
+                        Period = "1s",
+                        Limit = 2
+                    },
+                    new()
+                    {
+                        Endpoint = "*",
+                        Period = "15m",
+                        Limit = 100
+                    },
+                    new()
+                    {
+                        Endpoint = "*",
+                        Period = "12h",
+                        Limit = 1000
+                    },
+                    new()
+                    {
+                        Endpoint = "*",
+                        Period = "7d",
+                        Limit = 10000
+                    }
+                };
+            });
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 
             //Add the Mudblazor Theme
             services.AddMudServices();
@@ -116,7 +157,7 @@ namespace Pamaxie.Website
                 MinimumSameSitePolicy = SameSiteMode.Lax
             });
 
-
+            app.UseIpRateLimiting();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
