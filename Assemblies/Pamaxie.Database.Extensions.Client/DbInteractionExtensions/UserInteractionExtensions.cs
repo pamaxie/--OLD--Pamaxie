@@ -17,22 +17,10 @@ namespace Pamaxie.Database.Extensions.Client
             return UserInteraction.Get(key);
         }
 
-        /// <inheritdoc cref="IDatabaseInteraction{T}.UpdateOrCreate"/>
-        public static bool UpdateOrCreate(this IPamaxieUser value, out IPamaxieUser databaseValue)
+        /// <inheritdoc cref="IDatabaseInteraction{T}.Create"/>
+        public static IPamaxieUser Create(this IPamaxieUser value)
         {
-            return UserInteraction.UpdateOrCreate(value, out databaseValue);
-        }
-
-        /// <inheritdoc cref="IDatabaseInteraction{T}.TryUpdate"/>
-        public static bool TryUpdate(this IPamaxieUser value, out IPamaxieUser updatedValue)
-        {
-            return UserInteraction.TryUpdate(value, out updatedValue);
-        }
-
-        /// <inheritdoc cref="IDatabaseInteraction{T}.Update"/>
-        public static IPamaxieUser Update(this IPamaxieUser value)
-        {
-            return UserInteraction.Update(value);
+            return UserInteraction.Create(value);
         }
 
         /// <inheritdoc cref="IDatabaseInteraction{T}.TryCreate"/>
@@ -41,10 +29,22 @@ namespace Pamaxie.Database.Extensions.Client
             return UserInteraction.TryCreate(value, out createdValue);
         }
 
-        /// <inheritdoc cref="IDatabaseInteraction{T}.Create"/>
-        public static IPamaxieUser Create(this IPamaxieUser value)
+        /// <inheritdoc cref="IDatabaseInteraction{T}.Update"/>
+        public static IPamaxieUser Update(this IPamaxieUser value)
         {
-            return UserInteraction.Create(value);
+            return UserInteraction.Update(value);
+        }
+
+        /// <inheritdoc cref="IDatabaseInteraction{T}.TryUpdate"/>
+        public static bool TryUpdate(this IPamaxieUser value, out IPamaxieUser updatedValue)
+        {
+            return UserInteraction.TryUpdate(value, out updatedValue);
+        }
+
+        /// <inheritdoc cref="IDatabaseInteraction{T}.UpdateOrCreate"/>
+        public static bool UpdateOrCreate(this IPamaxieUser value, out IPamaxieUser databaseValue)
+        {
+            return UserInteraction.UpdateOrCreate(value, out databaseValue);
         }
 
         /// <inheritdoc cref="IDatabaseInteraction{T}.Delete"/>
