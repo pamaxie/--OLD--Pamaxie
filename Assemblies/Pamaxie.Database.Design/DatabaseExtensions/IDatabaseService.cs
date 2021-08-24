@@ -1,26 +1,38 @@
-﻿namespace Pamaxie.Database.Extensions.DatabaseExtensions
+﻿using System;
+using Pamaxie.Database.Extensions.InteractionObjects;
+using Pamaxie.Database.Extensions.InteractionObjects.BaseInterfaces;
+
+namespace Pamaxie.Database.Extensions.DatabaseExtensions
 {
     /// <summary>
     /// Service responsible for handling interaction with the database or database api. This automatically detects
     /// the connection context.
     /// </summary>
-    public interface IDatabaseService
+    public interface IDatabaseService<T>
     {
+        #region Services
         /// <summary>
-        /// Defines the available Redis instances
-        /// </summary>
-        internal string RedisInstances { get; set; }
-        
+            /// The actual Database Service that we use to connect to the database
+            /// </summary>
+            public T Service { get; set;  }
+
+        #endregion
+
         /// <summary>
-        /// Defines the password to use for the redis instances
+        /// The data context that should be used for connecting to instances
         /// </summary>
-        internal string Password { get; set; }
-        
+        public IPamaxieDataContext DataContext { get; }
+
         /// <summary>
-        /// How many attempts should be made to connect to the database
+        /// Is set if <see cref="Connect"/> ran successfully, please see <see cref="LastConnectionSuccess"/> when the last connection was successful
         /// </summary>
-        internal int ReconnectionAttempts { get; set; }
-        
+        public bool ConnectionSuccess { get; set; }
+
+        /// <summary>
+        /// Defines when the last connection was made successfully
+        /// </summary>
+        public DateTime LastConnectionSuccess { get; set; }
+
         /// <summary>
         /// Attempts a connection with the redis instance
         /// </summary>

@@ -1,55 +1,28 @@
 ﻿using System;
+using System.Data;
+using Newtonsoft.Json;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.InteractionObjects;
+using Pamaxie.Database.Extensions.Server._BASE_;
+using StackExchange.Redis;
 
 namespace Pamaxie.Database.Extensions.Server
 {
-    /// <inheritdoc/>
-    internal class UserInteraction : IUserInteraction
+    /// <inheritdoc cref="IUserDataService" />
+    public class UserDataService : ServerDataServiceBase<IPamaxieUser>
     {
         /// <inheritdoc/>
-        public IPamaxieUser Get(string key)
+        internal UserDataService(PamaxieDataContext dataContext, DatabaseService service)
         {
-            throw new NotImplementedException();
+            DataContext = dataContext;
+            Service = service;
         }
 
-        /// <inheritdoc/>
-        public IPamaxieUser Create(IPamaxieUser value)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc/>
-        public bool TryCreate(IPamaxieUser value, out IPamaxieUser createdValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc/>
-        public IPamaxieUser Update(IPamaxieUser value)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc/>
-        public bool TryUpdate(IPamaxieUser value, out IPamaxieUser updatedValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc/>
-        public bool UpdateOrCreate(IPamaxieUser value, out IPamaxieUser databaseValue)
-        {
-            throw new NotImplementedException();
-        }
-        
-        /// <inheritdoc/>
-        public bool Delete(IPamaxieUser value)
-        {
-            throw new NotImplementedException();
-        }
-        
-        /// <inheritdoc/>
+        /// <summary>
+        /// Verifies the email of the user
+        /// </summary>
+        /// <param name="value">The user that will have their email verified</param>
+        /// <returns><see cref="bool"/> if the operation was successful and the email was verified</returns>
         public bool VerifyEmail(IPamaxieUser value)
         {
             throw new NotImplementedException();

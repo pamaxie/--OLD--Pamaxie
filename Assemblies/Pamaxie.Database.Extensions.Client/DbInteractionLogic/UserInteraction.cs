@@ -5,10 +5,10 @@ using Pamaxie.Database.Extensions.InteractionObjects;
 namespace Pamaxie.Database.Extensions.Client
 {
     /// <inheritdoc/>
-    internal class UserInteraction : IUserInteraction
+    internal class UserDataService : IUserDataService
     {
         /// <inheritdoc/>
-        public IPamaxieUser Get(string key)
+        public object Get(string key)
         {
             throw new NotImplementedException();
         }

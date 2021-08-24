@@ -4,10 +4,10 @@ using Pamaxie.Database.Extensions.InteractionObjects;
 
 namespace Test.Base
 {
-    public class MockUserInteraction : IUserInteraction
+    public class MockUserDataService : IUserDataService
     {
         /// <inheritdoc/>
-        public IPamaxieUser Get(string key)
+        public object Get(string key)
         {
             throw new NotImplementedException();
         }

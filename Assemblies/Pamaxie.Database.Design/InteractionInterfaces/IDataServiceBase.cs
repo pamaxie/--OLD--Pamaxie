@@ -5,7 +5,7 @@ namespace Pamaxie.Database.Extensions.InteractionObjects.BaseInterfaces
     /// <summary>
     /// Interface that defines how a database extension has to look like
     /// </summary>
-    public interface IDatabaseInteraction<T>
+    public interface IDataServiceBase<T>
     {
         /// <summary>
         /// Gets a value from the database
@@ -37,7 +37,7 @@ namespace Pamaxie.Database.Extensions.InteractionObjects.BaseInterfaces
         /// <param name="value">The value that should be updated</param>
         /// <returns>The updated value of the database</returns>
         /// <exception cref="ArgumentException">The value does not exist in the database</exception>
-        public T Update(T value);
+        public T? Update(T value);
 
         /// <summary>
         /// Updates a value inside the database to the value of <see cref="updatedValue"/>

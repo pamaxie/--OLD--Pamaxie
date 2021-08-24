@@ -2,13 +2,13 @@
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.InteractionObjects;
 
-namespace Pamaxie.Database.Extensions.Server
+namespace Pamaxie.Database.Extensions.Client
 {
     /// <inheritdoc/>
-    internal class AuthenticationInteraction : IAuthenticationInteraction
+    internal class AuthenticationDataService : IAuthenticationDataService
     {
         /// <inheritdoc/>
-        public AppAuthCredentials Get(string key)
+        public object Get(string key)
         {
             throw new NotImplementedException();
         }

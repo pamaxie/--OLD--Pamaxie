@@ -108,7 +108,7 @@ namespace Test.Pamaxie.Website
             Assert.NotNull(googleClaims);
             
             //TODO Mock UserInteractionExtension, as it will be used in UserService
-            MockUserInteraction mockedUserInteraction = new(); //Delete this once a mocking implementation have been added
+            MockUserDataService mockedUserDataService = new(); //Delete this once a mocking implementation have been added
             
             //Mock HttpContext with principle claims
             IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);
@@ -116,14 +116,14 @@ namespace Test.Pamaxie.Website
             //Check if the user is the current logged in
             Assert.NotNull(httpContextAccessor.HttpContext?.User.GetGoogleAuthData(out bool _));
 
-            IPamaxieUser unverifiedPamaxieUser = mockedUserInteraction.Get(userKey);
+            IPamaxieUser unverifiedPamaxieUser = mockedUserDataService.Get(userKey);
             TestOutputHelper.WriteLine("Email verified: " + unverifiedPamaxieUser.EmailVerified);
 
             UserService userService = new(Configuration, httpContextAccessor, null);
             string token = userService.GenerateEmailConfirmationToken(unverifiedPamaxieUser);
             Assert.True(userService.ConfirmEmail(token));
             
-            IPamaxieUser verifiedPamaxieUser = mockedUserInteraction.Get(userKey);
+            IPamaxieUser verifiedPamaxieUser = mockedUserDataService.Get(userKey);
             TestOutputHelper.WriteLine("Email verified: " + verifiedPamaxieUser.EmailVerified);
             Assert.True(userService.IsEmailOfCurrentUserVerified());
         }

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.InteractionObjects;
 
-namespace Pamaxie.Database.Extensions.Server
+namespace Pamaxie.Database.Extensions.Client
 {
     /// <inheritdoc/>
-    internal class ApplicationInteraction : IApplicationInteraction
+    internal class ApplicationDataService : IApplicationDataService
     {
         /// <inheritdoc/>
-        public IPamaxieApplication Get(string key)
+        public object Get(string key)
         {
             throw new NotImplementedException();
         }
@@ -19,7 +19,7 @@ namespace Pamaxie.Database.Extensions.Server
         {
             throw new NotImplementedException();
         }
-
+        
         /// <inheritdoc/>
         public IPamaxieApplication Create(IPamaxieApplication value)
         {
@@ -55,7 +55,7 @@ namespace Pamaxie.Database.Extensions.Server
         {
             throw new NotImplementedException();
         }
-        
+
         /// <inheritdoc/>
         public bool EnableOrDisable(IPamaxieApplication value)
         {

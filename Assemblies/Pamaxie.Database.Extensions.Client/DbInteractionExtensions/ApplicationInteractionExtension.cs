@@ -10,60 +10,60 @@ namespace Pamaxie.Database.Extensions.Client
     /// </summary>
     public static class ApplicationInteractionExtension
     {
-        private static readonly IApplicationInteraction ApplicationInteraction = new ApplicationInteraction();
+        private static readonly IApplicationDataService ApplicationDataService = new ApplicationDataService();
         
-        /// <inheritdoc cref="IDatabaseInteraction{T}.Get"/>
+        /// <inheritdoc cref="IDataServiceBase{T}.Get"/>
         public static IPamaxieApplication Get(string key)
         {
-            return ApplicationInteraction.Get(key);
+            return ApplicationDataService.Get(key);
         }
         
-        /// <inheritdoc cref="IApplicationInteraction.GetFromUser"/>
+        /// <inheritdoc cref="IApplicationDataService.GetFromUser"/>
         public static IEnumerable<IPamaxieApplication> GetFromUser(string value)
         {
-            return ApplicationInteraction.GetFromUser(value);
+            return ApplicationDataService.GetFromUser(value);
         }
         
-        /// <inheritdoc cref="IDatabaseInteraction{T}.Create"/>
+        /// <inheritdoc cref="IDataServiceBase{T}.Create"/>
         public static IPamaxieApplication Create(this IPamaxieApplication value)
         {
-            return ApplicationInteraction.Create(value);
+            return ApplicationDataService.Create(value);
         }
         
-        /// <inheritdoc cref="IDatabaseInteraction{T}.TryCreate"/>
+        /// <inheritdoc cref="IDataServiceBase{T}.TryCreate"/>
         public static bool TryCreate(this IPamaxieApplication value, out IPamaxieApplication createdValue)
         {
-            return ApplicationInteraction.TryCreate(value, out createdValue);
+            return ApplicationDataService.TryCreate(value, out createdValue);
         }
 
-        /// <inheritdoc cref="IDatabaseInteraction{T}.Update"/>
+        /// <inheritdoc cref="IDataServiceBase{T}.Update"/>
         public static IPamaxieApplication Update(this IPamaxieApplication value)
         {
-            return ApplicationInteraction.Update(value);
+            return ApplicationDataService.Update(value);
         }
 
-        /// <inheritdoc cref="IDatabaseInteraction{T}.TryUpdate"/>
+        /// <inheritdoc cref="IDataServiceBase{T}.TryUpdate"/>
         public static bool TryUpdate(this IPamaxieApplication value, out IPamaxieApplication updatedValue)
         {
-            return ApplicationInteraction.TryUpdate(value, out updatedValue);
+            return ApplicationDataService.TryUpdate(value, out updatedValue);
         }
 
-        /// <inheritdoc cref="IDatabaseInteraction{T}.UpdateOrCreate"/>
+        /// <inheritdoc cref="IDataServiceBase{T}.UpdateOrCreate"/>
         public static bool UpdateOrCreate(this IPamaxieApplication value, out IPamaxieApplication databaseValue)
         {
-            return ApplicationInteraction.UpdateOrCreate(value, out databaseValue);
+            return ApplicationDataService.UpdateOrCreate(value, out databaseValue);
         }
 
-        /// <inheritdoc cref="IDatabaseInteraction{T}.Delete"/>
+        /// <inheritdoc cref="IDataServiceBase{T}.Delete"/>
         public static bool Delete(this IPamaxieApplication value)
         {
-            return ApplicationInteraction.Delete(value);
+            return ApplicationDataService.Delete(value);
         }
         
-        /// <inheritdoc cref="IApplicationInteraction.EnableOrDisable"/>
+        /// <inheritdoc cref="IApplicationDataService.EnableOrDisable"/>
         public static bool EnableOrDisable(this IPamaxieApplication value)
         {
-            return ApplicationInteraction.EnableOrDisable(value);
+            return ApplicationDataService.EnableOrDisable(value);
         }
     }
 }

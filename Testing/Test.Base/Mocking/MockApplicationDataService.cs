@@ -1,56 +1,63 @@
 ﻿using System;
+using System.Collections.Generic;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.InteractionObjects;
 
-namespace Pamaxie.Database.Extensions.Client
+namespace Test.Base
 {
     /// <inheritdoc/>
-    internal class AuthenticationInteraction : IAuthenticationInteraction
+    public class MockApplicationDataService : IApplicationDataService
     {
         /// <inheritdoc/>
-        public AppAuthCredentials Get(string key)
+        public object Get(string key)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public AppAuthCredentials Create(AppAuthCredentials value)
+        public IEnumerable<IPamaxieApplication> GetFromUser(string value)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public bool TryCreate(AppAuthCredentials value, out AppAuthCredentials createdValue)
+        public IPamaxieApplication Create(IPamaxieApplication value)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public AppAuthCredentials Update(AppAuthCredentials value)
+        public bool TryCreate(IPamaxieApplication value, out IPamaxieApplication createdValue)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public bool TryUpdate(AppAuthCredentials value, out AppAuthCredentials updatedValue)
+        public IPamaxieApplication Update(IPamaxieApplication value)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public bool UpdateOrCreate(AppAuthCredentials value, out AppAuthCredentials databaseValue)
+        public bool TryUpdate(IPamaxieApplication value, out IPamaxieApplication updatedValue)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public bool Delete(AppAuthCredentials value)
+        public bool UpdateOrCreate(IPamaxieApplication value, out IPamaxieApplication databaseValue)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public bool VerifyAuthentication(AppAuthCredentials value)
+        public bool Delete(IPamaxieApplication value)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public bool EnableOrDisable(IPamaxieApplication value)
         {
             throw new NotImplementedException();
         }

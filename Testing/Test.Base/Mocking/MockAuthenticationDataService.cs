@@ -5,10 +5,10 @@ using Pamaxie.Database.Extensions.InteractionObjects;
 namespace Test.Base
 {
     /// <inheritdoc/>
-    public class MockAuthenticationInteraction : IAuthenticationInteraction
+    public class MockAuthenticationDataService : IAuthenticationDataService
     {
         /// <inheritdoc/>
-        public AppAuthCredentials Get(string key)
+        public object Get(string key)
         {
             throw new NotImplementedException();
         }

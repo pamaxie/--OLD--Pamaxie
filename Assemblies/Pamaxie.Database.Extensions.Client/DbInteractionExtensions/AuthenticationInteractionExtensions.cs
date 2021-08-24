@@ -9,48 +9,48 @@ namespace Pamaxie.Database.Extensions.Client
     /// </summary>
     public static class AuthenticationInteractionExtensions
     {
-        private static readonly IAuthenticationInteraction AuthenticationInteraction = new AuthenticationInteraction();
+        private static readonly IAuthenticationDataService AuthenticationDataService = new AuthenticationDataService();
         
-        /// <inheritdoc cref="IDatabaseInteraction{T}.Get"/>
+        /// <inheritdoc cref="IDataServiceBase{T}.Get"/>
         public static AppAuthCredentials Get(string key)
         {
-            return AuthenticationInteraction.Get(key);
+            return AuthenticationDataService.Get(key);
         }
         
-        /// <inheritdoc cref="IDatabaseInteraction{T}.Create"/>
+        /// <inheritdoc cref="IDataServiceBase{T}.Create"/>
         public static AppAuthCredentials Create(this AppAuthCredentials value)
         {
-            return AuthenticationInteraction.Create(value);
+            return AuthenticationDataService.Create(value);
         }
 
-        /// <inheritdoc cref="IDatabaseInteraction{T}.TryCreate"/>
+        /// <inheritdoc cref="IDataServiceBase{T}.TryCreate"/>
         public static bool TryCreate(this AppAuthCredentials value, out AppAuthCredentials createdValue)
         {
-            return AuthenticationInteraction.TryCreate(value, out createdValue);
+            return AuthenticationDataService.TryCreate(value, out createdValue);
         }
 
-        /// <inheritdoc cref="IDatabaseInteraction{T}.Update"/>
+        /// <inheritdoc cref="IDataServiceBase{T}.Update"/>
         public static AppAuthCredentials Update(this AppAuthCredentials value)
         {
-            return AuthenticationInteraction.Update(value);
+            return AuthenticationDataService.Update(value);
         }
 
-        /// <inheritdoc cref="IDatabaseInteraction{T}.TryUpdate"/>
+        /// <inheritdoc cref="IDataServiceBase{T}.TryUpdate"/>
         public static bool TryUpdate(this AppAuthCredentials value, out AppAuthCredentials updatedValue)
         {
-            return AuthenticationInteraction.TryUpdate(value, out updatedValue);
+            return AuthenticationDataService.TryUpdate(value, out updatedValue);
         }
         
-        /// <inheritdoc cref="IDatabaseInteraction{T}.UpdateOrCreate"/>
+        /// <inheritdoc cref="IDataServiceBase{T}.UpdateOrCreate"/>
         public static bool UpdateOrCreate(this AppAuthCredentials value, out AppAuthCredentials databaseValue)
         {
-            return AuthenticationInteraction.UpdateOrCreate(value, out databaseValue);
+            return AuthenticationDataService.UpdateOrCreate(value, out databaseValue);
         }
 
-        /// <inheritdoc cref="IAuthenticationInteraction.VerifyAuthentication"/>
+        /// <inheritdoc cref="IAuthenticationDataService.VerifyAuthentication"/>
         public static bool VerifyAuthentication(this AppAuthCredentials value)
         {
-            return AuthenticationInteraction.VerifyAuthentication(value);
+            return AuthenticationDataService.VerifyAuthentication(value);
         }
     }
 }
