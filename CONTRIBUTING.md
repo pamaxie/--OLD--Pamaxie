@@ -1,8 +1,10 @@
 # Contributing
 
+
 ## Introduction
 Please follow the guidelines in this document if you want to contribute to Pamaxie<br>
 Please remember that to contribute to our source code you will also have to follow our [code of conduct](https://github.com/pamaxie/Pamaxie/blob/main/CODE_OF_CONDUCT.md)!
+
 
 ## Guidelines
 Only work on issues that you know you can fix or are willing to do the research to fix.
@@ -11,17 +13,37 @@ Only work on problems that are documented. If you find a new issue create an iss
 
 Planning is key. If a issue is flagged as a "Complex Problem" it usually requires planning and we expect contributors to have done that planning and explain their train of thought as a comment in the issue. We will then agree or disagree with the implementation. After that, a contribution can be done.
 
-When working on a issue, create a branch for the issue with the format ``dev/issue/summary``<br>
-Example:
+When working on a issue, create a branch for the issue with the format:
 ```
+dev/issue/summary
+
+Example:
 dev/2/test_for_api
+dev/5/website_performance
 ```
 
 ### Code Style
 Normal .NET coding guidelines apply. See the [Framework Design Guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/) for more information.
 
+### Documentation
+All work needs to be documented. This includes the Wiki and in the code.
+
+The wiki needs to be updated after new changes have been made and a pull request have been accepted.
+
+Everything with a Public or Internal Access Modifier needs to have a summary explaining what they do, including the parameter or return value.
+``` c#
+Example:
+/// <summary>
+/// description
+/// </summary>
+/// <param name="name">description</param>
+/// <returns>description</returns>
+public string Method(string name) { }
+```
+
 ### Unit Tests
 Make sure to run all unit tests before creating a pull request. Any new code should also have reasonable unit test coverage.
+
 
 ## How To Contribute
 
@@ -40,11 +62,12 @@ Make sure to run all unit tests before creating a pull request. Any new code sho
   - No reformatting.
   - No changing files that are not specific to the issue.
 - Test your changes.
+- Document your work. (See guideline)
 
 ### Prepare commits
 Pamaxie uses a consistent structure for commit messages with the following pattern:
 ```
-#ISSUE Sum_Up_Of_Current_Change
+#ISSUE Summary
 
 Example:
 #1 Fixed Bug in AuthController.cs where a null reference was not checked for.
@@ -70,6 +93,7 @@ Example:
 - In the pull request, outline what you did and point to specific conversations, with a url, and issues that you are resolving. This is a tremendous help for the evaluation and acceptance.
 - Once a pull request is in, do not delete the branch or close the pull request.
 - One of the core Pamaxie team members will evaluate it within a reasonable time period. Some things get evaluated faster or fast tracked. We are human and we have active lives outside of open source so don't fret if you haven't seen any activity on your pull request within a month or two. We don't have a Service Level Agreement (SLA) for pull requests. Just know that we will evaluate your pull request.
+- If issue is related to anything documented in the Wiki, then include snippet of changes that will be made. If the pull request is accepted, then please add your changes to the wiki.
 
 ### Respond to feedback on pull request
 There may be feedback for you to fix or change. These changes must be pushed against the same branch, the pull request will automatically get updated.
@@ -79,6 +103,7 @@ If comments or questions have not received any response, it will eventually mean
 Sometimes there is a need for you to rebase your commit against the latest code before it can get reviewed further.
 
 The only reason a pull request should be closed and resubmitted, is when a pull request is targeting the wrong branch.
+
 
 ## Other general information
 If you reformat code or hit core functionality without an approval from a person on the Pamaxie Team, it's likely that no matter how awesome it looks afterwards, it will probably not get accepted. Reformatting code makes it harder for the Pamaxie team to evaluate exactly what was changed.
