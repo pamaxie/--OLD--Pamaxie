@@ -21,18 +21,18 @@ namespace Pamaxie.Database.Extensions.Client
         /// <summary>
         /// Contains the service responsible for interacting with user data in the redis database
         /// </summary>
-        public UserDataService Users { get; }
+        internal static  UserDataService UserService { get; private set; }
 
         /// <summary>
         /// Contains the Service responsible for interacting with application data in the redis database
         /// </summary>
-        public ApplicationDataService Applications { get; }
+        internal static ApplicationDataService ApplicationService { get; private set; }
 
         public DatabaseService(PamaxieDataContext dataContext)
         {
             DataContext = dataContext;
-            Users = new UserDataService(dataContext, this);
-            Applications = new ApplicationDataService(dataContext, this);
+            UserService = new UserDataService(dataContext, this);
+            ApplicationService = new ApplicationDataService(dataContext, this);
         }
         
         /// <inheritdoc/>

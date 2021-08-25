@@ -7,7 +7,7 @@ namespace Pamaxie.Database.Extensions.Client
     /// </summary>
     public static class ApplicationDataServiceExtension
     {
-        internal static ApplicationDataService ApplicationService;
+        private static ApplicationDataService ApplicationService => DatabaseService.ApplicationService;
         
         /// <inheritdoc cref="ApplicationDataService.Get"/>
         public static IPamaxieApplication Get(string key)

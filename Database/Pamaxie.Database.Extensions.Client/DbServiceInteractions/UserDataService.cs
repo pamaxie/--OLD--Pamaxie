@@ -10,14 +10,13 @@ using StackExchange.Redis;
 namespace Pamaxie.Database.Extensions.Client
 {
     /// Implementation to get <see cref="IPamaxieUser"/> data from the server
-    public class UserDataService : ClientDataServiceBase<IPamaxieUser>
+    internal class UserDataService : ClientDataServiceBase<IPamaxieUser>
     {
         /// <inheritdoc/>
         internal UserDataService(PamaxieDataContext dataContext, DatabaseService service)
         {
             DataContext = dataContext;
             Service = service;
-            UserDataServiceExtension.UserService = this;
         }
         
         /// <summary>

@@ -5,7 +5,7 @@ namespace Pamaxie.Database.Extensions.Client
 {
     public static class UserDataServiceExtension
     {
-        internal static UserDataService UserService;
+        private static UserDataService UserService => DatabaseService.UserService;
         
         /// <inheritdoc cref="UserDataService.Get"/>
         public static IPamaxieUser Get(string key)

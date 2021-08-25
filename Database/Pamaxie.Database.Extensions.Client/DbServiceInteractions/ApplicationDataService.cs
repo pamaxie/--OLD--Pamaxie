@@ -8,14 +8,13 @@ using StackExchange.Redis;
 namespace Pamaxie.Database.Extensions.Client
 {
     /// Implementation to get <see cref="IPamaxieApplication"/> data from the server
-    public class ApplicationDataService : ClientDataServiceBase<IPamaxieApplication>
+    internal class ApplicationDataService : ClientDataServiceBase<IPamaxieApplication>
     {
         /// <inheritdoc/>
         internal ApplicationDataService(PamaxieDataContext dataContext, DatabaseService service)
         {
             DataContext = dataContext;
             Service = service;
-            ApplicationDataServiceExtension.ApplicationService = this;
         }
 
         /// <summary>
