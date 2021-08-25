@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Pamaxie.Database.Design\Pamaxie.Database.Design.csproj" />
+    <ProjectReference Include="..\Pamaxie.Data\Pamaxie.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="DbValidationLogic\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="DbValidationLogic\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="DbValidationLogic\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="StackExchange.Redis" Version="2.2.50" />
+  </ItemGroup>
+
+</Project>

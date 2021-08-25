@@ -10,7 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Assemblies\Pamaxie.Data\Pamaxie.Data.csproj" />
+      <ProjectReference Include="..\..\Database\Pamaxie.Data\Pamaxie.Data.csproj" />
       <ProjectReference Include="..\..\Pamaxie.Website\Pamaxie.Website.csproj" />
       <ProjectReference Include="..\Test.Base\Test.Base.csproj" />
     </ItemGroup>
