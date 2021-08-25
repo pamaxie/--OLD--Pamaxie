@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="CryptSharp.Core" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.7" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="5.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
