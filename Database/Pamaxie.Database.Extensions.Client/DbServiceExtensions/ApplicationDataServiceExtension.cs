@@ -3,7 +3,7 @@
 namespace Pamaxie.Database.Extensions.Client
 {
     /// <summary>
-    /// Extension methods for <see cref="PamaxieApplication"/>
+    /// Extension methods for <see cref="IPamaxieApplication"/>
     /// </summary>
     public static class ApplicationDataServiceExtension
     {

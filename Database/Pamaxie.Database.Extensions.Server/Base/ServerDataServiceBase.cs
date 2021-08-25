@@ -7,6 +7,10 @@ using StackExchange.Redis;
 
 namespace Pamaxie.Database.Extensions.Server.Base
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
+    /// <typeparam name="T">TODO</typeparam>
     public class ServerDataServiceBase<T> : IDataServiceBase<T> where T : IDatabaseObject
     {
         /// <summary>

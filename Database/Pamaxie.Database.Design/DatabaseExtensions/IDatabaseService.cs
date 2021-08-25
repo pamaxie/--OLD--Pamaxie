@@ -10,9 +10,9 @@ namespace Pamaxie.Database.Design
     {
         #region Services
         /// <summary>
-            /// The actual Database Service that we use to connect to the database
-            /// </summary>
-            public T Service { get; }
+        /// The actual Database Service that we use to connect to the database
+        /// </summary>
+        public T Service { get; }
 
         #endregion
 

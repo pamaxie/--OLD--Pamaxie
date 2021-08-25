@@ -4,8 +4,17 @@ using Pamaxie.Database.Design;
 
 namespace Pamaxie.Database.Extensions.Client
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
+    /// <typeparam name="T">TODO</typeparam>
     internal class ClientDataServiceBase<T> : IDataServiceBase<T> where T : IDatabaseObject
     {
+        /// <summary>
+        /// Data Context responsible for connecting to Pamaxie
+        /// </summary>
+        internal PamaxieDataContext DataContext { get; set; }
+
         /// <summary>
         /// The Service that should be used to connect to the database
         /// </summary>

@@ -3,6 +3,9 @@ using Pamaxie.Data;
 
 namespace Pamaxie.Database.Design
 {
+    /// <summary>
+    /// Interface that defines User interactions
+    /// </summary>
     public interface IUserDataService : IDataServiceBase<IPamaxieUser>
     {
         /// <summary>

@@ -3,6 +3,9 @@ using Pamaxie.Data;
 
 namespace Pamaxie.Database.Extensions.Client
 {
+    /// <summary>
+    /// Extension methods for <see cref="IPamaxieUser"/>
+    /// </summary>
     public static class UserDataServiceExtension
     {
         private static UserDataService UserService => DatabaseService.UserService;

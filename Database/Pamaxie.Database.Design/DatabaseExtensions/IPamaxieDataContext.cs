@@ -1,5 +1,8 @@
 ﻿namespace Pamaxie.Database.Design
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public interface IPamaxieDataContext
     {
         /// <summary>

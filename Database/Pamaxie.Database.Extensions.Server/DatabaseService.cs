@@ -4,6 +4,7 @@ using StackExchange.Redis;
 
 namespace Pamaxie.Database.Extensions.Server
 {
+    /// <inheritdoc/>
     public class DatabaseService : IDatabaseService<ConnectionMultiplexer>
     {
         /// <inheritdoc/>
