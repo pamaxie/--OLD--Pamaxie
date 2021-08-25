@@ -3,7 +3,7 @@
 namespace Test.Base
 {
     /// <summary>
-    /// Class containing method for mocking NavigationManager.
+    /// Class containing method for mocking <see cref="NavigationManager"/>.
     /// </summary>
     public static class MockNavigationManager
     {

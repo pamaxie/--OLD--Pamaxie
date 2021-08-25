@@ -1,7 +1,7 @@
 ﻿using Pamaxie.Database.Extensions.Server;
 using Xunit.Abstractions;
 
-namespace Test.Database.Extensions.Client
+namespace Test.Database.Extensions.Server
 {
     /// <summary>
     /// Testing class for <see cref="UserDataService"/>

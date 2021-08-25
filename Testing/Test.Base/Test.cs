@@ -3,6 +3,9 @@ using Xunit.Abstractions;
 
 namespace Test.Base
 {
+    /// <summary>
+    /// Base testing class
+    /// </summary>
     public class Test
     {
         protected ITestOutputHelper TestOutputHelper { get; }

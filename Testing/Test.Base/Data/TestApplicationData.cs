@@ -5,6 +5,9 @@ using Pamaxie.Data;
 
 namespace Test.Base
 {
+    /// <summary>
+    /// Contains randomly generated <see cref="IPamaxieApplication"/> Data
+    /// </summary>
     public static class TestApplicationData
     {
         /// <summary>

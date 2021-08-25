@@ -7,7 +7,7 @@ using Pamaxie.Data;
 namespace Test.Base
 {
     /// <summary>
-    /// Contains randomly generated User Data
+    /// Contains randomly generated <see cref="IPamaxieUser"/> Data
     /// </summary>
     public static class TestUserData
     {
