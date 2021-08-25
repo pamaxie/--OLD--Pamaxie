@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using Moq;
 using Pamaxie.Data;
+using Pamaxie.Database.Extensions.Client;
 using Pamaxie.Website.Authentication;
 using Pamaxie.Website.Services;
 using Test.Base;
@@ -108,7 +110,7 @@ namespace Test.Pamaxie.Website
             Assert.NotNull(googleClaims);
             
             //TODO Mock UserInteractionExtension, as it will be used in UserService
-            MockUserDataService mockedUserDataService = new(); //Delete this once a mocking implementation have been added
+            UserDataService mockedUserDataService = new Mock<UserDataService>().Object; //Delete this once a mocking implementation have been added
             
             //Mock HttpContext with principle claims
             IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);

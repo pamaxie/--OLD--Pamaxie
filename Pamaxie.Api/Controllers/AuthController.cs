@@ -41,7 +41,7 @@ namespace Pamaxie.Api.Controllers
             if (string.IsNullOrEmpty(appData?.Credentials.AuthorizationToken) || default == appData.Key)
                 return Unauthorized(ErrorHandler.UnAuthorized());
 
-            if (!appData.Credentials.VerifyAuthentication()) return Unauthorized(ErrorHandler.UnAuthorized());
+            if (!appData.VerifyAuthentication()) return Unauthorized(ErrorHandler.UnAuthorized());
 
             AuthToken token = _generator.CreateToken(appData.Key);
             return Ok(token);

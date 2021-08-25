@@ -28,6 +28,9 @@
     <ProjectReference Include="..\Assemblies\Pamaxie.Database.Redis\Pamaxie.Database.Redis.csproj" />
     <ProjectReference Include="..\Assemblies\Pamaxie.ImageProcessing\Pamaxie.ImageProcessing.csproj" />
     <ProjectReference Include="..\Assemblies\Pamaxie.MediaDetection\Pamaxie.MediaDetection.csproj" />
+    <ProjectReference Include="..\Database\Pamaxie.Database.Extensions.Client\Pamaxie.Database.Extensions.Client.csproj" />
+    <ProjectReference Include="..\Database\Pamaxie.Database.Redis\Pamaxie.Database.Redis.csproj" />
+    <ProjectReference Include="..\Database\Pamaxie.Data\Pamaxie.Data.csproj" />
     <ProjectReference Include="..\MLModules\PamaxieML.Model\PamaxieML.Model.csproj" />
   </ItemGroup>
 </Project>

@@ -17,6 +17,7 @@ namespace Pamaxie.Database.Extensions.Client
         {
             DataContext = dataContext;
             Service = service;
+            UserDataServiceExtension.UserService = this;
         }
         
         /// <summary>
@@ -24,7 +25,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// </summary>
         /// <param name="value">The key of the user who owns the applications</param>
         /// <returns>A list of all applications the user owns</returns>
-        public IEnumerable<IPamaxieApplication?> GetAllApplicationsFromUser(IPamaxieUser value)
+        public IEnumerable<IPamaxieApplication> GetAllApplications(IPamaxieUser value)
         {
             if (Service.Service == null)
                 throw new DataException(
@@ -35,7 +36,7 @@ namespace Pamaxie.Database.Extensions.Client
                 throw new ArgumentException("The key u entered does not exist in our database yet");
 
             IEnumerable<string> applicationKeys = value.ApplicationKeys;
-            List<IPamaxieApplication?> applications = (from key in applicationKeys
+            List<IPamaxieApplication> applications = (from key in applicationKeys
                 select db.StringGet(key)
                 into rawData
                 where !string.IsNullOrEmpty(rawData)

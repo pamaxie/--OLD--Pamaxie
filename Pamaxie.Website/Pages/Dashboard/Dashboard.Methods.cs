@@ -34,7 +34,7 @@ namespace Pamaxie.Website.Pages
             if (!hasAccount)
                 return Task.CompletedTask;
             
-            Applications = ApplicationInteractionExtension.GetFromUser(User.Key).ToList();
+            Applications = User.GetAllApplications().ToList();
             StateHasChanged();
             return Task.CompletedTask;
         }
@@ -49,7 +49,7 @@ namespace Pamaxie.Website.Pages
             if (result is true && User is not null)
             {
                 pamaxieApplication.Delete();
-                Applications = ApplicationInteractionExtension.GetFromUser(User.Key).ToList();
+                Applications = User.GetAllApplications().ToList();
                 StateHasChanged();
             }
         }
@@ -68,7 +68,7 @@ namespace Pamaxie.Website.Pages
                 pamaxieApplication.EnableOrDisable();
 
                 if (User != null)
-                    Applications = ApplicationInteractionExtension.GetFromUser(User.Key).ToList();
+                    Applications = User.GetAllApplications().ToList();
                 StateHasChanged();
             }
         }

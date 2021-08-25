@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -25,7 +24,7 @@ namespace Pamaxie.Database.Extensions.Server
         /// </summary>
         /// <param name="value">The key of the user who owns the applications</param>
         /// <returns>A list of all applications the user owns</returns>
-        public IEnumerable<IPamaxieApplication?> GetAllApplicationsFromUser(IPamaxieUser value)
+        public IEnumerable<IPamaxieApplication> GetAllApplicationsFromUser(IPamaxieUser value)
         {
             if (Service.Service == null)
                 throw new DataException(
@@ -36,7 +35,7 @@ namespace Pamaxie.Database.Extensions.Server
                 throw new ArgumentException("The key u entered does not exist in our database yet");
 
             IEnumerable<string> applicationKeys = value.ApplicationKeys;
-            List<IPamaxieApplication?> applications = (from key in applicationKeys
+            List<IPamaxieApplication> applications = (from key in applicationKeys
                 select db.StringGet(key)
                 into rawData
                 where !string.IsNullOrEmpty(rawData)

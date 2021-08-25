@@ -17,9 +17,9 @@ namespace Pamaxie.Database.Extensions.Client
         /// <summary>
         /// Connection properties to a database with a password and a custom amount of reconnection attempts
         /// </summary>
-        /// <param name="instanceName">TODO</param>
-        /// <param name="password">TODO</param>
-        /// <param name="reconnectionAttempts">TODO</param>
+        /// <param name="instanceName">The instance of the database</param>
+        /// <param name="password">Password to use for the database</param>
+        /// <param name="reconnectionAttempts">How many attempts should be made to connect to the database</param>
         // ReSharper disable once MemberCanBePrivate.Global
         public PamaxieDataContext(string instanceName, string password, int reconnectionAttempts = 3)
         {
@@ -31,7 +31,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <summary>
         /// Connection properties to a database without a password !!THIS IS NOT RECOMMENDED!!
         /// </summary>
-        /// <param name="instanceName">TODO</param>
+        /// <param name="instanceName">The instance of the database</param>
         [Obsolete(
             "This should not be used, since this means u don't have a password on your database, which exposes your database to attacks. Please always make sure to use a password on your database.")]
         public PamaxieDataContext(string instanceName) : this(instanceName, string.Empty) { }

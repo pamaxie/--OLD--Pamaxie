@@ -45,7 +45,7 @@ namespace Pamaxie.Website.Services
             IPamaxieUser? googleUser = claimUser.GetGoogleAuthData(out _);
             if (googleUser is null)
                 return false;
-            IPamaxieUser pamaxieUser = UserInteractionExtensions.Get(googleUser.Key);
+            IPamaxieUser pamaxieUser = UserDataServiceExtension.Get(googleUser.Key);
             return pamaxieUser is {EmailVerified: true};
         }
         
@@ -70,7 +70,7 @@ namespace Pamaxie.Website.Services
             ConfirmEmailBody? body = JsonWebToken.Decode<ConfirmEmailBody>(token, _secret) as ConfirmEmailBody;
             if (body?.Purpose is not EmailPurpose.EMAIL_CONFIRMATION)
                 return false;
-            IPamaxieUser pamaxieUser = UserInteractionExtensions.Get(body.User.Key);
+            IPamaxieUser pamaxieUser = UserDataServiceExtension.Get(body.User.Key);
             return pamaxieUser.EmailAddress == body.User.EmailAddress && body.User.VerifyEmail();
         }
         

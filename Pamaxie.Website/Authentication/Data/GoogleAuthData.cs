@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Pamaxie.Data;
 
 #pragma warning disable 8618
@@ -44,6 +45,11 @@ namespace Pamaxie.Website.Authentication.Data
         /// <inheritdoc/>
         /// </summary>
         public string ProfilePictureAddress { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public IEnumerable<string> ApplicationKeys { get; set; }
 
         /// <summary>
         /// <inheritdoc/>

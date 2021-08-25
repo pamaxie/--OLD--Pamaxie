@@ -58,7 +58,7 @@ namespace Pamaxie.Website.Authentication
             }
 
             //Check if user exists if yes get their id if no create one!
-            IPamaxieUser pamaxieUser = UserInteractionExtensions.Get(googleClaim.Key);
+            IPamaxieUser pamaxieUser = UserDataServiceExtension.Get(googleClaim.Key);
             if (pamaxieUser is not {Deleted: false}) return googleClaim;
             hasAccount = true;
             googleClaim.Key = pamaxieUser.Key;
