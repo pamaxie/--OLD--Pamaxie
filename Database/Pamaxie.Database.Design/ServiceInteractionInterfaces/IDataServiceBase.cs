@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Pamaxie.Database.Extensions.InteractionObjects.BaseInterfaces
+namespace Pamaxie.Database.Design
 {
     /// <summary>
     /// Interface that defines how a database extension has to look like

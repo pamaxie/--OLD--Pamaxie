@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Pamaxie.Database.Extensions.DatabaseExtensions
+﻿namespace Pamaxie.Database.Design
 {
     public interface IPamaxieDataContext
     {

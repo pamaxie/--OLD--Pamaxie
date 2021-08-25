@@ -1,14 +1,12 @@
 ﻿using System;
-using Pamaxie.Database.Extensions.InteractionObjects;
-using Pamaxie.Database.Extensions.InteractionObjects.BaseInterfaces;
 
-namespace Pamaxie.Database.Extensions.DatabaseExtensions
+namespace Pamaxie.Database.Design
 {
     /// <summary>
     /// Service responsible for handling interaction with the database or database api. This automatically detects
     /// the connection context.
     /// </summary>
-    public interface IDatabaseService<T>
+    public interface IDatabaseService<out T>
     {
         #region Services
         /// <summary>

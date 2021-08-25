@@ -2,7 +2,7 @@
 using System.Data;
 using Newtonsoft.Json;
 using Pamaxie.Data;
-using Pamaxie.Database.Extensions.InteractionObjects.BaseInterfaces;
+using Pamaxie.Database.Design;
 using StackExchange.Redis;
 
 namespace Pamaxie.Database.Extensions.Server.Base

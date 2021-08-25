@@ -2,13 +2,14 @@
 using System.Data;
 using Newtonsoft.Json;
 using Pamaxie.Data;
+using Pamaxie.Database.Design;
 using Pamaxie.Database.Extensions.Server.Base;
 using StackExchange.Redis;
 
 namespace Pamaxie.Database.Extensions.Server
 {
     /// Implementation to get <see cref="IPamaxieApplication"/> data from the server
-    public class ApplicationDataService : ServerDataServiceBase<IPamaxieApplication>
+    public class ApplicationDataService : ServerDataServiceBase<IPamaxieApplication>, IApplicationDataService
     {
         /// <inheritdoc/>
         internal ApplicationDataService(PamaxieDataContext dataContext, DatabaseService service)

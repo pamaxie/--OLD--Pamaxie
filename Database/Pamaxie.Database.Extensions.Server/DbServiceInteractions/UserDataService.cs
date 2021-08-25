@@ -4,13 +4,14 @@ using System.Data;
 using System.Linq;
 using Newtonsoft.Json;
 using Pamaxie.Data;
+using Pamaxie.Database.Design;
 using Pamaxie.Database.Extensions.Server.Base;
 using StackExchange.Redis;
 
 namespace Pamaxie.Database.Extensions.Server
 {
     /// Implementation to get <see cref="IPamaxieUser"/> data from the server
-    public class UserDataService : ServerDataServiceBase<IPamaxieUser>
+    public class UserDataService : ServerDataServiceBase<IPamaxieUser>, IUserDataService
     {
         /// <inheritdoc/>
         internal UserDataService(PamaxieDataContext dataContext, DatabaseService service)
@@ -24,7 +25,7 @@ namespace Pamaxie.Database.Extensions.Server
         /// </summary>
         /// <param name="value">The key of the user who owns the applications</param>
         /// <returns>A list of all applications the user owns</returns>
-        public IEnumerable<IPamaxieApplication> GetAllApplicationsFromUser(IPamaxieUser value)
+        public IEnumerable<IPamaxieApplication> GetAllApplications(IPamaxieUser value)
         {
             if (Service.Service == null)
                 throw new DataException(

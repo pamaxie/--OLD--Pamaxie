@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Data;
-using Newtonsoft.Json;
 using Pamaxie.Data;
-using Pamaxie.Database.Extensions.InteractionObjects.BaseInterfaces;
-using StackExchange.Redis;
+using Pamaxie.Database.Design;
 
-namespace Pamaxie.Database.Extensions.Client.Base
+namespace Pamaxie.Database.Extensions.Client
 {
-    public class ClientDataServiceBase<T> : IDataServiceBase<T> where T : IDatabaseObject
+    internal class ClientDataServiceBase<T> : IDataServiceBase<T> where T : IDatabaseObject
     {
-        /// <summary>
-        /// Data Context responsible for connecting to Pamaxie
-        /// </summary>
-        internal PamaxieDataContext DataContext { get; set; }
-
         /// <summary>
         /// The Service that should be used to connect to the database
         /// </summary>
@@ -22,104 +14,43 @@ namespace Pamaxie.Database.Extensions.Client.Base
         /// <inheritdoc/>
         public T Get(string key)
         {
-            if (Service.Service == null)
-                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll data from it");
-
-            IDatabase db = Service.Service.GetDatabase();
-            RedisValue rawData = db.StringGet(key);
-            return string.IsNullOrEmpty(rawData) ? default : JsonConvert.DeserializeObject<T>(rawData);
+            throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
         public T Create(T value)
         {
-            if (Service.Service == null)
-                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
-
-            IDatabase db = Service.Service.GetDatabase();
-            if (db.KeyExists(value.Key))
-                throw new ArgumentException("The key u tried to create already exists in our database");
-
-            string data = JsonConvert.SerializeObject(value);
-            db.StringSet(value.Key, data);
-            return value;
+            throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
         public bool TryCreate(T value, out T createdValue)
         {
-            createdValue = default;
-            if (Service.Service == null)
-                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
-
-            IDatabase db = Service.Service.GetDatabase();
-            if (db.KeyExists(value.Key))
-                return false;
-
-            string data = JsonConvert.SerializeObject(value);
-            db.StringSet(value.Key, data);
-            createdValue = value;
-            return true;
+            throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
         public T Update(T value)
         {
-            if (Service.Service == null)
-                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
-
-            IDatabase db = Service.Service.GetDatabase();
-            if (!db.KeyExists(value.Key))
-                throw new ArgumentException("The key u entered does not exist in our database yet");
-
-            string data = JsonConvert.SerializeObject(value);
-            db.StringSet(value.Key, data);
-            return value;
+            throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
         public bool TryUpdate(T value, out T updatedValue)
         {
-            updatedValue = default;
-            if (Service.Service == null)
-                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
-
-            IDatabase db = Service.Service.GetDatabase();
-            if (!db.KeyExists(value.Key))
-                return false;
-
-            string data = JsonConvert.SerializeObject(value);
-            db.StringSet(value.Key, data);
-            updatedValue = value;
-            return false;
+            throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
         public bool UpdateOrCreate(T value, out T databaseValue)
         {
-            databaseValue = default;
-            if (Service.Service == null)
-                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
-
-            IDatabase db = Service.Service.GetDatabase();
-            string data = JsonConvert.SerializeObject(value);
-            bool existed = db.KeyExists(value.Key);
-            db.StringSet(value.Key, data);
-            return existed;
+            throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
         public bool Delete(T value)
         {
-            if (Service.Service == null)
-                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
-
-            IDatabase db = Service.Service.GetDatabase();
-
-            if (!db.KeyExists(value.Key))
-                throw new ArgumentException("The key u entered does not exist in our database yet");
-
-            return db.KeyDelete(value.Key);
+            throw new NotImplementedException();
         }
     }
 }

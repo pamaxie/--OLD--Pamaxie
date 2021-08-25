@@ -1,5 +1,5 @@
 ﻿using System;
-using Pamaxie.Database.Extensions.DatabaseExtensions;
+using Pamaxie.Database.Design;
 using StackExchange.Redis;
 
 namespace Pamaxie.Database.Extensions.Server
