@@ -14,7 +14,7 @@ namespace Pamaxie.Database.Extensions.DatabaseExtensions
         /// <summary>
             /// The actual Database Service that we use to connect to the database
             /// </summary>
-            public T Service { get; set;  }
+            public T Service { get;  }
 
         #endregion
 

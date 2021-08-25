@@ -29,9 +29,11 @@ namespace Pamaxie.Database.Extensions.Server
         /// Contains the service responsible for interacting with user data in the redis database
         /// </summary>
         public UserDataService Users { get; }
-        
 
-        public ConnectionMultiplexer Service { get; set;  }
+        /// <summary>
+        /// Contains the connection service used to call the database directly.
+        /// </summary>
+        public ConnectionMultiplexer Service { get; private set;  }
 
         #endregion Data Services
 
