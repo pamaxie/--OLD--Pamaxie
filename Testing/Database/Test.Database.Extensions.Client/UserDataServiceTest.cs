@@ -1,4 +1,7 @@
-﻿using Pamaxie.Database.Extensions.Server;
+﻿using System.Net.Http;
+using Pamaxie.Data;
+using Pamaxie.Database.Extensions.Client;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace Test.Database.Extensions.Client
@@ -10,6 +13,17 @@ namespace Test.Database.Extensions.Client
     {
         public UserDataServiceTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
+        }
+
+        [Fact]
+        public void Test()
+        {
+            string instance = "";
+            string password = "";
+            PamaxieDataContext context = new PamaxieDataContext(instance, password);
+            DatabaseService service = new(context);
+            IPamaxieUser user = new PamaxieUser();
+            user.Create();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Pamaxie.Api.Controllers
         /// <summary>
         /// Creates a new Api User
         /// </summary>
-        /// <returns><see cref="string"/> Sucess?</returns>
+        /// <returns><see cref="string"/> Success?</returns>
         [Authorize]
         [HttpPost("createUser")]
         public ActionResult<string> CreateUserTask()

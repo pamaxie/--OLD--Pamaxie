@@ -49,27 +49,12 @@ namespace Test.Pamaxie.API_UnitTesting
             };
 
             //Parse the application to a request body and send it to the controller
-            Stream body = CreateStream(application);
+            Stream body = ControllerService.CreateStream(application);
             authController.Request.Body = body;
             
             ActionResult<AuthToken> result = authController.LoginTask();
             TestOutputHelper.WriteLine(result.Result.ToString());
             //Assert.Equal(, result.Result);
-        }
-        
-        private static Stream CreateStream(object body)
-        {            
-            MemoryStream ms = new();
-            StreamWriter sw = new(ms);
- 
-            string json = JsonConvert.SerializeObject(body);
- 
-            sw.Write(json);
-            sw.Flush();
- 
-            ms.Position = 0;
-            
-            return ms;
         }
     }
 }

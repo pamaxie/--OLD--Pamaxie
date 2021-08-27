@@ -40,7 +40,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public string ConnectionString()
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException("Cannot use connection strings for connecting to the client as of now.");
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Pamaxie.Database.Extensions.Client
     public class DatabaseService : IDatabaseService<HttpClient>
     {
         /// <inheritdoc/>
-        public HttpClient Service { get; }
+        public HttpClient Service { get; } = new();
         
         /// <inheritdoc/>
         public IPamaxieDataContext DataContext { get; }
@@ -20,12 +20,12 @@ namespace Pamaxie.Database.Extensions.Client
         public DateTime LastConnectionSuccess { get; set; }
         
         /// <summary>
-        /// Contains the service responsible for interacting with user data in the redis database
+        /// Contains the service responsible for interacting with user data for the Api
         /// </summary>
         internal static  UserDataService UserService { get; private set; }
 
         /// <summary>
-        /// Contains the Service responsible for interacting with application data in the redis database
+        /// Contains the Service responsible for interacting with application data for the Api
         /// </summary>
         internal static ApplicationDataService ApplicationService { get; private set; }
 

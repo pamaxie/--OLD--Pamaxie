@@ -54,7 +54,7 @@ namespace Pamaxie.Api
         /// Gets called by the runtime to configure HTTP Services
         /// </summary>
         /// <param name="app"><see cref="IApplicationBuilder"/> Builder</param>
-        /// <param name="env">Hosting Enviorement</param>
+        /// <param name="env">Hosting Environment</param>
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment()) 

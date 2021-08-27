@@ -1,4 +1,5 @@
 ﻿using Pamaxie.Api.Security;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace Test.Database.Api
@@ -10,6 +11,15 @@ namespace Test.Database.Api
     {
         public TokenGeneratorTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
+        }
+        
+        /// <summary>
+        /// Test for getting a application through <see cref="TokenGenerator.CreateToken"/>
+        /// </summary>
+        [Fact] //TODO Needs testing data
+        public void CreateToken()
+        {
+            //TODO Not yet implemented
         }
     }
 }
