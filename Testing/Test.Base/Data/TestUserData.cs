@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Pamaxie.Data;
 
-namespace Test.Base
+namespace Test.TestBase
 {
     /// <summary>
     /// Contains randomly generated <see cref="IPamaxieUser"/> Data

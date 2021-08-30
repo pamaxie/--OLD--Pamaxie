@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Test.Base
+namespace Test.TestBase
 {
     /// <summary>
     /// Contains all data members that will be used for inline data in the testing methods.

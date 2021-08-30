@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
 
-namespace Test.Base
+namespace Test.TestBase
 {
     public static class ControllerService
     {

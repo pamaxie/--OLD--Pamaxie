@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using Pamaxie.Data;
 using Pamaxie.Website.Models;
 using Pamaxie.Website.Services;
-using Test.Base;
+using Test.TestBase;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -15,7 +15,7 @@ namespace Test.Pamaxie.Website
     /// <summary>
     /// Testing class for <see cref="JsonWebToken"/>
     /// </summary>
-    public class JsonWebTokenTest : Base.Test
+    public class JsonWebTokenBaseTest : BaseTest
     {
         private readonly string _secret;
         
@@ -24,7 +24,7 @@ namespace Test.Pamaxie.Website
         /// </summary>
         public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
 
-        public JsonWebTokenTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public JsonWebTokenBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             IConfigurationSection configurationSection = Configuration.GetSection("JwtToken");
             _secret = configurationSection.GetValue<string>("Secret");

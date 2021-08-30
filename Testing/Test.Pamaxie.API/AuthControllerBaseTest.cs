@@ -7,7 +7,7 @@ using Pamaxie.Api.Controllers;
 using Pamaxie.Api.Data;
 using Pamaxie.Api.Security;
 using Pamaxie.Data;
-using Test.Base;
+using Test.TestBase;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -16,14 +16,14 @@ namespace Test.Pamaxie.API_UnitTesting
     /// <summary>
     /// Testing class for <see cref="AuthController"/>
     /// </summary>
-    public class AuthControllerTest : Base.Test
+    public class AuthControllerBaseTest : BaseTest
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllApplications"/>
         /// </summary>
         public static IEnumerable<object[]> AllApplications => MemberData.AllApplications;
         
-        public AuthControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public AuthControllerBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
         

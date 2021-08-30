@@ -1,5 +1,7 @@
-﻿using Pamaxie.Api.Controllers;
-using Pamaxie.Database.Extensions.Server;
+﻿using Microsoft.AspNetCore.Http;
+using Pamaxie.Api.Controllers;
+using Pamaxie.Api.Security;
+using Test.TestBase;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -8,12 +10,15 @@ namespace Test.Database.Api
     /// <summary>
     /// Testing class for <see cref="AuthController"/>
     /// </summary>
-    public class AuthControllerTest : Base.Test
+    public class AuthControllerBaseTest : ApiBaseTest<AuthController>
     {
-        private readonly PamaxieDataContext _context = new("", "");
-        
-        public AuthControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public AuthControllerBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
+            //Instantiate the controller and add a default HttpContext
+            Controller = new AuthController(new TokenGenerator(Configuration))
+            {
+                ControllerContext = {HttpContext = new DefaultHttpContext()}
+            };
         }
         
         /// <summary>

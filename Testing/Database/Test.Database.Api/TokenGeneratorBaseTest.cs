@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
+﻿using System.Collections.Generic;
 using Pamaxie.Api.Data;
 using Pamaxie.Api.Security;
-using Test.Base;
+using Test.TestBase;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -12,14 +10,14 @@ namespace Test.Database.Api
     /// <summary>
     /// Testing class for <see cref="TokenGenerator"/>
     /// </summary>
-    public class TokenGeneratorTest : Base.Test
+    public class TokenGeneratorBaseTest : BaseTest
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllUsers"/>
         /// </summary>
         public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
         
-        public TokenGeneratorTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public TokenGeneratorBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
         

@@ -8,7 +8,7 @@ using Pamaxie.Api.Controllers;
 using Pamaxie.Api.Security;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Server;
-using Test.Base;
+using Test.TestBase;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -17,7 +17,7 @@ namespace Test.Database.Api
     /// <summary>
     /// Testing class for <see cref="UserController"/>
     /// </summary>
-    public class UserControllerTest : Base.Test
+    public class UserControllerBaseTest : ApiBaseTest<UserController>
     {
         private readonly PamaxieDataContext _context = new("", "");
         
@@ -31,8 +31,13 @@ namespace Test.Database.Api
         /// </summary>
         public static IEnumerable<object[]> AllUnverifiedUsers => MemberData.AllUnverifiedUsers;
         
-        public UserControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public UserControllerBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
+            //Instantiate the controller and add a default HttpContext
+            Controller = new UserController(new TokenGenerator(Configuration), Context)
+            {
+                ControllerContext = {HttpContext = new DefaultHttpContext()}
+            };
         }
 
         /// <summary>
@@ -43,18 +48,12 @@ namespace Test.Database.Api
         [MemberData(nameof(AllUsers))]
         public void Get(string userKey)
         {
-            //Instantiate the controller and add a default HttpContext
-            UserController userController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the user to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(userKey);
-            userController.Request.Body = body;
+            Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieUser> result = userController.GetTask();
+            ActionResult<IPamaxieUser> result = Controller.GetTask();
             
             //Check if user is not null
             IPamaxieUser user = ((ObjectResult)result.Result).Value as IPamaxieUser;
@@ -73,18 +72,12 @@ namespace Test.Database.Api
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
             
-            //Instantiate the controller and add a default HttpContext
-            UserController userController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
-            userController.Request.Body = body;
+            Controller.Request.Body = body;
             
             //Call controller and get result
-            ActionResult<IPamaxieUser> result = userController.CreateTask();
+            ActionResult<IPamaxieUser> result = Controller.CreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
             
             //Check if user is created
@@ -103,18 +96,12 @@ namespace Test.Database.Api
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
             
-            //Instantiate the controller and add a default HttpContext
-            UserController userController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
-            userController.Request.Body = body;
+            Controller.Request.Body = body;
             
             //Call controller and get result
-            ActionResult<IPamaxieUser> result = userController.TryCreateTask();
+            ActionResult<IPamaxieUser> result = Controller.TryCreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
             
             //Check if user is created
@@ -139,18 +126,12 @@ namespace Test.Database.Api
             //Update User
             user.EmailAddress = newEmail;
             
-            //Instantiate the controller and add a default HttpContext
-            UserController userController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
-            userController.Request.Body = body;
+            Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieUser> result = userController.UpdateTask();
+            ActionResult<IPamaxieUser> result = Controller.UpdateTask();
             Assert.IsType<OkObjectResult>(result.Result);
             
             //Check if user is updated
@@ -176,18 +157,12 @@ namespace Test.Database.Api
             //Update User
             user.EmailAddress = newEmail;
             
-            //Instantiate the controller and add a default HttpContext
-            UserController userController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
-            userController.Request.Body = body;
+            Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieUser> result = userController.TryUpdateTask();
+            ActionResult<IPamaxieUser> result = Controller.TryUpdateTask();
             Assert.IsType<OkObjectResult>(result.Result);
             
             //Check if user is updated
@@ -208,18 +183,12 @@ namespace Test.Database.Api
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
-            //Instantiate the controller and add a default HttpContext
-            UserController userController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
-            userController.Request.Body = body;
+            Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieUser> result = userController.UpdateOrCreateTask();
+            ActionResult<IPamaxieUser> result = Controller.UpdateOrCreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if user is updated or created
@@ -244,18 +213,12 @@ namespace Test.Database.Api
             //Update User
             user.EmailAddress = newEmail;
 
-            //Instantiate the controller and add a default HttpContext
-            UserController userController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
-            userController.Request.Body = body;
+            Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieUser> result = userController.UpdateOrCreateTask();
+            ActionResult<IPamaxieUser> result = Controller.UpdateOrCreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if user is updated or created
@@ -276,18 +239,12 @@ namespace Test.Database.Api
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
-            //Instantiate the controller and add a default HttpContext
-            UserController userController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
-            userController.Request.Body = body;
+            Controller.Request.Body = body;
 
             //Call controller and check if user is deleted
-            ActionResult<bool> result = userController.DeleteTask();
+            ActionResult<bool> result = Controller.DeleteTask();
             Assert.IsType<OkObjectResult>(result.Result);
             Assert.True((bool)((ObjectResult)result.Result).Value);
         }
@@ -303,19 +260,13 @@ namespace Test.Database.Api
             //Get application
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
-
-            //Instantiate the controller and add a default HttpContext
-            UserController userController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
             
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
-            userController.Request.Body = body;
+            Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IEnumerable<IPamaxieApplication>> result = userController.GetAllApplicationsTask();
+            ActionResult<IEnumerable<IPamaxieApplication>> result = Controller.GetAllApplicationsTask();
             Assert.IsType<OkObjectResult>(result.Result);
             
             //Check if user is updated or created
@@ -340,18 +291,12 @@ namespace Test.Database.Api
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
             
-            //Instantiate the controller and add a default HttpContext
-            UserController userController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
-            userController.Request.Body = body;
+            Controller.Request.Body = body;
 
             //Call controller and check if user is verified
-            ActionResult<bool> result = userController.VerifyEmailTask();
+            ActionResult<bool> result = Controller.VerifyEmailTask();
             Assert.IsType<OkObjectResult>(result.Result);
             Assert.True((bool)((ObjectResult)result.Result).Value);
         }

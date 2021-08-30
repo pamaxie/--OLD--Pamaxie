@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Pamaxie.Data;
 
-namespace Test.Base
+namespace Test.TestBase
 {
     /// <summary>
     /// Contains randomly generated <see cref="IPamaxieApplication"/> Data

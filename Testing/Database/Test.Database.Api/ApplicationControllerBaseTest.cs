@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Pamaxie.Api.Controllers;
 using Pamaxie.Api.Security;
 using Pamaxie.Data;
-using Pamaxie.Database.Extensions.Server;
-using Test.Base;
+using Test.TestBase;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -16,17 +15,21 @@ namespace Test.Database.Api
     /// <summary>
     /// Testing class for <see cref="ApplicationController"/>
     /// </summary>
-    public class ApplicationControllerTest : Base.Test
+    public class ApplicationControllerBaseTest : ApiBaseTest<ApplicationController>
     {
-        private readonly PamaxieDataContext _context = new("", "");
         
         /// <summary>
         /// <inheritdoc cref="MemberData.AllApplications"/>
         /// </summary>
         public static IEnumerable<object[]> AllApplications => MemberData.AllApplications;
         
-        public ApplicationControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public ApplicationControllerBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
+            //Instantiate the controller and add a default HttpContext
+            Controller = new ApplicationController(new TokenGenerator(Configuration), Context)
+            {
+                ControllerContext = {HttpContext = new DefaultHttpContext()}
+            };
         }
 
         /// <summary>
@@ -37,18 +40,12 @@ namespace Test.Database.Api
         [MemberData(nameof(AllApplications))]
         public void Get(string applicationKey)
         {
-            //Instantiate the controller and add a default HttpContext
-            ApplicationController applicationController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(applicationKey);
-            applicationController.Request.Body = body;
+            Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieApplication> result = applicationController.GetTask();
+            ActionResult<IPamaxieApplication> result = Controller.GetTask();
             
             //Check if application is not null
             IPamaxieApplication application = ((ObjectResult)result.Result).Value as IPamaxieApplication;
@@ -67,18 +64,12 @@ namespace Test.Database.Api
             IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             
-            //Instantiate the controller and add a default HttpContext
-            ApplicationController applicationController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
-            applicationController.Request.Body = body;
+            Controller.Request.Body = body;
             
             //Call controller and get result
-            ActionResult<IPamaxieApplication> result = applicationController.CreateTask();
+            ActionResult<IPamaxieApplication> result = Controller.CreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
             
             //Check if application is created
@@ -98,18 +89,12 @@ namespace Test.Database.Api
             IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             
-            //Instantiate the controller and add a default HttpContext
-            ApplicationController applicationController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
-            applicationController.Request.Body = body;
+            Controller.Request.Body = body;
             
             //Call controller and get result
-            ActionResult<IPamaxieApplication> result = applicationController.TryCreateTask();
+            ActionResult<IPamaxieApplication> result = Controller.TryCreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
             
             //Check if application is created
@@ -134,18 +119,12 @@ namespace Test.Database.Api
             //Update application
             application.ApplicationName = newName;
             
-            //Instantiate the controller and add a default HttpContext
-            ApplicationController applicationController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
-            applicationController.Request.Body = body;
+            Controller.Request.Body = body;
             
             //Call controller and get result
-            ActionResult<IPamaxieApplication> result = applicationController.UpdateTask();
+            ActionResult<IPamaxieApplication> result = Controller.UpdateTask();
             Assert.IsType<OkObjectResult>(result.Result);
             
             //Check if application is updated
@@ -171,18 +150,12 @@ namespace Test.Database.Api
             //Update application
             application.ApplicationName = newName;
             
-            //Instantiate the controller and add a default HttpContext
-            ApplicationController applicationController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
-            applicationController.Request.Body = body;
+            Controller.Request.Body = body;
             
             //Call controller and get result
-            ActionResult<IPamaxieApplication> result = applicationController.TryUpdateTask();
+            ActionResult<IPamaxieApplication> result = Controller.TryUpdateTask();
             Assert.IsType<OkObjectResult>(result.Result);
             
             //Check if application is updated
@@ -203,18 +176,12 @@ namespace Test.Database.Api
             IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 
-            //Instantiate the controller and add a default HttpContext
-            ApplicationController applicationController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
-            applicationController.Request.Body = body;
+            Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieApplication> result = applicationController.UpdateOrCreateTask();
+            ActionResult<IPamaxieApplication> result = Controller.UpdateOrCreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if application is updated or created
@@ -239,18 +206,12 @@ namespace Test.Database.Api
             //Update application
             application.ApplicationName = newName;
 
-            //Instantiate the controller and add a default HttpContext
-            ApplicationController applicationController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
-            applicationController.Request.Body = body;
+            Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieApplication> result = applicationController.UpdateOrCreateTask();
+            ActionResult<IPamaxieApplication> result = Controller.UpdateOrCreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if application is updated or created
@@ -271,18 +232,12 @@ namespace Test.Database.Api
             IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 
-            //Instantiate the controller and add a default HttpContext
-            ApplicationController applicationController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
-            applicationController.Request.Body = body;
+            Controller.Request.Body = body;
 
             //Call controller and check if applications is deleted
-            ActionResult<bool> result = applicationController.DeleteTask();
+            ActionResult<bool> result = Controller.DeleteTask();
             Assert.IsType<OkObjectResult>(result.Result);
             Assert.True((bool)((ObjectResult)result.Result).Value);
         }
@@ -299,18 +254,12 @@ namespace Test.Database.Api
             IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 
-            //Instantiate the controller and add a default HttpContext
-            ApplicationController applicationController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
-            applicationController.Request.Body = body;
+            Controller.Request.Body = body;
 
             //Call controller and check if application is enabled or disabled
-            ActionResult<IPamaxieApplication> result = applicationController.EnableOrDisableTask();
+            ActionResult<IPamaxieApplication> result = Controller.EnableOrDisableTask();
             Assert.IsType<OkObjectResult>(result.Result);
             Assert.Equal(!application.Disabled, ((IPamaxieApplication)((ObjectResult)result.Result).Value).Disabled);
         }
@@ -327,18 +276,12 @@ namespace Test.Database.Api
             IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             
-            //Instantiate the controller and add a default HttpContext
-            ApplicationController applicationController = new(new TokenGenerator(Configuration), _context)
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
-            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
-            applicationController.Request.Body = body;
+            Controller.Request.Body = body;
 
             //Call controller and check if application is verified
-            ActionResult<bool> result = applicationController.VerifyAuthenticationTask();
+            ActionResult<bool> result = Controller.VerifyAuthenticationTask();
             Assert.IsType<OkObjectResult>(result.Result);
             Assert.True((bool)((ObjectResult)result.Result).Value);
         }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Pamaxie.Api.Data;
 using Pamaxie.Api.Security;
-using Test.Base;
+using Test.TestBase;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -10,14 +10,14 @@ namespace Test.Pamaxie.API_UnitTesting
     /// <summary>
     /// Testing class for <see cref="TokenGenerator"/>
     /// </summary>
-    public class TokenTest : Base.Test
+    public class TokenBaseTest : BaseTest
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllUsers"/>
         /// </summary>
         public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
 
-        public TokenTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public TokenBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
         

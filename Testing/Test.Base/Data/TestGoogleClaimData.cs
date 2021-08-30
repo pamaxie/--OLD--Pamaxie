@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 
-namespace Test.Base
+namespace Test.TestBase
 {
     /// <summary>
     /// Contains randomly generated Google Claims Data
