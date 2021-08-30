@@ -14,7 +14,7 @@ namespace Test.Database.Api
         }
         
         /// <summary>
-        /// Test for getting a application through <see cref="TokenGenerator.CreateToken"/>
+        /// Test for creating a token through <see cref="TokenGenerator.CreateToken"/>
         /// </summary>
         [Fact] //TODO Needs testing data
         public void CreateToken()

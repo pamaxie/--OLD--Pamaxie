@@ -5,6 +5,9 @@ using Pamaxie.Api.Security;
 
 namespace Pamaxie.Api.Controllers
 {
+    /// <summary>
+    /// Api Controller for handling all authentication interactions
+    /// </summary>
     [Authorize]
     [ApiController]
     [Route("[controller]")]

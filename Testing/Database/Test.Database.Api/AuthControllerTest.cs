@@ -3,7 +3,7 @@ using Pamaxie.Database.Extensions.Server;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Database.Api.DirectControllerCall
+namespace Test.Database.Api
 {
     /// <summary>
     /// Testing class for <see cref="AuthController"/>

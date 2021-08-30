@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,7 @@ using Pamaxie.Database.Extensions.Server;
 namespace Pamaxie.Api.Controllers
 {
     /// <summary>
-    /// TODO
+    /// Api Controller for handling all application interactions
     /// </summary>
     [Authorize]
     [ApiController]
@@ -30,9 +29,9 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        /// TODO
+        /// Gets a application from the database with a application key from the request body
         /// </summary>
-        /// <returns>TODO</returns>
+        /// <returns>A <see cref="IPamaxieApplication"/> from the database</returns>
         [Authorize]
         [HttpGet("get")]
         public ActionResult<IPamaxieApplication> GetTask()
@@ -41,9 +40,9 @@ namespace Pamaxie.Api.Controllers
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
 
-            //TODO get application from database
-
-            return Ok(new PamaxieApplication() { Key = result }); //TODO return application
+            IPamaxieApplication application = _dbService.Applications.Get(result);
+            
+            return Ok(application);
         }
 
         /// <summary>
@@ -62,9 +61,30 @@ namespace Pamaxie.Api.Controllers
             if (application == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            //TODO Create application in the db and return that created application
+            IPamaxieApplication createdApplication = _dbService.Applications.Create(application);
 
-            return Ok(application); //TODO return created application, not the application from request body
+            return Ok(createdApplication);
+        }
+
+        /// <summary>
+        /// Tries to create a new <see cref="IPamaxieApplication"/>
+        /// </summary>
+        /// <returns>Created <see cref="IPamaxieApplication"/></returns>
+        [Authorize]
+        [HttpPost("tryCreate")]
+        public ActionResult<IPamaxieApplication> TryCreateTask()
+        {
+            StreamReader reader = new(Request.Body);
+            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
+            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+
+            IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
+            if (application == null)
+                return BadRequest(ErrorHandler.BadData());
+
+            bool created = _dbService.Applications.TryCreate(application, out IPamaxieApplication createdApplication);
+
+            return Ok(createdApplication); //TODO find a solution to involve the boolean "created"
         }
 
         /// <summary>
@@ -83,15 +103,36 @@ namespace Pamaxie.Api.Controllers
             if (application == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            //TODO Update application in the db and return that updated application
+            IPamaxieApplication updatedApplication = _dbService.Applications.Update(application);
 
-            return Ok(application); //TODO return updated application, not the application from request body
+            return Ok(updatedApplication);
         }
 
         /// <summary>
-        /// TODO
+        /// Tries to update a <see cref="IPamaxieApplication"/>
         /// </summary>
-        /// <returns>TODO</returns>
+        /// <returns>Updated <see cref="IPamaxieApplication"/></returns>
+        [Authorize]
+        [HttpPost("tryUpdate")]
+        public ActionResult<IPamaxieApplication> TryUpdateTask()
+        {
+            StreamReader reader = new(Request.Body);
+            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
+            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+
+            IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
+            if (application == null)
+                return BadRequest(ErrorHandler.BadData());
+
+            bool updated = _dbService.Applications.TryUpdate(application, out IPamaxieApplication updatedApplication);
+
+            return Ok(updatedApplication); //TODO find a solution to involve the boolean "updated"
+        }
+
+        /// <summary>
+        /// Updates or creates a <see cref="IPamaxieApplication"/>
+        /// </summary>
+        /// <returns>Updated or created <see cref="IPamaxieApplication"/></returns>
         [Authorize]
         [HttpPost("updateOrCreate")]
         public ActionResult<IPamaxieApplication> UpdateOrCreateTask()
@@ -104,18 +145,20 @@ namespace Pamaxie.Api.Controllers
             if (application == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            //TODO Update or create application in the db and return that updated or created application
+            bool updatedOrCreated =
+                _dbService.Applications.UpdateOrCreate(application,
+                    out IPamaxieApplication updatedOrCreatedApplication);
 
-            return Ok(application); //TODO return updated or created application, not the application from request body
+            return Ok(updatedOrCreatedApplication); //TODO find a solution to involve the boolean "updatedOrCreated"
         }
 
         /// <summary>
-        /// TODO
+        /// Deletes a <see cref="IPamaxieApplication"/>
         /// </summary>
-        /// <returns>TODO</returns>
+        /// <returns><see cref="bool"/> if <see cref="IPamaxieApplication"/> is deleted</returns>
         [Authorize]
         [HttpPost("delete")]
-        public ActionResult<IPamaxieApplication> DeleteTask()
+        public ActionResult<bool> DeleteTask()
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
@@ -125,18 +168,18 @@ namespace Pamaxie.Api.Controllers
             if (application == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            //TODO Delete application from the db, if deletion failed, return BadRequest
+            bool deleted = _dbService.Applications.Delete(application);
 
-            return Ok("Success");
+            return Ok(deleted);
         }
         
         
         /// <summary>
-        /// TODO
+        /// Enables or disables the <see cref="IPamaxieApplication"/> 
         /// </summary>
-        /// <returns>TODO</returns>
+        /// <returns>Enabled or disabled <see cref="IPamaxieApplication"/></returns>
         [Authorize]
-        [HttpPost("enableOrUpdate")]
+        [HttpPost("enableOrDisable")]
         public ActionResult<IPamaxieApplication> EnableOrDisableTask()
         {
             StreamReader reader = new(Request.Body);
@@ -147,16 +190,15 @@ namespace Pamaxie.Api.Controllers
             if (application == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            //TODO enable or disable the application from the db
-            application.Disabled = !application.Disabled; //TODO Find out if the enable/disable function should be in .Client, .Server or the Api
+            IPamaxieApplication enabledOrDisabledApplication = _dbService.Applications.EnableOrDisable(application);
 
-            return Ok(application); //TODO return enabled or disabled application, not the application from request body
+            return Ok(enabledOrDisabledApplication);
         }
         
         /// <summary>
-        /// TODO
+        /// Verify if the <see cref="IPamaxieApplication"/> is authorized
         /// </summary>
-        /// <returns>TODO</returns>
+        /// <returns><see cref="bool"/> if the <see cref="IPamaxieApplication"/>is authorized</returns>
         [Authorize]
         [HttpPost("verifyAuthentication")]
         public ActionResult<bool> VerifyAuthenticationTask()
@@ -169,9 +211,9 @@ namespace Pamaxie.Api.Controllers
             if (application == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            //TODO Verify application with the application.Credentials, if verification fails, return false
+            bool authorized = _dbService.Applications.VerifyAuthentication(application);
 
-            return Ok(true); //TODO return true of false depending on, if the verification failed or succeeded
+            return Ok(authorized);
         }
     }
 }

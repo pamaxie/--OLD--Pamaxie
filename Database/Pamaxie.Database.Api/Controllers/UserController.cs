@@ -11,13 +11,14 @@ using Pamaxie.Database.Extensions.Server;
 namespace Pamaxie.Api.Controllers
 {
     /// <summary>
-    /// TODO
+    /// Api Controller for handling all user interactions
     /// </summary>
     [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
+        // ReSharper disable once NotAccessedField.Local
         private readonly TokenGenerator _generator;
         private readonly DatabaseService _dbService;
 
@@ -28,9 +29,9 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        /// TODO
+        /// Get a user from the database with a user key from the request body
         /// </summary>
-        /// <returns>TODO</returns>
+        /// <returns>A <see cref="IPamaxieUser"/> from the database</returns>
         [Authorize]
         [HttpGet("get")]
         public ActionResult<IPamaxieUser> GetTask()
@@ -39,9 +40,9 @@ namespace Pamaxie.Api.Controllers
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
 
-            //TODO get user from database
-
-            return Ok(new PamaxieUser() { Key = result }); //TODO return user
+            IPamaxieUser user = _dbService.Users.Get(result);
+            
+            return Ok(user);
         }
 
         /// <summary>
@@ -60,9 +61,30 @@ namespace Pamaxie.Api.Controllers
             if (user == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            //TODO Create user in the db and return that created user
+            IPamaxieUser createdUser = _dbService.Users.Create(user);
 
-            return Ok(user); //TODO return created user, not the user from request body
+            return Ok(createdUser);
+        }
+
+        /// <summary>
+        /// Tries to create a new <see cref="IPamaxieUser"/>
+        /// </summary>
+        /// <returns>Created <see cref="IPamaxieUser"/></returns>
+        [Authorize]
+        [HttpPost("tryCreate")]
+        public ActionResult<IPamaxieUser> TryCreateTask()
+        {
+            StreamReader reader = new(Request.Body);
+            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
+            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+
+            IPamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
+            if (user == null)
+                return BadRequest(ErrorHandler.BadData());
+
+            bool created = _dbService.Users.TryCreate(user, out IPamaxieUser createdUser);
+
+            return Ok(createdUser); //TODO find a solution to involve the boolean "created"
         }
 
         /// <summary>
@@ -81,15 +103,36 @@ namespace Pamaxie.Api.Controllers
             if (user == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            //TODO Update user in the db and return that updated user
+            IPamaxieUser updatedUser = _dbService.Users.Update(user);
 
-            return Ok(user); //TODO return updated user, not the user from request body
+            return Ok(updatedUser);
         }
 
         /// <summary>
-        /// TODO
+        /// Tries to update a <see cref="IPamaxieUser"/>
         /// </summary>
-        /// <returns>TODO</returns>
+        /// <returns>Updated <see cref="IPamaxieUser"/></returns>
+        [Authorize]
+        [HttpPost("tryUpdate")]
+        public ActionResult<IPamaxieUser> TryUpdateTask()
+        {
+            StreamReader reader = new(Request.Body);
+            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
+            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+
+            IPamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
+            if (user == null)
+                return BadRequest(ErrorHandler.BadData());
+
+            bool updated = _dbService.Users.TryUpdate(user, out IPamaxieUser updatedUser);
+
+            return Ok(updatedUser); //TODO find a solution to involve the boolean "updated"
+        }
+
+        /// <summary>
+        /// Updates or creates a <see cref="IPamaxieUser"/>
+        /// </summary>
+        /// <returns>Updated or created <see cref="IPamaxieUser"/></returns>
         [Authorize]
         [HttpPost("updateOrCreate")]
         public ActionResult<IPamaxieUser> UpdateOrCreateTask()
@@ -102,18 +145,18 @@ namespace Pamaxie.Api.Controllers
             if (user == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            //TODO Update or create user in the db and return that updated or created user
+            bool updateOrCreate = _dbService.Users.UpdateOrCreate(user, out IPamaxieUser updatedOrCreatedUser);
 
-            return Ok(user); //TODO return updated or created user, not the user from request body
+            return Ok(updatedOrCreatedUser); //TODO find a solution to involve the boolean "updatedOrCreated"
         }
 
         /// <summary>
-        /// TODO
+        /// Deletes a <see cref="IPamaxieUser"/>
         /// </summary>
-        /// <returns>TODO</returns>
+        /// <returns><see cref="bool"/> if <see cref="IPamaxieUser"/> is deleted</returns>
         [Authorize]
         [HttpPost("delete")]
-        public ActionResult<IPamaxieUser> DeleteTask()
+        public ActionResult<bool> DeleteTask()
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
@@ -123,15 +166,15 @@ namespace Pamaxie.Api.Controllers
             if (user == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            //TODO Delete user from the db, if deletion failed, return BadRequest
+            bool deleted = _dbService.Users.Delete(user);
 
-            return Ok("Success");
+            return Ok(deleted);
         }
 
         /// <summary>
-        /// TODO
+        /// Get all <see cref="IPamaxieApplication"/>s the user owns
         /// </summary>
-        /// <returns>TODO</returns>
+        /// <returns>A list of all <see cref="IPamaxieApplication"/>s the user owns</returns>
         [Authorize]
         [HttpPost("getAllApplications")]
         public ActionResult<IEnumerable<IPamaxieApplication>> GetAllApplicationsTask()
@@ -144,19 +187,15 @@ namespace Pamaxie.Api.Controllers
             if (user == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            //TODO Get all applications the user owns from the database
-            
-            return Ok(new List<IPamaxieApplication>
-            {
-                new PamaxieApplication { Key = "1", OwnerKey = user.Key },
-                new PamaxieApplication { Key = "2", OwnerKey = user.Key }
-            }); //TODO return the list of applications the user owns from the database
+            IEnumerable<IPamaxieApplication> applications = _dbService.Users.GetAllApplications(user);
+
+            return Ok(applications);
         }
 
         /// <summary>
-        /// TODO
+        /// Verifies the user's email address
         /// </summary>
-        /// <returns>TODO</returns>
+        /// <returns><see cref="bool"/> if the user got verified</returns>
         [Authorize]
         [HttpPost("verifyEmail")]
         public ActionResult<bool> VerifyEmailTask()
@@ -169,9 +208,9 @@ namespace Pamaxie.Api.Controllers
             if (user == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            //TODO Verify the user in the database, and return the verified user
+            bool verified = _dbService.Users.VerifyEmail(user);
             
-            return Ok(user.EmailVerified = true); //TODO return the verified user
+            return Ok(verified);
         }
     }
 }

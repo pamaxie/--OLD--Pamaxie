@@ -12,7 +12,7 @@ using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Database.Api.DirectControllerCall
+namespace Test.Database.Api
 {
     /// <summary>
     /// Testing class for <see cref="UserController"/>
@@ -93,6 +93,36 @@ namespace Test.Database.Api.DirectControllerCall
         }
         
         /// <summary>
+        /// </summary>
+        /// <param name="userKey">The user key from inlined data</param>
+        [Theory]
+        [MemberData(nameof(AllUsers))]
+        public void TryCreate(string userKey)
+        {
+            //Get application
+            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            Assert.NotNull(user);
+            
+            //Instantiate the controller and add a default HttpContext
+            UserController userController = new(new TokenGenerator(Configuration), _context)
+            {
+                ControllerContext = {HttpContext = new DefaultHttpContext()}
+            };
+            
+            //Parse the application to a request body and send it to the controller
+            Stream body = ControllerService.CreateStream(user);
+            userController.Request.Body = body;
+            
+            //Call controller and get result
+            ActionResult<IPamaxieUser> result = userController.TryCreateTask();
+            Assert.IsType<OkObjectResult>(result.Result);
+            
+            //Check if user is created
+            IPamaxieUser createdUser = ((ObjectResult)result.Result).Value as IPamaxieUser;
+            Assert.NotNull(createdUser);
+        }
+        
+        /// <summary>
         /// Test for updating a user through <see cref="UserController.UpdateTask"/>
         /// </summary>
         /// <param name="userKey">The user key from inlined data</param>
@@ -121,6 +151,43 @@ namespace Test.Database.Api.DirectControllerCall
 
             //Call controller and get result
             ActionResult<IPamaxieUser> result = userController.UpdateTask();
+            Assert.IsType<OkObjectResult>(result.Result);
+            
+            //Check if user is updated
+            IPamaxieUser updatedUser = ((ObjectResult)result.Result).Value as IPamaxieUser;
+            Assert.NotNull(updatedUser);
+            Assert.Equal(newEmail, updatedUser.EmailAddress);
+        }
+        
+        /// <summary>
+        /// Test for trying to update a user through <see cref="UserController.UpdateTask"/>
+        /// </summary>
+        /// <param name="userKey">The user key from inlined data</param>
+        [Theory]
+        [MemberData(nameof(AllUsers))]
+        public void TryUpdate(string userKey)
+        {
+            const string newEmail = "UpdatedEmail@testmail.com";
+            
+            //Get application
+            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            Assert.NotNull(user);
+            
+            //Update User
+            user.EmailAddress = newEmail;
+            
+            //Instantiate the controller and add a default HttpContext
+            UserController userController = new(new TokenGenerator(Configuration), _context)
+            {
+                ControllerContext = {HttpContext = new DefaultHttpContext()}
+            };
+            
+            //Parse the application to a request body and send it to the controller
+            Stream body = ControllerService.CreateStream(user);
+            userController.Request.Body = body;
+
+            //Call controller and get result
+            ActionResult<IPamaxieUser> result = userController.TryUpdateTask();
             Assert.IsType<OkObjectResult>(result.Result);
             
             //Check if user is updated
@@ -220,8 +287,9 @@ namespace Test.Database.Api.DirectControllerCall
             userController.Request.Body = body;
 
             //Call controller and check if user is deleted
-            ActionResult<IPamaxieUser> result = userController.DeleteTask();
+            ActionResult<bool> result = userController.DeleteTask();
             Assert.IsType<OkObjectResult>(result.Result);
+            Assert.True((bool)((ObjectResult)result.Result).Value);
         }
         
         /// <summary>

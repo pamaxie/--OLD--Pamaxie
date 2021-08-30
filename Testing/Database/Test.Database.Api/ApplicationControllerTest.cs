@@ -11,7 +11,7 @@ using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Database.Api.DirectControllerCall
+namespace Test.Database.Api
 {
     /// <summary>
     /// Testing class for <see cref="ApplicationController"/>
@@ -87,6 +87,37 @@ namespace Test.Database.Api.DirectControllerCall
         }
         
         /// <summary>
+        /// Test for trying to create a application <see cref="ApplicationController.CreateTask"/>
+        /// </summary>
+        /// <param name="applicationKey">The application key from inlined data</param>
+        [Theory]
+        [MemberData(nameof(AllApplications))]
+        public void TryCreate(string applicationKey)
+        {
+            //Get application
+            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            Assert.NotNull(application);
+            
+            //Instantiate the controller and add a default HttpContext
+            ApplicationController applicationController = new(new TokenGenerator(Configuration), _context)
+            {
+                ControllerContext = {HttpContext = new DefaultHttpContext()}
+            };
+            
+            //Parse the application to a request body and send it to the controller
+            Stream body = ControllerService.CreateStream(application);
+            applicationController.Request.Body = body;
+            
+            //Call controller and get result
+            ActionResult<IPamaxieApplication> result = applicationController.TryCreateTask();
+            Assert.IsType<OkObjectResult>(result.Result);
+            
+            //Check if application is created
+            IPamaxieApplication createdApplication = ((ObjectResult)result.Result).Value as IPamaxieApplication;
+            Assert.NotNull(createdApplication);
+        }
+        
+        /// <summary>
         /// Test for updating a application through <see cref="ApplicationController.UpdateTask"/>
         /// </summary>
         /// <param name="applicationKey">The application key from inlined data</param>
@@ -115,6 +146,43 @@ namespace Test.Database.Api.DirectControllerCall
             
             //Call controller and get result
             ActionResult<IPamaxieApplication> result = applicationController.UpdateTask();
+            Assert.IsType<OkObjectResult>(result.Result);
+            
+            //Check if application is updated
+            IPamaxieApplication updatedApplication = ((ObjectResult)result.Result).Value as IPamaxieApplication;
+            Assert.NotNull(updatedApplication);
+            Assert.Equal(newName, updatedApplication.ApplicationName);
+        }
+        
+        /// <summary>
+        /// Test for trying to update a application through <see cref="ApplicationController.UpdateTask"/>
+        /// </summary>
+        /// <param name="applicationKey">The application key from inlined data</param>
+        [Theory]
+        [MemberData(nameof(AllApplications))]
+        public void TryUpdate(string applicationKey)
+        {
+            const string newName = "UpdatedName";
+            
+            //Get application
+            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            Assert.NotNull(application);
+            
+            //Update application
+            application.ApplicationName = newName;
+            
+            //Instantiate the controller and add a default HttpContext
+            ApplicationController applicationController = new(new TokenGenerator(Configuration), _context)
+            {
+                ControllerContext = {HttpContext = new DefaultHttpContext()}
+            };
+            
+            //Parse the application to a request body and send it to the controller
+            Stream body = ControllerService.CreateStream(application);
+            applicationController.Request.Body = body;
+            
+            //Call controller and get result
+            ActionResult<IPamaxieApplication> result = applicationController.TryUpdateTask();
             Assert.IsType<OkObjectResult>(result.Result);
             
             //Check if application is updated
@@ -214,8 +282,9 @@ namespace Test.Database.Api.DirectControllerCall
             applicationController.Request.Body = body;
 
             //Call controller and check if applications is deleted
-            ActionResult<IPamaxieApplication> result = applicationController.DeleteTask();
+            ActionResult<bool> result = applicationController.DeleteTask();
             Assert.IsType<OkObjectResult>(result.Result);
+            Assert.True((bool)((ObjectResult)result.Result).Value);
         }
         
         /// <summary>
