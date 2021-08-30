@@ -1,4 +1,5 @@
-﻿using Pamaxie.Database.Extensions.Server;
+﻿using Microsoft.Extensions.Configuration;
+using Pamaxie.Database.Extensions.Server;
 using Xunit.Abstractions;
 
 namespace Test.TestBase
@@ -21,7 +22,10 @@ namespace Test.TestBase
 
         protected ApiBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
-            Context = new PamaxieDataContext("", "");
+            //TODO Change these section name, and value names when the appsettings.json is done for Database.Api
+            IConfigurationSection dbConfigSection = Configuration.GetSection("DbConfig");
+            Context = new PamaxieDataContext(dbConfigSection.GetValue<string>("Instance"),
+                dbConfigSection.GetValue<string>("Password"));
         }
     }
 }
