@@ -8,9 +8,15 @@ namespace Test.TestBase
     /// </summary>
     public class BaseTest
     {
+        /// <summary>
+        /// Provides test output
+        /// </summary>
         protected ITestOutputHelper TestOutputHelper { get; }
 
-        protected static IConfiguration Configuration { get; } =
+        /// <summary>
+        /// Configurations for testing methods
+        /// </summary>
+        protected IConfiguration Configuration { get; } =
             new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
 
         protected BaseTest(ITestOutputHelper testOutputHelper)
