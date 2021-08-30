@@ -14,16 +14,5 @@ namespace Test.Database.Extensions.Client
         public UserDataServiceBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
-
-        [Fact]
-        public void Test()
-        {
-            string instance = "";
-            string password = "";
-            PamaxieDataContext context = new PamaxieDataContext(instance, password);
-            DatabaseService service = new(context);
-            IPamaxieUser user = new PamaxieUser();
-            user.Create();
-        }
     }
 }
