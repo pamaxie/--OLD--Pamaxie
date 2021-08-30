@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using Moq;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Client;
 using Pamaxie.Website.Authentication;
@@ -118,14 +117,14 @@ namespace Test.Pamaxie.Website
             Assert.NotNull(httpContextAccessor.HttpContext?.User.GetGoogleAuthData(out bool _));
 
             IPamaxieUser unverifiedPamaxieUser = UserDataServiceExtension.Get(userKey);
-            TestOutputHelper.WriteLine("Email verified: " + unverifiedPamaxieUser.EmailVerified);
+            TestOutputHelper.WriteLine("Email verified: {0}", unverifiedPamaxieUser.EmailVerified);
 
             UserService userService = new(Configuration, httpContextAccessor, null);
             string token = userService.GenerateEmailConfirmationToken(unverifiedPamaxieUser);
             Assert.True(userService.ConfirmEmail(token));
             
             IPamaxieUser verifiedPamaxieUser = UserDataServiceExtension.Get(userKey);
-            TestOutputHelper.WriteLine("Email verified: " + verifiedPamaxieUser.EmailVerified);
+            TestOutputHelper.WriteLine("Email verified: {0}", verifiedPamaxieUser.EmailVerified);
             Assert.True(userService.IsEmailOfCurrentUserVerified());
         }
     }

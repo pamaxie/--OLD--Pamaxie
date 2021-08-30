@@ -29,6 +29,8 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("login")]
         public ActionResult<AuthToken> LoginTask()
         {
+            //TODO Not yet implemented
+            
             return Ok("Success");
         }
 
@@ -40,6 +42,8 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("createUser")]
         public ActionResult<string> CreateUserTask()
         {
+            //TODO Not yet implemented
+            
             return Ok("Success");
         }
 
@@ -52,6 +56,8 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("refresh")]
         public ActionResult<AuthToken> RefreshTask()
         {
+            //TODO Not yet implemented
+            
             return Ok("Success");
         }
     }

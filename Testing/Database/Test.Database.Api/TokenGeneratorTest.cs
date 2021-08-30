@@ -1,4 +1,9 @@
-﻿using Pamaxie.Api.Security;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
+using Pamaxie.Api.Data;
+using Pamaxie.Api.Security;
+using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -9,6 +14,11 @@ namespace Test.Database.Api
     /// </summary>
     public class TokenGeneratorTest : Base.Test
     {
+        /// <summary>
+        /// <inheritdoc cref="MemberData.AllUsers"/>
+        /// </summary>
+        public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
+        
         public TokenGeneratorTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
@@ -16,10 +26,16 @@ namespace Test.Database.Api
         /// <summary>
         /// Test for creating a token through <see cref="TokenGenerator.CreateToken"/>
         /// </summary>
-        [Fact] //TODO Needs testing data
-        public void CreateToken()
+        /// <param name="userKey">The user key from inlined data</param>
+        [Theory]
+        [MemberData(nameof(AllUsers))]
+        public void CreateToken(string userKey)
         {
-            //TODO Not yet implemented
+            TokenGenerator generator = new(Configuration);
+            AuthToken authToken = generator.CreateToken(userKey);
+            Assert.NotNull(authToken);
+            Assert.NotEmpty(authToken.Token);
+            TestOutputHelper.WriteLine("Token: {0}", authToken.Token);
         }
     }
 }

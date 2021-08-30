@@ -21,7 +21,6 @@ namespace Pamaxie.Api.Controllers
         private readonly TokenGenerator _generator;
         private readonly DatabaseService _dbService;
 
-
         public ApplicationController(TokenGenerator generator, PamaxieDataContext context)
         {
             _generator = generator;

@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Pamaxie.Api.Controllers;
 using Pamaxie.Api.Data;
 using Pamaxie.Api.Security;

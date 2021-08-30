@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using Pamaxie.Data;
+﻿using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Client;
 using Xunit;
 using Xunit.Abstractions;
