@@ -10,7 +10,7 @@ namespace Pamaxie.Database.Design
     {
         #region Services
         /// <summary>
-        /// The actual Database Service that we use to connect to the database
+        /// The actual Database Service that we use to connect to the database or database api
         /// </summary>
         public T Service { get; }
 
@@ -32,21 +32,21 @@ namespace Pamaxie.Database.Design
         public DateTime LastConnectionSuccess { get; set; }
 
         /// <summary>
-        /// Attempts a connection with the redis instance
+        /// Attempts a connection with the instance
         /// </summary>
         /// <returns><see cref="bool"/> if the connection attempt was successful</returns>
         public bool Connect();
         
         /// <summary>
-        /// Validates if the database is available
+        /// Validates if the service is available
         /// </summary>
-        /// <returns><see cref="bool"/> if the database is available</returns>
-        public bool IsDatabaseAvailable();
+        /// <returns><see cref="bool"/> if the service is available</returns>
+        public bool IsServiceAvailable();
         
         /// <summary>
-        /// Validates the roundtrip latency to the database
+        /// Validates the roundtrip latency to the service
         /// </summary>
-        /// <returns><inheritdoc cref="ushort"/> Denoting the latency to the database</returns>
-        public ushort DatabaseLatency();
+        /// <returns><inheritdoc cref="ushort"/> Denoting the latency to the service</returns>
+        public ushort ServiceLatency();
     }
 }

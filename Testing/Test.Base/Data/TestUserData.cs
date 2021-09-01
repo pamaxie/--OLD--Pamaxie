@@ -12,7 +12,7 @@ namespace Test.TestBase
     public static class TestUserData
     {
         /// <summary>
-        /// List of Users for the SqlDbContext.
+        /// List of Test Users
         /// </summary>
         public static readonly List<IPamaxieUser> ListOfUsers = new()
         {

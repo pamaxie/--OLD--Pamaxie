@@ -1,4 +1,5 @@
 ﻿using Pamaxie.Data;
+using Pamaxie.Database.Design;
 
 namespace Pamaxie.Database.Extensions.Client
 {
@@ -7,7 +8,7 @@ namespace Pamaxie.Database.Extensions.Client
     /// </summary>
     public static class ApplicationDataServiceExtension
     {
-        private static ApplicationDataService ApplicationService => DatabaseService.ApplicationService;
+        private static IApplicationDataService ApplicationService => DatabaseService.ApplicationService;
         
         /// <inheritdoc cref="ApplicationDataService.Get"/>
         public static IPamaxieApplication Get(string key)

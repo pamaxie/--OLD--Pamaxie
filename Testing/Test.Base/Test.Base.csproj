@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
       <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.7" />
       <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.1.0" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.9" />
@@ -24,6 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Database\Pamaxie.Database.Extensions.Client\Pamaxie.Database.Extensions.Client.csproj" />
       <ProjectReference Include="..\..\Database\Pamaxie.Database.Extensions.Server\Pamaxie.Database.Extensions.Server.csproj" />
       <ProjectReference Include="..\..\Database\Pamaxie.Data\Pamaxie.Data.csproj" />
     </ItemGroup>

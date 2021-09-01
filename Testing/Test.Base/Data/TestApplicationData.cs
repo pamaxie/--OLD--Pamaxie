@@ -11,64 +11,94 @@ namespace Test.TestBase
     public static class TestApplicationData
     {
         /// <summary>
-        /// List of Users for the SqlDbContext.
+        /// List of Test Applications
         /// </summary>
-        public static readonly List<PamaxieApplication> ListOfApplications = new()
+        public static readonly List<IPamaxieApplication> ListOfApplications = new()
         {
-            new PamaxieApplication()
+            new PamaxieApplication
             {
                 Key = "64922",
                 OwnerKey = "102617494281791801620",
-                ApplicationName = "",
+                TTL = DateTime.Now,
+                Credentials = new AppAuthCredentials
+                {
+                    AuthorizationToken = "Apple",
+                    AuthorizationTokenCipher = BCrypt.Net.BCrypt.HashPassword("Apple", BCryptExtension.CalculateSaltCost()),
+                    LastAuth = DateTime.Now
+                },
+                ApplicationName = "Sparkle",
                 LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
                 RateLimited = false,
                 Disabled = false,
                 Deleted = false
-                //AppToken = "Apple"
             },
-            new PamaxieApplication()
+            new PamaxieApplication
             {
                 Key = "53324",
                 OwnerKey = "102617494281791801620",
-                ApplicationName = "",
+                TTL = DateTime.Now,
+                Credentials = new AppAuthCredentials
+                {
+                    AuthorizationToken = "Pie",
+                    AuthorizationTokenCipher = BCrypt.Net.BCrypt.HashPassword("Pie", BCryptExtension.CalculateSaltCost()),
+                    LastAuth = DateTime.Now
+                },
+                ApplicationName = "Droop",
                 LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
                 RateLimited = false,
                 Disabled = false,
                 Deleted = false
-                //AppToken = "Pie"
             },
-            new PamaxieApplication()
+            new PamaxieApplication
             {
                 Key = "51080",
                 OwnerKey = "104669818103955818761",
-                ApplicationName = "",
+                TTL = DateTime.Now,
+                Credentials = new AppAuthCredentials
+                {
+                    AuthorizationToken = "Orange",
+                    AuthorizationTokenCipher = BCrypt.Net.BCrypt.HashPassword("Orange", BCryptExtension.CalculateSaltCost()),
+                    LastAuth = DateTime.Now
+                },
+                ApplicationName = "Cornwall",
                 LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
                 RateLimited = false,
                 Disabled = false,
                 Deleted = false
-                //AppToken = "Orange"
             },
-            new PamaxieApplication()
+            new PamaxieApplication
             {
                 Key = "65779",
                 OwnerKey = "104669818103955818761",
-                ApplicationName = "",
+                TTL = DateTime.Now,
+                Credentials = new AppAuthCredentials
+                {
+                    AuthorizationToken = "Pear",
+                    AuthorizationTokenCipher = BCrypt.Net.BCrypt.HashPassword("Pear", BCryptExtension.CalculateSaltCost()),
+                    LastAuth = DateTime.Now
+                },
+                ApplicationName = "Crystal",
                 LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
                 RateLimited = false,
                 Disabled = false,
                 Deleted = false
-                //AppToken = "Pear"
             },
-            new PamaxieApplication()
+            new PamaxieApplication
             {
                 Key = "60105",
                 OwnerKey = "104669818103955818761",
-                ApplicationName = "",
+                TTL = DateTime.Now,
+                Credentials = new AppAuthCredentials
+                {
+                    AuthorizationToken = "Cake",
+                    AuthorizationTokenCipher = BCrypt.Net.BCrypt.HashPassword("Cake", BCryptExtension.CalculateSaltCost()),
+                    LastAuth = DateTime.Now
+                },
+                ApplicationName = "Penny",
                 LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
                 RateLimited = false,
                 Disabled = false,
                 Deleted = false
-                //AppToken = "Cake"
             }
         };
     }

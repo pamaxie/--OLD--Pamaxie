@@ -43,6 +43,9 @@ namespace Test.Pamaxie.Website
             Claim[] googleClaims = TestGoogleClaimData.ListOfGoogleUserPrincipleClaims.FirstOrDefault(_ => _[0].Value == userKey);
             Assert.NotNull(googleClaims);
             
+            //Mock UserDataService, for UserDataServiceExtension
+            MockUserDataService.Mock();
+            
             //Mock HttpContext with principle claims
             IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);
 
@@ -58,11 +61,12 @@ namespace Test.Pamaxie.Website
         [MemberData(nameof(AllUnverifiedUsers))]
         public void IsEmailOfCurrentUserVerified_Failure(string userKey)
         {
-            //TODO Mock UserInteractionExtension, as it will be used in UserService
-            
             //Get Google Claims from the googleUserId
             Claim[] googleClaims = TestGoogleClaimData.ListOfGoogleUserPrincipleClaims.FirstOrDefault(_ => _[0].Value == userKey);
             Assert.NotNull(googleClaims);
+            
+            //Mock UserDataService, for UserDataServiceExtension
+            MockUserDataService.Mock();
             
             //Mock HttpContext with principle claims
             IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);
@@ -108,7 +112,8 @@ namespace Test.Pamaxie.Website
             Claim[] googleClaims = TestGoogleClaimData.ListOfGoogleUserPrincipleClaims.FirstOrDefault(_ => _[0].Value == userKey);
             Assert.NotNull(googleClaims);
             
-            //TODO Mock the redis DB
+            //Mock UserDataService, for UserDataServiceExtension
+            MockUserDataService.Mock();
             
             //Mock HttpContext with principle claims
             IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);

@@ -22,12 +22,12 @@ namespace Pamaxie.Database.Extensions.Client
         /// <summary>
         /// Contains the service responsible for interacting with user data for the Api
         /// </summary>
-        internal static  UserDataService UserService { get; private set; }
+        internal static  IUserDataService UserService { get; set; }
 
         /// <summary>
         /// Contains the Service responsible for interacting with application data for the Api
         /// </summary>
-        internal static ApplicationDataService ApplicationService { get; private set; }
+        internal static IApplicationDataService ApplicationService { get; set; }
 
         public DatabaseService(PamaxieDataContext dataContext)
         {
@@ -43,13 +43,13 @@ namespace Pamaxie.Database.Extensions.Client
         }
 
         /// <inheritdoc/>
-        public bool IsDatabaseAvailable()
+        public bool IsServiceAvailable()
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public ushort DatabaseLatency()
+        public ushort ServiceLatency()
         {
             throw new NotImplementedException();
         }

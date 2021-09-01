@@ -48,13 +48,13 @@ namespace Pamaxie.Database.Extensions.Server
         }
 
         /// <inheritdoc/>
-        public bool IsDatabaseAvailable()
+        public bool IsServiceAvailable()
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public ushort DatabaseLatency()
+        public ushort ServiceLatency()
         {
             throw new NotImplementedException();
         }

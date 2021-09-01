@@ -36,10 +36,11 @@ namespace Test.Pamaxie.API_UnitTesting
         public void Login_Succeed(string applicationKey)
         {
             //Get application
-            PamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             
-            //TODO Mock AuthenticationInteractionExtensions, as it will be used in the AuthController
+            //Mock ApplicationDataService, for ApplicationDataServiceExtension
+            MockApplicationDataService.Mock();
             
             //Instantiate the controller and add a default HttpContext
             AuthController authController = new(new TokenGenerator(Configuration))
@@ -52,8 +53,7 @@ namespace Test.Pamaxie.API_UnitTesting
             authController.Request.Body = body;
             
             ActionResult<AuthToken> result = authController.LoginTask();
-            TestOutputHelper.WriteLine(result.Result.ToString());
-            //Assert.Equal(, result.Result);
+            Assert.IsType<OkObjectResult>(result.Result);
         }
     }
 }

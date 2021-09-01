@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Pamaxie.Data;
+using Pamaxie.Database.Design;
 
 namespace Pamaxie.Database.Extensions.Client
 {
@@ -8,7 +9,7 @@ namespace Pamaxie.Database.Extensions.Client
     /// </summary>
     public static class UserDataServiceExtension
     {
-        private static UserDataService UserService => DatabaseService.UserService;
+        private static IUserDataService UserService => DatabaseService.UserService;
         
         /// <inheritdoc cref="UserDataService.Get"/>
         public static IPamaxieUser Get(string key)
@@ -52,7 +53,7 @@ namespace Pamaxie.Database.Extensions.Client
             return UserService.Delete(value);
         }
         
-        /// <inheritdoc cref="UserDataService.GetAllApplicationsFromUser"/>
+        /// <inheritdoc cref="UserDataService.GetAllApplications"/>
         public static IEnumerable<IPamaxieApplication> GetAllApplications(this IPamaxieUser value)
         {
             return UserService.GetAllApplications(value);

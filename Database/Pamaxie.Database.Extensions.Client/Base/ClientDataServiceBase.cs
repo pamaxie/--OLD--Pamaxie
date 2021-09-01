@@ -85,7 +85,7 @@ namespace Pamaxie.Database.Extensions.Client
         }
 
         /// <inheritdoc/>
-        public bool UpdateOrCreate(T value, out T databaseValue)
+        public bool UpdateOrCreate(T value, out T updatedOrCreatedValue)
         {
             throw new NotImplementedException();
         }

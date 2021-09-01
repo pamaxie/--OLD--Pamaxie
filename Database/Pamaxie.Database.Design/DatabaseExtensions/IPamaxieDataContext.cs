@@ -17,12 +17,12 @@
         public string DataInstances { get; }
 
         /// <summary>
-        /// Defines the password to use for the redis instances
+        /// Defines the password to use for the instances
         /// </summary>
         public string Password { get; }
 
         /// <summary>
-        /// How many attempts should be made to connect to the database
+        /// How many attempts should be made to connect to the service
         /// </summary>
         public int ReconnectionAttempts { get; }
     }
