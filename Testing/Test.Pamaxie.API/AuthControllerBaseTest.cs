@@ -25,6 +25,8 @@ namespace Test.Pamaxie.API_UnitTesting
 
         public AuthControllerBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
+            //Mock ApplicationDataService, for ApplicationDataServiceExtension
+            MockApplicationDataService.Mock();
         }
 
         /// <summary>
@@ -39,9 +41,6 @@ namespace Test.Pamaxie.API_UnitTesting
             IPamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
-
-            //Mock ApplicationDataService, for ApplicationDataServiceExtension
-            MockApplicationDataService.Mock();
 
             //Instantiate the controller and add a default HttpContext
             AuthController authController = new(new TokenGenerator(Configuration))

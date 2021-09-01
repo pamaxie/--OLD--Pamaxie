@@ -29,6 +29,8 @@ namespace Test.Pamaxie.Website
 
         public UserServiceBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
+            //Mock UserDataService, for UserDataServiceExtension
+            MockUserDataService.Mock();
         }
 
         /// <summary>
@@ -43,9 +45,6 @@ namespace Test.Pamaxie.Website
             Claim[] googleClaims =
                 TestGoogleClaimData.ListOfGoogleUserPrincipleClaims.FirstOrDefault(_ => _[0].Value == userKey);
             Assert.NotNull(googleClaims);
-
-            //Mock UserDataService, for UserDataServiceExtension
-            MockUserDataService.Mock();
 
             //Mock HttpContext with principle claims
             IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);
@@ -66,9 +65,6 @@ namespace Test.Pamaxie.Website
             Claim[] googleClaims =
                 TestGoogleClaimData.ListOfGoogleUserPrincipleClaims.FirstOrDefault(_ => _[0].Value == userKey);
             Assert.NotNull(googleClaims);
-
-            //Mock UserDataService, for UserDataServiceExtension
-            MockUserDataService.Mock();
 
             //Mock HttpContext with principle claims
             IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);
@@ -115,9 +111,6 @@ namespace Test.Pamaxie.Website
             Claim[] googleClaims =
                 TestGoogleClaimData.ListOfGoogleUserPrincipleClaims.FirstOrDefault(_ => _[0].Value == userKey);
             Assert.NotNull(googleClaims);
-
-            //Mock UserDataService, for UserDataServiceExtension
-            MockUserDataService.Mock();
 
             //Mock HttpContext with principle claims
             IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);
