@@ -17,18 +17,17 @@ namespace Test.Database.Api
     /// </summary>
     public class ApplicationControllerBaseTest : ApiBaseTest<ApplicationController>
     {
-        
         /// <summary>
         /// <inheritdoc cref="MemberData.AllApplications"/>
         /// </summary>
         public static IEnumerable<object[]> AllApplications => MemberData.AllApplications;
-        
+
         public ApplicationControllerBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             //Instantiate the controller and add a default HttpContext
             Controller = new ApplicationController(new TokenGenerator(Configuration), Context)
             {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
+                ControllerContext = { HttpContext = new DefaultHttpContext() }
             };
         }
 
@@ -46,12 +45,12 @@ namespace Test.Database.Api
 
             //Call controller and get result
             ActionResult<IPamaxieApplication> result = Controller.GetTask();
-            
+
             //Check if application is not null
             IPamaxieApplication application = ((ObjectResult)result.Result).Value as IPamaxieApplication;
             Assert.NotNull(application);
         }
-        
+
         /// <summary>
         /// Test for creating a application <see cref="ApplicationController.CreateTask"/>
         /// </summary>
@@ -61,22 +60,23 @@ namespace Test.Database.Api
         public void Create(string applicationKey)
         {
             //Get application
-            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
-            
+
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
             Controller.Request.Body = body;
-            
+
             //Call controller and get result
             ActionResult<IPamaxieApplication> result = Controller.CreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
-            
+
             //Check if application is created
             IPamaxieApplication createdApplication = ((ObjectResult)result.Result).Value as IPamaxieApplication;
             Assert.NotNull(createdApplication);
         }
-        
+
         /// <summary>
         /// Test for trying to create a application <see cref="ApplicationController.CreateTask"/>
         /// </summary>
@@ -86,22 +86,23 @@ namespace Test.Database.Api
         public void TryCreate(string applicationKey)
         {
             //Get application
-            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
-            
+
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
             Controller.Request.Body = body;
-            
+
             //Call controller and get result
             ActionResult<IPamaxieApplication> result = Controller.TryCreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
-            
+
             //Check if application is created
             IPamaxieApplication createdApplication = ((ObjectResult)result.Result).Value as IPamaxieApplication;
             Assert.NotNull(createdApplication);
         }
-        
+
         /// <summary>
         /// Test for updating a application through <see cref="ApplicationController.UpdateTask"/>
         /// </summary>
@@ -111,28 +112,29 @@ namespace Test.Database.Api
         public void Update(string applicationKey)
         {
             const string newName = "UpdatedName";
-            
+
             //Get application
-            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
-            
+
             //Update application
             application.ApplicationName = newName;
-            
+
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
             Controller.Request.Body = body;
-            
+
             //Call controller and get result
             ActionResult<IPamaxieApplication> result = Controller.UpdateTask();
             Assert.IsType<OkObjectResult>(result.Result);
-            
+
             //Check if application is updated
             IPamaxieApplication updatedApplication = ((ObjectResult)result.Result).Value as IPamaxieApplication;
             Assert.NotNull(updatedApplication);
             Assert.Equal(newName, updatedApplication.ApplicationName);
         }
-        
+
         /// <summary>
         /// Test for trying to update a application through <see cref="ApplicationController.UpdateTask"/>
         /// </summary>
@@ -142,28 +144,29 @@ namespace Test.Database.Api
         public void TryUpdate(string applicationKey)
         {
             const string newName = "UpdatedName";
-            
+
             //Get application
-            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
-            
+
             //Update application
             application.ApplicationName = newName;
-            
+
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
             Controller.Request.Body = body;
-            
+
             //Call controller and get result
             ActionResult<IPamaxieApplication> result = Controller.TryUpdateTask();
             Assert.IsType<OkObjectResult>(result.Result);
-            
+
             //Check if application is updated
             IPamaxieApplication updatedApplication = ((ObjectResult)result.Result).Value as IPamaxieApplication;
             Assert.NotNull(updatedApplication);
             Assert.Equal(newName, updatedApplication.ApplicationName);
         }
-        
+
         /// <summary>
         /// Test for creating a application through <see cref="ApplicationController.UpdateOrCreateTask"/>
         /// </summary>
@@ -173,7 +176,8 @@ namespace Test.Database.Api
         public void UpdateOrCreate_Create(string applicationKey)
         {
             //Get application
-            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 
             //Parse the application to a request body and send it to the controller
@@ -188,7 +192,7 @@ namespace Test.Database.Api
             IPamaxieApplication createdApplication = ((ObjectResult)result.Result).Value as IPamaxieApplication;
             Assert.NotNull(createdApplication);
         }
-        
+
         /// <summary>
         /// Test for updating a application through <see cref="ApplicationController.UpdateOrCreateTask"/>
         /// </summary>
@@ -198,11 +202,12 @@ namespace Test.Database.Api
         public void UpdateOrCreate_Update(string applicationKey)
         {
             const string newName = "UpdatedName";
-            
+
             //Get application
-            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
-            
+
             //Update application
             application.ApplicationName = newName;
 
@@ -219,7 +224,7 @@ namespace Test.Database.Api
             Assert.NotNull(updatedApplication);
             Assert.Equal(newName, updatedApplication.ApplicationName);
         }
-        
+
         /// <summary>
         /// Test for deleting a application through <see cref="ApplicationController.DeleteTask"/>
         /// </summary>
@@ -229,7 +234,8 @@ namespace Test.Database.Api
         public void Delete(string applicationKey)
         {
             //Get application
-            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 
             //Parse the application to a request body and send it to the controller
@@ -241,7 +247,7 @@ namespace Test.Database.Api
             Assert.IsType<OkObjectResult>(result.Result);
             Assert.True((bool)((ObjectResult)result.Result).Value);
         }
-        
+
         /// <summary>
         /// Test for getting all applications from a application through <see cref="ApplicationController.EnableOrDisableTask"/>
         /// </summary>
@@ -251,7 +257,8 @@ namespace Test.Database.Api
         public void EnableOrDisable(string applicationKey)
         {
             //Get application
-            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 
             //Parse the application to a request body and send it to the controller
@@ -273,9 +280,10 @@ namespace Test.Database.Api
         public void VerifyAuthentication(string applicationKey)
         {
             //Get application
-            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
-            
+
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
             Controller.Request.Body = body;

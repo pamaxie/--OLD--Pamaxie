@@ -29,6 +29,7 @@ namespace Test.TestBase
                 cost += 1;
                 durationMs *= 2;
             }
+
             return cost;
         }
     }

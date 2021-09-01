@@ -17,10 +17,10 @@ namespace Test.Database.Api
             //Instantiate the controller and add a default HttpContext
             Controller = new AuthController(new TokenGenerator(Configuration))
             {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
+                ControllerContext = { HttpContext = new DefaultHttpContext() }
             };
         }
-        
+
         /// <summary>
         /// Test for getting a application through <see cref="AuthController.LoginTask"/>
         /// </summary>

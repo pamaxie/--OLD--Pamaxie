@@ -20,7 +20,7 @@ namespace Test.Pamaxie.API_UnitTesting
         public TokenBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
-        
+
         /// <summary>
         /// Testing for succeeding in generating a new token from a user key
         /// </summary>

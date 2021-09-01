@@ -62,7 +62,8 @@ namespace Test.TestBase
                 .Returns<IPamaxieApplication, IPamaxieApplication>((_, _) => _updated);
 
             //Setup for UpdateOrCreate
-            mockApplicationDataService.Setup(_ => _.UpdateOrCreate(It.IsAny<IPamaxieApplication>(), out _updatedOrCreatedValue))
+            mockApplicationDataService
+                .Setup(_ => _.UpdateOrCreate(It.IsAny<IPamaxieApplication>(), out _updatedOrCreatedValue))
                 .Callback(new OutAction<IPamaxieApplication, IPamaxieApplication>(
                     (IPamaxieApplication value, out IPamaxieApplication updatedOrCreatedValue) =>
                     {
@@ -159,6 +160,7 @@ namespace Test.TestBase
                     int indexToUpdate = TestApplicationData.ListOfApplications.FindIndex(_ => _.Key == value.Key);
                     TestApplicationData.ListOfApplications[indexToUpdate] = value;
                 }
+
                 updatedOrCreatedValue = value;
                 return true;
             }
@@ -168,7 +170,8 @@ namespace Test.TestBase
             {
                 if (value == null)
                     return false;
-                IPamaxieApplication valueToRemove = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == value.Key);
+                IPamaxieApplication valueToRemove =
+                    TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == value.Key);
                 if (valueToRemove == null)
                     return false;
                 TestApplicationData.ListOfApplications.Remove(valueToRemove);
@@ -180,7 +183,8 @@ namespace Test.TestBase
             {
                 if (value == null)
                     return null;
-                IPamaxieApplication valueToEnableOrDisable = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == value.Key);
+                IPamaxieApplication valueToEnableOrDisable =
+                    TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == value.Key);
                 if (valueToEnableOrDisable == null)
                     return null;
                 valueToEnableOrDisable.Disabled = !valueToEnableOrDisable.Disabled;

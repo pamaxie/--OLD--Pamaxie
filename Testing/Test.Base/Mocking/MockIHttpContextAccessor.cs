@@ -23,7 +23,7 @@ namespace Test.TestBase
             {
                 User = user
             };
-            
+
             Mock<IHttpContextAccessor> mockHttpContextAccessor = new();
             mockHttpContextAccessor.Setup(_ => _.HttpContext).Returns(context);
 

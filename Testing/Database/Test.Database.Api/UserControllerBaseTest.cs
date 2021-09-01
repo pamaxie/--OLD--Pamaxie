@@ -20,23 +20,23 @@ namespace Test.Database.Api
     public class UserControllerBaseTest : ApiBaseTest<UserController>
     {
         private readonly PamaxieDataContext _context = new("", "");
-        
+
         /// <summary>
         /// <inheritdoc cref="MemberData.AllUsers"/>
         /// </summary>
         public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
-        
+
         /// <summary>
         /// <inheritdoc cref="MemberData.AllUnverifiedUsers"/>
         /// </summary>
         public static IEnumerable<object[]> AllUnverifiedUsers => MemberData.AllUnverifiedUsers;
-        
+
         public UserControllerBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             //Instantiate the controller and add a default HttpContext
             Controller = new UserController(new TokenGenerator(Configuration), Context)
             {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
+                ControllerContext = { HttpContext = new DefaultHttpContext() }
             };
         }
 
@@ -54,12 +54,12 @@ namespace Test.Database.Api
 
             //Call controller and get result
             ActionResult<IPamaxieUser> result = Controller.GetTask();
-            
+
             //Check if user is not null
             IPamaxieUser user = ((ObjectResult)result.Result).Value as IPamaxieUser;
             Assert.NotNull(user);
         }
-        
+
         /// <summary>
         /// Test for creating a user <see cref="UserController.CreateTask"/>
         /// </summary>
@@ -71,20 +71,20 @@ namespace Test.Database.Api
             //Get application
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
-            
+
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
             Controller.Request.Body = body;
-            
+
             //Call controller and get result
             ActionResult<IPamaxieUser> result = Controller.CreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
-            
+
             //Check if user is created
             IPamaxieUser createdUser = ((ObjectResult)result.Result).Value as IPamaxieUser;
             Assert.NotNull(createdUser);
         }
-        
+
         /// <summary>
         /// </summary>
         /// <param name="userKey">The user key from inlined data</param>
@@ -95,20 +95,20 @@ namespace Test.Database.Api
             //Get application
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
-            
+
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
             Controller.Request.Body = body;
-            
+
             //Call controller and get result
             ActionResult<IPamaxieUser> result = Controller.TryCreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
-            
+
             //Check if user is created
             IPamaxieUser createdUser = ((ObjectResult)result.Result).Value as IPamaxieUser;
             Assert.NotNull(createdUser);
         }
-        
+
         /// <summary>
         /// Test for updating a user through <see cref="UserController.UpdateTask"/>
         /// </summary>
@@ -118,14 +118,14 @@ namespace Test.Database.Api
         public void Update(string userKey)
         {
             const string newEmail = "UpdatedEmail@testmail.com";
-            
+
             //Get application
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
-            
+
             //Update User
             user.EmailAddress = newEmail;
-            
+
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
             Controller.Request.Body = body;
@@ -133,13 +133,13 @@ namespace Test.Database.Api
             //Call controller and get result
             ActionResult<IPamaxieUser> result = Controller.UpdateTask();
             Assert.IsType<OkObjectResult>(result.Result);
-            
+
             //Check if user is updated
             IPamaxieUser updatedUser = ((ObjectResult)result.Result).Value as IPamaxieUser;
             Assert.NotNull(updatedUser);
             Assert.Equal(newEmail, updatedUser.EmailAddress);
         }
-        
+
         /// <summary>
         /// Test for trying to update a user through <see cref="UserController.UpdateTask"/>
         /// </summary>
@@ -149,14 +149,14 @@ namespace Test.Database.Api
         public void TryUpdate(string userKey)
         {
             const string newEmail = "UpdatedEmail@testmail.com";
-            
+
             //Get application
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
-            
+
             //Update User
             user.EmailAddress = newEmail;
-            
+
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
             Controller.Request.Body = body;
@@ -164,13 +164,13 @@ namespace Test.Database.Api
             //Call controller and get result
             ActionResult<IPamaxieUser> result = Controller.TryUpdateTask();
             Assert.IsType<OkObjectResult>(result.Result);
-            
+
             //Check if user is updated
             IPamaxieUser updatedUser = ((ObjectResult)result.Result).Value as IPamaxieUser;
             Assert.NotNull(updatedUser);
             Assert.Equal(newEmail, updatedUser.EmailAddress);
         }
-        
+
         /// <summary>
         /// Test for creating a user through <see cref="UserController.UpdateOrCreateTask"/>
         /// </summary>
@@ -195,7 +195,7 @@ namespace Test.Database.Api
             IPamaxieUser createdUser = ((ObjectResult)result.Result).Value as IPamaxieUser;
             Assert.NotNull(createdUser);
         }
-        
+
         /// <summary>
         /// Test for updating a user through <see cref="UserController.UpdateOrCreateTask"/>
         /// </summary>
@@ -205,11 +205,11 @@ namespace Test.Database.Api
         public void UpdateOrCreate_Update(string userKey)
         {
             const string newEmail = "UpdatedEmail@testmail.com";
-            
+
             //Get application
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
-            
+
             //Update User
             user.EmailAddress = newEmail;
 
@@ -226,7 +226,7 @@ namespace Test.Database.Api
             Assert.NotNull(updatedUser);
             Assert.Equal(newEmail, updatedUser.EmailAddress);
         }
-        
+
         /// <summary>
         /// Test for deleting a user through <see cref="UserController.DeleteTask"/>
         /// </summary>
@@ -248,7 +248,7 @@ namespace Test.Database.Api
             Assert.IsType<OkObjectResult>(result.Result);
             Assert.True((bool)((ObjectResult)result.Result).Value);
         }
-        
+
         /// <summary>
         /// Test for getting all applications from a user through <see cref="UserController.GetAllApplicationsTask"/>
         /// </summary>
@@ -260,7 +260,7 @@ namespace Test.Database.Api
             //Get application
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
-            
+
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
             Controller.Request.Body = body;
@@ -268,9 +268,10 @@ namespace Test.Database.Api
             //Call controller and get result
             ActionResult<IEnumerable<IPamaxieApplication>> result = Controller.GetAllApplicationsTask();
             Assert.IsType<OkObjectResult>(result.Result);
-            
+
             //Check if user is updated or created
-            IEnumerable<IPamaxieApplication> applications = ((ObjectResult)result.Result).Value as IEnumerable<IPamaxieApplication>;
+            IEnumerable<IPamaxieApplication> applications =
+                ((ObjectResult)result.Result).Value as IEnumerable<IPamaxieApplication>;
             Assert.NotNull(applications);
             foreach (IPamaxieApplication application in applications)
             {
@@ -290,7 +291,7 @@ namespace Test.Database.Api
             //Get application
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
-            
+
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
             Controller.Request.Body = body;

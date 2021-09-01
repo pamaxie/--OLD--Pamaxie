@@ -15,13 +15,15 @@ namespace Test.TestBase
         {
             return new MockedNavigationManager();
         }
-        
+
         private sealed class MockedNavigationManager : NavigationManager
         {
-            public MockedNavigationManager() => 
+            public MockedNavigationManager() =>
                 Initialize("http://localhost:2112/", "http://localhost:2112/test");
 
-            protected override void NavigateToCore(string uri, bool forceLoad) { }
+            protected override void NavigateToCore(string uri, bool forceLoad)
+            {
+            }
         }
     }
 }

@@ -28,15 +28,15 @@ namespace Test.TestBase
         {
             UserDataService userDataService = new();
             Mock<IUserDataService> mockUserDataService = new();
-            
+
             //Setup for Get
             mockUserDataService.Setup(_ => _.Get(It.IsAny<string>()))
                 .Returns<string>((key) => userDataService.Get(key));
-            
+
             //Setup for Create
             mockUserDataService.Setup(_ => _.Create(It.IsAny<IPamaxieUser>()))
                 .Returns<IPamaxieUser>((value) => userDataService.Create(value));
-            
+
             //Setup for TryCreate
             mockUserDataService.Setup(_ => _.TryCreate(It.IsAny<IPamaxieUser>(), out _createdValue))
                 .Callback(new OutAction<IPamaxieUser, IPamaxieUser>(
@@ -46,11 +46,11 @@ namespace Test.TestBase
                         _createdValue = createdValue;
                     }))
                 .Returns<IPamaxieUser, IPamaxieUser>((_, _) => _created);
-            
+
             //Setup for Update
             mockUserDataService.Setup(_ => _.Update(It.IsAny<IPamaxieUser>()))
                 .Returns<IPamaxieUser>((value) => userDataService.Update(value));
-            
+
             //Setup for TryUpdated
             mockUserDataService.Setup(_ => _.TryUpdate(It.IsAny<IPamaxieUser>(), out _updatedValue))
                 .Callback(new OutAction<IPamaxieUser, IPamaxieUser>(
@@ -60,7 +60,7 @@ namespace Test.TestBase
                         _updatedValue = updatedValue;
                     }))
                 .Returns<IPamaxieUser, IPamaxieUser>((_, _) => _updated);
-            
+
             //Setup for UpdateOrCreate
             mockUserDataService.Setup(_ => _.UpdateOrCreate(It.IsAny<IPamaxieUser>(), out _updatedOrCreatedValue))
                 .Callback(new OutAction<IPamaxieUser, IPamaxieUser>(
@@ -70,19 +70,19 @@ namespace Test.TestBase
                         _updatedOrCreatedValue = updatedOrCreatedValue;
                     }))
                 .Returns<IPamaxieUser, IPamaxieUser>((_, _) => _updatedOrCreated);
-            
+
             //Setup for Delete
             mockUserDataService.Setup(_ => _.Delete(It.IsAny<IPamaxieUser>()))
                 .Returns<IPamaxieUser>((value) => userDataService.Delete(value));
-            
+
             //Setup for GetAllApplications
             mockUserDataService.Setup(_ => _.GetAllApplications(It.IsAny<IPamaxieUser>()))
                 .Returns<IPamaxieUser>((value) => userDataService.GetAllApplications(value));
-            
+
             //Setup for VerifyEmail
             mockUserDataService.Setup(_ => _.VerifyEmail(It.IsAny<IPamaxieUser>()))
                 .Returns<IPamaxieUser>((value) => userDataService.VerifyEmail(value));
-            
+
             DatabaseService.UserService = mockUserDataService.Object;
         }
 
@@ -159,6 +159,7 @@ namespace Test.TestBase
                     int indexToUpdate = TestUserData.ListOfUsers.FindIndex(_ => _.Key == value.Key);
                     TestUserData.ListOfUsers[indexToUpdate] = value;
                 }
+
                 updatedOrCreatedValue = value;
                 return true;
             }

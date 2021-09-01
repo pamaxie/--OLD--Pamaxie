@@ -16,11 +16,11 @@ namespace Test.Database.Api
         /// <inheritdoc cref="MemberData.AllUsers"/>
         /// </summary>
         public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
-        
+
         public TokenGeneratorBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
-        
+
         /// <summary>
         /// Test for creating a token through <see cref="TokenGenerator.CreateToken"/>
         /// </summary>

@@ -17,11 +17,11 @@ namespace Test.Pamaxie.Website
         /// <inheritdoc cref="MemberData.PersonalUser"/>
         /// </summary>
         public static IEnumerable<object[]> PersonalUser => MemberData.PersonalUser;
-        
+
         public EmailSenderBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
-        
+
         /// <summary>
         /// Sends a confirmation email to the email inside Data
         /// </summary>
@@ -33,11 +33,10 @@ namespace Test.Pamaxie.Website
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
             Assert.False(user.Deleted);
-            
+
             EmailSender emailSender =
                 new(Configuration, MockNavigationManager.Mock(), new UserService(Configuration, null!, null));
             emailSender.SendConfirmationEmail(user);
         }
-
     }
 }
