@@ -38,6 +38,7 @@ namespace Test.TestBase
                 .Returns<IPamaxieUser>((value) => userDataService.Create(value));
 
             //Setup for TryCreate
+            
             mockUserDataService.Setup(_ => _.TryCreate(It.IsAny<IPamaxieUser>(), out _createdValue))
                 .Callback(new OutAction<IPamaxieUser, IPamaxieUser>(
                     (IPamaxieUser value, out IPamaxieUser createdValue) =>
@@ -181,7 +182,7 @@ namespace Test.TestBase
             {
                 List<IPamaxieApplication> applications = value.ApplicationKeys
                     .Select(key => TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key))
-                    .Where(application => application != null).Cast<IPamaxieApplication>().ToList();
+                    .Where(application => application != null).ToList();
                 return applications.AsEnumerable();
             }
 

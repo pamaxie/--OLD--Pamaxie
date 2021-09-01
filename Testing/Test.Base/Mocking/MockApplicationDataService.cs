@@ -103,6 +103,10 @@ namespace Test.TestBase
                     return null;
                 if (TestApplicationData.ListOfApplications.Any(_ => _.Key == value.Key))
                     return value;
+                IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
+                if (user == null)
+                    return null;
+                user.ApplicationKeys.ToList().Add(value.OwnerKey);
                 TestApplicationData.ListOfApplications.Add(value);
                 return value;
             }
@@ -115,6 +119,10 @@ namespace Test.TestBase
                     return false;
                 if (TestApplicationData.ListOfApplications.Any(_ => _.Key == value.Key))
                     return false;
+                IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
+                if (user == null)
+                    return false;
+                user.ApplicationKeys.ToList().Add(value.OwnerKey);
                 TestApplicationData.ListOfApplications.Add(value);
                 createdValue = value;
                 return true;
@@ -153,6 +161,10 @@ namespace Test.TestBase
                     return false;
                 if (TestApplicationData.ListOfApplications.Any(_ => _.Key != value.Key))
                 {
+                    IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
+                    if (user == null)
+                        return false;
+                    user.ApplicationKeys.ToList().Add(value.OwnerKey);
                     TestApplicationData.ListOfApplications.Add(value);
                 }
                 else
@@ -194,8 +206,15 @@ namespace Test.TestBase
             /// <inheritdoc cref="IApplicationDataService.VerifyAuthentication"/>
             public bool VerifyAuthentication(IPamaxieApplication value)
             {
-                //TODO Not yet implemented
-                return true;
+                if (value == null)
+                    return false;
+                AppAuthCredentials appAuthCredentials =
+                    TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == value.Key)?.Credentials;
+                if (appAuthCredentials == null)
+                    return false;
+                string hashedToken = BCrypt.Net.BCrypt.HashPassword(appAuthCredentials.AuthorizationToken,
+                    BCryptExtension.CalculateSaltCost());
+                return appAuthCredentials.AuthorizationTokenCipher == hashedToken;
             }
         }
     }

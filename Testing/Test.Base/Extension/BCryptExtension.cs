@@ -6,7 +6,7 @@ namespace Test.TestBase
     /// Encryption extension for BCrypt
     /// TODO Remove once the actual encryption for Application Credentials have been made
     /// </summary>
-    public class BCryptExtension
+    public static class BCryptExtension
     {
         /// <summary>
         /// Calculates the ideal cost for BCrypt hashing
