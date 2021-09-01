@@ -14,13 +14,6 @@ namespace Test.TestBase
     {
         private delegate void OutAction<in T, TOut>(T val, out TOut outVal);
 
-        private static IPamaxieUser _createdValue;
-        private static bool _created;
-        private static IPamaxieUser _updatedValue;
-        private static bool _updated;
-        private static IPamaxieUser _updatedOrCreatedValue;
-        private static bool _updatedOrCreated;
-
         /// <summary>
         /// Mocks the <see cref="UserDataService"/> and applies it to the <see cref="UserDataServiceExtension"/> for testing usage
         /// </summary>
@@ -38,38 +31,44 @@ namespace Test.TestBase
                 .Returns<IPamaxieUser>((value) => userDataService.Create(value));
 
             //Setup for TryCreate
-            mockUserDataService.Setup(_ => _.TryCreate(It.IsAny<IPamaxieUser>(), out _createdValue))
+            IPamaxieUser createdValue = null;
+            bool created = false;
+            mockUserDataService.Setup(_ => _.TryCreate(It.IsAny<IPamaxieUser>(), out createdValue))
                 .Callback(new OutAction<IPamaxieUser, IPamaxieUser>(
-                    (IPamaxieUser value, out IPamaxieUser createdValue) =>
+                    (IPamaxieUser value, out IPamaxieUser outValue) =>
                     {
-                        _created = userDataService.TryCreate(value, out createdValue);
-                        _createdValue = createdValue;
+                        created = userDataService.TryCreate(value, out outValue);
+                        createdValue = outValue;
                     }))
-                .Returns<IPamaxieUser, IPamaxieUser>((_, _) => _created);
+                .Returns<IPamaxieUser, IPamaxieUser>((_, _) => created);
 
             //Setup for Update
             mockUserDataService.Setup(_ => _.Update(It.IsAny<IPamaxieUser>()))
                 .Returns<IPamaxieUser>((value) => userDataService.Update(value));
 
             //Setup for TryUpdated
-            mockUserDataService.Setup(_ => _.TryUpdate(It.IsAny<IPamaxieUser>(), out _updatedValue))
+            IPamaxieUser updatedValue = null;
+            bool updated = false;
+            mockUserDataService.Setup(_ => _.TryUpdate(It.IsAny<IPamaxieUser>(), out updatedValue))
                 .Callback(new OutAction<IPamaxieUser, IPamaxieUser>(
-                    (IPamaxieUser value, out IPamaxieUser updatedValue) =>
+                    (IPamaxieUser value, out IPamaxieUser outValue) =>
                     {
-                        _updated = userDataService.TryUpdate(value, out updatedValue);
-                        _updatedValue = updatedValue;
+                        updated = userDataService.TryUpdate(value, out outValue);
+                        updatedValue = outValue;
                     }))
-                .Returns<IPamaxieUser, IPamaxieUser>((_, _) => _updated);
+                .Returns<IPamaxieUser, IPamaxieUser>((_, _) => updated);
 
             //Setup for UpdateOrCreate
-            mockUserDataService.Setup(_ => _.UpdateOrCreate(It.IsAny<IPamaxieUser>(), out _updatedOrCreatedValue))
+            IPamaxieUser updatedOrCreatedValue = null;
+            bool updatedOrCreated = false;
+            mockUserDataService.Setup(_ => _.UpdateOrCreate(It.IsAny<IPamaxieUser>(), out updatedOrCreatedValue))
                 .Callback(new OutAction<IPamaxieUser, IPamaxieUser>(
-                    (IPamaxieUser value, out IPamaxieUser updatedOrCreatedValue) =>
+                    (IPamaxieUser value, out IPamaxieUser outValue) =>
                     {
-                        _updatedOrCreated = userDataService.UpdateOrCreate(value, out updatedOrCreatedValue);
-                        _updatedOrCreatedValue = updatedOrCreatedValue;
+                        updatedOrCreated = userDataService.UpdateOrCreate(value, out outValue);
+                        updatedOrCreatedValue = outValue;
                     }))
-                .Returns<IPamaxieUser, IPamaxieUser>((_, _) => _updatedOrCreated);
+                .Returns<IPamaxieUser, IPamaxieUser>((_, _) => updatedOrCreated);
 
             //Setup for Delete
             mockUserDataService.Setup(_ => _.Delete(It.IsAny<IPamaxieUser>()))
@@ -100,8 +99,13 @@ namespace Test.TestBase
             {
                 if (value == null)
                     return null;
-                if (TestUserData.ListOfUsers.Any(_ => _.Key == value.Key))
-                    return value;
+                string key;
+                do
+                {
+                    key = RandomService.GenerateRandomKey();
+                } while (TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == key) != null);
+
+                value.Key = key;
                 TestUserData.ListOfUsers.Add(value);
                 return value;
             }
@@ -112,6 +116,7 @@ namespace Test.TestBase
                 createdValue = null;
                 if (value == null)
                     return false;
+                //TODO Generate a Key
                 if (TestUserData.ListOfUsers.Any(_ => _.Key == value.Key))
                     return false;
                 TestUserData.ListOfUsers.Add(value);
@@ -152,6 +157,7 @@ namespace Test.TestBase
                     return false;
                 if (TestUserData.ListOfUsers.Any(_ => _.Key != value.Key))
                 {
+                    //TODO Generate a Key
                     TestUserData.ListOfUsers.Add(value);
                 }
                 else
@@ -159,6 +165,7 @@ namespace Test.TestBase
                     int indexToUpdate = TestUserData.ListOfUsers.FindIndex(_ => _.Key == value.Key);
                     TestUserData.ListOfUsers[indexToUpdate] = value;
                 }
+
                 updatedOrCreatedValue = value;
                 return true;
             }
@@ -166,7 +173,7 @@ namespace Test.TestBase
             /// <inheritdoc cref="IUserDataService.Delete"/>
             public bool Delete(IPamaxieUser value)
             {
-                if (value == null) 
+                if (value == null)
                     return false;
                 IPamaxieUser valueToRemove = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.Key);
                 if (valueToRemove == null)

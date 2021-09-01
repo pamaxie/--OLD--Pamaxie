@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Test.TestBase
@@ -12,7 +13,7 @@ namespace Test.TestBase
         /// Contains a list of all testing users
         /// </summary>
         public static IEnumerable<object[]> AllUsers => TestUserData.ListOfUsers.Select(_ => _.Key)
-            .Select(googleUserId => new object[] { googleUserId }).AsEnumerable();
+            .Select(key => new object[] { key }).AsEnumerable();
 
         /// <summary>
         /// Contains a list of all testing users that have their email verified
@@ -38,6 +39,28 @@ namespace Test.TestBase
         /// Contains a list of all applications
         /// </summary>
         public static IEnumerable<object[]> AllApplications => TestApplicationData.ListOfApplications.Select(_ => _.Key)
-            .Select(applicationId => new object[] { applicationId }).AsEnumerable();
+            .Select(key => new object[] { key }).AsEnumerable();
+
+        /// <summary>
+        /// Contains a list of unused user keys which can be used to create new users
+        /// </summary>
+        public static IEnumerable<object[]> RandomUserData
+        {
+            get
+            {
+                List<object[]> list = new List<object[]>();
+                for (int i = 0; i < 6; i++)
+                {
+                    string userName = RandomService.GenerateRandomName();
+                    string firstName = RandomService.GenerateRandomName();
+                    string lastName = RandomService.GenerateRandomName();
+                    string emailAddress = $"{firstName}.{lastName}@fakemail.com";
+                    
+                    list.Add(new object[] { userName, firstName, lastName, emailAddress });
+                }
+
+                return list;
+            }
+        }
     }
 }

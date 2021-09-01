@@ -13,13 +13,6 @@ namespace Test.TestBase
     {
         private delegate void OutAction<in T, TOut>(T val, out TOut outVal);
 
-        private static IPamaxieApplication _createdValue;
-        private static bool _created;
-        private static IPamaxieApplication _updatedValue;
-        private static bool _updated;
-        private static IPamaxieApplication _updatedOrCreatedValue;
-        private static bool _updatedOrCreated;
-
         /// <summary>
         /// Mocks the <see cref="ApplicationDataService"/> and applies it to the <see cref="ApplicationDataServiceExtension"/> for testing usage
         /// </summary>
@@ -37,39 +30,45 @@ namespace Test.TestBase
                 .Returns<IPamaxieApplication>((value) => applicationDataService.Create(value));
 
             //Setup for TryCreate
-            mockApplicationDataService.Setup(_ => _.TryCreate(It.IsAny<IPamaxieApplication>(), out _createdValue))
+            IPamaxieApplication createdValue = null;
+            bool created = false;
+            mockApplicationDataService.Setup(_ => _.TryCreate(It.IsAny<IPamaxieApplication>(), out createdValue))
                 .Callback(new OutAction<IPamaxieApplication, IPamaxieApplication>(
-                    (IPamaxieApplication value, out IPamaxieApplication createdValue) =>
+                    (IPamaxieApplication value, out IPamaxieApplication outValue) =>
                     {
-                        _created = applicationDataService.TryCreate(value, out createdValue);
-                        _createdValue = createdValue;
+                        created = applicationDataService.TryCreate(value, out outValue);
+                        createdValue = outValue;
                     }))
-                .Returns<IPamaxieApplication, IPamaxieApplication>((_, _) => _created);
+                .Returns<IPamaxieApplication, IPamaxieApplication>((_, _) => created);
 
             //Setup for Update
             mockApplicationDataService.Setup(_ => _.Update(It.IsAny<IPamaxieApplication>()))
                 .Returns<IPamaxieApplication>((value) => applicationDataService.Update(value));
 
             //Setup for TryUpdated
-            mockApplicationDataService.Setup(_ => _.TryUpdate(It.IsAny<IPamaxieApplication>(), out _updatedValue))
+            IPamaxieApplication updatedValue = null;
+            bool updated = false;
+            mockApplicationDataService.Setup(_ => _.TryUpdate(It.IsAny<IPamaxieApplication>(), out updatedValue))
                 .Callback(new OutAction<IPamaxieApplication, IPamaxieApplication>(
-                    (IPamaxieApplication value, out IPamaxieApplication updatedValue) =>
+                    (IPamaxieApplication value, out IPamaxieApplication outValue) =>
                     {
-                        _updated = applicationDataService.TryUpdate(value, out updatedValue);
-                        _updatedValue = updatedValue;
+                        updated = applicationDataService.TryUpdate(value, out outValue);
+                        updatedValue = outValue;
                     }))
-                .Returns<IPamaxieApplication, IPamaxieApplication>((_, _) => _updated);
+                .Returns<IPamaxieApplication, IPamaxieApplication>((_, _) => updated);
 
             //Setup for UpdateOrCreate
+            IPamaxieApplication updatedOrCreatedValue = null;
+            bool updatedOrCreated = false;
             mockApplicationDataService
-                .Setup(_ => _.UpdateOrCreate(It.IsAny<IPamaxieApplication>(), out _updatedOrCreatedValue))
+                .Setup(_ => _.UpdateOrCreate(It.IsAny<IPamaxieApplication>(), out updatedOrCreatedValue))
                 .Callback(new OutAction<IPamaxieApplication, IPamaxieApplication>(
-                    (IPamaxieApplication value, out IPamaxieApplication updatedOrCreatedValue) =>
+                    (IPamaxieApplication value, out IPamaxieApplication outValue) =>
                     {
-                        _updatedOrCreated = applicationDataService.UpdateOrCreate(value, out updatedOrCreatedValue);
-                        _updatedOrCreatedValue = updatedOrCreatedValue;
+                        updatedOrCreated = applicationDataService.UpdateOrCreate(value, out outValue);
+                        updatedOrCreatedValue = outValue;
                     }))
-                .Returns<IPamaxieApplication, IPamaxieApplication>((_, _) => _updatedOrCreated);
+                .Returns<IPamaxieApplication, IPamaxieApplication>((_, _) => updatedOrCreated);
 
             //Setup for Delete
             mockApplicationDataService.Setup(_ => _.Delete(It.IsAny<IPamaxieApplication>()))
@@ -171,6 +170,7 @@ namespace Test.TestBase
                     int indexToUpdate = TestApplicationData.ListOfApplications.FindIndex(_ => _.Key == value.Key);
                     TestApplicationData.ListOfApplications[indexToUpdate] = value;
                 }
+
                 updatedOrCreatedValue = value;
                 return true;
             }
