@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Moq;
 using Pamaxie.Data;
 using Pamaxie.Database.Design;
@@ -22,7 +21,7 @@ namespace Test.TestBase
         private static bool _updatedOrCreated;
 
         /// <summary>
-        /// Mocks the <see cref="ApplicationDataServiceExtension"/> for testing usage
+        /// Mocks the <see cref="ApplicationDataService"/> and applies it to the <see cref="ApplicationDataServiceExtension"/> for testing usage
         /// </summary>
         public static void Mock()
         {
@@ -172,7 +171,6 @@ namespace Test.TestBase
                     int indexToUpdate = TestApplicationData.ListOfApplications.FindIndex(_ => _.Key == value.Key);
                     TestApplicationData.ListOfApplications[indexToUpdate] = value;
                 }
-
                 updatedOrCreatedValue = value;
                 return true;
             }

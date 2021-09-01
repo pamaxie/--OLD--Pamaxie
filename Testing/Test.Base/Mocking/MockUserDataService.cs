@@ -22,7 +22,7 @@ namespace Test.TestBase
         private static bool _updatedOrCreated;
 
         /// <summary>
-        /// Mocks the <see cref="UserDataService"/> for testing usage
+        /// Mocks the <see cref="UserDataService"/> and applies it to the <see cref="UserDataServiceExtension"/> for testing usage
         /// </summary>
         public static void Mock()
         {
@@ -160,7 +160,6 @@ namespace Test.TestBase
                     int indexToUpdate = TestUserData.ListOfUsers.FindIndex(_ => _.Key == value.Key);
                     TestUserData.ListOfUsers[indexToUpdate] = value;
                 }
-
                 updatedOrCreatedValue = value;
                 return true;
             }
@@ -168,7 +167,7 @@ namespace Test.TestBase
             /// <inheritdoc cref="IUserDataService.Delete"/>
             public bool Delete(IPamaxieUser value)
             {
-                if (value == null)
+                if (value == null) 
                     return false;
                 IPamaxieUser valueToRemove = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.Key);
                 if (valueToRemove == null)
