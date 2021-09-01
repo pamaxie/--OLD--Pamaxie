@@ -38,7 +38,6 @@ namespace Test.TestBase
                 .Returns<IPamaxieUser>((value) => userDataService.Create(value));
 
             //Setup for TryCreate
-            
             mockUserDataService.Setup(_ => _.TryCreate(It.IsAny<IPamaxieUser>(), out _createdValue))
                 .Callback(new OutAction<IPamaxieUser, IPamaxieUser>(
                     (IPamaxieUser value, out IPamaxieUser createdValue) =>
