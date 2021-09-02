@@ -23,8 +23,7 @@ namespace Test.TestBase
                 Credentials = new AppAuthCredentials
                 {
                     AuthorizationToken = "Apple",
-                    AuthorizationTokenCipher =
-                        BCrypt.Net.BCrypt.HashPassword("Apple", BCryptExtension.CalculateSaltCost()),
+                    AuthorizationTokenCipher = "",
                     LastAuth = DateTime.Now
                 },
                 ApplicationName = "Sparkle",
@@ -41,8 +40,7 @@ namespace Test.TestBase
                 Credentials = new AppAuthCredentials
                 {
                     AuthorizationToken = "Pie",
-                    AuthorizationTokenCipher =
-                        BCrypt.Net.BCrypt.HashPassword("Pie", BCryptExtension.CalculateSaltCost()),
+                    AuthorizationTokenCipher = "",
                     LastAuth = DateTime.Now
                 },
                 ApplicationName = "Droop",
@@ -59,8 +57,7 @@ namespace Test.TestBase
                 Credentials = new AppAuthCredentials
                 {
                     AuthorizationToken = "Orange",
-                    AuthorizationTokenCipher =
-                        BCrypt.Net.BCrypt.HashPassword("Orange", BCryptExtension.CalculateSaltCost()),
+                    AuthorizationTokenCipher = "",
                     LastAuth = DateTime.Now
                 },
                 ApplicationName = "Cornwall",
@@ -77,8 +74,7 @@ namespace Test.TestBase
                 Credentials = new AppAuthCredentials
                 {
                     AuthorizationToken = "Pear",
-                    AuthorizationTokenCipher =
-                        BCrypt.Net.BCrypt.HashPassword("Pear", BCryptExtension.CalculateSaltCost()),
+                    AuthorizationTokenCipher = "",
                     LastAuth = DateTime.Now
                 },
                 ApplicationName = "Crystal",
@@ -95,8 +91,7 @@ namespace Test.TestBase
                 Credentials = new AppAuthCredentials
                 {
                     AuthorizationToken = "Cake",
-                    AuthorizationTokenCipher =
-                        BCrypt.Net.BCrypt.HashPassword("Cake", BCryptExtension.CalculateSaltCost()),
+                    AuthorizationTokenCipher = "",
                     LastAuth = DateTime.Now
                 },
                 ApplicationName = "Penny",
