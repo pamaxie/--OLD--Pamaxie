@@ -15,14 +15,14 @@ namespace Test.Database.Api
     /// <summary>
     /// Testing class for <see cref="ApplicationController"/>
     /// </summary>
-    public class ApplicationControllerBaseTest : ApiBaseTest<ApplicationController>
+    public class ApplicationControllerTest : ApiBaseTest<ApplicationController>
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllApplications"/>
         /// </summary>
         public static IEnumerable<object[]> AllApplications => MemberData.AllApplications;
 
-        public ApplicationControllerBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public ApplicationControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             //Instantiate the controller and add a default HttpContext
             Controller = new ApplicationController(new TokenGenerator(Configuration), Context)
@@ -248,6 +248,17 @@ namespace Test.Database.Api
             Assert.True((bool)((ObjectResult)result.Result).Value);
         }
 
+        /// <summary>
+        /// Test for getting the owner from a application through <see cref="ApplicationController.GetOwner"/>
+        /// </summary>
+        /// <param name="applicationKey">The application key from inlined data</param>
+        [Theory]
+        [MemberData(nameof(AllApplications))]
+        public void GetOwner(string applicationKey)
+        {
+            
+        }
+        
         /// <summary>
         /// Test for getting all applications from a application through <see cref="ApplicationController.EnableOrDisableTask"/>
         /// </summary>

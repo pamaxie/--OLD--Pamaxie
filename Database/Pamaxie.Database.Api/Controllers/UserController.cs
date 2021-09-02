@@ -38,7 +38,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieUser user = _dbService.Users.Get(result);
             
@@ -55,7 +56,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
@@ -76,7 +78,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
@@ -97,7 +100,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
@@ -118,7 +122,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
@@ -139,7 +144,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
@@ -160,7 +166,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
@@ -181,7 +188,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result)) 
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
@@ -202,7 +210,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)

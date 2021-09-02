@@ -37,7 +37,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieApplication application = _dbService.Applications.Get(result);
             
@@ -54,7 +55,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
@@ -75,7 +77,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
@@ -96,7 +99,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
@@ -117,7 +121,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
@@ -138,7 +143,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
@@ -161,7 +167,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
@@ -171,7 +178,28 @@ namespace Pamaxie.Api.Controllers
 
             return Ok(deleted);
         }
-        
+
+        /// <summary>
+        /// Gets the owner from a <see cref="IPamaxieApplication"/>
+        /// </summary>
+        /// <returns>The owner of the application</returns>
+        [Authorize]
+        [HttpPost("getOwner")]
+        public ActionResult<IPamaxieUser> GetOwner()
+        {
+            StreamReader reader = new(Request.Body);
+            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
+
+            IPamaxieApplication application = JsonConvert.DeserializeObject<IPamaxieApplication>(result);
+            if (application == null)
+                return BadRequest(ErrorHandler.BadData());
+
+            IPamaxieUser user = _dbService.Applications.GetOwner(application);
+
+            return Ok(user);
+        }
         
         /// <summary>
         /// Enables or disables the <see cref="IPamaxieApplication"/> 
@@ -183,7 +211,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
@@ -204,7 +233,8 @@ namespace Pamaxie.Api.Controllers
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)

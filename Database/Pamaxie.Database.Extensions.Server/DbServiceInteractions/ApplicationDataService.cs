@@ -21,7 +21,12 @@ namespace Pamaxie.Database.Extensions.Server
         /// <inheritdoc/>
         public IPamaxieUser GetOwner(IPamaxieApplication value)
         {
-            throw new NotImplementedException();
+            if (Service.Service == null)
+                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll data from it");
+
+            IDatabase db = Service.Service.GetDatabase();
+            RedisValue rawData = db.StringGet(value.OwnerKey);
+            return string.IsNullOrEmpty(rawData) ? default : JsonConvert.DeserializeObject<IPamaxieUser>(rawData);
         }
 
         /// <inheritdoc/>
