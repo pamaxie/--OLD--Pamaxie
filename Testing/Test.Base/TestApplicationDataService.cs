@@ -4,7 +4,6 @@ using System.Linq;
 using Newtonsoft.Json;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Client;
-using Pamaxie.Database.Extensions.Server;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -61,8 +60,7 @@ namespace Test.TestBase
                 Credentials = new AppAuthCredentials
                 {
                     AuthorizationToken = authorizationToken,
-                    AuthorizationTokenCipher =
-                        BCrypt.Net.BCrypt.HashPassword(authorizationToken, BCryptExtension.CalculateSaltCost()),
+                    AuthorizationTokenCipher = "",
                     LastAuth = DateTime.Now
                 },
                 OwnerKey = ownerKey,
@@ -97,8 +95,7 @@ namespace Test.TestBase
                 Credentials = new AppAuthCredentials
                 {
                     AuthorizationToken = authorizationToken,
-                    AuthorizationTokenCipher =
-                        BCrypt.Net.BCrypt.HashPassword(authorizationToken, BCryptExtension.CalculateSaltCost()),
+                    AuthorizationTokenCipher = "",
                     LastAuth = DateTime.Now
                 },
                 OwnerKey = ownerKey,
@@ -175,8 +172,7 @@ namespace Test.TestBase
                 Credentials = new AppAuthCredentials
                 {
                     AuthorizationToken = authorizationToken,
-                    AuthorizationTokenCipher =
-                        BCrypt.Net.BCrypt.HashPassword(authorizationToken, BCryptExtension.CalculateSaltCost()),
+                    AuthorizationTokenCipher = "",
                     LastAuth = DateTime.Now
                 },
                 OwnerKey = ownerKey,
