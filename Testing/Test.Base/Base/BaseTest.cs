@@ -1,11 +1,21 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace Test.TestBase
 {
     /// <summary>
+    /// Disable tests from running parallel, as this can fail tests using the same collection
+    /// </summary>
+    [CollectionDefinition(nameof(TestCollectionDefinition), DisableParallelization = true)]
+    public class TestCollectionDefinition
+    {
+    }
+
+    /// <summary>
     /// Base testing class
     /// </summary>
+    [Collection(nameof(TestCollectionDefinition))]
     public class BaseTest
     {
         /// <summary>
