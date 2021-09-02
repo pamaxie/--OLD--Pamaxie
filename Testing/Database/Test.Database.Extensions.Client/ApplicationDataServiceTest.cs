@@ -2,14 +2,14 @@
 using Test.TestBase;
 using Xunit.Abstractions;
 
-namespace Test.Database.Extensions.Server
+namespace Test.Database.Extensions.Client
 {
     /// <summary>
     /// Testing class for <see cref="ApplicationDataService"/>
     /// </summary>
-    public class ApplicationDataServiceBaseTest : BaseTest
+    public class ApplicationDataServiceTest : BaseTest
     {
-        public ApplicationDataServiceBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public ApplicationDataServiceTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
     }

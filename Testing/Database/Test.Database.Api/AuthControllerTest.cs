@@ -10,9 +10,9 @@ namespace Test.Database.Api
     /// <summary>
     /// Testing class for <see cref="AuthController"/>
     /// </summary>
-    public class AuthControllerBaseTest : ApiBaseTest<AuthController>
+    public class AuthControllerTest : ApiBaseTest<AuthController>
     {
-        public AuthControllerBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public AuthControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             //Instantiate the controller and add a default HttpContext
             Controller = new AuthController(new TokenGenerator(Configuration))

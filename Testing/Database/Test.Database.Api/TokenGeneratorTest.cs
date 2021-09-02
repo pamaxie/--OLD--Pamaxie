@@ -10,14 +10,14 @@ namespace Test.Database.Api
     /// <summary>
     /// Testing class for <see cref="TokenGenerator"/>
     /// </summary>
-    public class TokenGeneratorBaseTest : BaseTest
+    public class TokenGeneratorTest : BaseTest
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllUsers"/>
         /// </summary>
         public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
 
-        public TokenGeneratorBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public TokenGeneratorTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
 

@@ -17,7 +17,7 @@ namespace Test.Database.Api
     /// <summary>
     /// Testing class for <see cref="UserController"/>
     /// </summary>
-    public class UserControllerBaseTest : ApiBaseTest<UserController>
+    public class UserControllerTest : ApiBaseTest<UserController>
     {
         private readonly PamaxieDataContext _context = new("", "");
 
@@ -31,7 +31,7 @@ namespace Test.Database.Api
         /// </summary>
         public static IEnumerable<object[]> AllUnverifiedUsers => MemberData.AllUnverifiedUsers;
 
-        public UserControllerBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public UserControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             //Instantiate the controller and add a default HttpContext
             Controller = new UserController(new TokenGenerator(Configuration), Context)

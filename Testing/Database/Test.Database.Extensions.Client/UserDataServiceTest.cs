@@ -9,9 +9,9 @@ namespace Test.Database.Extensions.Client
     /// <summary>
     /// Testing class for <see cref="UserDataService"/>
     /// </summary>
-    public class UserDataServiceBaseTest : BaseTest
+    public class UserDataServiceTest : BaseTest
     {
-        public UserDataServiceBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public UserDataServiceTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
     }
