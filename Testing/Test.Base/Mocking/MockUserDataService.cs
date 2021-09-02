@@ -97,7 +97,7 @@ namespace Test.TestBase
             /// <inheritdoc cref="IUserDataService.Create"/>
             public IPamaxieUser Create(IPamaxieUser value)
             {
-                if (value == null)
+                if (value == null || !string.IsNullOrEmpty(value.Key))
                     return null;
                 string key;
                 do
@@ -114,11 +114,15 @@ namespace Test.TestBase
             public bool TryCreate(IPamaxieUser value, out IPamaxieUser createdValue)
             {
                 createdValue = null;
-                if (value == null)
+                if (value == null || !string.IsNullOrEmpty(value.Key))
                     return false;
-                //TODO Generate a Key
-                if (TestUserData.ListOfUsers.Any(_ => _.Key == value.Key))
-                    return false;
+                string key;
+                do
+                {
+                    key = RandomService.GenerateRandomKey();
+                } while (TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == key) != null);
+
+                value.Key = key;
                 TestUserData.ListOfUsers.Add(value);
                 createdValue = value;
                 return true;
@@ -127,7 +131,7 @@ namespace Test.TestBase
             /// <inheritdoc cref="IUserDataService.Update"/>
             public IPamaxieUser Update(IPamaxieUser value)
             {
-                if (value == null)
+                if (value == null || string.IsNullOrEmpty(value.Key))
                     return null;
                 if (TestUserData.ListOfUsers.Any(_ => _.Key == value.Key))
                     return value;
@@ -139,7 +143,7 @@ namespace Test.TestBase
             public bool TryUpdate(IPamaxieUser value, out IPamaxieUser updatedValue)
             {
                 updatedValue = null;
-                if (value == null)
+                if (value == null || string.IsNullOrEmpty(value.Key))
                     return false;
                 int indexToUpdate = TestUserData.ListOfUsers.FindIndex(_ => _.Key == value.Key);
                 if (indexToUpdate == -1)
@@ -155,9 +159,15 @@ namespace Test.TestBase
                 updatedOrCreatedValue = null;
                 if (value == null)
                     return false;
-                if (TestUserData.ListOfUsers.Any(_ => _.Key != value.Key))
+                if (string.IsNullOrEmpty(value.Key))
                 {
-                    //TODO Generate a Key
+                    string key;
+                    do
+                    {
+                        key = RandomService.GenerateRandomKey();
+                    } while (TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == key) != null);
+
+                    value.Key = key;
                     TestUserData.ListOfUsers.Add(value);
                 }
                 else
@@ -173,7 +183,7 @@ namespace Test.TestBase
             /// <inheritdoc cref="IUserDataService.Delete"/>
             public bool Delete(IPamaxieUser value)
             {
-                if (value == null)
+                if (value == null || string.IsNullOrEmpty(value.Key))
                     return false;
                 IPamaxieUser valueToRemove = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.Key);
                 if (valueToRemove == null)
@@ -185,6 +195,8 @@ namespace Test.TestBase
             /// <inheritdoc cref="IUserDataService.GetAllApplications"/>
             public IEnumerable<IPamaxieApplication> GetAllApplications(IPamaxieUser value)
             {
+                if (value == null || string.IsNullOrEmpty(value.Key))
+                    return null;
                 List<IPamaxieApplication> applications = value.ApplicationKeys
                     .Select(key => TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key))
                     .Where(application => application != null).ToList();
@@ -194,7 +206,7 @@ namespace Test.TestBase
             /// <inheritdoc cref="IUserDataService.VerifyEmail"/>
             public bool VerifyEmail(IPamaxieUser value)
             {
-                if (value == null)
+                if (value == null || string.IsNullOrEmpty(value.Key))
                     return false;
                 IPamaxieUser valueToVerify = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.Key);
                 if (valueToVerify == null)

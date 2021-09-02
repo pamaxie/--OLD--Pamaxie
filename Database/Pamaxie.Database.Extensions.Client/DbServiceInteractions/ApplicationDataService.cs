@@ -15,6 +15,12 @@ namespace Pamaxie.Database.Extensions.Client
         }
 
         /// <inheritdoc/>
+        public IPamaxieUser GetOwner(IPamaxieApplication value)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
         public IPamaxieApplication EnableOrDisable(IPamaxieApplication value)
         {
             throw new NotImplementedException();

@@ -62,5 +62,27 @@ namespace Test.TestBase
                 return list;
             }
         }
+
+        /// <summary>
+        /// Contains a list of unused user keys which can be used to create new users
+        /// </summary>
+        public static IEnumerable<object[]> RandomApplicationData
+        {
+            get
+            {
+                List<object[]> list = new List<object[]>();
+                for (int i = 0; i < 6; i++)
+                {
+                    Random rnd = new();
+                    string ownerKey = TestUserData.ListOfUsers[rnd.Next(TestUserData.ListOfUsers.Count - 1)].Key;
+                    string applicationName = RandomService.GenerateRandomName();
+                    string authorizationToken = RandomService.GenerateRandomName();
+                    
+                    list.Add(new object[] { ownerKey, applicationName, authorizationToken });
+                }
+
+                return list;
+            }
+        }
     }
 }

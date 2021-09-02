@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Moq;
 using Pamaxie.Data;
 using Pamaxie.Database.Design;
@@ -74,6 +75,10 @@ namespace Test.TestBase
             mockApplicationDataService.Setup(_ => _.Delete(It.IsAny<IPamaxieApplication>()))
                 .Returns<IPamaxieApplication>((value) => applicationDataService.Delete(value));
 
+            //Setup for GetOwner
+            mockApplicationDataService.Setup(_ => _.GetOwner(It.IsAny<IPamaxieApplication>()))
+                .Returns<IPamaxieApplication>((value) => applicationDataService.GetOwner(value));
+            
             //Setup for EnableOrDisable
             mockApplicationDataService.Setup(_ => _.EnableOrDisable(It.IsAny<IPamaxieApplication>()))
                 .Returns<IPamaxieApplication>((value) => applicationDataService.EnableOrDisable(value));
@@ -91,16 +96,24 @@ namespace Test.TestBase
             /// <inheritdoc cref="IApplicationDataService.Get"/>
             public IPamaxieApplication Get(string key)
             {
-                return TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key);
+                return string.IsNullOrEmpty(key)
+                    ? null
+                    : TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key);
             }
 
             /// <inheritdoc cref="IApplicationDataService.Create"/>
             public IPamaxieApplication Create(IPamaxieApplication value)
             {
-                if (value == null)
+                if (value == null || !string.IsNullOrEmpty(value.Key))
                     return null;
-                if (TestApplicationData.ListOfApplications.Any(_ => _.Key == value.Key))
-                    return value;
+                
+                string key;
+                do
+                {
+                    key = RandomService.GenerateRandomKey(6);
+                } while (TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key) != null);
+
+                value.Key = key;
                 IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
                 if (user == null)
                     return null;
@@ -113,10 +126,16 @@ namespace Test.TestBase
             public bool TryCreate(IPamaxieApplication value, out IPamaxieApplication createdValue)
             {
                 createdValue = null;
-                if (value == null)
+                if (value == null || !string.IsNullOrEmpty(value.Key))
                     return false;
-                if (TestApplicationData.ListOfApplications.Any(_ => _.Key == value.Key))
-                    return false;
+                string key;
+                do
+                {
+                    key = RandomService.GenerateRandomKey(6);
+                } while (TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key) != null);
+
+                value.Key = key;
+                
                 IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
                 if (user == null)
                     return false;
@@ -129,7 +148,7 @@ namespace Test.TestBase
             /// <inheritdoc cref="IApplicationDataService.Update"/>
             public IPamaxieApplication Update(IPamaxieApplication value)
             {
-                if (value == null)
+                if (value == null || string.IsNullOrEmpty(value.Key))
                     return null;
                 if (TestApplicationData.ListOfApplications.Any(_ => _.Key == value.Key))
                     return value;
@@ -141,7 +160,7 @@ namespace Test.TestBase
             public bool TryUpdate(IPamaxieApplication value, out IPamaxieApplication updatedValue)
             {
                 updatedValue = null;
-                if (value == null)
+                if (value == null || string.IsNullOrEmpty(value.Key))
                     return false;
                 int indexToUpdate = TestApplicationData.ListOfApplications.FindIndex(_ => _.Key == value.Key);
                 if (indexToUpdate == -1)
@@ -155,10 +174,17 @@ namespace Test.TestBase
             public bool UpdateOrCreate(IPamaxieApplication value, out IPamaxieApplication updatedOrCreatedValue)
             {
                 updatedOrCreatedValue = null;
-                if (value == null)
+                if (value == null || string.IsNullOrEmpty(value.Key))
                     return false;
                 if (TestApplicationData.ListOfApplications.Any(_ => _.Key != value.Key))
                 {
+                    string key;
+                    do
+                    {
+                        key = RandomService.GenerateRandomKey(6);
+                    } while (TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key) != null);
+
+                    value.Key = key;
                     IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
                     if (user == null)
                         return false;
@@ -178,7 +204,7 @@ namespace Test.TestBase
             /// <inheritdoc cref="IApplicationDataService.Delete"/>
             public bool Delete(IPamaxieApplication value)
             {
-                if (value == null)
+                if (value == null || string.IsNullOrEmpty(value.Key))
                     return false;
                 IPamaxieApplication valueToRemove =
                     TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == value.Key);
@@ -188,10 +214,19 @@ namespace Test.TestBase
                 return true;
             }
 
+            /// <inheritdoc cref="IApplicationDataService.GetOwner"/>
+            public IPamaxieUser GetOwner(IPamaxieApplication value)
+            {
+                if (value == null || string.IsNullOrEmpty(value.Key) || string.IsNullOrEmpty(value.OwnerKey))
+                    return null;
+                IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
+                return user;
+            }
+
             /// <inheritdoc cref="IApplicationDataService.EnableOrDisable"/>
             public IPamaxieApplication EnableOrDisable(IPamaxieApplication value)
             {
-                if (value == null)
+                if (value == null || string.IsNullOrEmpty(value.Key))
                     return null;
                 IPamaxieApplication valueToEnableOrDisable =
                     TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == value.Key);
@@ -204,15 +239,7 @@ namespace Test.TestBase
             /// <inheritdoc cref="IApplicationDataService.VerifyAuthentication"/>
             public bool VerifyAuthentication(IPamaxieApplication value)
             {
-                if (value == null)
-                    return false;
-                AppAuthCredentials appAuthCredentials =
-                    TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == value.Key)?.Credentials;
-                if (appAuthCredentials == null)
-                    return false;
-                string hashedToken = BCrypt.Net.BCrypt.HashPassword(appAuthCredentials.AuthorizationToken,
-                    BCryptExtension.CalculateSaltCost());
-                return appAuthCredentials.AuthorizationTokenCipher == hashedToken;
+                throw new NotImplementedException(); //TODO
             }
         }
     }

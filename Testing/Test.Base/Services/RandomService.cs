@@ -11,12 +11,12 @@ namespace Test.TestBase
         /// Generates a random key
         /// </summary>
         /// <returns>Randomly generated key</returns>
-        public static string GenerateRandomKey()
+        public static string GenerateRandomKey(int length = 19)
         {
             Random rnd = new();
-            const ulong min = 1000000000000000000;
-            const ulong max = 9999999999999999999;
-            const ulong uRange = max - min;
+            ulong min = ulong.Parse("1" + new string('0', length - 1));
+            ulong max = ulong.Parse(new string('9', length));
+            ulong uRange = max - min;
             ulong ulongRand;
             do
             {
@@ -25,7 +25,7 @@ namespace Test.TestBase
                 ulongRand = (ulong)BitConverter.ToInt64(buf, 0);
             } while (ulongRand > ulong.MaxValue - ((ulong.MaxValue % uRange) + 1) % uRange);
 
-            return "10" + (long)(ulongRand % uRange);
+            return "10" + ((long)(ulongRand % uRange)).ToString(new string('0', length));
         }
 
         /// <summary>
@@ -42,12 +42,13 @@ namespace Test.TestBase
             
             string[] consonants =
             {
-                "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "l", "n", "p", "q", "r", "s", "sh", "zh", "t", "v",
+                "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "sh", "zh", "t", "v",
                 "w", "x"
             };
             string[] vowels = { "a", "e", "i", "o", "u", "ae", "y" };
             string name = "";
-            name += consonants[r.Next(consonants.Length)].ToUpper();
+            name += consonants[r.Next(consonants.Length)];
+            name = char.ToUpper(name[0]) + name[1..];
             name += vowels[r.Next(vowels.Length)];
             int b = 2;
             while (b < length)

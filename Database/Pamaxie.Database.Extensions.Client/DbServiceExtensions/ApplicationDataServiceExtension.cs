@@ -51,6 +51,12 @@ namespace Pamaxie.Database.Extensions.Client
         {
             return ApplicationService.Delete(value);
         }
+
+        /// <inheritdoc cref="ApplicationDataService.GetOwner"/>
+        public static IPamaxieUser GetOwner(this IPamaxieApplication value)
+        {
+            return ApplicationService.GetOwner(value);
+        }
         
         /// <inheritdoc cref="ApplicationDataService.EnableOrDisable"/>
         public static IPamaxieApplication EnableOrDisable(this IPamaxieApplication value)

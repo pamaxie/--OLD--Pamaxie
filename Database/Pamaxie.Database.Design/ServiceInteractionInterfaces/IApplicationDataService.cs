@@ -8,6 +8,13 @@ namespace Pamaxie.Database.Design
     public interface IApplicationDataService : IDataServiceBase<IPamaxieApplication>
     {
         /// <summary>
+        /// Get the owner of the application
+        /// </summary>
+        /// <param name="value">The application to get the owner from</param>
+        /// <returns>The application's owner</returns>
+        public IPamaxieUser GetOwner(IPamaxieApplication value);
+        
+        /// <summary>
         /// Enables or Disables the application
         /// </summary>
         /// <param name="value">The application that will be enabled or disabled</param>
