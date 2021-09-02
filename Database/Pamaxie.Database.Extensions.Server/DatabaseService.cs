@@ -29,7 +29,7 @@ namespace Pamaxie.Database.Extensions.Server
         /// </summary>
         public ApplicationDataService Applications { get; }
 
-        public DatabaseService(PamaxieDataContext dataContext)
+        public DatabaseService(IPamaxieDataContext dataContext)
         {
             DataContext = dataContext;
             Users = new UserDataService(dataContext, this);

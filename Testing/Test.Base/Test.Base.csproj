@@ -26,7 +26,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Database\Pamaxie.Database.Extensions.Client\Pamaxie.Database.Extensions.Client.csproj" />
-      <ProjectReference Include="..\..\Database\Pamaxie.Database.Extensions.Server\Pamaxie.Database.Extensions.Server.csproj" />
       <ProjectReference Include="..\..\Database\Pamaxie.Data\Pamaxie.Data.csproj" />
     </ItemGroup>
 

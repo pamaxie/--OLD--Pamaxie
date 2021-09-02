@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Pamaxie.Database.Extensions.Server;
+using Pamaxie.Database.Design;
+using Pamaxie.Database.Extensions.Client;
 using Xunit.Abstractions;
 
 namespace Test.TestBase
@@ -13,7 +14,7 @@ namespace Test.TestBase
         /// <summary>
         /// Database Context
         /// </summary>
-        protected PamaxieDataContext Context { get; }
+        protected IPamaxieDataContext Context { get; }
 
         /// <summary>
         /// The Api controller that will be tested against

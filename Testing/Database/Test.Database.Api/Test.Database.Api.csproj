@@ -14,6 +14,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\Database\Pamaxie.Database.Api\Pamaxie.Database.Api.csproj" />
       <ProjectReference Include="..\..\Test.Base\Test.Base.csproj" />
+      <ProjectReference Include="..\Test.Database.Extensions.Server\Test.Database.Extensions.Server.csproj" />
     </ItemGroup>
 
 </Project>

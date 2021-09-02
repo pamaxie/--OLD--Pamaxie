@@ -9,7 +9,7 @@ namespace Pamaxie.Database.Extensions.Client
     internal class UserDataService : ClientDataServiceBase<IPamaxieUser>, IUserDataService
     {
         /// <inheritdoc/>
-        internal UserDataService(PamaxieDataContext dataContext, DatabaseService service)
+        internal UserDataService(IPamaxieDataContext dataContext, DatabaseService service)
         {
             DataContext = dataContext;
             Service = service;

@@ -12,7 +12,7 @@ namespace Pamaxie.Database.Extensions.Server
     public class ApplicationDataService : ServerDataServiceBase<IPamaxieApplication>, IApplicationDataService
     {
         /// <inheritdoc/>
-        internal ApplicationDataService(PamaxieDataContext dataContext, DatabaseService service)
+        internal ApplicationDataService(IPamaxieDataContext dataContext, DatabaseService service)
         {
             DataContext = dataContext;
             Service = service;

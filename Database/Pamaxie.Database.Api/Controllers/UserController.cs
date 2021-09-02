@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Pamaxie.Api.Data;
 using Pamaxie.Api.Security;
 using Pamaxie.Data;
+using Pamaxie.Database.Design;
 using Pamaxie.Database.Extensions.Server;
 
 namespace Pamaxie.Api.Controllers
@@ -22,7 +23,7 @@ namespace Pamaxie.Api.Controllers
         private readonly TokenGenerator _generator;
         private readonly DatabaseService _dbService;
 
-        public UserController(TokenGenerator generator, PamaxieDataContext context)
+        public UserController(TokenGenerator generator, IPamaxieDataContext context)
         {
             _generator = generator;
             _dbService = new DatabaseService(context);

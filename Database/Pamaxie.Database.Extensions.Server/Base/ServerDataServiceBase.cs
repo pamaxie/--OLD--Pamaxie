@@ -16,7 +16,7 @@ namespace Pamaxie.Database.Extensions.Server.Base
         /// <summary>
         /// Data Context responsible for connecting to Pamaxie
         /// </summary>
-        internal PamaxieDataContext DataContext { get; set; }
+        internal IPamaxieDataContext DataContext { get; set; }
 
         /// <summary>
         /// The Service that should be used to connect to the database
