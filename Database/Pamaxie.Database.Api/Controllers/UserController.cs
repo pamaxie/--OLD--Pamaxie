@@ -19,12 +19,10 @@ namespace Pamaxie.Api.Controllers
     public class UserController : ControllerBase
     {
         // ReSharper disable once NotAccessedField.Local
-        private readonly TokenGenerator _generator;
         private readonly DatabaseService _dbService;
 
         public UserController(TokenGenerator generator, DatabaseService dbService)
         {
-            _generator = generator;
             _dbService = dbService;
         }
 
