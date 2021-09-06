@@ -1,4 +1,4 @@
-name: lint
+name: Code Style Check
 on:
   push:
     branches:
