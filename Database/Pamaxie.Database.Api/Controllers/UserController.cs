@@ -23,10 +23,10 @@ namespace Pamaxie.Api.Controllers
         private readonly TokenGenerator _generator;
         private readonly DatabaseService _dbService;
 
-        public UserController(TokenGenerator generator, IPamaxieDataContext context)
+        public UserController(TokenGenerator generator, DatabaseService dbService)
         {
             _generator = generator;
-            _dbService = new DatabaseService(context);
+            _dbService = dbService;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using Newtonsoft.Json;
 using Pamaxie.Data;
@@ -113,6 +114,17 @@ namespace Pamaxie.Database.Extensions.Server.Base
         }
 
         /// <inheritdoc/>
+        public bool Exists(string key)
+        {
+            if (Service.Service == null)
+                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentException("The key you entered is null or empty.");
+            IDatabase db = Service.Service.GetDatabase();
+            return db.KeyExists(key);
+        }
+
+        /// <inheritdoc/>
         public bool Delete(T value)
         {
             if (Service.Service == null)
@@ -121,7 +133,7 @@ namespace Pamaxie.Database.Extensions.Server.Base
             IDatabase db = Service.Service.GetDatabase();
 
             if (!db.KeyExists(value.Key))
-                throw new ArgumentException("The key u entered does not exist in our database yet");
+                throw new ArgumentException("The key you entered does not exist in our database yet");
 
             return db.KeyDelete(value.Key);
         }

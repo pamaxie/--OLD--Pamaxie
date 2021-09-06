@@ -34,7 +34,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// </summary>
         /// <param name="instanceName">The instance of the database</param>
         [Obsolete(
-            "This should not be used, since this means u don't have a password on your database, which exposes your database to attacks. Please always make sure to use a password on your database.")]
+            "This should not be used, since this means u don't have a password on your database api, which exposes your database to attacks. Please always make sure to use a password on your database.")]
         public PamaxieDataContext(string instanceName) : this(instanceName, string.Empty) { }
         
         /// <inheritdoc/>

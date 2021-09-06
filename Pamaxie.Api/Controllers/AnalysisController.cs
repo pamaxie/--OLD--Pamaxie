@@ -46,6 +46,8 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("scanImage")]
         public async Task<ActionResult<string>> ScanImageTask()
         {
+            //TODO: Add response for 102 Processing
+            //TODO: DO NOT scan things directly on this controller, that's highly inefficient
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
@@ -84,6 +86,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("getExistingData")]
         public async Task<ActionResult<string>> GetExistingData()
         {
+            //TODO: Use proper status codes for response / failure
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
@@ -104,6 +107,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("getHash")]
         public async Task<ActionResult<string>> GetHash()
         {
+            //TODO: Use proper status codes for response / failure
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());

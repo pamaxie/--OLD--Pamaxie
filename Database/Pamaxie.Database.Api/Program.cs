@@ -14,7 +14,6 @@ namespace Pamaxie.Api
         /// Main Function
         /// </summary>
         /// <param name="args">Args to be passed</param>
-        [SuppressMessage("NDepend", "ND2500:DontCreateThreadsExplicitly", Justification = "TODO")]
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
