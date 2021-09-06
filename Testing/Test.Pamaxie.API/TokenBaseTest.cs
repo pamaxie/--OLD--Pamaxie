@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Pamaxie.Jwt;
 using Test.TestBase;
 using Xunit;
 using Xunit.Abstractions;

@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Pamaxie.Api.Data;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Server;
+using Pamaxie.Jwt;
 
 namespace Pamaxie.Api.Controllers
 {

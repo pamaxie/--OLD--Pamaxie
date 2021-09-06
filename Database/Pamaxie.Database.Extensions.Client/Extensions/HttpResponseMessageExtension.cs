@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 
 namespace Pamaxie.Database.Extensions.Client.Extensions
 {
@@ -59,7 +60,7 @@ namespace Pamaxie.Database.Extensions.Client.Extensions
                 case HttpStatusCode.BadRequest:
                     throw new WebException("");
                 case HttpStatusCode.Unauthorized:
-                    throw new WebException(HttpStatusCode.Accepted.ToString());
+                    throw new WebException(HttpStatusCode.Unauthorized.ToString());
                 case HttpStatusCode.PaymentRequired:
                     throw new WebException("");
                 case HttpStatusCode.Forbidden:

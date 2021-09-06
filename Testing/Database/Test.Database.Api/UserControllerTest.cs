@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Pamaxie.Api.Controllers;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Server;
+using Pamaxie.Jwt;
 using Test.TestBase;
 using Xunit;
 using Xunit.Abstractions;
