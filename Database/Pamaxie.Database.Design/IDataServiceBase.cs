@@ -58,6 +58,13 @@ namespace Pamaxie.Database.Design
         public bool UpdateOrCreate(T value, out T updatedOrCreatedValue);
 
         /// <summary>
+        /// Checks if a given key exists in the database (does not read the key out)
+        /// </summary>
+        /// <param name="key"><see cref="string"/> that specifies the key that we should search for</param>
+        /// <returns><see cref="bool"/> if the value could be found</returns>
+        public bool Exists(string key);
+
+        /// <summary>
         /// Deletes a <see cref="T"/> value inside the service,
         /// returns a <see cref="bool"/> depending if the <see cref="T"/> value was deleted or not
         /// </summary>

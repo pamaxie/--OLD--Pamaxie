@@ -91,6 +91,12 @@ namespace Pamaxie.Database.Extensions.Client
         }
 
         /// <inheritdoc/>
+        public bool Exists(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
         public bool Delete(T value)
         {
             throw new NotImplementedException();

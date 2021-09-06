@@ -18,10 +18,13 @@ namespace Pamaxie.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly TokenGenerator _generator;
+        private readonly DatabaseService _dbService;
 
-        public AuthController(TokenGenerator generator)
+
+        public AuthController(TokenGenerator generator, DatabaseService dbService)
         {
             _generator = generator;
+            _dbService = dbService;
         }
 
         /// <summary>
@@ -32,6 +35,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("login")]
         public ActionResult<AuthToken> LoginTask()
         {
+            //TODO: Use basic auth here please, do not use a HTTPPost for login.
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
@@ -55,25 +59,15 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("refresh")]
         public ActionResult<AuthToken> RefreshTask()
         {
-            StreamReader reader = new(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            
-            if (string.IsNullOrEmpty(result))  return BadRequest(ErrorHandler.BadData());
-            PamaxieApplication? appData;
-            try
-            {
-                appData = JsonConvert.DeserializeObject<PamaxieApplication>(result);
-            }
-            catch
-            {
-                return StatusCode(400);
-            }
-            
-            if (default == appData?.Key) return BadRequest(ErrorHandler.UnAuthorized());
+            //TODO Not yet implemented
+            var token = Request.Headers["authorization"];
+            if (string.IsNullOrEmpty(token))
+                return BadRequest("Authentication token for refresh could not be found");
 
-            string userId = appData.Key;
-            AuthToken token = _generator.CreateToken(userId);
-            return Ok(token);
+            var userId = _generator.GetUserKey(token);
+            _dbService.Users.Exists(userId);
+            AuthToken newToken = _generator.CreateToken(userId);
+            return Ok(newToken);
         }
     }
 }

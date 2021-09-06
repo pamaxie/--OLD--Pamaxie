@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Pamaxie.Api.Security;
+using Pamaxie.Database.Extensions.Server;
 
 namespace Pamaxie.Api
 {
@@ -26,8 +27,8 @@ namespace Pamaxie.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            IConfigurationSection section = Configuration.GetSection("AuthData");
-            byte[] key = Encoding.ASCII.GetBytes(section.GetValue<string>("Secret"));
+            IConfigurationSection authSection = Configuration.GetSection("AuthData");
+            byte[] key = Encoding.ASCII.GetBytes(authSection.GetValue<string>("Secret"));
             services
                 .AddAuthentication(x =>
                 {
@@ -47,6 +48,14 @@ namespace Pamaxie.Api
                     };
                 });
 
+            IConfigurationSection dbSection = Configuration.GetSection("Redis");
+            PamaxieDataContext dataContext = new PamaxieDataContext(
+                dbSection.GetValue<string>("Instances"),
+                dbSection.GetValue<string>("Password"),
+                dbSection.GetValue<int>("ReconAttempts"));
+
+            //TODO: Add connection parameters here, this won't work like this (forgot how this works)
+            services.AddTransient<DatabaseService>();
             services.AddTransient<TokenGenerator>();
         }
 
@@ -57,7 +66,7 @@ namespace Pamaxie.Api
         /// <param name="env">Hosting Environment</param>
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment()) 
+            if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 
             app.UseHttpsRedirection();
