@@ -104,6 +104,8 @@ Sometimes there is a need for you to rebase your commit against the latest code 
 
 The only reason a pull request should be closed and resubmitted, is when a pull request is targeting the wrong branch.
 
+### Code Style
+We follow the Google code style guidelines for developing our source code. This means if someone wants to contribute to our codebase we would like if they adhere to the rules too. These rules can be found [here](https://google.github.io/styleguide/). If something is not defined in the code guidelines by google (usually most scenarios should be) or something is unclear please open an issue with "question" as a tag. We will then try to help that person as soon as possible. If there is any deviations from the guidelines we will note them here as well as in our wiki (see: contribution guide)
 
 ## Other general information
 If you reformat code or hit core functionality without an approval from a person on the Pamaxie Team, it's likely that no matter how awesome it looks afterwards, it will probably not get accepted. Reformatting code makes it harder for the Pamaxie team to evaluate exactly what was changed.
