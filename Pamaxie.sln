@@ -49,25 +49,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Base", "Testing\Test.B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{3D245451-8A7A-418B-8375-C36C46FDE81E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pamaxie.Data", "Database\Pamaxie.Data\Pamaxie.Data.csproj", "{9F853BBD-858B-444A-A4EE-52BF37C54EDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.Data", "Database\Pamaxie.Data\Pamaxie.Data.csproj", "{9F853BBD-858B-444A-A4EE-52BF37C54EDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pamaxie.Database.Api", "Database\Pamaxie.Database.Api\Pamaxie.Database.Api.csproj", "{7AFE0E74-9EE0-4B79-9C2B-6A2D2E7FD69D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.Database.Api", "Database\Pamaxie.Database.Api\Pamaxie.Database.Api.csproj", "{7AFE0E74-9EE0-4B79-9C2B-6A2D2E7FD69D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pamaxie.Database.Design", "Database\Pamaxie.Database.Design\Pamaxie.Database.Design.csproj", "{961C38E2-9D48-471C-AD7D-4F5B5BA8406B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.Database.Design", "Database\Pamaxie.Database.Design\Pamaxie.Database.Design.csproj", "{961C38E2-9D48-471C-AD7D-4F5B5BA8406B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pamaxie.Database.Extensions.Client", "Database\Pamaxie.Database.Extensions.Client\Pamaxie.Database.Extensions.Client.csproj", "{18D1F01A-F3AC-4544-8938-C7E85C6C0EFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.Database.Extensions.Client", "Database\Pamaxie.Database.Extensions.Client\Pamaxie.Database.Extensions.Client.csproj", "{18D1F01A-F3AC-4544-8938-C7E85C6C0EFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pamaxie.Database.Extensions.Server", "Database\Pamaxie.Database.Extensions.Server\Pamaxie.Database.Extensions.Server.csproj", "{F29C989A-ADBC-4A57-92F3-56282997F897}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.Database.Extensions.Server", "Database\Pamaxie.Database.Extensions.Server\Pamaxie.Database.Extensions.Server.csproj", "{F29C989A-ADBC-4A57-92F3-56282997F897}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pamaxie.Database.Redis", "Database\Pamaxie.Database.Redis\Pamaxie.Database.Redis.csproj", "{367BA3F0-1B92-4C83-BE8D-1000FD2EEE68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.Database.Redis", "Database\Pamaxie.Database.Redis\Pamaxie.Database.Redis.csproj", "{367BA3F0-1B92-4C83-BE8D-1000FD2EEE68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Database.Extensions.Client", "Testing\Database\Test.Database.Extensions.Client\Test.Database.Extensions.Client.csproj", "{C05A7D46-2A18-4B88-A644-E8A3C26685B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Database.Extensions.Client", "Testing\Database\Test.Database.Extensions.Client\Test.Database.Extensions.Client.csproj", "{C05A7D46-2A18-4B88-A644-E8A3C26685B1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{661FD5E4-C281-456B-B9A6-0BD9C0E231CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Database.Extensions.Server", "Testing\Database\Test.Database.Extensions.Server\Test.Database.Extensions.Server.csproj", "{146C4933-BD3B-4406-85AC-709B222CF6E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Database.Extensions.Server", "Testing\Database\Test.Database.Extensions.Server\Test.Database.Extensions.Server.csproj", "{146C4933-BD3B-4406-85AC-709B222CF6E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Database.Api", "Testing\Database\Test.Database.Api\Test.Database.Api.csproj", "{FEDD5720-1F85-42CB-8373-B49379A465C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Database.Api", "Testing\Database\Test.Database.Api\Test.Database.Api.csproj", "{FEDD5720-1F85-42CB-8373-B49379A465C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pamaxie.Jwt", "Assemblies\Pamaxie.Jwt\Pamaxie.Jwt.csproj", "{2DF05DB5-3792-468D-B93B-62DD68DF2C52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1248,6 +1250,56 @@ Global
 		{FEDD5720-1F85-42CB-8373-B49379A465C7}.Release|x64.Build.0 = Release|Any CPU
 		{FEDD5720-1F85-42CB-8373-B49379A465C7}.Release|x86.ActiveCfg = Release|Any CPU
 		{FEDD5720-1F85-42CB-8373-B49379A465C7}.Release|x86.Build.0 = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.All|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.All|Any CPU.Build.0 = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.All|ARM.ActiveCfg = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.All|ARM.Build.0 = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.All|ARM64.ActiveCfg = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.All|ARM64.Build.0 = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.All|x64.ActiveCfg = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.All|x64.Build.0 = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.All|x86.ActiveCfg = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.All|x86.Build.0 = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Apply Migrations|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Apply Migrations|Any CPU.Build.0 = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Apply Migrations|ARM.ActiveCfg = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Apply Migrations|ARM.Build.0 = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Apply Migrations|ARM64.ActiveCfg = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Apply Migrations|ARM64.Build.0 = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Apply Migrations|x64.ActiveCfg = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Apply Migrations|x64.Build.0 = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Apply Migrations|x86.ActiveCfg = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Apply Migrations|x86.Build.0 = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Blazor Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Blazor Release|Any CPU.Build.0 = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Blazor Release|ARM.ActiveCfg = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Blazor Release|ARM.Build.0 = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Blazor Release|ARM64.ActiveCfg = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Blazor Release|ARM64.Build.0 = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Blazor Release|x64.ActiveCfg = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Blazor Release|x64.Build.0 = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Blazor Release|x86.ActiveCfg = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Blazor Release|x86.Build.0 = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Debug|ARM.Build.0 = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Debug|x64.Build.0 = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Debug|x86.Build.0 = Debug|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Release|ARM.ActiveCfg = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Release|ARM.Build.0 = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Release|ARM64.Build.0 = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Release|x64.ActiveCfg = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Release|x64.Build.0 = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Release|x86.ActiveCfg = Release|Any CPU
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1274,10 +1326,11 @@ Global
 		{18D1F01A-F3AC-4544-8938-C7E85C6C0EFC} = {3D245451-8A7A-418B-8375-C36C46FDE81E}
 		{F29C989A-ADBC-4A57-92F3-56282997F897} = {3D245451-8A7A-418B-8375-C36C46FDE81E}
 		{367BA3F0-1B92-4C83-BE8D-1000FD2EEE68} = {3D245451-8A7A-418B-8375-C36C46FDE81E}
-		{661FD5E4-C281-456B-B9A6-0BD9C0E231CC} = {DE5A386D-BC9A-4FA1-9EAB-36E66C72BC6E}
 		{C05A7D46-2A18-4B88-A644-E8A3C26685B1} = {661FD5E4-C281-456B-B9A6-0BD9C0E231CC}
+		{661FD5E4-C281-456B-B9A6-0BD9C0E231CC} = {DE5A386D-BC9A-4FA1-9EAB-36E66C72BC6E}
 		{146C4933-BD3B-4406-85AC-709B222CF6E7} = {661FD5E4-C281-456B-B9A6-0BD9C0E231CC}
 		{FEDD5720-1F85-42CB-8373-B49379A465C7} = {661FD5E4-C281-456B-B9A6-0BD9C0E231CC}
+		{2DF05DB5-3792-468D-B93B-62DD68DF2C52} = {F55228AE-1F0F-487D-B7F5-41E0ED19782A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7548869C-04B6-4F88-A5AF-48310959D2D3}

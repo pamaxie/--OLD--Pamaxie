@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using Pamaxie.Api.Data;
-using Pamaxie.Api.Security;
 using Test.TestBase;
 using Xunit;
 using Xunit.Abstractions;

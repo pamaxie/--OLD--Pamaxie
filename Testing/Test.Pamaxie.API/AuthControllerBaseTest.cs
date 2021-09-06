@@ -4,8 +4,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pamaxie.Api.Controllers;
-using Pamaxie.Api.Data;
-using Pamaxie.Api.Security;
 using Pamaxie.Data;
 using Test.TestBase;
 using Xunit;

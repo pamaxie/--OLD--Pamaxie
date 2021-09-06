@@ -1,5 +1,9 @@
 ﻿namespace Pamaxie.Api.Data
 {
+    /// <summary>
+    /// Contains all error handling information
+    /// TODO: Please get rid of this shit. Either use the proper error codes or just like, use the proper file for it (resx) so it can be modified later.
+    /// </summary>
     public class ErrorHandler
     {
         /// <summary>

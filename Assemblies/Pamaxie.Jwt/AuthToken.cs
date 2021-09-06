@@ -2,7 +2,7 @@
 
 #pragma warning disable 8618
 
-namespace Pamaxie.Api.Data
+namespace Pamaxie.Jwt
 {
     /// <summary>
     /// Authentication Token

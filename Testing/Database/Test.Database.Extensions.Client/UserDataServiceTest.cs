@@ -3,7 +3,6 @@ using Pamaxie.Data;
 using Pamaxie.Database.Design;
 using Pamaxie.Database.Extensions.Client;
 using Test.TestBase;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace Test.Database.Extensions.Client

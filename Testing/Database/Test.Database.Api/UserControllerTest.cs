@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Pamaxie.Api.Controllers;
-using Pamaxie.Api.Security;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Server;
 using Test.TestBase;

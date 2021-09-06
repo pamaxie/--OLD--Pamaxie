@@ -6,8 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Pamaxie.Api.Security;
 using Pamaxie.Database.Extensions.Server;
+using Pamaxie.Jwt;
 
 namespace Pamaxie.Api
 {

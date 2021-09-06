@@ -9,7 +9,7 @@ namespace Pamaxie.Data
     {
         /// <summary>
         /// The Authorization Token that is reached in to us for auth
-        /// </summary>
+        /// </summary>z
         public string AuthorizationToken { get; set; }
 
         /// <summary>

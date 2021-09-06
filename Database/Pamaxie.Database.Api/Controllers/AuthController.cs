@@ -1,12 +1,9 @@
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Pamaxie.Api.Data;
-using Pamaxie.Api.Security;
-using Pamaxie.Data;
-using Pamaxie.Database.Design;
 using Pamaxie.Database.Extensions.Server;
+using Pamaxie.Jwt;
 
 namespace Pamaxie.Api.Controllers
 {
@@ -73,10 +70,13 @@ namespace Pamaxie.Api.Controllers
             //TODO Not yet implemented
             var token = Request.Headers["authorization"];
             if (string.IsNullOrEmpty(token))
-                return BadRequest("Authentication token for refresh could not be found");
+                return Unauthorized("Invalid authorization token");
 
             var userId = _generator.GetUserKey(token);
-            //_dbService.Users.Exists(userId); //TODO uncomment
+            if (_dbService.Users.Exists(userId))
+            {
+                return Unauthorized("Invalid authorization token");
+            }
             AuthToken newToken = _generator.CreateToken(userId);
             return Ok(newToken);
         }

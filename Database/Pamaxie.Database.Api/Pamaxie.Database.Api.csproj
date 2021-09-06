@@ -26,9 +26,11 @@
     <PackageReference Include="CryptSharp.Core" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.7" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Reflection" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Assemblies\Pamaxie.Jwt\Pamaxie.Jwt.csproj" />
     <ProjectReference Include="..\Pamaxie.Database.Extensions.Server\Pamaxie.Database.Extensions.Server.csproj" />
   </ItemGroup>
 

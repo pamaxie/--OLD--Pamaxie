@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Pamaxie.Api.Controllers;
-using Pamaxie.Api.Security;
 using Test.TestBase;
 using Xunit;
 using Xunit.Abstractions;
