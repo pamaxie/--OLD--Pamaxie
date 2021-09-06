@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Pamaxie.Api.Data;
+using Pamaxie.Database.Extensions.Client;
 using Pamaxie.Database.Redis.DataClasses;
 using PamaxieML.Model;
 
@@ -20,10 +21,12 @@ namespace Pamaxie.Api.Controllers
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly ILogger<AnalysisController> _logger;
+        private readonly DatabaseService _dbService;
 
-        public AnalysisController(ILogger<AnalysisController> logger)
+        public AnalysisController(ILogger<AnalysisController> logger, DatabaseService dbService)
         {
             _logger = logger;
+            _dbService = dbService;
         }
 
         /// <summary>

@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Catalyst" Version="0.0.16396" />
+    <PackageReference Include="Catalyst" Version="1.0.19323" />
   </ItemGroup>
 
 </Project>
