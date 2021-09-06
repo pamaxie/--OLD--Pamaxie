@@ -49,6 +49,8 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("scanImage")]
         public async Task<ActionResult<string>> ScanImageTask()
         {
+            //TODO: FORWARD the request to the workerservice or the analysis method directly depending on what the user sets (single server mode)
+            //TODO: Allow sending/ analysis of binary/raw data
             //TODO: Add response for 102 Processing
             //TODO: DO NOT scan things directly on this controller, that's highly inefficient
             StreamReader reader = new(Request.Body);
