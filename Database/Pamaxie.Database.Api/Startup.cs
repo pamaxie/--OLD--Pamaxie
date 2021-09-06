@@ -55,7 +55,7 @@ namespace Pamaxie.Api
                 dbSection.GetValue<int>("ReconAttempts"));
 
             //TODO: Add connection parameters here, this won't work like this (forgot how this works)
-            services.AddTransient<DatabaseService>();
+            services.AddSingleton(new DatabaseService(dataContext));
             services.AddTransient<TokenGenerator>();
         }
 
