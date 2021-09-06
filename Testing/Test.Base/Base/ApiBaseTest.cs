@@ -14,7 +14,7 @@ namespace Test.TestBase
         /// <summary>
         /// Database Context
         /// </summary>
-        protected IPamaxieDataContext Context { get; }
+        private IPamaxieDataContext Context { get; }
         
         /// <summary>
         /// Database Service
@@ -30,7 +30,7 @@ namespace Test.TestBase
         {
             //TODO Change these section name, and value names when the appsettings.json is done for Database.Api
             IConfigurationSection dbConfigSection = Configuration.GetSection("DbConfig");
-            Context = new PamaxieDataContext(dbConfigSection.GetValue<string>("Instance"),
+            Context = new PamaxieDataContext(dbConfigSection.GetValue<string>("Instances"),
                 dbConfigSection.GetValue<string>("Password"));
             Service = new DatabaseService(Context);
         }

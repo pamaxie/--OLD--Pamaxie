@@ -76,7 +76,7 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest("Authentication token for refresh could not be found");
 
             var userId = _generator.GetUserKey(token);
-            _dbService.Users.Exists(userId);
+            //_dbService.Users.Exists(userId); //TODO uncomment
             AuthToken newToken = _generator.CreateToken(userId);
             return Ok(newToken);
         }

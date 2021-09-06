@@ -180,6 +180,12 @@ namespace Test.TestBase
                 return true;
             }
 
+            /// <inheritdoc cref="IApplicationDataService.Exists"/>
+            public bool Exists(string key)
+            {
+                return !string.IsNullOrEmpty(key) && TestApplicationData.ListOfApplications.Any(_ => _.Key == key);
+            }
+
             /// <inheritdoc cref="IUserDataService.Delete"/>
             public bool Delete(IPamaxieUser value)
             {

@@ -13,6 +13,7 @@ namespace Pamaxie.Database.Extensions.Client
         {
             DataContext = dataContext;
             Service = service;
+            Url = DataContext.DataInstances + "/User";
         }
         
         /// <inheritdoc/>

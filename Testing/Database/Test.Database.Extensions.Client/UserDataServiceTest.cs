@@ -1,4 +1,6 @@
-﻿using Pamaxie.Data;
+﻿using Microsoft.Extensions.Configuration;
+using Pamaxie.Data;
+using Pamaxie.Database.Design;
 using Pamaxie.Database.Extensions.Client;
 using Test.TestBase;
 using Xunit;
@@ -9,10 +11,36 @@ namespace Test.Database.Extensions.Client
     /// <summary>
     /// Testing class for <see cref="UserDataService"/>
     /// </summary>
-    public class UserDataServiceTest : BaseTest
+    public class UserDataServiceTest : BaseTest, IClassFixture<DatabaseApiFactory>
     {
-        public UserDataServiceTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public UserDataServiceTest(DatabaseApiFactory fixture, ITestOutputHelper testOutputHelper) : base(
+            testOutputHelper)
         {
+            PamaxieDataContext context = new("", Configuration.GetSection("AuthData").GetValue<string>("Token"));
+            DatabaseService service = new(context)
+            {
+                Service = fixture.CreateClient()
+            };
+            //_service.Service.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("IntegrationTest");
+            service.Service.DefaultRequestHeaders.Authorization = null;
+        }
+
+        [Fact]
+        public void Get()
+        {
+            IPamaxieUser user = UserDataServiceExtension.Get("123");
+            Assert.NotNull(user);
+        }
+
+        [Fact]
+        public void Create()
+        {
+            IPamaxieUser user = new PamaxieUser()
+            {
+                Key = "123"
+            };
+            IPamaxieUser createdUser = user.Create();
+            Assert.NotNull(createdUser);
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Data;
 using Newtonsoft.Json;
 using Pamaxie.Data;
 using Pamaxie.Database.Design;
-using Pamaxie.Database.Extensions.Server.Base;
 using StackExchange.Redis;
 
 namespace Pamaxie.Database.Extensions.Server

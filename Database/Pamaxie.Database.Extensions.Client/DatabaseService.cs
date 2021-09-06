@@ -8,7 +8,7 @@ namespace Pamaxie.Database.Extensions.Client
     public class DatabaseService : IDatabaseService<HttpClient>
     {
         /// <inheritdoc/>
-        public HttpClient Service { get; } = new();
+        public HttpClient Service { get; internal init; } = new();
         
         /// <inheritdoc/>
         public IPamaxieDataContext DataContext { get; }
@@ -29,11 +29,12 @@ namespace Pamaxie.Database.Extensions.Client
         /// </summary>
         internal static IApplicationDataService ApplicationService { get; set; }
 
-        public DatabaseService(IPamaxieDataContext dataContext)
+        public DatabaseService(PamaxieDataContext dataContext)
         {
             DataContext = dataContext;
             UserService = new UserDataService(dataContext, this);
             ApplicationService = new ApplicationDataService(dataContext, this);
+            Service.DefaultRequestHeaders.Authorization = dataContext.GetAuthenticationRequestHeader();
         }
 
         /// <inheritdoc/>

@@ -6,7 +6,7 @@ using Pamaxie.Data;
 using Pamaxie.Database.Design;
 using StackExchange.Redis;
 
-namespace Pamaxie.Database.Extensions.Server.Base
+namespace Pamaxie.Database.Extensions.Server
 {
     /// <summary>
     /// TODO

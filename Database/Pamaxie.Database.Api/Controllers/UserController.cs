@@ -33,13 +33,13 @@ namespace Pamaxie.Api.Controllers
         /// Get a user from the database with a user key from the request body
         /// </summary>
         /// <returns>A <see cref="IPamaxieUser"/> from the database</returns>
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet("get")]
         public ActionResult<IPamaxieUser> GetTask()
         {
             StreamReader reader = new(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
+            if (string.IsNullOrEmpty(result)) 
                 return BadRequest(ErrorHandler.BadData());
 
             IPamaxieUser user = _dbService.Users.Get(result);
@@ -51,7 +51,7 @@ namespace Pamaxie.Api.Controllers
         /// Creates a new <see cref="IPamaxieUser"/>
         /// </summary>
         /// <returns>Created <see cref="IPamaxieUser"/></returns>
-        [Authorize]
+        [AllowAnonymous]
         [HttpPost("create")]
         public ActionResult<IPamaxieUser> CreateTask()
         {

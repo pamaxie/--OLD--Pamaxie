@@ -45,6 +45,12 @@ namespace Pamaxie.Database.Extensions.Client
         {
             return ApplicationService.UpdateOrCreate(value, out databaseValue);
         }
+        
+        /// <inheritdoc cref="ApplicationDataService.Exists"/>
+        public static bool Exists(string value)
+        {
+            return ApplicationService.Exists(value);
+        }
 
         /// <inheritdoc cref="ApplicationDataService.Delete"/>
         public static bool Delete(this IPamaxieApplication value)

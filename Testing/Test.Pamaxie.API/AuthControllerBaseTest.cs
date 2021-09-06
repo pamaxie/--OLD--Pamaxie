@@ -16,7 +16,7 @@ namespace Test.Pamaxie.API_UnitTesting
     /// <summary>
     /// Testing class for <see cref="AuthController"/>
     /// </summary>
-    public class AuthControllerBaseTest : BaseTest
+    public class AuthControllerBaseTest : ApiBaseTest<AuthController>
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllApplications"/>
@@ -42,17 +42,11 @@ namespace Test.Pamaxie.API_UnitTesting
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 
-            //Instantiate the controller and add a default HttpContext
-            AuthController authController = new(new TokenGenerator(Configuration))
-            {
-                ControllerContext = { HttpContext = new DefaultHttpContext() }
-            };
-
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
-            authController.Request.Body = body;
+            Controller.Request.Body = body;
 
-            ActionResult<AuthToken> result = authController.LoginTask();
+            ActionResult<AuthToken> result = Controller.LoginTask();
             Assert.IsType<OkObjectResult>(result.Result);
         }
     }

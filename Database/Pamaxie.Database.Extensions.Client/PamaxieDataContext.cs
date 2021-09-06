@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http.Headers;
 using Pamaxie.Database.Design;
 
 namespace Pamaxie.Database.Extensions.Client
@@ -41,6 +42,15 @@ namespace Pamaxie.Database.Extensions.Client
         public string ConnectionString()
         {
             throw new NotSupportedException("Cannot use connection strings for connecting to the client as of now.");
+        }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <returns>TODO</returns>
+        public AuthenticationHeaderValue GetAuthenticationRequestHeader()
+        {
+            return new AuthenticationHeaderValue("Basic", Password);
         }
     }
 }
