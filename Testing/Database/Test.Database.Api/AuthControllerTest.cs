@@ -15,7 +15,7 @@ namespace Test.Database.Api
         public AuthControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             //Instantiate the controller and add a default HttpContext
-            Controller = new AuthController(new TokenGenerator(Configuration))
+            Controller = new AuthController(new TokenGenerator(Configuration), Service)
             {
                 ControllerContext = { HttpContext = new DefaultHttpContext() }
             };

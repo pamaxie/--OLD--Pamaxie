@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Pamaxie.Database.Design;
-using Pamaxie.Database.Extensions.Client;
+using Pamaxie.Database.Extensions.Server;
 using Xunit.Abstractions;
 
 namespace Test.TestBase
@@ -15,6 +15,11 @@ namespace Test.TestBase
         /// Database Context
         /// </summary>
         protected IPamaxieDataContext Context { get; }
+        
+        /// <summary>
+        /// Database Service
+        /// </summary>
+        protected DatabaseService Service { get; }
 
         /// <summary>
         /// The Api controller that will be tested against
@@ -27,6 +32,7 @@ namespace Test.TestBase
             IConfigurationSection dbConfigSection = Configuration.GetSection("DbConfig");
             Context = new PamaxieDataContext(dbConfigSection.GetValue<string>("Instance"),
                 dbConfigSection.GetValue<string>("Password"));
+            Service = new DatabaseService(Context);
         }
     }
 }
