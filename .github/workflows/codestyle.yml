@@ -19,7 +19,7 @@ jobs:
 
       - name: Run dotnet format
         id: format
-        uses: pamaxie/dotnet-format@v1.2.0
+        uses: pamaxie/dotnet-format@v1.0.2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           action: "fix"
