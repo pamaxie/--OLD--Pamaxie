@@ -8,7 +8,7 @@ namespace Pamaxie.Database.Extensions.Client
     public class DatabaseService : IDatabaseService<HttpClient>
     {
         /// <inheritdoc/>
-        public HttpClient Service { get; internal init; } = new();
+        public HttpClient Service { get; internal set; } = new();
         
         /// <inheritdoc/>
         public IPamaxieDataContext DataContext { get; }

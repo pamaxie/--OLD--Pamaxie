@@ -20,7 +20,7 @@ namespace Pamaxie.Api.Controllers
         // ReSharper disable once NotAccessedField.Local
         private readonly DatabaseService _dbService;
 
-        public ApplicationController( DatabaseService dbService)
+        public ApplicationController(DatabaseService dbService)
         {
             _dbService = dbService;
         }

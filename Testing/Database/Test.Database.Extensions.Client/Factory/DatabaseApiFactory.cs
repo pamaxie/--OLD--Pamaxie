@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pamaxie.Api;
+using Pamaxie.Database.Extensions.Server;
 
 namespace Test.Database.Extensions.Client
 {
@@ -21,10 +22,10 @@ namespace Test.Database.Extensions.Client
                 {
                     services.Configure<TestServer>(options => options.AllowSynchronousIO = true);
                 })
-                .ConfigureTestServices(services =>
-                {
-                    services.AddMvc(options => options.Filters.Add(new AllowAnonymousFilter()));
-                })
+                //.ConfigureTestServices(services =>
+                //{
+                //    services.AddMvc(options => options.Filters.Add(new AllowAnonymousFilter()));
+                //})
                 .ConfigureAppConfiguration(config =>
                 {
                     Configuration = new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();

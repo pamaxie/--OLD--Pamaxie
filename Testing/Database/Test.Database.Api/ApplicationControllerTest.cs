@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pamaxie.Api.Controllers;
 using Pamaxie.Data;
-using Pamaxie.Jwt;
 using Test.TestBase;
 using Xunit;
 using Xunit.Abstractions;
@@ -25,7 +24,7 @@ namespace Test.Database.Api
         public ApplicationControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             //Instantiate the controller and add a default HttpContext
-            Controller = new ApplicationController(new TokenGenerator(Configuration), Service)
+            Controller = new ApplicationController(Service)
             {
                 ControllerContext = { HttpContext = new DefaultHttpContext() }
             };

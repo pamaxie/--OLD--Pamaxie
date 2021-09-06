@@ -40,7 +40,8 @@ namespace Pamaxie.Database.Extensions.Client
         {
             HttpRequestMessage requestMessage = new(HttpMethod.Get, Url + "/Get");
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
-            response.NotBadResponse();
+            if (!response.IsSuccessStatusCode)
+                throw new WebException(response.StatusCode.ToString());
             Stream stream = response.Content.ReadAsStream();
             StreamReader reader = new(stream, Encoding.Default);
             string content = reader.ReadToEnd();
@@ -59,15 +60,9 @@ namespace Pamaxie.Database.Extensions.Client
             requestMessage.Content = new ByteArrayContent(bodyBytes);
             requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
+            if (!response.IsSuccessStatusCode)
+                throw new WebException(response.StatusCode.ToString());
             Stream stream = response.Content.ReadAsStream();
-            switch (response.StatusCode)
-            {
-                case HttpStatusCode.Unauthorized:
-                    throw new WebException("Unauthorized");
-                case HttpStatusCode.InternalServerError:
-                    throw new WebException("Internal Server Error");
-            }
-
             StreamReader reader = new(stream, Encoding.Default);
             string content = reader.ReadToEnd();
             if (string.IsNullOrEmpty(content))
@@ -85,15 +80,9 @@ namespace Pamaxie.Database.Extensions.Client
             requestMessage.Content = new ByteArrayContent(bodyBytes);
             requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
+            if (!response.IsSuccessStatusCode)
+                throw new WebException(response.StatusCode.ToString());
             Stream stream = response.Content.ReadAsStream();
-            switch (response.StatusCode)
-            {
-                case HttpStatusCode.Unauthorized:
-                    throw new WebException("Unauthorized");
-                case HttpStatusCode.InternalServerError:
-                    throw new WebException("Internal Server Error");
-            }
-
             StreamReader reader = new(stream, Encoding.Default);
             string content = reader.ReadToEnd();
             if (string.IsNullOrEmpty(content))
