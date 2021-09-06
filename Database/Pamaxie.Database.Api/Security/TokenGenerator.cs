@@ -38,5 +38,18 @@ namespace Pamaxie.Api.Security
 
             return new AuthToken {ExpirationUtc = expires, Token = tokenHandler.WriteToken(token)};
         }
+
+        /// <summary>
+        /// Decrypts a JWT bearer token
+        /// </summary>
+        /// <param name="authToken"></param>
+        /// <returns></returns>
+        public string GetUserKey(string authToken)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(authToken);
+            var tokenS = jsonToken as JwtSecurityToken;
+            return tokenS?.Id;
+        }
     }
 }

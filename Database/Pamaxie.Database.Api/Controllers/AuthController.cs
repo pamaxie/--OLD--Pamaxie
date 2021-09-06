@@ -1,7 +1,12 @@
+using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Pamaxie.Api.Data;
 using Pamaxie.Api.Security;
+using Pamaxie.Data;
+using Pamaxie.Database.Design;
+using Pamaxie.Database.Extensions.Server;
 
 namespace Pamaxie.Api.Controllers
 {
@@ -15,10 +20,12 @@ namespace Pamaxie.Api.Controllers
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly TokenGenerator _generator;
+        private readonly DatabaseService _dbService;
 
-        public AuthController(TokenGenerator generator)
+        public AuthController(TokenGenerator generator, DatabaseService dbService)
         {
             _generator = generator;
+            _dbService = dbService;
         }
 
         /// <summary>
@@ -31,20 +38,27 @@ namespace Pamaxie.Api.Controllers
         {
             //TODO Not yet implemented
             
-            return Ok("Success");
+
+
+            return Accepted("Success");
         }
 
         /// <summary>
-        /// Creates a new Api User
+        /// Creates a new Api User, needs to be unauthorized
         /// </summary>
         /// <returns><see cref="string"/> Success?</returns>
-        [Authorize]
+        [AllowAnonymous]
         [HttpPost("createUser")]
         public ActionResult<string> CreateUserTask()
         {
             //TODO Not yet implemented
-            
-            return Ok("Success");
+            StreamReader reader = new(Request.Body);
+            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
+            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+
+
+
+            return Created("https://pamaxie.com/auth/", string.Empty);
         }
 
 
@@ -57,8 +71,14 @@ namespace Pamaxie.Api.Controllers
         public ActionResult<AuthToken> RefreshTask()
         {
             //TODO Not yet implemented
-            
-            return Ok("Success");
+            var token = Request.Headers["authorization"];
+            if (string.IsNullOrEmpty(token))
+                return BadRequest("Authentication token for refresh could not be found");
+
+            var userId = _generator.GetUserKey(token);
+            _dbService.Users.Exists(userId);
+            AuthToken newToken = _generator.CreateToken(userId);
+            return Ok(newToken);
         }
     }
 }
