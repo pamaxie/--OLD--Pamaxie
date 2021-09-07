@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using Pamaxie.Api.Data;
 using Pamaxie.Database.Extensions.Client;
 using Pamaxie.Database.Redis.DataClasses;
-using PamaxieML.Model;
+using Pamaxie.ImageScanning;
 
 namespace Pamaxie.Api.Controllers
 {

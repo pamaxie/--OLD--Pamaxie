@@ -3,7 +3,7 @@
 using System;
 using Microsoft.ML;
 
-namespace PamaxieML.Model
+namespace Pamaxie.ImageScanning
 {
     /// <summary>
     /// BUG: Rewrite all of this, this is auto generated currently and doesn't nessecarily fit our needs.

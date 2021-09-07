@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using PamaxieML.Model;
 using StackExchange.Redis;
 using System;
+using Pamaxie.ImageScanning;
 
 namespace Pamaxie.Database.Redis.DataClasses
 {

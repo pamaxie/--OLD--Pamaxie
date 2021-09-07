@@ -3,7 +3,7 @@
 using System;
 using Microsoft.ML.Data;
 
-namespace PamaxieML.Model
+namespace Pamaxie.ImageScanning
 {
     public class ModelOutput
     {

@@ -1,4 +1,4 @@
-﻿namespace PamaxieML.Model
+﻿namespace Pamaxie.ImageScanning
 {
     public class OutputProperties
     {
