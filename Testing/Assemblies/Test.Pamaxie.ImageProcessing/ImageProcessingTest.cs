@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 using Pamaxie.ImageProcessing;
 using Test.Base;
 using Xunit;
@@ -36,6 +37,7 @@ namespace Test.Pamaxie.ImageProcessing_Test
         {
             FileInfo file = ImageProcessing.DownloadFile(url);
             Assert.NotNull(file);
+            TestOutputHelper.WriteLine(file.FullName);
         }
 
         /// <summary>

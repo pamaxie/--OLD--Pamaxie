@@ -32,7 +32,7 @@ namespace Pamaxie.MediaDetection
                 .Where(t => typeof(FileSpecification).IsAssignableFrom(t))
                 .Where(t => !t.GetTypeInfo().IsAbstract)
                 .Where(t => t.GetConstructors().Any(c => c.GetParameters().Length == 0))
-                .Select(t => Activator.CreateInstance(t))
+                .Select(Activator.CreateInstance)
                 .OfType<FileSpecification>();
         }
 

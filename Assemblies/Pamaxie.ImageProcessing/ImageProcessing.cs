@@ -39,8 +39,7 @@ namespace Pamaxie.ImageProcessing
             if (spec == null)
                 throw new ArgumentException("Unknown filetype detected. Can't analyze filetypes without a specification");
 
-            //var fileFormat = FileDetection.DetermineFileType(stream);
-            string fileName = $"{TempImageDirectory}\\{imageNumber}.jpg";
+            string fileName = $"{TempImageDirectory}\\{imageNumber}.{spec.Value.Value.Extension}";
 
             Image img = Image.Load(Configuration.Default, stream);
             img.Mutate(x => x
