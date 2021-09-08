@@ -44,7 +44,7 @@ namespace Test.Base
         /// <summary>
         /// Contains a list of unused user keys which can be used to create new users
         /// </summary>
-        public static IEnumerable<object[]> RandomUserData
+        public static IEnumerable<object[]> RandomUsers
         {
             get
             {
@@ -55,7 +55,7 @@ namespace Test.Base
                     string firstName = RandomService.GenerateRandomName();
                     string lastName = RandomService.GenerateRandomName();
                     string emailAddress = $"{firstName}.{lastName}@fakemail.com";
-                    
+
                     list.Add(new object[] { userName, firstName, lastName, emailAddress });
                 }
 
@@ -66,7 +66,7 @@ namespace Test.Base
         /// <summary>
         /// Contains a list of unused user keys which can be used to create new users
         /// </summary>
-        public static IEnumerable<object[]> RandomApplicationData
+        public static IEnumerable<object[]> RandomApplications
         {
             get
             {
@@ -77,12 +77,24 @@ namespace Test.Base
                     string ownerKey = TestUserData.ListOfUsers[rnd.Next(TestUserData.ListOfUsers.Count - 1)].Key;
                     string applicationName = RandomService.GenerateRandomName();
                     string authorizationToken = RandomService.GenerateRandomName();
-                    
+
                     list.Add(new object[] { ownerKey, applicationName, authorizationToken });
                 }
 
                 return list;
             }
         }
+
+        /// <summary>
+        /// Contains a list of file links
+        /// </summary>
+        public static IEnumerable<object[]> FileLinks =>
+            TestFileLinkData.ListOfFileLinks.AsEnumerable().Select(link => new object[] { link[0] });
+
+        /// <summary>
+        /// Contains a list of file links with expected hash
+        /// </summary>
+        public static IEnumerable<object[]> FileLinksWithHash =>
+            TestFileLinkData.ListOfFileLinks.AsEnumerable().Select(link => new object[] { link[0], link[1] });
     }
 }

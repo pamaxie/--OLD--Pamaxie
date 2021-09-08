@@ -9,7 +9,7 @@ using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Pamaxie.API
+namespace Test.Pamaxie.API_Test
 {
     /// <summary>
     /// Testing class for <see cref="AuthController"/>

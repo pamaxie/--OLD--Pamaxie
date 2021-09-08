@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Pamaxie.Api.Controllers;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Server;
@@ -10,7 +11,7 @@ using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Pamaxie.Database.Api
+namespace Test.Pamaxie.Database.Api_Test
 {
     /// <summary>
     /// Testing class for <see cref="ApplicationController"/>
@@ -258,7 +259,20 @@ namespace Test.Pamaxie.Database.Api
         [MemberData(nameof(AllApplications))]
         public void GetOwner(string applicationKey)
         {
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            Assert.NotNull(application);
             
+            //Parse the application to a request body and send it to the controller
+            Stream body = ControllerService.CreateStream(application);
+            Controller.Request.Body = body;
+            
+            //Call controller and get the owner of the application
+            ActionResult<IPamaxieUser> result = Controller.GetOwner();
+            Assert.IsType<OkObjectResult>(result.Result);
+            IPamaxieUser owner = ((ObjectResult)result.Result).Value as IPamaxieUser;
+            Assert.NotNull(owner);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(owner));
         }
         
         /// <summary>

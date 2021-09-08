@@ -10,7 +10,7 @@ using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Pamaxie.Website
+namespace Test.Pamaxie.Website_Test
 {
     /// <summary>
     /// Testing class for <see cref="UserService"/>

@@ -2,7 +2,7 @@
 using Test.Base;
 using Xunit.Abstractions;
 
-namespace Test.Database.Extensions.Server
+namespace Test.Database.Extensions.Server_Test
 {
     /// <summary>
     /// Testing class for <see cref="UserDataService"/>

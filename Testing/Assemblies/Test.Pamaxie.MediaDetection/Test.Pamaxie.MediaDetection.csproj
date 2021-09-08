@@ -5,8 +5,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Assemblies\Pamaxie.Jwt\Pamaxie.Jwt.csproj" />
+      <ProjectReference Include="..\..\..\Assemblies\Pamaxie.MediaDetection\Pamaxie.MediaDetection.csproj" />
       <ProjectReference Include="..\..\Test.Base\Test.Base.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="xunit.abstractions" Version="2.0.3" />
     </ItemGroup>
 
 </Project>

@@ -11,7 +11,7 @@ using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Pamaxie.Database.Api
+namespace Test.Pamaxie.Database.Api_Test
 {
     /// <summary>
     /// Testing class for <see cref="UserController"/>

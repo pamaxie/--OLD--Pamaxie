@@ -20,9 +20,9 @@ namespace Test.Base
         public static IEnumerable<object[]> AllApplications => MemberData.AllApplications;
         
         /// <summary>
-        /// <inheritdoc cref="MemberData.RandomApplicationData"/>
+        /// <inheritdoc cref="MemberData.RandomApplications"/>
         /// </summary>
-        public static IEnumerable<object[]> RandomApplicationData => MemberData.RandomApplicationData;
+        public static IEnumerable<object[]> RandomApplicationData => MemberData.RandomApplications;
         
         public TestApplicationDataService(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {

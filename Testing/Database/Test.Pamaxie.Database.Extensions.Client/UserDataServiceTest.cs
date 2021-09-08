@@ -5,7 +5,7 @@ using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Pamaxie.Database.Extensions.Client
+namespace Test.Pamaxie.Database.Extensions.Client_Test
 {
     /// <summary>
     /// Testing class for <see cref="UserDataService"/>
@@ -24,6 +24,7 @@ namespace Test.Pamaxie.Database.Extensions.Client
             service.Service.DefaultRequestHeaders.Authorization = null;
         }
 
+        // TODO This is only a short test until I find a way to get through the authorization on the fixture Api
         [Fact]
         public void Get()
         {
@@ -31,6 +32,7 @@ namespace Test.Pamaxie.Database.Extensions.Client
             Assert.NotNull(user);
         }
 
+        // TODO This is only a short test until I find a way to get through the authorization on the fixture Api
         [Fact]
         public void Create()
         {

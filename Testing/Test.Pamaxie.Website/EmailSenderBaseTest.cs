@@ -6,7 +6,7 @@ using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Pamaxie.Website
+namespace Test.Pamaxie.Website_Test
 {
     /// <summary>
     /// Testing class for <see cref="EmailSender"/>
@@ -23,7 +23,7 @@ namespace Test.Pamaxie.Website
         }
 
         /// <summary>
-        /// Sends a confirmation email to the email inside Data
+        /// Sends a confirmation email to the personal email inside appsettings.test.json, will fail if no email have been put in
         /// </summary>
         /// <param name="userKey">The user key from inlined data</param>
         [Theory]

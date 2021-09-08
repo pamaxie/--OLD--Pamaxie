@@ -19,9 +19,9 @@ namespace Test.Base
         public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
         
         /// <summary>
-        /// <inheritdoc cref="MemberData.RandomUserData"/>
+        /// <inheritdoc cref="MemberData.RandomUsers"/>
         /// </summary>
-        public static IEnumerable<object[]> RandomUserData => MemberData.RandomUserData;
+        public static IEnumerable<object[]> RandomUserData => MemberData.RandomUsers;
         
         public TestUserDataService(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {

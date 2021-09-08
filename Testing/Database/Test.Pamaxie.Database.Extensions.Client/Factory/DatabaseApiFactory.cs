@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pamaxie.Api;
 
-namespace Test.Pamaxie.Database.Extensions.Client
+namespace Test.Pamaxie.Database.Extensions.Client_Test
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class DatabaseApiFactory : WebApplicationFactory<Startup>

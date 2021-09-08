@@ -2,7 +2,7 @@
 using Test.Base;
 using Xunit.Abstractions;
 
-namespace Test.Pamaxie.Database.Extensions.Client
+namespace Test.Pamaxie.Database.Extensions.Client_Test
 {
     /// <summary>
     /// Testing class for <see cref="ApplicationDataService"/>

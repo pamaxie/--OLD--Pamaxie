@@ -4,7 +4,7 @@ using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Pamaxie.Jwt
+namespace Test.Pamaxie.Jwt_Test
 {
     /// <summary>
     /// Testing class for <see cref="TokenGenerator"/>
@@ -40,7 +40,7 @@ namespace Test.Pamaxie.Jwt
         /// </summary>
         /// <param name="authToken">The auth token to decrypt</param>
         [Theory]
-        [MemberData(nameof(AllUsers))]
+        [InlineData("")] //TODO Needs testing data
         public void GetUserKey(string authToken)
         {
             //TODO
