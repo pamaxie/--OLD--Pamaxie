@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
 using Pamaxie.ImageProcessing;
 using Test.Base;
 using Xunit;

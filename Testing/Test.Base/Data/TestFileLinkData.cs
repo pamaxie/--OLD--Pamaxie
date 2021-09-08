@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Pamaxie.MediaDetection.FileTypes;
 
 //Get-FileHash [-path] -Algorithm SHA256 | Format-List
@@ -50,12 +49,6 @@ namespace Test.Base
                 "75B2557EF1A6691F6ACA48EC630074C91B160572243226A4318BA30D0264B303",
                 new _7z()
             }
-            //new object[]
-            //{
-            //    //txt file
-            //    "https://cdn.discordapp.com/attachments/439855996974661653/885086422216876032/yv345c45x3f.txt",
-            //    "532EAABD9574880DBF76B9B8CC00832C20A6EC113D682299550D7A6E0F345E25"
-            //}
         };
     }
 }
