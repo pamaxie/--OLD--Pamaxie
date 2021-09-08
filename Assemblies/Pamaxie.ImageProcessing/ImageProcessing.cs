@@ -30,7 +30,11 @@ namespace Pamaxie.ImageProcessing
             request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
             request.Headers.Add("Accept-Encoding", "gzip, deflate");
             WebResponse response = request.GetResponse();
-            Stream stream = response.GetResponseStream();
+            Stream stream = new MemoryStream();
+            using (Stream responseStream = response.GetResponseStream())
+            {
+                responseStream.CopyTo(stream);
+            }
             KeyValuePair<FileSpecification, FileType>? spec = stream.DetermineFileType();
             if (spec == null)
                 throw new ArgumentException("Unknown filetype detected. Can't analyze filetypes without a specification");
