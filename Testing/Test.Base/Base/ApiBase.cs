@@ -1,38 +1,47 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Pamaxie.Database.Design;
-using Pamaxie.Database.Extensions.Server;
+using StackExchange.Redis;
 using Xunit.Abstractions;
 
-namespace Test.TestBase
+namespace Test.Base
 {
     /// <summary>
     /// Base testing class for Api
     /// </summary>
     /// <typeparam name="T">The Api controller that will be tested against</typeparam>
-    public class ApiBaseTest<T> : BaseTest
+    public class ApiTestBase<T> : TestBase
     {
         /// <summary>
         /// Database Context
         /// </summary>
-        private IPamaxieDataContext Context { get; }
+        protected IPamaxieDataContext Context { get; init; }
         
         /// <summary>
         /// Database Service
         /// </summary>
-        protected DatabaseService Service { get; }
+        protected IDatabaseService<IConnectionMultiplexer> Service { get; init; }
 
+        /// <summary>
+        /// Database Instance
+        /// </summary>
+        protected string Instance { get; }
+
+        /// <summary>
+        /// Database Password
+        /// </summary>
+        protected string Password { get; }
+        
         /// <summary>
         /// The Api controller that will be tested against
         /// </summary>
         protected T Controller { get; init; }
 
-        protected ApiBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        protected ApiTestBase(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             //TODO Change these section name, and value names when the appsettings.json is done for Database.Api
             IConfigurationSection dbConfigSection = Configuration.GetSection("DbConfig");
-            Context = new PamaxieDataContext(dbConfigSection.GetValue<string>("Instances"),
-                dbConfigSection.GetValue<string>("Password"));
-            Service = new DatabaseService(Context);
+            Instance = dbConfigSection.GetValue<string>("Instances");
+            Password = dbConfigSection.GetValue<string>("Password");;
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Test.TestBase
+namespace Test.Base
 {
     /// <summary>
     /// Contains all data members that will be used for inline data in the testing methods.

@@ -1,21 +1,24 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Pamaxie.Api.Controllers;
+using Pamaxie.Database.Extensions.Server;
 using Pamaxie.Jwt;
-using Test.TestBase;
+using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Database.Api
+namespace Test.Pamaxie.Database.Api
 {
     /// <summary>
     /// Testing class for <see cref="AuthController"/>
     /// </summary>
-    public class AuthControllerTest : ApiBaseTest<AuthController>
+    public class AuthControllerTest : ApiTestBase<AuthController>
     {
         public AuthControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
+            Context = new PamaxieDataContext(Instance, Password);
+            Service = new DatabaseService(Context);
             //Instantiate the controller and add a default HttpContext
-            Controller = new AuthController(new TokenGenerator(Configuration), Service)
+            Controller = new AuthController(new TokenGenerator(Configuration), Service as DatabaseService)
             {
                 ControllerContext = { HttpContext = new DefaultHttpContext() }
             };

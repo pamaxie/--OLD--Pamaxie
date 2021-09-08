@@ -13,8 +13,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Database\Pamaxie.Database.Api\Pamaxie.Database.Api.csproj" />
       <ProjectReference Include="..\..\..\Database\Pamaxie.Database.Extensions.Client\Pamaxie.Database.Extensions.Client.csproj" />
+      <ProjectReference Include="..\..\..\Pamaxie.Database.Api\Pamaxie.Database.Api.csproj" />
       <ProjectReference Include="..\..\Test.Base\Test.Base.csproj" />
     </ItemGroup>
 

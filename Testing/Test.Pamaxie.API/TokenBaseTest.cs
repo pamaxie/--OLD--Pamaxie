@@ -1,22 +1,22 @@
 ﻿using System.Collections.Generic;
 using Pamaxie.Jwt;
-using Test.TestBase;
+using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Pamaxie.API_UnitTesting
+namespace Test.Pamaxie.API
 {
     /// <summary>
     /// Testing class for <see cref="TokenGenerator"/>
     /// </summary>
-    public class TokenBaseTest : BaseTest
+    public class TokenTestBaseTest : TestBase
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllUsers"/>
         /// </summary>
         public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
 
-        public TokenBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public TokenTestBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
 

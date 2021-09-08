@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
@@ -21,8 +19,8 @@ namespace Pamaxie.WorkerService
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                //TODO: POLL NEW ITEMS TO SCAN FROM WORKERSERVICEAPI
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                //TODO: Poll new items to scan from WorkerService
+                _logger.LogInformation("Worker running at: {Time}", DateTimeOffset.Now);
                 await Task.Delay(1000, stoppingToken);
             }
         }

@@ -1,5 +1,5 @@
-using StackExchange.Redis;
 using System;
+using StackExchange.Redis;
 
 namespace Pamaxie.Database.Redis
 {

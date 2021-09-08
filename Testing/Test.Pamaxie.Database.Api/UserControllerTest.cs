@@ -7,20 +7,17 @@ using Newtonsoft.Json;
 using Pamaxie.Api.Controllers;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Server;
-using Pamaxie.Jwt;
-using Test.TestBase;
+using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Database.Api
+namespace Test.Pamaxie.Database.Api
 {
     /// <summary>
     /// Testing class for <see cref="UserController"/>
     /// </summary>
-    public class UserControllerTest : ApiBaseTest<UserController>
+    public class UserControllerTest : ApiTestBase<UserController>
     {
-        private readonly PamaxieDataContext _context = new("", "");
-
         /// <summary>
         /// <inheritdoc cref="MemberData.AllUsers"/>
         /// </summary>
@@ -33,8 +30,10 @@ namespace Test.Database.Api
 
         public UserControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
+            Context = new PamaxieDataContext(Instance, Password);
+            Service = new DatabaseService(Context);
             //Instantiate the controller and add a default HttpContext
-            Controller = new UserController(new TokenGenerator(Configuration), Service)
+            Controller = new UserController(Service as DatabaseService)
             {
                 ControllerContext = { HttpContext = new DefaultHttpContext() }
             };

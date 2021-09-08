@@ -34,21 +34,25 @@ namespace Pamaxie.Api
         public void ConfigureServices(IServiceCollection services)
         {
             //Load Data Storage Configuration from appsettings.json
-            
+
             IConfigurationSection dbConfigSection = Configuration.GetSection("DbConfig");
-            Environment.SetEnvironmentVariable("PamaxieSqlDb", dbConfigSection.GetValue<string>("PamaxieSqlDb"));
-            Environment.SetEnvironmentVariable("PamaxieRedisAddr", dbConfigSection.GetValue<string>("PamaxieRedisAddr"));
-            Environment.SetEnvironmentVariable("PamaxiePublicRedisAddr", dbConfigSection.GetValue<string>("PamaxiePublicRedisAddr"));
-            Environment.SetEnvironmentVariable("ApplyMigrations", dbConfigSection.GetValue<string>("Apply Migrations"));
+            Environment.SetEnvironmentVariable("PamaxieSqlDb",
+                dbConfigSection.GetValue<string>("PamaxieSqlDb"));
+            Environment.SetEnvironmentVariable("PamaxieRedisAddr",
+                dbConfigSection.GetValue<string>("PamaxieRedisAddr"));
+            Environment.SetEnvironmentVariable("PamaxiePublicRedisAddr",
+                dbConfigSection.GetValue<string>("PamaxiePublicRedisAddr"));
+            Environment.SetEnvironmentVariable("ApplyMigrations",
+                dbConfigSection.GetValue<string>("Apply Migrations"));
 
             services.AddControllers();
             IConfigurationSection section = Configuration.GetSection("AuthData");
             byte[] key = Encoding.ASCII.GetBytes(section.GetValue<string>("Secret"));
             services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
+                {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(x =>
                 {
                     x.RequireHttpsMetadata = false;

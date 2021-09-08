@@ -6,12 +6,12 @@ using Pamaxie.Database.Extensions.Client;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.TestBase
+namespace Test.Base
 {
     /// <summary>
     /// Testing class to test the custom UserDataService Client interaction used when testing towards other projects
     /// </summary>
-    public class TestUserDataService : BaseTest
+    public class TestUserDataService : TestBase
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllUsers"/>

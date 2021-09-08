@@ -6,10 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Pamaxie.Database.Design;
 using Pamaxie.Database.Extensions.Server;
 using Pamaxie.Jwt;
-using StackExchange.Redis;
 
 namespace Pamaxie.Api
 {

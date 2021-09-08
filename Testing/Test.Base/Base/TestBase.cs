@@ -2,7 +2,7 @@
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.TestBase
+namespace Test.Base
 {
     /// <summary>
     /// Disable tests from running parallel, as this can fail tests using the same collection
@@ -16,7 +16,7 @@ namespace Test.TestBase
     /// Base testing class
     /// </summary>
     [Collection(nameof(TestCollectionDefinition))]
-    public class BaseTest
+    public class TestBase
     {
         /// <summary>
         /// Provides test output
@@ -29,7 +29,7 @@ namespace Test.TestBase
         protected IConfiguration Configuration { get; } =
             new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
 
-        protected BaseTest(ITestOutputHelper testOutputHelper)
+        protected TestBase(ITestOutputHelper testOutputHelper)
         {
             TestOutputHelper = testOutputHelper;
         }

@@ -1,5 +1,5 @@
 ﻿using Pamaxie.Database.Extensions.Server;
-using Test.TestBase;
+using Test.Base;
 using Xunit.Abstractions;
 
 namespace Test.Database.Extensions.Server
@@ -7,7 +7,7 @@ namespace Test.Database.Extensions.Server
     /// <summary>
     /// Testing class for <see cref="UserDataService"/>
     /// </summary>
-    public class UserDataServiceTest : BaseTest
+    public class UserDataServiceTest : TestBase
     {
         public UserDataServiceTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {

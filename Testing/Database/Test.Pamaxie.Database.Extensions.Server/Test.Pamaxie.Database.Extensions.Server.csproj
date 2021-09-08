@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>Test.Database.Extensions.Server</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

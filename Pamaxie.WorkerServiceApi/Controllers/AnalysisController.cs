@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Pamaxie.Database.Extensions.Client;
 
 namespace Pamaxie.Api.Controllers
 {
@@ -16,12 +15,10 @@ namespace Pamaxie.Api.Controllers
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly ILogger<AnalysisController> _logger;
-        private readonly DatabaseService _dbService;
 
-        public AnalysisController(ILogger<AnalysisController> logger, DatabaseService dbService)
+        public AnalysisController(ILogger<AnalysisController> logger)
         {
             _logger = logger;
-            _dbService = dbService;
         }
         
         /// <summary>

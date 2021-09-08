@@ -1,15 +1,15 @@
 ﻿using Pamaxie.Api.Controllers;
-using Test.TestBase;
+using Test.Base;
 using Xunit.Abstractions;
 
-namespace Test.Pamaxie.API_UnitTesting
+namespace Test.Pamaxie.API
 {
     /// <summary>
     /// Testing class for <see cref="AnalysisController"/>
     /// </summary>
-    public class AnalysisControllerBaseTest : ApiBaseTest<AnalysisController>
+    public class AnalysisControllerTestBaseTest : ApiTestBase<AnalysisController>
     {
-        public AnalysisControllerBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public AnalysisControllerTestBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
     }

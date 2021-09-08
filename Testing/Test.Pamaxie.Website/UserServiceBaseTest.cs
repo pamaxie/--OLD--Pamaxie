@@ -6,7 +6,7 @@ using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Client;
 using Pamaxie.Website.Authentication;
 using Pamaxie.Website.Services;
-using Test.TestBase;
+using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -15,7 +15,7 @@ namespace Test.Pamaxie.Website
     /// <summary>
     /// Testing class for <see cref="UserService"/>
     /// </summary>
-    public class UserServiceBaseTest : BaseTest
+    public class UserServiceTestBaseTest : TestBase
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllVerifiedUsers"/>
@@ -27,7 +27,7 @@ namespace Test.Pamaxie.Website
         /// </summary>
         public static IEnumerable<object[]> AllUnverifiedUsers => MemberData.AllUnverifiedUsers;
 
-        public UserServiceBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public UserServiceTestBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             //Mock UserDataService, for UserDataServiceExtension
             MockUserDataService.Mock();

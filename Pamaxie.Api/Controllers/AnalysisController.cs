@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Pamaxie.Api.Data;
-using Pamaxie.Database.Extensions.Client;
 using Pamaxie.Database.Redis.DataClasses;
 using Pamaxie.ImageScanning;
 
@@ -21,12 +20,10 @@ namespace Pamaxie.Api.Controllers
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly ILogger<AnalysisController> _logger;
-        private readonly DatabaseService _dbService;
 
-        public AnalysisController(ILogger<AnalysisController> logger, DatabaseService dbService)
+        public AnalysisController(ILogger<AnalysisController> logger)
         {
             _logger = logger;
-            _dbService = dbService;
         }
 
         /// <summary>
@@ -49,7 +46,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("scanImage")]
         public async Task<ActionResult<string>> ScanImageTask()
         {
-            //TODO: FORWARD the request to the workerservice or the analysis method directly depending on what the user sets (single server mode)
+            //TODO: FORWARD the request to the WorkerService or the analysis method directly depending on what the user sets (single server mode)
             //TODO: Allow sending/ analysis of binary/raw data
             //TODO: Add response for 102 Processing
             //TODO: DO NOT scan things directly on this controller, that's highly inefficient
@@ -70,7 +67,7 @@ namespace Pamaxie.Api.Controllers
                 ImageSource = image.FullName
             };
             //Load model and predict output of sample data
-            ConsumeModel.Predict(input, out var labelResult);
+            ConsumeModel.Predict(input, out OutputProperties labelResult);
 
             MediaData predictionData = new()
             {
@@ -97,7 +94,7 @@ namespace Pamaxie.Api.Controllers
             if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
             string filehash = await ImageProcessing.ImageProcessing.GetFileHash(result);
             MediaPredictionData data = new(filehash);
-            if (data.TryLoadData(out var knownResult))
+            if (data.TryLoadData(out MediaData knownResult))
             {
                 return JsonConvert.SerializeObject(knownResult);
             }

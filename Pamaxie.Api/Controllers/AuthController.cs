@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Pamaxie.Api.Data;
 using Pamaxie.Data;
@@ -18,13 +19,11 @@ namespace Pamaxie.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly TokenGenerator _generator;
-        private readonly DatabaseService _dbService;
 
 
-        public AuthController(TokenGenerator generator, DatabaseService dbService)
+        public AuthController(TokenGenerator generator)
         {
             _generator = generator;
-            _dbService = dbService;
         }
 
         /// <summary>
@@ -60,11 +59,11 @@ namespace Pamaxie.Api.Controllers
         public ActionResult<AuthToken> RefreshTask()
         {
             //TODO Not yet implemented
-            var token = Request.Headers["authorization"];
+            StringValues token = Request.Headers["authorization"];
             if (string.IsNullOrEmpty(token))
                 return BadRequest("Authentication token for refresh could not be found");
 
-            var userId = _generator.GetUserKey(token);
+            var userId = TokenGenerator.GetUserKey(token);
             UserDataServiceExtension.Exists(userId);
             AuthToken newToken = _generator.CreateToken(userId);
             return Ok(newToken);

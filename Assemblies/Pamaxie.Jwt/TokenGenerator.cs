@@ -42,7 +42,7 @@ namespace Pamaxie.Jwt
                     SecurityAlgorithms.HmacSha256Signature)
             };
 
-            SecurityToken? token = tokenHandler.CreateToken(tokenDescriptor);
+            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
             return new AuthToken { ExpirationUtc = expires, Token = tokenHandler.WriteToken(token) };
         }
@@ -52,11 +52,11 @@ namespace Pamaxie.Jwt
         /// </summary>
         /// <param name="authToken"></param>
         /// <returns></returns>
-        public string GetUserKey(string authToken)
+        public static string GetUserKey(string authToken)
         {
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(authToken);
-            var tokenS = jsonToken as JwtSecurityToken;
+            JwtSecurityTokenHandler handler = new();
+            SecurityToken jsonToken = handler.ReadToken(authToken);
+            JwtSecurityToken tokenS = jsonToken as JwtSecurityToken;
             return tokenS?.Id;
         }
     }

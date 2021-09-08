@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using Pamaxie.Api.Data;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Server;
-using Pamaxie.Jwt;
 
 namespace Pamaxie.Api.Controllers
 {
@@ -21,7 +20,7 @@ namespace Pamaxie.Api.Controllers
         // ReSharper disable once NotAccessedField.Local
         private readonly DatabaseService _dbService;
 
-        public UserController(TokenGenerator generator, DatabaseService dbService)
+        public UserController(DatabaseService dbService)
         {
             _dbService = dbService;
         }

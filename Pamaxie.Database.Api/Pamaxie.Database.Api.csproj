@@ -23,15 +23,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CryptSharp.Core" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="System.Reflection" Version="4.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Assemblies\Pamaxie.Jwt\Pamaxie.Jwt.csproj" />
-    <ProjectReference Include="..\Pamaxie.Database.Extensions.Server\Pamaxie.Database.Extensions.Server.csproj" />
+    <ProjectReference Include="..\Assemblies\Pamaxie.Jwt\Pamaxie.Jwt.csproj" />
+    <ProjectReference Include="..\Database\Pamaxie.Database.Extensions.Server\Pamaxie.Database.Extensions.Server.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +35,10 @@
 
   <ItemGroup>
     <Content Remove="appsettings.Development.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
   </ItemGroup>
 
 </Project>

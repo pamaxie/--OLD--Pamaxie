@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using StackExchange.Redis;
-using System;
+﻿using System;
+using Newtonsoft.Json;
 using Pamaxie.ImageScanning;
+using StackExchange.Redis;
 
 namespace Pamaxie.Database.Redis.DataClasses
 {

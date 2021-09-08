@@ -2,7 +2,7 @@
 using System.Linq;
 using Pamaxie.Data;
 using Pamaxie.Website.Services;
-using Test.TestBase;
+using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -11,14 +11,14 @@ namespace Test.Pamaxie.Website
     /// <summary>
     /// Testing class for <see cref="EmailSender"/>
     /// </summary>
-    public class EmailSenderBaseTest : BaseTest
+    public class EmailSenderTestBaseTest : TestBase
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.PersonalUser"/>
         /// </summary>
         public static IEnumerable<object[]> PersonalUser => MemberData.PersonalUser;
 
-        public EmailSenderBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public EmailSenderTestBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
 

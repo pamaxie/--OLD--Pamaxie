@@ -23,7 +23,8 @@ namespace Pamaxie.Api
             {
                 Console.WriteLine("We are testing if the neural network works. This may take a minute.");
 
-                FileInfo image = ImageProcessing.ImageProcessing.DownloadFile("https://www.pinclipart.com/picdir/middle/9-93455_what-is-the-meaning-of-png-clipart-download.png");
+                FileInfo image = ImageProcessing.ImageProcessing.DownloadFile(
+                    "https://www.pinclipart.com/picdir/middle/9-93455_what-is-the-meaning-of-png-clipart-download.png");
                 // Add input data
                 ModelInput input = new()
                 {
@@ -35,7 +36,8 @@ namespace Pamaxie.Api
                 image.Delete();
 
                 Console.WriteLine("Tested neural network successfully. Starting now!");
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine("Hit an error while testing the Neural Network. Exiting...");
                 Console.WriteLine(ex.Message);

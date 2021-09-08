@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Client;
@@ -17,13 +18,11 @@ namespace Pamaxie.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly TokenGenerator _generator;
-        private readonly DatabaseService _dbService;
 
 
-        public AuthController(TokenGenerator generator, DatabaseService dbService)
+        public AuthController(TokenGenerator generator)
         {
             _generator = generator;
-            _dbService = dbService;
         }
 
         /// <summary>
@@ -39,7 +38,7 @@ namespace Pamaxie.Api.Controllers
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result)) return BadRequest();
 
-            PamaxieApplication? appData = JsonConvert.DeserializeObject<PamaxieApplication>(result);
+            PamaxieApplication appData = JsonConvert.DeserializeObject<PamaxieApplication>(result);
 
             if (string.IsNullOrEmpty(appData?.Credentials.AuthorizationToken) || default == appData.Key)
                 return Unauthorized();
@@ -59,12 +58,13 @@ namespace Pamaxie.Api.Controllers
         public ActionResult<AuthToken> RefreshTask()
         {
             //TODO Not yet implemented
-            var token = Request.Headers["authorization"];
+            StringValues token = Request.Headers["authorization"];
             if (string.IsNullOrEmpty(token))
                 return BadRequest("Authentication token for refresh could not be found");
 
-            var userId = _generator.GetUserKey(token);
-            UserDataServiceExtension.Exists(userId);
+            string userId = TokenGenerator.GetUserKey(token);
+            if (!UserDataServiceExtension.Exists(userId))
+                return BadRequest("User does not exist");
             AuthToken newToken = _generator.CreateToken(userId);
             return Ok(newToken);
         }

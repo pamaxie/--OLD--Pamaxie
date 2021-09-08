@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace Test.TestBase
+namespace Test.Base
 {
     /// <summary>
     /// Class containing method for mocking <see cref="NavigationManager"/>.

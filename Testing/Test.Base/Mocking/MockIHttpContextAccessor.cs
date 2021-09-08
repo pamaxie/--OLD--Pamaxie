@@ -3,7 +3,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Moq;
 
-namespace Test.TestBase
+namespace Test.Base
 {
     /// <summary>
     /// Class containing method for mocking <see cref="IHttpContextAccessor"/>.

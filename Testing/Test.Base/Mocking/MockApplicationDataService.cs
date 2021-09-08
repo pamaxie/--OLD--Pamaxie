@@ -5,7 +5,7 @@ using Pamaxie.Data;
 using Pamaxie.Database.Design;
 using Pamaxie.Database.Extensions.Client;
 
-namespace Test.TestBase
+namespace Test.Base
 {
     /// <summary>
     /// Class containing method for mocking <see cref="ApplicationDataService"/>.
@@ -15,7 +15,7 @@ namespace Test.TestBase
         private delegate void OutAction<in T, TOut>(T val, out TOut outVal);
 
         /// <summary>
-        /// Mocks the <see cref="ApplicationDataService"/> and applies it to the <see cref="ApplicationDataServiceExtension"/> for testing usage
+        /// Mocks the <see cref="ApplicationDataService"/> and applies it to the ApplicationDataServiceExtension for testing usage
         /// </summary>
         public static void Mock()
         {

@@ -72,7 +72,7 @@ namespace Pamaxie.Api.Controllers
             if (string.IsNullOrEmpty(token))
                 return Unauthorized("Invalid authorization token");
 
-            var userId = _generator.GetUserKey(token);
+            var userId = TokenGenerator.GetUserKey(token);
             if (_dbService.Users.Exists(userId))
             {
                 return Unauthorized("Invalid authorization token");

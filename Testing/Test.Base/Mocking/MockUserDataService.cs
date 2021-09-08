@@ -5,7 +5,7 @@ using Pamaxie.Data;
 using Pamaxie.Database.Design;
 using Pamaxie.Database.Extensions.Client;
 
-namespace Test.TestBase
+namespace Test.Base
 {
     /// <summary>
     /// Class containing method for mocking <see cref="UserDataService"/>.

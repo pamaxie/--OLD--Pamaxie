@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
 
-namespace Test.TestBase
+namespace Test.Base
 {
     /// <summary>
     /// Contains methods for to help with controller calls

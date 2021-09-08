@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Test.TestBase
+namespace Test.Base
 {
     /// <summary>
     /// Provides random data used for testing

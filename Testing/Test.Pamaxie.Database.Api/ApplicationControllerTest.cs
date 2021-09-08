@@ -5,16 +5,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pamaxie.Api.Controllers;
 using Pamaxie.Data;
-using Test.TestBase;
+using Pamaxie.Database.Extensions.Server;
+using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Database.Api
+namespace Test.Pamaxie.Database.Api
 {
     /// <summary>
     /// Testing class for <see cref="ApplicationController"/>
     /// </summary>
-    public class ApplicationControllerTest : ApiBaseTest<ApplicationController>
+    public class ApplicationControllerTest : ApiTestBase<ApplicationController>
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllApplications"/>
@@ -23,8 +24,10 @@ namespace Test.Database.Api
 
         public ApplicationControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
+            Context = new PamaxieDataContext(Instance, Password);
+            Service = new DatabaseService(Context);
             //Instantiate the controller and add a default HttpContext
-            Controller = new ApplicationController(Service)
+            Controller = new ApplicationController(Service as DatabaseService)
             {
                 ControllerContext = { HttpContext = new DefaultHttpContext() }
             };

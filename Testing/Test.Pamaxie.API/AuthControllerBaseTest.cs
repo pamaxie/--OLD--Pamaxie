@@ -1,28 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pamaxie.Api.Controllers;
 using Pamaxie.Data;
 using Pamaxie.Jwt;
-using Test.TestBase;
+using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Pamaxie.API_UnitTesting
+namespace Test.Pamaxie.API
 {
     /// <summary>
     /// Testing class for <see cref="AuthController"/>
     /// </summary>
-    public class AuthControllerBaseTest : ApiBaseTest<AuthController>
+    public class AuthControllerTestBaseTest : ApiTestBase<AuthController>
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllApplications"/>
         /// </summary>
         public static IEnumerable<object[]> AllApplications => MemberData.AllApplications;
 
-        public AuthControllerBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public AuthControllerTestBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             //Mock ApplicationDataService, for ApplicationDataServiceExtension
             MockApplicationDataService.Mock();

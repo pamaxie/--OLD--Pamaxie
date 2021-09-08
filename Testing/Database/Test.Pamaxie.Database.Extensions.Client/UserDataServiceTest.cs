@@ -1,16 +1,16 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Client;
-using Test.TestBase;
+using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Database.Extensions.Client
+namespace Test.Pamaxie.Database.Extensions.Client
 {
     /// <summary>
     /// Testing class for <see cref="UserDataService"/>
     /// </summary>
-    public class UserDataServiceTest : BaseTest, IClassFixture<DatabaseApiFactory>
+    public class UserDataServiceTest : TestBase, IClassFixture<DatabaseApiFactory>
     {
         public UserDataServiceTest(DatabaseApiFactory fixture, ITestOutputHelper testOutputHelper) : base(
             testOutputHelper)
