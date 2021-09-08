@@ -95,6 +95,12 @@ namespace Test.Base
         /// Contains a list of file links with expected hash
         /// </summary>
         public static IEnumerable<object[]> FileLinksWithHash =>
-            TestFileLinkData.ListOfFileLinks.AsEnumerable().Select(link => new object[] { link[0], link[1] });
+            TestFileLinkData.ListOfFileLinks.AsEnumerable().Select(link => new[] { link[0], link[1] });
+
+        /// <summary>
+        /// Contains a list of file links with file type
+        /// </summary>
+        public static IEnumerable<object[]> FileLinksWithFileType => TestFileLinkData.ListOfFileLinks.AsEnumerable()
+            .Select(link => new[] { link[0], link[2] });
     }
 }

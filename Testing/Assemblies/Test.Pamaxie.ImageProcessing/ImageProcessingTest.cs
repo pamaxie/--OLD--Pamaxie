@@ -44,13 +44,13 @@ namespace Test.Pamaxie.ImageProcessing_Test
         /// Testing for getting a file's hash
         /// </summary>
         /// <param name="url">A url to the file that will be checked for it's hash</param>
-        /// <param name="hash">The expected file hash</param>
+        /// <param name="expectedHash">The expected file hash</param>
         [Theory]
         [MemberData(nameof(FileLinksWithHash))]
-        public void GetFileHash(string url, string hash)
+        public void GetFileHash(string url, string expectedHash)
         {
             string fileHash = ImageProcessing.GetFileHash(url).Result.ToUpper();
-            Assert.Equal(hash, fileHash);
+            Assert.Equal(expectedHash, fileHash);
         }
     }
 }

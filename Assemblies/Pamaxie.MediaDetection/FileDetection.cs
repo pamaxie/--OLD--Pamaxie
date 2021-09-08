@@ -88,7 +88,7 @@ namespace Pamaxie.MediaDetection
         /// Add a number of file types to the list
         /// </summary>
         /// <param name="fileTypes"></param>
-        public static void AddFileTypes(IList<FileType> fileTypes)
+        private static void AddFileTypes(IList<FileType> fileTypes)
         {
             List<FileType> types;
             if (fileTypes != null)
@@ -108,7 +108,7 @@ namespace Pamaxie.MediaDetection
         /// Add a list of specifications 
         /// </summary>
         /// <param name="specifications"></param>
-        public static void AddFileSpecifications(IList<FileSpecification> specifications)
+        private static void AddFileSpecifications(IList<FileSpecification> specifications)
         {
             if (FileSpecifications.Any())
                 specifications = specifications.Concat(FileSpecifications).ToList();
