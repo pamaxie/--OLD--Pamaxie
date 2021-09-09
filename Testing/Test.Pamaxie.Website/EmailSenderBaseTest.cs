@@ -30,7 +30,7 @@ namespace Test.Pamaxie.Website_Test
         [MemberData(nameof(PersonalUser))]
         public void SendConfirmationEmail_Success(string userKey)
         {
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
             Assert.False(user.Deleted);
 

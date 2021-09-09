@@ -43,10 +43,9 @@ namespace Pamaxie.Website.Services
             ClaimsPrincipal? claimUser = _httpContextAccessor.HttpContext?.User;
             if (claimUser is null)
                 return false;
-            IPamaxieUser? googleUser = claimUser.GetGoogleAuthData(out _);
-            if (googleUser is null)
+            if (claimUser.GetGoogleAuthData(out _) is not PamaxieUser googleUser)
                 return false;
-            IPamaxieUser pamaxieUser = UserDataServiceExtension.Get(googleUser.Key);
+            PamaxieUser pamaxieUser = UserDataServiceExtension.Get(googleUser.Key);
             return pamaxieUser is { EmailVerified: true };
         }
 
@@ -55,7 +54,7 @@ namespace Pamaxie.Website.Services
         /// </summary>
         /// <param name="user"></param>
         /// <returns>Email Confirmation Token</returns>
-        public string GenerateEmailConfirmationToken(IPamaxieUser user)
+        public string GenerateEmailConfirmationToken(PamaxieUser user)
         {
             IBody body = new ConfirmEmailBody(user);
             return JsonWebToken.Encode(body, _secret);
@@ -71,7 +70,7 @@ namespace Pamaxie.Website.Services
             ConfirmEmailBody? body = JsonWebToken.Decode<ConfirmEmailBody>(token, _secret) as ConfirmEmailBody;
             if (body?.Purpose is not EmailPurpose.EMAIL_CONFIRMATION)
                 return false;
-            IPamaxieUser pamaxieUser = UserDataServiceExtension.Get(body.User.Key);
+            PamaxieUser pamaxieUser = UserDataServiceExtension.Get(body.User.Key);
             return pamaxieUser.EmailAddress == body.User.EmailAddress && body.User.VerifyEmail();
         }
 

@@ -21,9 +21,9 @@ namespace Pamaxie.Website.Models
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IPamaxieUser User { get; }
+        public PamaxieUser User { get; }
 
-        public ConfirmEmailBody(IPamaxieUser user)
+        public ConfirmEmailBody(PamaxieUser user)
         {
             User = user;
         }

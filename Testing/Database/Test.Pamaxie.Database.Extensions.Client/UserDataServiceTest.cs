@@ -29,7 +29,7 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
         [Fact]
         public void Get()
         {
-            IPamaxieUser user = UserDataServiceExtension.Get("123");
+            PamaxieUser user = UserDataServiceExtension.Get("123");
             Assert.NotNull(user);
         }
 
@@ -37,11 +37,11 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
         [Fact]
         public void Create()
         {
-            IPamaxieUser user = new PamaxieUser()
+            PamaxieUser user = new PamaxieUser()
             {
                 Key = "123"
             };
-            IPamaxieUser createdUser = user.Create();
+            PamaxieUser createdUser = user.Create();
             Assert.NotNull(createdUser);
         }
     }

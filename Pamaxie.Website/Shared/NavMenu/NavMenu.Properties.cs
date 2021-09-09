@@ -27,7 +27,7 @@ namespace Pamaxie.Website.Shared
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
-        private IPamaxieUser? User { get; set; }
+        private PamaxieUser? User { get; set; }
         private bool UserHasAccount { get; set; } = true;
         private bool ShowCreateAccount { get; set; }
     }

@@ -7,14 +7,14 @@ using Pamaxie.Data;
 namespace Test.Base
 {
     /// <summary>
-    /// Contains randomly generated <see cref="IPamaxieUser"/> Data
+    /// Contains randomly generated <see cref="PamaxieUser"/> Data
     /// </summary>
     public static class TestUserData
     {
         /// <summary>
         /// List of Test Users
         /// </summary>
-        public static readonly List<IPamaxieUser> ListOfUsers = new List<IPamaxieUser>
+        public static readonly List<PamaxieUser> ListOfUsers = new List<PamaxieUser>
         {
             new PamaxieUser
             {

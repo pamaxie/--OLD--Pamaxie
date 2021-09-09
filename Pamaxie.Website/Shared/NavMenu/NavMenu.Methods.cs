@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Client;
 using Pamaxie.Website.Authentication;
 
@@ -20,7 +21,7 @@ namespace Pamaxie.Website.Shared
         {
             bool hasAccount = false;
             ClaimsPrincipal? user = HttpContextAccessor.HttpContext?.User;
-            User = user?.GetGoogleAuthData(out hasAccount);
+            User = user?.GetGoogleAuthData(out hasAccount) as PamaxieUser;
             UserHasAccount = hasAccount;
             return base.OnInitializedAsync();
         }

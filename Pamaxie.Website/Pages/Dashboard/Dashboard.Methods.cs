@@ -22,7 +22,7 @@ namespace Pamaxie.Website.Pages
             if (user == null)
                 return Task.CompletedTask;
 
-            User = user.GetGoogleAuthData(out bool hasAccount);
+            User = user.GetGoogleAuthData(out bool hasAccount) as PamaxieUser;
             //Something weird is going on. Logout the user to make sure we are not de-syncing or anything.
             if (User == null)
             {
@@ -39,7 +39,7 @@ namespace Pamaxie.Website.Pages
             return Task.CompletedTask;
         }
 
-        private async Task DeleteApplication(IPamaxieApplication pamaxieApplication)
+        private async Task DeleteApplication(PamaxieApplication pamaxieApplication)
         {
             bool? result = await DialogService.ShowMessageBox(
                 $"Do you really wanna delete {pamaxieApplication.ApplicationName}?",
@@ -54,7 +54,7 @@ namespace Pamaxie.Website.Pages
             }
         }
 
-        private async Task EnableOrDisableApplication(IPamaxieApplication pamaxieApplication)
+        private async Task EnableOrDisableApplication(PamaxieApplication pamaxieApplication)
         {
             bool? result = true;
             if (!pamaxieApplication.Disabled)
@@ -122,7 +122,7 @@ namespace Pamaxie.Website.Pages
                 return;
 
             NewApplication.Credentials.AuthorizationToken = PwField1.Value;
-            IPamaxieApplication createdApp = NewApplication.Create();
+            PamaxieApplication createdApp = NewApplication.Create();
             Applications.Add(createdApp);
             NewApplication = null;
         }

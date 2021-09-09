@@ -27,60 +27,60 @@ namespace Test.Base
                 .Returns<string>((key) => userDataService.Get(key));
 
             //Setup for Create
-            mockUserDataService.Setup(_ => _.Create(It.IsAny<IPamaxieUser>()))
-                .Returns<IPamaxieUser>((value) => userDataService.Create(value));
+            mockUserDataService.Setup(_ => _.Create(It.IsAny<PamaxieUser>()))
+                .Returns<PamaxieUser>((value) => userDataService.Create(value));
 
             //Setup for TryCreate
-            IPamaxieUser createdValue = null;
+            PamaxieUser createdValue = null;
             bool created = false;
-            mockUserDataService.Setup(_ => _.TryCreate(It.IsAny<IPamaxieUser>(), out createdValue))
-                .Callback(new OutAction<IPamaxieUser, IPamaxieUser>(
-                    (IPamaxieUser value, out IPamaxieUser outValue) =>
+            mockUserDataService.Setup(_ => _.TryCreate(It.IsAny<PamaxieUser>(), out createdValue))
+                .Callback(new OutAction<PamaxieUser, PamaxieUser>(
+                    (PamaxieUser value, out PamaxieUser outValue) =>
                     {
                         created = userDataService.TryCreate(value, out outValue);
                         createdValue = outValue;
                     }))
-                .Returns<IPamaxieUser, IPamaxieUser>((_, _) => created);
+                .Returns<PamaxieUser, PamaxieUser>((_, _) => created);
 
             //Setup for Update
-            mockUserDataService.Setup(_ => _.Update(It.IsAny<IPamaxieUser>()))
-                .Returns<IPamaxieUser>((value) => userDataService.Update(value));
+            mockUserDataService.Setup(_ => _.Update(It.IsAny<PamaxieUser>()))
+                .Returns<PamaxieUser>((value) => userDataService.Update(value));
 
             //Setup for TryUpdated
-            IPamaxieUser updatedValue = null;
+            PamaxieUser updatedValue = null;
             bool updated = false;
-            mockUserDataService.Setup(_ => _.TryUpdate(It.IsAny<IPamaxieUser>(), out updatedValue))
-                .Callback(new OutAction<IPamaxieUser, IPamaxieUser>(
-                    (IPamaxieUser value, out IPamaxieUser outValue) =>
+            mockUserDataService.Setup(_ => _.TryUpdate(It.IsAny<PamaxieUser>(), out updatedValue))
+                .Callback(new OutAction<PamaxieUser, PamaxieUser>(
+                    (PamaxieUser value, out PamaxieUser outValue) =>
                     {
                         updated = userDataService.TryUpdate(value, out outValue);
                         updatedValue = outValue;
                     }))
-                .Returns<IPamaxieUser, IPamaxieUser>((_, _) => updated);
+                .Returns<PamaxieUser, PamaxieUser>((_, _) => updated);
 
             //Setup for UpdateOrCreate
-            IPamaxieUser updatedOrCreatedValue = null;
+            PamaxieUser updatedOrCreatedValue = null;
             bool updatedOrCreated = false;
-            mockUserDataService.Setup(_ => _.UpdateOrCreate(It.IsAny<IPamaxieUser>(), out updatedOrCreatedValue))
-                .Callback(new OutAction<IPamaxieUser, IPamaxieUser>(
-                    (IPamaxieUser value, out IPamaxieUser outValue) =>
+            mockUserDataService.Setup(_ => _.UpdateOrCreate(It.IsAny<PamaxieUser>(), out updatedOrCreatedValue))
+                .Callback(new OutAction<PamaxieUser, PamaxieUser>(
+                    (PamaxieUser value, out PamaxieUser outValue) =>
                     {
                         updatedOrCreated = userDataService.UpdateOrCreate(value, out outValue);
                         updatedOrCreatedValue = outValue;
                     }))
-                .Returns<IPamaxieUser, IPamaxieUser>((_, _) => updatedOrCreated);
+                .Returns<PamaxieUser, PamaxieUser>((_, _) => updatedOrCreated);
 
             //Setup for Delete
-            mockUserDataService.Setup(_ => _.Delete(It.IsAny<IPamaxieUser>()))
-                .Returns<IPamaxieUser>((value) => userDataService.Delete(value));
+            mockUserDataService.Setup(_ => _.Delete(It.IsAny<PamaxieUser>()))
+                .Returns<PamaxieUser>((value) => userDataService.Delete(value));
 
             //Setup for GetAllApplications
-            mockUserDataService.Setup(_ => _.GetAllApplications(It.IsAny<IPamaxieUser>()))
-                .Returns<IPamaxieUser>((value) => userDataService.GetAllApplications(value));
+            mockUserDataService.Setup(_ => _.GetAllApplications(It.IsAny<PamaxieUser>()))
+                .Returns<PamaxieUser>((value) => userDataService.GetAllApplications(value));
 
             //Setup for VerifyEmail
-            mockUserDataService.Setup(_ => _.VerifyEmail(It.IsAny<IPamaxieUser>()))
-                .Returns<IPamaxieUser>((value) => userDataService.VerifyEmail(value));
+            mockUserDataService.Setup(_ => _.VerifyEmail(It.IsAny<PamaxieUser>()))
+                .Returns<PamaxieUser>((value) => userDataService.VerifyEmail(value));
 
             DatabaseService.UserService = mockUserDataService.Object;
         }
@@ -89,13 +89,13 @@ namespace Test.Base
         private sealed class UserDataService : IUserDataService
         {
             /// <inheritdoc cref="IUserDataService.Get"/>
-            public IPamaxieUser Get(string key)
+            public PamaxieUser Get(string key)
             {
                 return string.IsNullOrEmpty(key) ? null : TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == key);
             }
 
             /// <inheritdoc cref="IUserDataService.Create"/>
-            public IPamaxieUser Create(IPamaxieUser value)
+            public PamaxieUser Create(PamaxieUser value)
             {
                 if (value == null || !string.IsNullOrEmpty(value.Key))
                     return null;
@@ -111,7 +111,7 @@ namespace Test.Base
             }
 
             /// <inheritdoc cref="IUserDataService.TryCreate"/>
-            public bool TryCreate(IPamaxieUser value, out IPamaxieUser createdValue)
+            public bool TryCreate(PamaxieUser value, out PamaxieUser createdValue)
             {
                 createdValue = null;
                 if (value == null || !string.IsNullOrEmpty(value.Key))
@@ -129,7 +129,7 @@ namespace Test.Base
             }
 
             /// <inheritdoc cref="IUserDataService.Update"/>
-            public IPamaxieUser Update(IPamaxieUser value)
+            public PamaxieUser Update(PamaxieUser value)
             {
                 if (value == null || string.IsNullOrEmpty(value.Key))
                     return null;
@@ -140,7 +140,7 @@ namespace Test.Base
             }
 
             /// <inheritdoc cref="IUserDataService.TryUpdate"/>
-            public bool TryUpdate(IPamaxieUser value, out IPamaxieUser updatedValue)
+            public bool TryUpdate(PamaxieUser value, out PamaxieUser updatedValue)
             {
                 updatedValue = null;
                 if (value == null || string.IsNullOrEmpty(value.Key))
@@ -154,7 +154,7 @@ namespace Test.Base
             }
 
             /// <inheritdoc cref="IUserDataService.UpdateOrCreate"/>
-            public bool UpdateOrCreate(IPamaxieUser value, out IPamaxieUser updatedOrCreatedValue)
+            public bool UpdateOrCreate(PamaxieUser value, out PamaxieUser updatedOrCreatedValue)
             {
                 updatedOrCreatedValue = null;
                 if (value == null)
@@ -187,11 +187,11 @@ namespace Test.Base
             }
 
             /// <inheritdoc cref="IUserDataService.Delete"/>
-            public bool Delete(IPamaxieUser value)
+            public bool Delete(PamaxieUser value)
             {
                 if (value == null || string.IsNullOrEmpty(value.Key))
                     return false;
-                IPamaxieUser valueToRemove = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.Key);
+                PamaxieUser valueToRemove = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.Key);
                 if (valueToRemove == null)
                     return false;
                 TestUserData.ListOfUsers.Remove(valueToRemove);
@@ -199,22 +199,22 @@ namespace Test.Base
             }
 
             /// <inheritdoc cref="IUserDataService.GetAllApplications"/>
-            public IEnumerable<IPamaxieApplication> GetAllApplications(IPamaxieUser value)
+            public IEnumerable<PamaxieApplication> GetAllApplications(PamaxieUser value)
             {
                 if (value == null || string.IsNullOrEmpty(value.Key))
                     return null;
-                List<IPamaxieApplication> applications = value.ApplicationKeys
+                List<PamaxieApplication> applications = value.ApplicationKeys
                     .Select(key => TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key))
                     .Where(application => application != null).ToList();
                 return applications.AsEnumerable();
             }
 
             /// <inheritdoc cref="IUserDataService.VerifyEmail"/>
-            public bool VerifyEmail(IPamaxieUser value)
+            public bool VerifyEmail(PamaxieUser value)
             {
                 if (value == null || string.IsNullOrEmpty(value.Key))
                     return false;
-                IPamaxieUser valueToVerify = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.Key);
+                PamaxieUser valueToVerify = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.Key);
                 if (valueToVerify == null)
                     return false;
                 valueToVerify.EmailVerified = true;

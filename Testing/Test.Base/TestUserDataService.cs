@@ -37,7 +37,7 @@ namespace Test.Base
         [MemberData(nameof(AllUsers))]
         public void Get(string userKey)
         {
-            IPamaxieUser user = UserDataServiceExtension.Get(userKey);
+            PamaxieUser user = UserDataServiceExtension.Get(userKey);
             Assert.NotNull(user);
             string str = JsonConvert.SerializeObject(user);
             TestOutputHelper.WriteLine(str);
@@ -54,7 +54,7 @@ namespace Test.Base
         [MemberData(nameof(RandomUserData))]
         public void Create(string userName, string firstName, string lastName, string emailAddress)
         {
-            IPamaxieUser user = new PamaxieUser
+            PamaxieUser user = new PamaxieUser
             {
                 UserName = userName,
                 FirstName = firstName,
@@ -66,7 +66,7 @@ namespace Test.Base
                 Disabled = false,
                 Deleted = false
             };
-            IPamaxieUser createdUser = user.Create();
+            PamaxieUser createdUser = user.Create();
             Assert.NotNull(createdUser);
             Assert.NotEmpty(createdUser.Key);
             string str = JsonConvert.SerializeObject(createdUser);
@@ -84,7 +84,7 @@ namespace Test.Base
         [MemberData(nameof(RandomUserData))]
         public void TryCreate(string userName, string firstName, string lastName, string emailAddress)
         {
-            IPamaxieUser user = new PamaxieUser
+            PamaxieUser user = new PamaxieUser
             {
                 UserName = userName,
                 FirstName = firstName,
@@ -96,7 +96,7 @@ namespace Test.Base
                 Disabled = false,
                 Deleted = false
             };
-            bool created = user.TryCreate(out IPamaxieUser createdUser);
+            bool created = user.TryCreate(out PamaxieUser createdUser);
             Assert.True(created);
             Assert.NotNull(createdUser);
             Assert.NotEmpty(createdUser.Key);
@@ -112,11 +112,11 @@ namespace Test.Base
         [MemberData(nameof(AllUsers))]
         public void Update(string userKey)
         {
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
             string oldEmailAddress = user.EmailAddress;
             user.EmailAddress = RandomService.GenerateRandomName();
-            IPamaxieUser updatedUser = user.Update();
+            PamaxieUser updatedUser = user.Update();
             Assert.NotNull(updatedUser);
             Assert.NotEqual(oldEmailAddress, updatedUser.EmailAddress);
             Assert.Equal(user.EmailAddress, updatedUser.EmailAddress);
@@ -132,11 +132,11 @@ namespace Test.Base
         [MemberData(nameof(AllUsers))]
         public void TryUpdate(string userKey)
         {
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
             string oldEmailAddress = user.EmailAddress;
             user.EmailAddress = RandomService.GenerateRandomName();
-            bool updated = user.TryUpdate(out IPamaxieUser updatedUser);
+            bool updated = user.TryUpdate(out PamaxieUser updatedUser);
             Assert.True(updated);
             Assert.NotNull(updatedUser);
             Assert.NotEqual(oldEmailAddress, updatedUser.EmailAddress);
@@ -156,7 +156,7 @@ namespace Test.Base
         [MemberData(nameof(RandomUserData))]
         public void UpdateOrCreate_Create(string userName, string firstName, string lastName, string emailAddress)
         {
-            IPamaxieUser user = new PamaxieUser
+            PamaxieUser user = new PamaxieUser
             {
                 UserName = userName,
                 FirstName = firstName,
@@ -168,7 +168,7 @@ namespace Test.Base
                 Disabled = false,
                 Deleted = false
             };
-            bool created = user.UpdateOrCreate(out IPamaxieUser createdUser);
+            bool created = user.UpdateOrCreate(out PamaxieUser createdUser);
             Assert.True(created);
             Assert.NotNull(createdUser);
             Assert.NotEmpty(createdUser.Key);
@@ -184,11 +184,11 @@ namespace Test.Base
         [MemberData(nameof(AllUsers))]
         public void UpdateOrCreate_Update(string userKey)
         {
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
             string oldEmailAddress = user.EmailAddress;
             user.EmailAddress = RandomService.GenerateRandomName();
-            bool updated = user.UpdateOrCreate(out IPamaxieUser updatedUser);
+            bool updated = user.UpdateOrCreate(out PamaxieUser updatedUser);
             Assert.True(updated);
             Assert.NotNull(updatedUser);
             Assert.NotEqual(oldEmailAddress, updatedUser.EmailAddress);
@@ -205,7 +205,7 @@ namespace Test.Base
         [MemberData(nameof(AllUsers))]
         public void Delete(string userKey)
         {
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
             bool deleted = user.Delete();
             Assert.True(deleted);
@@ -223,9 +223,9 @@ namespace Test.Base
         [MemberData(nameof(AllUsers))]
         public void GetAllApplications(string userKey)
         {
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
-            List<IPamaxieApplication> applications = user.GetAllApplications().ToList();
+            List<PamaxieApplication> applications = user.GetAllApplications().ToList();
             Assert.NotNull(applications);
             foreach (string str in applications.Select(JsonConvert.SerializeObject)) TestOutputHelper.WriteLine(str);
         }
@@ -238,7 +238,7 @@ namespace Test.Base
         [MemberData(nameof(AllUsers))]
         public void VerifyEmail(string userKey)
         {
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
             bool verified = user.VerifyEmail();
             Assert.True(verified);

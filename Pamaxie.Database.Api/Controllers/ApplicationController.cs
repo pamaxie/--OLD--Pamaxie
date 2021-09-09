@@ -27,137 +27,138 @@ namespace Pamaxie.Api.Controllers
         /// <summary>
         /// Gets a application from the database with a application key from the request body
         /// </summary>
-        /// <returns>A <see cref="IPamaxieApplication"/> from the database</returns>
+        /// <returns>A <see cref="PamaxieApplication"/> from the database</returns>
         [Authorize]
         [HttpGet("get")]
-        public ActionResult<IPamaxieApplication> GetTask()
+        public ActionResult<PamaxieApplication> GetTask()
         {
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
-
-            IPamaxieApplication application = _dbService.Applications.Get(result);
+            result = result.Replace("\"", string.Empty);
+            
+            PamaxieApplication application = _dbService.Applications.Get(result);
 
             return Ok(application);
         }
 
         /// <summary>
-        /// Creates a new <see cref="IPamaxieApplication"/>
+        /// Creates a new <see cref="PamaxieApplication"/>
         /// </summary>
-        /// <returns>Created <see cref="IPamaxieApplication"/></returns>
+        /// <returns>Created <see cref="PamaxieApplication"/></returns>
         [Authorize]
         [HttpPost("create")]
-        public ActionResult<IPamaxieApplication> CreateTask()
+        public ActionResult<PamaxieApplication> CreateTask()
         {
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
 
-            IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
+            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            IPamaxieApplication createdApplication = _dbService.Applications.Create(application);
+            PamaxieApplication createdApplication = _dbService.Applications.Create(application);
 
             return Ok(createdApplication);
         }
 
         /// <summary>
-        /// Tries to create a new <see cref="IPamaxieApplication"/>
+        /// Tries to create a new <see cref="PamaxieApplication"/>
         /// </summary>
-        /// <returns>Created <see cref="IPamaxieApplication"/></returns>
+        /// <returns>Created <see cref="PamaxieApplication"/></returns>
         [Authorize]
         [HttpPost("tryCreate")]
-        public ActionResult<IPamaxieApplication> TryCreateTask()
+        public ActionResult<PamaxieApplication> TryCreateTask()
         {
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
 
-            IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
+            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            bool created = _dbService.Applications.TryCreate(application, out IPamaxieApplication createdApplication);
+            bool created = _dbService.Applications.TryCreate(application, out PamaxieApplication createdApplication);
 
             return Ok(createdApplication); //TODO find a solution to involve the boolean "created"
         }
 
         /// <summary>
-        /// Updates a <see cref="IPamaxieApplication"/>
+        /// Updates a <see cref="PamaxieApplication"/>
         /// </summary>
-        /// <returns>Updated <see cref="IPamaxieApplication"/></returns>
+        /// <returns>Updated <see cref="PamaxieApplication"/></returns>
         [Authorize]
         [HttpPost("update")]
-        public ActionResult<IPamaxieApplication> UpdateTask()
+        public ActionResult<PamaxieApplication> UpdateTask()
         {
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
 
-            IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
+            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            IPamaxieApplication updatedApplication = _dbService.Applications.Update(application);
+            PamaxieApplication updatedApplication = _dbService.Applications.Update(application);
 
             return Ok(updatedApplication);
         }
 
         /// <summary>
-        /// Tries to update a <see cref="IPamaxieApplication"/>
+        /// Tries to update a <see cref="PamaxieApplication"/>
         /// </summary>
-        /// <returns>Updated <see cref="IPamaxieApplication"/></returns>
+        /// <returns>Updated <see cref="PamaxieApplication"/></returns>
         [Authorize]
         [HttpPost("tryUpdate")]
-        public ActionResult<IPamaxieApplication> TryUpdateTask()
+        public ActionResult<PamaxieApplication> TryUpdateTask()
         {
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
 
-            IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
+            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            bool updated = _dbService.Applications.TryUpdate(application, out IPamaxieApplication updatedApplication);
+            bool updated = _dbService.Applications.TryUpdate(application, out PamaxieApplication updatedApplication);
 
             return Ok(updatedApplication); //TODO find a solution to involve the boolean "updated"
         }
 
         /// <summary>
-        /// Updates or creates a <see cref="IPamaxieApplication"/>
+        /// Updates or creates a <see cref="PamaxieApplication"/>
         /// </summary>
-        /// <returns>Updated or created <see cref="IPamaxieApplication"/></returns>
+        /// <returns>Updated or created <see cref="PamaxieApplication"/></returns>
         [Authorize]
         [HttpPost("updateOrCreate")]
-        public ActionResult<IPamaxieApplication> UpdateOrCreateTask()
+        public ActionResult<PamaxieApplication> UpdateOrCreateTask()
         {
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
 
-            IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
+            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
                 return BadRequest(ErrorHandler.BadData());
 
             bool updatedOrCreated =
                 _dbService.Applications.UpdateOrCreate(application,
-                    out IPamaxieApplication updatedOrCreatedApplication);
+                    out PamaxieApplication updatedOrCreatedApplication);
 
             return Ok(updatedOrCreatedApplication); //TODO find a solution to involve the boolean "updatedOrCreated"
         }
 
         /// <summary>
-        /// Deletes a <see cref="IPamaxieApplication"/>
+        /// Deletes a <see cref="PamaxieApplication"/>
         /// </summary>
-        /// <returns><see cref="bool"/> if <see cref="IPamaxieApplication"/> is deleted</returns>
+        /// <returns><see cref="bool"/> if <see cref="PamaxieApplication"/> is deleted</returns>
         [Authorize]
         [HttpPost("delete")]
         public ActionResult<bool> DeleteTask()
@@ -167,7 +168,7 @@ namespace Pamaxie.Api.Controllers
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
 
-            IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
+            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
                 return BadRequest(ErrorHandler.BadData());
 
@@ -177,53 +178,53 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        /// Gets the owner from a <see cref="IPamaxieApplication"/>
+        /// Gets the owner from a <see cref="PamaxieApplication"/>
         /// </summary>
         /// <returns>The owner of the application</returns>
         [Authorize]
         [HttpPost("getOwner")]
-        public ActionResult<IPamaxieUser> GetOwner()
+        public ActionResult<PamaxieUser> GetOwner()
         {
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
 
-            IPamaxieApplication application = JsonConvert.DeserializeObject<IPamaxieApplication>(result);
+            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            IPamaxieUser user = _dbService.Applications.GetOwner(application);
+            PamaxieUser user = _dbService.Applications.GetOwner(application);
 
             return Ok(user);
         }
 
         /// <summary>
-        /// Enables or disables the <see cref="IPamaxieApplication"/> 
+        /// Enables or disables the <see cref="PamaxieApplication"/> 
         /// </summary>
-        /// <returns>Enabled or disabled <see cref="IPamaxieApplication"/></returns>
+        /// <returns>Enabled or disabled <see cref="PamaxieApplication"/></returns>
         [Authorize]
         [HttpPost("enableOrDisable")]
-        public ActionResult<IPamaxieApplication> EnableOrDisableTask()
+        public ActionResult<PamaxieApplication> EnableOrDisableTask()
         {
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
 
-            IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
+            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
                 return BadRequest(ErrorHandler.BadData());
 
-            IPamaxieApplication enabledOrDisabledApplication = _dbService.Applications.EnableOrDisable(application);
+            PamaxieApplication enabledOrDisabledApplication = _dbService.Applications.EnableOrDisable(application);
 
             return Ok(enabledOrDisabledApplication);
         }
 
         /// <summary>
-        /// Verify if the <see cref="IPamaxieApplication"/> is authorized
+        /// Verify if the <see cref="PamaxieApplication"/> is authorized
         /// </summary>
-        /// <returns><see cref="bool"/> if the <see cref="IPamaxieApplication"/>is authorized</returns>
+        /// <returns><see cref="bool"/> if the <see cref="PamaxieApplication"/>is authorized</returns>
         [Authorize]
         [HttpPost("verifyAuthentication")]
         public ActionResult<bool> VerifyAuthenticationTask()
@@ -233,7 +234,7 @@ namespace Pamaxie.Api.Controllers
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
 
-            IPamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
+            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
                 return BadRequest(ErrorHandler.BadData());
 

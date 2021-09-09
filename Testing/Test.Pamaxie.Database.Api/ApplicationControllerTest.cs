@@ -26,9 +26,10 @@ namespace Test.Pamaxie.Database.Api_Test
         public ApplicationControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             Context = new PamaxieDataContext(Instance, Password);
-            Service = new DatabaseService(Context);
+            Service = new FakeDatabaseService(Context);
+            Service.Connect(); //TODO Change all logic behind this depending on where the .Connect method will be called in the future
             //Instantiate the controller and add a default HttpContext
-            Controller = new ApplicationController(Service as DatabaseService)
+            Controller = new ApplicationController(Service as FakeDatabaseService)
             {
                 ControllerContext = { HttpContext = new DefaultHttpContext() }
             };
@@ -47,11 +48,12 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieApplication> result = Controller.GetTask();
+            ActionResult<PamaxieApplication> result = Controller.GetTask();
 
             //Check if application is not null
-            IPamaxieApplication application = ((ObjectResult)result.Result).Value as IPamaxieApplication;
+            PamaxieApplication application = ((ObjectResult)result.Result).Value as PamaxieApplication;
             Assert.NotNull(application);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(application));
         }
 
         /// <summary>
@@ -63,7 +65,7 @@ namespace Test.Pamaxie.Database.Api_Test
         public void Create(string applicationKey)
         {
             //Get application
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 
@@ -72,11 +74,11 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieApplication> result = Controller.CreateTask();
+            ActionResult<PamaxieApplication> result = Controller.CreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if application is created
-            IPamaxieApplication createdApplication = ((ObjectResult)result.Result).Value as IPamaxieApplication;
+            PamaxieApplication createdApplication = ((ObjectResult)result.Result).Value as PamaxieApplication;
             Assert.NotNull(createdApplication);
         }
 
@@ -89,7 +91,7 @@ namespace Test.Pamaxie.Database.Api_Test
         public void TryCreate(string applicationKey)
         {
             //Get application
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 
@@ -98,11 +100,11 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieApplication> result = Controller.TryCreateTask();
+            ActionResult<PamaxieApplication> result = Controller.TryCreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if application is created
-            IPamaxieApplication createdApplication = ((ObjectResult)result.Result).Value as IPamaxieApplication;
+            PamaxieApplication createdApplication = ((ObjectResult)result.Result).Value as PamaxieApplication;
             Assert.NotNull(createdApplication);
         }
 
@@ -117,7 +119,7 @@ namespace Test.Pamaxie.Database.Api_Test
             const string newName = "UpdatedName";
 
             //Get application
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 
@@ -129,11 +131,11 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieApplication> result = Controller.UpdateTask();
+            ActionResult<PamaxieApplication> result = Controller.UpdateTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if application is updated
-            IPamaxieApplication updatedApplication = ((ObjectResult)result.Result).Value as IPamaxieApplication;
+            PamaxieApplication updatedApplication = ((ObjectResult)result.Result).Value as PamaxieApplication;
             Assert.NotNull(updatedApplication);
             Assert.Equal(newName, updatedApplication.ApplicationName);
         }
@@ -149,7 +151,7 @@ namespace Test.Pamaxie.Database.Api_Test
             const string newName = "UpdatedName";
 
             //Get application
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 
@@ -161,11 +163,11 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieApplication> result = Controller.TryUpdateTask();
+            ActionResult<PamaxieApplication> result = Controller.TryUpdateTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if application is updated
-            IPamaxieApplication updatedApplication = ((ObjectResult)result.Result).Value as IPamaxieApplication;
+            PamaxieApplication updatedApplication = ((ObjectResult)result.Result).Value as PamaxieApplication;
             Assert.NotNull(updatedApplication);
             Assert.Equal(newName, updatedApplication.ApplicationName);
         }
@@ -179,7 +181,7 @@ namespace Test.Pamaxie.Database.Api_Test
         public void UpdateOrCreate_Create(string applicationKey)
         {
             //Get application
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 
@@ -188,11 +190,11 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieApplication> result = Controller.UpdateOrCreateTask();
+            ActionResult<PamaxieApplication> result = Controller.UpdateOrCreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if application is updated or created
-            IPamaxieApplication createdApplication = ((ObjectResult)result.Result).Value as IPamaxieApplication;
+            PamaxieApplication createdApplication = ((ObjectResult)result.Result).Value as PamaxieApplication;
             Assert.NotNull(createdApplication);
         }
 
@@ -207,7 +209,7 @@ namespace Test.Pamaxie.Database.Api_Test
             const string newName = "UpdatedName";
 
             //Get application
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 
@@ -219,11 +221,11 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieApplication> result = Controller.UpdateOrCreateTask();
+            ActionResult<PamaxieApplication> result = Controller.UpdateOrCreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if application is updated or created
-            IPamaxieApplication updatedApplication = ((ObjectResult)result.Result).Value as IPamaxieApplication;
+            PamaxieApplication updatedApplication = ((ObjectResult)result.Result).Value as PamaxieApplication;
             Assert.NotNull(updatedApplication);
             Assert.Equal(newName, updatedApplication.ApplicationName);
         }
@@ -237,7 +239,7 @@ namespace Test.Pamaxie.Database.Api_Test
         public void Delete(string applicationKey)
         {
             //Get application
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 
@@ -259,7 +261,7 @@ namespace Test.Pamaxie.Database.Api_Test
         [MemberData(nameof(AllApplications))]
         public void GetOwner(string applicationKey)
         {
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 
@@ -268,9 +270,9 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and get the owner of the application
-            ActionResult<IPamaxieUser> result = Controller.GetOwner();
+            ActionResult<PamaxieUser> result = Controller.GetOwner();
             Assert.IsType<OkObjectResult>(result.Result);
-            IPamaxieUser owner = ((ObjectResult)result.Result).Value as IPamaxieUser;
+            PamaxieUser owner = ((ObjectResult)result.Result).Value as PamaxieUser;
             Assert.NotNull(owner);
             TestOutputHelper.WriteLine(JsonConvert.SerializeObject(owner));
         }
@@ -284,7 +286,7 @@ namespace Test.Pamaxie.Database.Api_Test
         public void EnableOrDisable(string applicationKey)
         {
             //Get application
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 
@@ -293,9 +295,9 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and check if application is enabled or disabled
-            ActionResult<IPamaxieApplication> result = Controller.EnableOrDisableTask();
+            ActionResult<PamaxieApplication> result = Controller.EnableOrDisableTask();
             Assert.IsType<OkObjectResult>(result.Result);
-            Assert.Equal(!application.Disabled, ((IPamaxieApplication)((ObjectResult)result.Result).Value).Disabled);
+            Assert.Equal(!application.Disabled, ((PamaxieApplication)((ObjectResult)result.Result).Value).Disabled);
         }
 
         /// <summary>
@@ -307,7 +309,7 @@ namespace Test.Pamaxie.Database.Api_Test
         public void VerifyAuthentication(string applicationKey)
         {
             //Get application
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 

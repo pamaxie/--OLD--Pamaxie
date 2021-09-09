@@ -4,8 +4,8 @@ using Pamaxie.Database.Design;
 
 namespace Pamaxie.Database.Extensions.Client
 {
-    /// Implementation to get <see cref="IPamaxieApplication"/> data from the server
-    internal sealed class ApplicationDataService : ClientDataServiceBase<IPamaxieApplication>, IApplicationDataService
+    /// Implementation to get <see cref="PamaxieApplication"/> data from the server
+    internal sealed class ApplicationDataService : ClientDataServiceBase<PamaxieApplication>, IApplicationDataService
     {
         /// <inheritdoc/>
         internal ApplicationDataService(IPamaxieDataContext dataContext, DatabaseService service)
@@ -16,19 +16,19 @@ namespace Pamaxie.Database.Extensions.Client
         }
 
         /// <inheritdoc/>
-        public IPamaxieUser GetOwner(IPamaxieApplication value)
+        public PamaxieUser GetOwner(PamaxieApplication value)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public IPamaxieApplication EnableOrDisable(IPamaxieApplication value)
+        public PamaxieApplication EnableOrDisable(PamaxieApplication value)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public bool VerifyAuthentication(IPamaxieApplication value)
+        public bool VerifyAuthentication(PamaxieApplication value)
         {
             throw new NotImplementedException();
         }

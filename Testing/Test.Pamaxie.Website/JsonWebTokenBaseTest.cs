@@ -38,7 +38,7 @@ namespace Test.Pamaxie.Website_Test
         [MemberData(nameof(AllUsers))]
         public void Encode_Success(string userKey)
         {
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
             ConfirmEmailBody body = new ConfirmEmailBody(user);
@@ -54,7 +54,7 @@ namespace Test.Pamaxie.Website_Test
         [MemberData(nameof(AllUsers))]
         public void Decode_Success(string userKey)
         {
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
             //Newly created token
@@ -73,7 +73,7 @@ namespace Test.Pamaxie.Website_Test
         [MemberData(nameof(AllUsers))]
         public void Decode_Failure_Invalid(string userKey)
         {
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
             ConfirmEmailBody body = new ConfirmEmailBody(user);
@@ -93,7 +93,7 @@ namespace Test.Pamaxie.Website_Test
         [MemberData(nameof(AllUsers))]
         public void Decode_Failure_Expired(string userKey)
         {
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
             ConfirmEmailBody body = new ConfirmEmailBody(user)

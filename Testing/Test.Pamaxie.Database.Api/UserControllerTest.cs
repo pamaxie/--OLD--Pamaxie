@@ -52,10 +52,10 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieUser> result = Controller.GetTask();
+            ActionResult<PamaxieUser> result = Controller.GetTask();
 
             //Check if user is not null
-            IPamaxieUser user = ((ObjectResult)result.Result).Value as IPamaxieUser;
+            PamaxieUser user = ((ObjectResult)result.Result).Value as PamaxieUser;
             Assert.NotNull(user);
         }
 
@@ -68,7 +68,7 @@ namespace Test.Pamaxie.Database.Api_Test
         public void Create(string userKey)
         {
             //Get application
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
             //Parse the application to a request body and send it to the controller
@@ -76,11 +76,11 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieUser> result = Controller.CreateTask();
+            ActionResult<PamaxieUser> result = Controller.CreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if user is created
-            IPamaxieUser createdUser = ((ObjectResult)result.Result).Value as IPamaxieUser;
+            PamaxieUser createdUser = ((ObjectResult)result.Result).Value as PamaxieUser;
             Assert.NotNull(createdUser);
         }
 
@@ -92,7 +92,7 @@ namespace Test.Pamaxie.Database.Api_Test
         public void TryCreate(string userKey)
         {
             //Get application
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
             //Parse the application to a request body and send it to the controller
@@ -100,11 +100,11 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieUser> result = Controller.TryCreateTask();
+            ActionResult<PamaxieUser> result = Controller.TryCreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if user is created
-            IPamaxieUser createdUser = ((ObjectResult)result.Result).Value as IPamaxieUser;
+            PamaxieUser createdUser = ((ObjectResult)result.Result).Value as PamaxieUser;
             Assert.NotNull(createdUser);
         }
 
@@ -119,7 +119,7 @@ namespace Test.Pamaxie.Database.Api_Test
             const string newEmail = "UpdatedEmail@testmail.com";
 
             //Get application
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
             //Update User
@@ -130,11 +130,11 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieUser> result = Controller.UpdateTask();
+            ActionResult<PamaxieUser> result = Controller.UpdateTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if user is updated
-            IPamaxieUser updatedUser = ((ObjectResult)result.Result).Value as IPamaxieUser;
+            PamaxieUser updatedUser = ((ObjectResult)result.Result).Value as PamaxieUser;
             Assert.NotNull(updatedUser);
             Assert.Equal(newEmail, updatedUser.EmailAddress);
         }
@@ -150,7 +150,7 @@ namespace Test.Pamaxie.Database.Api_Test
             const string newEmail = "UpdatedEmail@testmail.com";
 
             //Get application
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
             //Update User
@@ -161,11 +161,11 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieUser> result = Controller.TryUpdateTask();
+            ActionResult<PamaxieUser> result = Controller.TryUpdateTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if user is updated
-            IPamaxieUser updatedUser = ((ObjectResult)result.Result).Value as IPamaxieUser;
+            PamaxieUser updatedUser = ((ObjectResult)result.Result).Value as PamaxieUser;
             Assert.NotNull(updatedUser);
             Assert.Equal(newEmail, updatedUser.EmailAddress);
         }
@@ -179,7 +179,7 @@ namespace Test.Pamaxie.Database.Api_Test
         public void UpdateOrCreate_Create(string userKey)
         {
             //Get application
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
             //Parse the application to a request body and send it to the controller
@@ -187,11 +187,11 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieUser> result = Controller.UpdateOrCreateTask();
+            ActionResult<PamaxieUser> result = Controller.UpdateOrCreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if user is updated or created
-            IPamaxieUser createdUser = ((ObjectResult)result.Result).Value as IPamaxieUser;
+            PamaxieUser createdUser = ((ObjectResult)result.Result).Value as PamaxieUser;
             Assert.NotNull(createdUser);
         }
 
@@ -206,7 +206,7 @@ namespace Test.Pamaxie.Database.Api_Test
             const string newEmail = "UpdatedEmail@testmail.com";
 
             //Get application
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
             //Update User
@@ -217,11 +217,11 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IPamaxieUser> result = Controller.UpdateOrCreateTask();
+            ActionResult<PamaxieUser> result = Controller.UpdateOrCreateTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if user is updated or created
-            IPamaxieUser updatedUser = ((ObjectResult)result.Result).Value as IPamaxieUser;
+            PamaxieUser updatedUser = ((ObjectResult)result.Result).Value as PamaxieUser;
             Assert.NotNull(updatedUser);
             Assert.Equal(newEmail, updatedUser.EmailAddress);
         }
@@ -235,7 +235,7 @@ namespace Test.Pamaxie.Database.Api_Test
         public void Delete(string userKey)
         {
             //Get application
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
             //Parse the application to a request body and send it to the controller
@@ -257,7 +257,7 @@ namespace Test.Pamaxie.Database.Api_Test
         public void GetAllApplications(string userKey)
         {
             //Get application
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
             //Parse the application to a request body and send it to the controller
@@ -265,14 +265,14 @@ namespace Test.Pamaxie.Database.Api_Test
             Controller.Request.Body = body;
 
             //Call controller and get result
-            ActionResult<IEnumerable<IPamaxieApplication>> result = Controller.GetAllApplicationsTask();
+            ActionResult<IEnumerable<PamaxieApplication>> result = Controller.GetAllApplicationsTask();
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if user is updated or created
-            IEnumerable<IPamaxieApplication> applications =
-                ((ObjectResult)result.Result).Value as IEnumerable<IPamaxieApplication>;
+            IEnumerable<PamaxieApplication> applications =
+                ((ObjectResult)result.Result).Value as IEnumerable<PamaxieApplication>;
             Assert.NotNull(applications);
-            foreach (IPamaxieApplication application in applications)
+            foreach (PamaxieApplication application in applications)
             {
                 string applicationStr = JsonConvert.SerializeObject(application);
                 TestOutputHelper.WriteLine(applicationStr);
@@ -288,7 +288,7 @@ namespace Test.Pamaxie.Database.Api_Test
         public void VerifyEmail(string userKey)
         {
             //Get application
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
             //Parse the application to a request body and send it to the controller

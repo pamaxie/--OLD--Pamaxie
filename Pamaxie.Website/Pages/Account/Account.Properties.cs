@@ -18,6 +18,6 @@ namespace Pamaxie.Website.Pages
         [Inject] private IDialogService DialogService { get; set; }
 
         private bool DisableDeleteData { get; set; }
-        private IPamaxieUser? User { get; set; }
+        private PamaxieUser? User { get; set; }
     }
 }

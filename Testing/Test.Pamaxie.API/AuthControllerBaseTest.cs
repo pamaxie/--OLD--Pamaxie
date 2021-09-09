@@ -36,7 +36,7 @@ namespace Test.Pamaxie.API_Test
         public void Login_Succeed(string applicationKey)
         {
             //Get application
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
 

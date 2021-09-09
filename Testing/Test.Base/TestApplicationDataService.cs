@@ -38,7 +38,7 @@ namespace Test.Base
         [MemberData(nameof(AllApplications))]
         public void Get(string applicationKey)
         {
-            IPamaxieApplication application = ApplicationDataServiceExtension.Get(applicationKey);
+            PamaxieApplication application = ApplicationDataServiceExtension.Get(applicationKey);
             Assert.NotNull(application);
             string str = JsonConvert.SerializeObject(application);
             TestOutputHelper.WriteLine(str);
@@ -54,7 +54,7 @@ namespace Test.Base
         [MemberData(nameof(RandomApplicationData))]
         public void Create(string ownerKey, string applicationName, string authorizationToken)
         {
-            IPamaxieApplication application = new PamaxieApplication
+            PamaxieApplication application = new PamaxieApplication
             {
                 TTL = DateTime.Now,
                 Credentials = new AppAuthCredentials
@@ -70,10 +70,10 @@ namespace Test.Base
                 Disabled = false,
                 Deleted = false
             };
-            IPamaxieApplication createdApplication = application.Create();
+            PamaxieApplication createdApplication = application.Create();
             Assert.NotNull(createdApplication);
             Assert.NotEmpty(createdApplication.Key);
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == createdApplication.OwnerKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == createdApplication.OwnerKey);
             Assert.NotNull(user);
             string str = JsonConvert.SerializeObject(createdApplication);
             TestOutputHelper.WriteLine(str);
@@ -89,7 +89,7 @@ namespace Test.Base
         [MemberData(nameof(RandomApplicationData))]
         public void TryCreate(string ownerKey, string applicationName, string authorizationToken)
         {
-            IPamaxieApplication application = new PamaxieApplication
+            PamaxieApplication application = new PamaxieApplication
             {
                 TTL = DateTime.Now,
                 Credentials = new AppAuthCredentials
@@ -105,11 +105,11 @@ namespace Test.Base
                 Disabled = false,
                 Deleted = false
             };
-            bool created = application.TryCreate(out IPamaxieApplication createdApplication);
+            bool created = application.TryCreate(out PamaxieApplication createdApplication);
             Assert.True(created);
             Assert.NotNull(createdApplication);
             Assert.NotEmpty(createdApplication.Key);
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == createdApplication.OwnerKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == createdApplication.OwnerKey);
             Assert.NotNull(user);
             string str = JsonConvert.SerializeObject(createdApplication);
             TestOutputHelper.WriteLine(str);
@@ -123,12 +123,12 @@ namespace Test.Base
         [MemberData(nameof(AllApplications))]
         public void Update(string applicationKey)
         {
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             string oldName = application.ApplicationName;
             application.ApplicationName = RandomService.GenerateRandomName();
-            IPamaxieApplication updatedApplication = application.Update();
+            PamaxieApplication updatedApplication = application.Update();
             Assert.NotNull(updatedApplication);
             Assert.NotEqual(oldName, updatedApplication.ApplicationName);
             Assert.Equal(application.ApplicationName, updatedApplication.ApplicationName);
@@ -144,12 +144,12 @@ namespace Test.Base
         [MemberData(nameof(AllApplications))]
         public void TryUpdate(string applicationKey)
         {
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             string oldName = application.ApplicationName;
             application.ApplicationName = RandomService.GenerateRandomName();
-            bool updated = application.TryUpdate(out IPamaxieApplication updatedApplication);
+            bool updated = application.TryUpdate(out PamaxieApplication updatedApplication);
             Assert.True(updated);
             Assert.NotNull(updatedApplication);
             Assert.NotEqual(oldName, updatedApplication.ApplicationName);
@@ -168,7 +168,7 @@ namespace Test.Base
         [MemberData(nameof(RandomApplicationData))]
         public void UpdateOrCreate_Create(string ownerKey, string applicationName, string authorizationToken)
         {
-            IPamaxieApplication application = new PamaxieApplication
+            PamaxieApplication application = new PamaxieApplication
             {
                 TTL = DateTime.Now,
                 Credentials = new AppAuthCredentials
@@ -184,11 +184,11 @@ namespace Test.Base
                 Disabled = false,
                 Deleted = false
             };
-            bool created = application.TryCreate(out IPamaxieApplication createdApplication);
+            bool created = application.TryCreate(out PamaxieApplication createdApplication);
             Assert.True(created);
             Assert.NotNull(createdApplication);
             Assert.NotEmpty(createdApplication.Key);
-            IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == createdApplication.OwnerKey);
+            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == createdApplication.OwnerKey);
             Assert.NotNull(user);
             string str = JsonConvert.SerializeObject(createdApplication);
             TestOutputHelper.WriteLine(str);
@@ -202,12 +202,12 @@ namespace Test.Base
         [MemberData(nameof(AllApplications))]
         public void UpdateOrCreate_Update(string applicationKey)
         {
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             string oldName = application.ApplicationName;
             application.ApplicationName = RandomService.GenerateRandomName();
-            bool updated = application.TryUpdate(out IPamaxieApplication updatedApplication);
+            bool updated = application.TryUpdate(out PamaxieApplication updatedApplication);
             Assert.True(updated);
             Assert.NotNull(updatedApplication);
             Assert.NotEqual(oldName, updatedApplication.ApplicationName);
@@ -224,7 +224,7 @@ namespace Test.Base
         [MemberData(nameof(AllApplications))]
         public void Delete(string applicationKey)
         {
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             bool deleted = application.Delete();
@@ -243,10 +243,10 @@ namespace Test.Base
         [MemberData(nameof(AllApplications))]
         public void GetOwner(string applicationKey)
         {
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
-            IPamaxieUser user = application.GetOwner();
+            PamaxieUser user = application.GetOwner();
             Assert.NotNull(user);
             string str = JsonConvert.SerializeObject(user);
             TestOutputHelper.WriteLine(str);
@@ -260,11 +260,11 @@ namespace Test.Base
         [MemberData(nameof(AllApplications))]
         public void EnableOrDisable(string applicationKey)
         {
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             bool disabled = application.Disabled;
-            IPamaxieApplication enabledOrDisabledApplication = application.EnableOrDisable();
+            PamaxieApplication enabledOrDisabledApplication = application.EnableOrDisable();
             Assert.NotEqual(disabled, enabledOrDisabledApplication.Disabled);
             TestOutputHelper.WriteLine(enabledOrDisabledApplication.Disabled ? "Enabled" : "Disabled");
         }
@@ -277,7 +277,7 @@ namespace Test.Base
         [MemberData(nameof(AllApplications))]
         public void VerifyAuthentication(string applicationKey)
         {
-            IPamaxieApplication application =
+            PamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             //bool verified = application.VerifyAuthentication();

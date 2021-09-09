@@ -33,8 +33,8 @@ namespace Pamaxie.Website.Services
         /// <summary>
         /// Sends a confirmation email to the registered user.
         /// </summary>
-        /// <param name="user">The <see cref="IPamaxieUser"/> the email will be sent to</param>
-        public async void SendConfirmationEmail(IPamaxieUser user)
+        /// <param name="user">The <see cref="PamaxieUser"/> the email will be sent to</param>
+        public async void SendConfirmationEmail(PamaxieUser user)
         {
             string code = _userService.GenerateEmailConfirmationToken(user);
             string callbackUrl = _navigationManager.ToAbsoluteUri($"ConfirmEmail/{code}/").ToString();

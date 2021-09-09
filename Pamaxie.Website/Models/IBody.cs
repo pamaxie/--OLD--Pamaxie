@@ -21,6 +21,6 @@ namespace Pamaxie.Website.Models
         /// <summary>
         /// <inheritdoc cref="PamaxieUser"/>
         /// </summary>
-        public IPamaxieUser User { get; }
+        public PamaxieUser User { get; }
     }
 }

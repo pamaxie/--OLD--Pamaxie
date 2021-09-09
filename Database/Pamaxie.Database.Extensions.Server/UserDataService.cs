@@ -9,8 +9,8 @@ using StackExchange.Redis;
 
 namespace Pamaxie.Database.Extensions.Server
 {
-    /// Implementation to get <see cref="IPamaxieUser"/> data from the server
-    public sealed class UserDataService : ServerDataServiceBase<IPamaxieUser>, IUserDataService
+    /// Implementation to get <see cref="PamaxieUser"/> data from the server
+    public sealed class UserDataService : ServerDataServiceBase<PamaxieUser>, IUserDataService
     {
         /// <inheritdoc/>
         internal UserDataService(IPamaxieDataContext dataContext, DatabaseService service)
@@ -20,7 +20,7 @@ namespace Pamaxie.Database.Extensions.Server
         }
 
         /// <inheritdoc/>
-        public IEnumerable<IPamaxieApplication> GetAllApplications(IPamaxieUser value)
+        public IEnumerable<PamaxieApplication> GetAllApplications(PamaxieUser value)
         {
             if (Service.Service == null)
                 throw new DataException(
@@ -31,11 +31,11 @@ namespace Pamaxie.Database.Extensions.Server
                 throw new ArgumentException("The key u entered does not exist in our database yet");
 
             IEnumerable<string> applicationKeys = value.ApplicationKeys;
-            List<IPamaxieApplication> applications = (from key in applicationKeys
+            List<PamaxieApplication> applications = (from key in applicationKeys
                 select db.StringGet(key)
                 into rawData
                 where !string.IsNullOrEmpty(rawData)
-                select JsonConvert.DeserializeObject<IPamaxieApplication>(rawData)
+                select JsonConvert.DeserializeObject<PamaxieApplication>(rawData)
                 into application
                 where application != null
                 where application.OwnerKey != value.Key
@@ -44,7 +44,7 @@ namespace Pamaxie.Database.Extensions.Server
         }
 
         /// <inheritdoc/>
-        public bool VerifyEmail(IPamaxieUser value)
+        public bool VerifyEmail(PamaxieUser value)
         {
             if (Service.Service == null)
                 return false;

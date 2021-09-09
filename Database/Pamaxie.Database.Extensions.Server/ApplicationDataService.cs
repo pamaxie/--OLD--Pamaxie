@@ -7,8 +7,8 @@ using StackExchange.Redis;
 
 namespace Pamaxie.Database.Extensions.Server
 {
-    /// Implementation to get <see cref="IPamaxieApplication"/> data from the server
-    public sealed class ApplicationDataService : ServerDataServiceBase<IPamaxieApplication>, IApplicationDataService
+    /// Implementation to get <see cref="PamaxieApplication"/> data from the server
+    public sealed class ApplicationDataService : ServerDataServiceBase<PamaxieApplication>, IApplicationDataService
     {
         /// <inheritdoc/>
         internal ApplicationDataService(IPamaxieDataContext dataContext, DatabaseService service)
@@ -18,7 +18,7 @@ namespace Pamaxie.Database.Extensions.Server
         }
 
         /// <inheritdoc/>
-        public IPamaxieUser GetOwner(IPamaxieApplication value)
+        public PamaxieUser GetOwner(PamaxieApplication value)
         {
             if (Service.Service == null)
                 throw new DataException(
@@ -26,11 +26,11 @@ namespace Pamaxie.Database.Extensions.Server
 
             IDatabase db = Service.Service.GetDatabase();
             RedisValue rawData = db.StringGet(value.OwnerKey);
-            return string.IsNullOrEmpty(rawData) ? default : JsonConvert.DeserializeObject<IPamaxieUser>(rawData);
+            return string.IsNullOrEmpty(rawData) ? default : JsonConvert.DeserializeObject<PamaxieUser>(rawData);
         }
 
         /// <inheritdoc/>
-        public IPamaxieApplication EnableOrDisable(IPamaxieApplication value)
+        public PamaxieApplication EnableOrDisable(PamaxieApplication value)
         {
             if (Service.Service == null)
                 throw new DataException(
@@ -48,7 +48,7 @@ namespace Pamaxie.Database.Extensions.Server
         }
 
         /// <inheritdoc/>
-        public bool VerifyAuthentication(IPamaxieApplication value)
+        public bool VerifyAuthentication(PamaxieApplication value)
         {
             throw new NotImplementedException();
         }

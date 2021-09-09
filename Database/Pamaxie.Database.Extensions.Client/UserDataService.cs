@@ -5,8 +5,8 @@ using Pamaxie.Database.Design;
 
 namespace Pamaxie.Database.Extensions.Client
 {
-    /// Implementation to get <see cref="IPamaxieUser"/> data from the server
-    internal sealed class UserDataService : ClientDataServiceBase<IPamaxieUser>, IUserDataService
+    /// Implementation to get <see cref="PamaxieUser"/> data from the server
+    internal sealed class UserDataService : ClientDataServiceBase<PamaxieUser>, IUserDataService
     {
         /// <inheritdoc/>
         internal UserDataService(IPamaxieDataContext dataContext, DatabaseService service)
@@ -17,13 +17,13 @@ namespace Pamaxie.Database.Extensions.Client
         }
 
         /// <inheritdoc/>
-        public IEnumerable<IPamaxieApplication> GetAllApplications(IPamaxieUser value)
+        public IEnumerable<PamaxieApplication> GetAllApplications(PamaxieUser value)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public bool VerifyEmail(IPamaxieUser value)
+        public bool VerifyEmail(PamaxieUser value)
         {
             throw new NotImplementedException();
         }

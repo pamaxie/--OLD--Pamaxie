@@ -6,14 +6,14 @@ using Pamaxie.Data;
 namespace Test.Base
 {
     /// <summary>
-    /// Contains randomly generated <see cref="IPamaxieApplication"/> Data
+    /// Contains randomly generated <see cref="PamaxieApplication"/> Data
     /// </summary>
     public static class TestApplicationData
     {
         /// <summary>
         /// List of Test Applications
         /// </summary>
-        public static readonly List<IPamaxieApplication> ListOfApplications = new List<IPamaxieApplication>
+        public static readonly List<PamaxieApplication> ListOfApplications = new List<PamaxieApplication>
         {
             new PamaxieApplication
             {

@@ -90,7 +90,7 @@ namespace Test.Pamaxie.Website_Test
             IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);
 
             //Get ProfileData from ClaimPrinciple
-            IPamaxieUser user = httpContextAccessor.HttpContext?.User.GetGoogleAuthData(out bool _);
+            PamaxieUser user = httpContextAccessor.HttpContext?.User.GetGoogleAuthData(out bool _) as PamaxieUser;
             Assert.NotNull(user);
 
             UserService userService = new UserService(Configuration, httpContextAccessor, null);
@@ -118,14 +118,14 @@ namespace Test.Pamaxie.Website_Test
             //Check if the user is the current logged in
             Assert.NotNull(httpContextAccessor.HttpContext?.User.GetGoogleAuthData(out bool _));
 
-            IPamaxieUser unverifiedPamaxieUser = UserDataServiceExtension.Get(userKey);
+            PamaxieUser unverifiedPamaxieUser = UserDataServiceExtension.Get(userKey);
             TestOutputHelper.WriteLine("Email verified: {0}", unverifiedPamaxieUser.EmailVerified);
 
             UserService userService = new UserService(Configuration, httpContextAccessor, null);
             string token = userService.GenerateEmailConfirmationToken(unverifiedPamaxieUser);
             Assert.True(userService.ConfirmEmail(token));
 
-            IPamaxieUser verifiedPamaxieUser = UserDataServiceExtension.Get(userKey);
+            PamaxieUser verifiedPamaxieUser = UserDataServiceExtension.Get(userKey);
             TestOutputHelper.WriteLine("Email verified: {0}", verifiedPamaxieUser.EmailVerified);
             Assert.True(userService.IsEmailOfCurrentUserVerified());
         }
