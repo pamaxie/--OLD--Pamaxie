@@ -22,7 +22,7 @@ namespace Test.Base
         /// <summary>
         /// <inheritdoc cref="MemberData.RandomApplications"/>
         /// </summary>
-        public static IEnumerable<object[]> RandomApplicationData => MemberData.RandomApplications;
+        public static IEnumerable<object[]> RandomApplications => MemberData.RandomApplications;
 
         public TestApplicationDataService(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
@@ -51,7 +51,7 @@ namespace Test.Base
         /// /// <param name="applicationName">The application name</param>
         /// /// <param name="authorizationToken">The authorization token</param>
         [Theory]
-        [MemberData(nameof(RandomApplicationData))]
+        [MemberData(nameof(RandomApplications))]
         public void Create(string ownerKey, string applicationName, string authorizationToken)
         {
             PamaxieApplication application = new PamaxieApplication
@@ -86,7 +86,7 @@ namespace Test.Base
         /// /// <param name="applicationName">The application name</param>
         /// /// <param name="authorizationToken">The authorization token</param>
         [Theory]
-        [MemberData(nameof(RandomApplicationData))]
+        [MemberData(nameof(RandomApplications))]
         public void TryCreate(string ownerKey, string applicationName, string authorizationToken)
         {
             PamaxieApplication application = new PamaxieApplication
@@ -165,7 +165,7 @@ namespace Test.Base
         /// /// <param name="applicationName">The application name</param>
         /// /// <param name="authorizationToken">The authorization token</param>
         [Theory]
-        [MemberData(nameof(RandomApplicationData))]
+        [MemberData(nameof(RandomApplications))]
         public void UpdateOrCreate_Create(string ownerKey, string applicationName, string authorizationToken)
         {
             PamaxieApplication application = new PamaxieApplication

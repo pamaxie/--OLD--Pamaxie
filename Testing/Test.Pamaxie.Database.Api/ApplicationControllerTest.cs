@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +23,11 @@ namespace Test.Pamaxie.Database.Api_Test
         /// <inheritdoc cref="MemberData.AllApplications"/>
         /// </summary>
         public static IEnumerable<object[]> AllApplications => MemberData.AllApplications;
+        
+        /// <summary>
+        /// <inheritdoc cref="MemberData.RandomApplications"/>
+        /// </summary>
+        public static IEnumerable<object[]> RandomApplications => MemberData.RandomApplications;
 
         public ApplicationControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
@@ -59,16 +65,31 @@ namespace Test.Pamaxie.Database.Api_Test
         /// <summary>
         /// Test for creating a application <see cref="ApplicationController.CreateTask"/>
         /// </summary>
-        /// <param name="applicationKey">The application key from inlined data</param>
+        /// /// <param name="ownerKey">The key of the application owner</param>
+        /// /// <param name="applicationName">The application name</param>
+        /// /// <param name="authorizationToken">The authorization token</param>
         [Theory]
-        [MemberData(nameof(AllApplications))]
-        public void Create(string applicationKey)
+        [MemberData(nameof(RandomApplications))]
+        public void Create(string ownerKey, string applicationName, string authorizationToken)
         {
-            //Get application
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
-
+            //Create application
+            PamaxieApplication application = new PamaxieApplication
+            {
+                TTL = DateTime.Now,
+                Credentials = new AppAuthCredentials
+                {
+                    AuthorizationToken = authorizationToken,
+                    AuthorizationTokenCipher = "",
+                    LastAuth = DateTime.Now
+                },
+                OwnerKey = ownerKey,
+                ApplicationName = applicationName,
+                LastAuth = DateTime.Now,
+                RateLimited = false,
+                Disabled = false,
+                Deleted = false
+            };
+            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
             Controller.Request.Body = body;
@@ -85,16 +106,31 @@ namespace Test.Pamaxie.Database.Api_Test
         /// <summary>
         /// Test for trying to create a application <see cref="ApplicationController.CreateTask"/>
         /// </summary>
-        /// <param name="applicationKey">The application key from inlined data</param>
+        /// /// <param name="ownerKey">The key of the application owner</param>
+        /// /// <param name="applicationName">The application name</param>
+        /// /// <param name="authorizationToken">The authorization token</param>
         [Theory]
-        [MemberData(nameof(AllApplications))]
-        public void TryCreate(string applicationKey)
+        [MemberData(nameof(RandomApplications))]
+        public void TryCreate(string ownerKey, string applicationName, string authorizationToken)
         {
-            //Get application
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
-
+            //Create application
+            PamaxieApplication application = new PamaxieApplication
+            {
+                TTL = DateTime.Now,
+                Credentials = new AppAuthCredentials
+                {
+                    AuthorizationToken = authorizationToken,
+                    AuthorizationTokenCipher = "",
+                    LastAuth = DateTime.Now
+                },
+                OwnerKey = ownerKey,
+                ApplicationName = applicationName,
+                LastAuth = DateTime.Now,
+                RateLimited = false,
+                Disabled = false,
+                Deleted = false
+            };
+            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
             Controller.Request.Body = body;
@@ -175,16 +211,31 @@ namespace Test.Pamaxie.Database.Api_Test
         /// <summary>
         /// Test for creating a application through <see cref="ApplicationController.UpdateOrCreateTask"/>
         /// </summary>
-        /// <param name="applicationKey">The application key from inlined data</param>
+        /// /// <param name="ownerKey">The key of the application owner</param>
+        /// /// <param name="applicationName">The application name</param>
+        /// /// <param name="authorizationToken">The authorization token</param>
         [Theory]
-        [MemberData(nameof(AllApplications))]
-        public void UpdateOrCreate_Create(string applicationKey)
+        [MemberData(nameof(RandomApplications))]
+        public void UpdateOrCreate_Create(string ownerKey, string applicationName, string authorizationToken)
         {
-            //Get application
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
-
+            //Create application
+            PamaxieApplication application = new PamaxieApplication
+            {
+                TTL = DateTime.Now,
+                Credentials = new AppAuthCredentials
+                {
+                    AuthorizationToken = authorizationToken,
+                    AuthorizationTokenCipher = "",
+                    LastAuth = DateTime.Now
+                },
+                OwnerKey = ownerKey,
+                ApplicationName = applicationName,
+                LastAuth = DateTime.Now,
+                RateLimited = false,
+                Disabled = false,
+                Deleted = false
+            };
+            
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
             Controller.Request.Body = body;
