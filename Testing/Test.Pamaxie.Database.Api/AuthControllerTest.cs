@@ -11,7 +11,7 @@ namespace Test.Pamaxie.Database.Api_Test
     /// <summary>
     /// Testing class for <see cref="AuthController"/>
     /// </summary>
-    public class AuthControllerTest : ApiTestBase<AuthController>
+    public sealed class AuthControllerTest : ApiTestBase<AuthController>
     {
         public AuthControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {

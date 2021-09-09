@@ -5,7 +5,7 @@ namespace Pamaxie.Data
     /// <summary>
     ///     Data for Application specific things
     /// </summary>
-    public class PamaxieApplication : IPamaxieApplication
+    public sealed class PamaxieApplication : IPamaxieApplication
     {
         /// <summary>
         /// <inheritdoc/>

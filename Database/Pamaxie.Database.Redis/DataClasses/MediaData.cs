@@ -8,7 +8,7 @@ namespace Pamaxie.Database.Redis.DataClasses
     /// <summary>
     /// Value pair for storing image Values
     /// </summary>
-    public class MediaPredictionData
+    public sealed class MediaPredictionData
     {
         /// <summary>
         /// Creating a new Media Prediction Data instance

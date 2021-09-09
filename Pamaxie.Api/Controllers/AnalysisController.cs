@@ -16,7 +16,7 @@ namespace Pamaxie.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class AnalysisController : ControllerBase
+    public sealed class AnalysisController : ControllerBase
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly ILogger<AnalysisController> _logger;

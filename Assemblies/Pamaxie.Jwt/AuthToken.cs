@@ -5,7 +5,7 @@ namespace Pamaxie.Jwt
     /// <summary>
     /// Authentication Token
     /// </summary>
-    public class AuthToken
+    public sealed class AuthToken
     {
         /// <summary>
         /// The token

@@ -15,7 +15,7 @@ namespace Pamaxie.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class AuthController : ControllerBase
+    public sealed class AuthController : ControllerBase
     {
         private readonly TokenGenerator _generator;
 

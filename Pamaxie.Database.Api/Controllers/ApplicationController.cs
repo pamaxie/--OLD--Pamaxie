@@ -14,7 +14,7 @@ namespace Pamaxie.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class ApplicationController : ControllerBase
+    public sealed class ApplicationController : ControllerBase
     {
         // ReSharper disable once NotAccessedField.Local
         private readonly DatabaseService _dbService;

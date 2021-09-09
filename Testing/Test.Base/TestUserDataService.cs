@@ -11,7 +11,7 @@ namespace Test.Base
     /// <summary>
     /// Testing class to test the custom UserDataService Client interaction used when testing towards other projects
     /// </summary>
-    public class TestUserDataService : TestBase
+    public sealed class TestUserDataService : TestBase
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllUsers"/>

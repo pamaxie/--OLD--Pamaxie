@@ -15,7 +15,7 @@ namespace Test.Pamaxie.Website_Test
     /// <summary>
     /// Testing class for <see cref="UserService"/>
     /// </summary>
-    public class UserServiceTestBaseTest : TestBase
+    public sealed class UserServiceTestBaseTest : TestBase
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllVerifiedUsers"/>

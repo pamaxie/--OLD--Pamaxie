@@ -2,7 +2,7 @@
 
 namespace Pamaxie.Data
 {
-    public class WebWebDomain : IWebDomain
+    public sealed class WebWebDomain : IWebDomain
     {
         /// <summary>
         /// <inheritdoc/>

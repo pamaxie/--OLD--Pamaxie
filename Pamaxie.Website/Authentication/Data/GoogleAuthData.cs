@@ -9,7 +9,7 @@ namespace Pamaxie.Website.Authentication.Data
     /// <summary>
     /// Google User Class
     /// </summary>
-    public class GoogleAuthData : IPamaxieUser
+    public sealed class GoogleAuthData : IPamaxieUser
     {
         /// <summary>
         /// <inheritdoc/>

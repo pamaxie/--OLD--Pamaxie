@@ -10,7 +10,7 @@ namespace Test.Pamaxie.MediaDetection_Test
     /// <summary>
     /// Testing class for <see cref="FileDetection"/>
     /// </summary>
-    public class FileDetectionTest : TestBase
+    public sealed class FileDetectionTest : TestBase
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.FileLinks"/>

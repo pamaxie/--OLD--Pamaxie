@@ -8,7 +8,7 @@ using Pamaxie.Api;
 namespace Test.Pamaxie.Database.Extensions.Client_Test
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class DatabaseApiFactory : WebApplicationFactory<Startup>
+    public sealed class DatabaseApiFactory : WebApplicationFactory<Startup>
     {
         private IConfiguration Configuration { get; set; }
 

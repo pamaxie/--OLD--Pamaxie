@@ -11,7 +11,7 @@ namespace Test.Pamaxie.Website_Test
     /// <summary>
     /// Testing class for <see cref="EmailSender"/>
     /// </summary>
-    public class EmailSenderTestBaseTest : TestBase
+    public sealed class EmailSenderTestBaseTest : TestBase
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.PersonalUser"/>

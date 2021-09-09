@@ -4,7 +4,7 @@ using Pamaxie.Database.Design;
 namespace Pamaxie.Database.Extensions.Server
 {
     /// <inheritdoc/>
-    public class PamaxieDataContext : IPamaxieDataContext
+    public sealed class PamaxieDataContext : IPamaxieDataContext
     {
         /// <inheritdoc/>
         public string DataInstances { get; }

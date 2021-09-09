@@ -11,7 +11,7 @@ namespace Pamaxie.Jwt
     /// <summary>
     /// Authentication token generator
     /// </summary>
-    public class TokenGenerator
+    public sealed class TokenGenerator
     {
         private readonly IConfiguration _configuration;
 

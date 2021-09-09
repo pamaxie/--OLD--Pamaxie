@@ -6,7 +6,7 @@ namespace Pamaxie.Website.Models
     /// <summary>
     /// Confirmation email body, used for the JWT Token
     /// </summary>
-    public class ConfirmEmailBody : IBody
+    public sealed class ConfirmEmailBody : IBody
     {
         /// <summary>
         /// <inheritdoc/>

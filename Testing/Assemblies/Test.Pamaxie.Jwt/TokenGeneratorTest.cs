@@ -9,7 +9,7 @@ namespace Test.Pamaxie.Jwt_Test
     /// <summary>
     /// Testing class for <see cref="TokenGenerator"/>
     /// </summary>
-    public class TokenGeneratorTest : TestBase
+    public sealed class TokenGeneratorTest : TestBase
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllUsers"/>

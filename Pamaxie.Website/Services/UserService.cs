@@ -12,7 +12,7 @@ namespace Pamaxie.Website.Services
     /// <summary>
     /// A service for User interactions on the website
     /// </summary>
-    public class UserService
+    public sealed class UserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISnackbar? _snackbar;

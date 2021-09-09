@@ -14,7 +14,7 @@ namespace Test.Pamaxie.API_Test
     /// <summary>
     /// Testing class for <see cref="AuthController"/>
     /// </summary>
-    public class AuthControllerTestBaseTest : ApiTestBase<AuthController>
+    public sealed class AuthControllerTestBaseTest : ApiTestBase<AuthController>
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllApplications"/>

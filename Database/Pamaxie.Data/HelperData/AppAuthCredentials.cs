@@ -5,7 +5,7 @@ namespace Pamaxie.Data
     /// <summary>
     /// AppAuthCredentials data used to authenticate with the API
     /// </summary>
-    public class AppAuthCredentials
+    public sealed class AppAuthCredentials
     {
         /// <summary>
         /// The Authorization Token that is reached in to us for auth

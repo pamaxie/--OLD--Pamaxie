@@ -10,7 +10,7 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
     /// <summary>
     /// Testing class for <see cref="UserDataService"/>
     /// </summary>
-    public class UserDataServiceTest : TestBase, IClassFixture<DatabaseApiFactory>
+    public sealed class UserDataServiceTest : TestBase, IClassFixture<DatabaseApiFactory>
     {
         public UserDataServiceTest(DatabaseApiFactory fixture, ITestOutputHelper testOutputHelper) : base(
             testOutputHelper)

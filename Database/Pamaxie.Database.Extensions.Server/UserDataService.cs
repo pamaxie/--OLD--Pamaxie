@@ -10,7 +10,7 @@ using StackExchange.Redis;
 namespace Pamaxie.Database.Extensions.Server
 {
     /// Implementation to get <see cref="IPamaxieUser"/> data from the server
-    public class UserDataService : ServerDataServiceBase<IPamaxieUser>, IUserDataService
+    public sealed class UserDataService : ServerDataServiceBase<IPamaxieUser>, IUserDataService
     {
         /// <inheritdoc/>
         internal UserDataService(IPamaxieDataContext dataContext, DatabaseService service)

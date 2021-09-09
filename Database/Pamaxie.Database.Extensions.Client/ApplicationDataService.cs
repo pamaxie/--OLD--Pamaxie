@@ -5,7 +5,7 @@ using Pamaxie.Database.Design;
 namespace Pamaxie.Database.Extensions.Client
 {
     /// Implementation to get <see cref="IPamaxieApplication"/> data from the server
-    internal class ApplicationDataService : ClientDataServiceBase<IPamaxieApplication>, IApplicationDataService
+    internal sealed class ApplicationDataService : ClientDataServiceBase<IPamaxieApplication>, IApplicationDataService
     {
         /// <inheritdoc/>
         internal ApplicationDataService(IPamaxieDataContext dataContext, DatabaseService service)

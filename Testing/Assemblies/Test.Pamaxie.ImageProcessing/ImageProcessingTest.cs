@@ -10,7 +10,7 @@ namespace Test.Pamaxie.ImageProcessing_Test
     /// <summary>
     /// Testing class for <see cref="ImageProcessing"/>
     /// </summary>
-    public class ImageProcessingTest : TestBase
+    public sealed class ImageProcessingTest : TestBase
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.FileLinks"/>

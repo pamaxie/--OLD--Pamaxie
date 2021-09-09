@@ -7,7 +7,7 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
     /// <summary>
     /// Testing class for <see cref="ApplicationDataService"/>
     /// </summary>
-    public class ApplicationDataServiceTest : TestBase
+    public sealed class ApplicationDataServiceTest : TestBase
     {
         public ApplicationDataServiceTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {

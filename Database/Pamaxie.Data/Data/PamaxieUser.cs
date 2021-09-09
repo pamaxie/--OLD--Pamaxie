@@ -6,7 +6,7 @@ namespace Pamaxie.Data
     /// <summary>
     /// Class containing information for website users
     /// </summary>
-    public class PamaxieUser : IPamaxieUser
+    public sealed class PamaxieUser : IPamaxieUser
     {
         /// <summary>
         /// <inheritdoc/>

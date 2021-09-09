@@ -13,7 +13,7 @@ namespace Pamaxie.Website.Services
     /// <summary>
     /// Service for everything related to sending emails
     /// </summary>
-    public class EmailSender
+    public sealed class EmailSender
     {
         private readonly string _email;
         private readonly string _password;

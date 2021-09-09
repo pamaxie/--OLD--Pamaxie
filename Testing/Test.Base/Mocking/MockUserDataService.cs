@@ -86,7 +86,7 @@ namespace Test.Base
         }
 
         /// <inheritdoc cref="IUserDataService"/>
-        private class UserDataService : IUserDataService
+        private sealed class UserDataService : IUserDataService
         {
             /// <inheritdoc cref="IUserDataService.Get"/>
             public IPamaxieUser Get(string key)

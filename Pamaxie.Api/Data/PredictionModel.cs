@@ -4,7 +4,7 @@ namespace Pamaxie.Api.Data
     /// <summary>
     /// Prediction Model
     /// </summary>
-    public class PredictionModel
+    public sealed class PredictionModel
     {
         public string ImageExtension;
         public string ImageUrl;

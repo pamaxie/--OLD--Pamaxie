@@ -8,7 +8,7 @@ namespace Test.Base
     /// Disable tests from running parallel, as this can fail tests using the same collection
     /// </summary>
     [CollectionDefinition(nameof(TestCollectionDefinition), DisableParallelization = true)]
-    public class TestCollectionDefinition
+    public sealed class TestCollectionDefinition
     {
     }
 

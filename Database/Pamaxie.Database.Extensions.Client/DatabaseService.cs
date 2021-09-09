@@ -5,7 +5,7 @@ using Pamaxie.Database.Design;
 namespace Pamaxie.Database.Extensions.Client
 {
     /// <inheritdoc/>
-    public class DatabaseService : IDatabaseService<HttpClient>
+    public sealed class DatabaseService : IDatabaseService<HttpClient>
     {
         /// <inheritdoc/>
         public HttpClient Service { get; internal init; } = new HttpClient();

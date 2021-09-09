@@ -91,7 +91,7 @@ namespace Test.Base
         }
 
         /// <inheritdoc cref="IApplicationDataService"/>
-        private class ApplicationDataService : IApplicationDataService
+        private sealed class ApplicationDataService : IApplicationDataService
         {
             /// <inheritdoc cref="IApplicationDataService.Get"/>
             public IPamaxieApplication Get(string key)

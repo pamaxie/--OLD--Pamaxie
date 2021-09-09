@@ -7,7 +7,7 @@ namespace Test.Pamaxie.API_Test
     /// <summary>
     /// Testing class for <see cref="AnalysisController"/>
     /// </summary>
-    public class AnalysisControllerTestBaseTest : ApiTestBase<AnalysisController>
+    public sealed class AnalysisControllerTestBaseTest : ApiTestBase<AnalysisController>
     {
         public AnalysisControllerTestBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {

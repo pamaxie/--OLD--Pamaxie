@@ -15,7 +15,7 @@ namespace Test.Pamaxie.Website_Test
     /// <summary>
     /// Testing class for <see cref="JsonWebToken"/>
     /// </summary>
-    public class JsonWebTokenTestBaseTest : TestBase
+    public sealed class JsonWebTokenTestBaseTest : TestBase
     {
         private readonly string _secret;
 

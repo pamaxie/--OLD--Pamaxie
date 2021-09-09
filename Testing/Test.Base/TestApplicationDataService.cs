@@ -12,7 +12,7 @@ namespace Test.Base
     /// <summary>
     /// Testing class to test the custom ApplicationDataService Client interaction used when testing towards other projects
     /// </summary>
-    public class TestApplicationDataService : TestBase
+    public sealed class TestApplicationDataService : TestBase
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllApplications"/>

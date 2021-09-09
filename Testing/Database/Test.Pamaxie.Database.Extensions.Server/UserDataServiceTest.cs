@@ -7,7 +7,7 @@ namespace Test.Database.Extensions.Server_Test
     /// <summary>
     /// Testing class for <see cref="UserDataService"/>
     /// </summary>
-    public class UserDataServiceTest : TestBase
+    public sealed class UserDataServiceTest : TestBase
     {
         public UserDataServiceTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
