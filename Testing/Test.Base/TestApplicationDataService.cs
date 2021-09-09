@@ -18,12 +18,12 @@ namespace Test.Base
         /// <inheritdoc cref="MemberData.AllApplications"/>
         /// </summary>
         public static IEnumerable<object[]> AllApplications => MemberData.AllApplications;
-        
+
         /// <summary>
         /// <inheritdoc cref="MemberData.RandomApplications"/>
         /// </summary>
         public static IEnumerable<object[]> RandomApplicationData => MemberData.RandomApplications;
-        
+
         public TestApplicationDataService(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             //Mock ApplicationDataService, for ApplicationDataServiceExtension
@@ -114,7 +114,7 @@ namespace Test.Base
             string str = JsonConvert.SerializeObject(createdApplication);
             TestOutputHelper.WriteLine(str);
         }
-        
+
         /// <summary>
         /// Updates a application
         /// </summary>
@@ -123,10 +123,11 @@ namespace Test.Base
         [MemberData(nameof(AllApplications))]
         public void Update(string applicationKey)
         {
-            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             string oldName = application.ApplicationName;
-            application.ApplicationName = RandomService.GenerateRandomName(); 
+            application.ApplicationName = RandomService.GenerateRandomName();
             IPamaxieApplication updatedApplication = application.Update();
             Assert.NotNull(updatedApplication);
             Assert.NotEqual(oldName, updatedApplication.ApplicationName);
@@ -134,7 +135,7 @@ namespace Test.Base
             string str = JsonConvert.SerializeObject(updatedApplication);
             TestOutputHelper.WriteLine(str);
         }
-        
+
         /// <summary>
         /// Tries to updates a application
         /// </summary>
@@ -143,10 +144,11 @@ namespace Test.Base
         [MemberData(nameof(AllApplications))]
         public void TryUpdate(string applicationKey)
         {
-            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             string oldName = application.ApplicationName;
-            application.ApplicationName = RandomService.GenerateRandomName(); 
+            application.ApplicationName = RandomService.GenerateRandomName();
             bool updated = application.TryUpdate(out IPamaxieApplication updatedApplication);
             Assert.True(updated);
             Assert.NotNull(updatedApplication);
@@ -155,7 +157,7 @@ namespace Test.Base
             string str = JsonConvert.SerializeObject(updatedApplication);
             TestOutputHelper.WriteLine(str);
         }
-        
+
         /// <summary>
         /// Tries to create a application
         /// </summary>
@@ -191,7 +193,7 @@ namespace Test.Base
             string str = JsonConvert.SerializeObject(createdApplication);
             TestOutputHelper.WriteLine(str);
         }
-        
+
         /// <summary>
         /// Tries to updates a application
         /// </summary>
@@ -200,10 +202,11 @@ namespace Test.Base
         [MemberData(nameof(AllApplications))]
         public void UpdateOrCreate_Update(string applicationKey)
         {
-            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             string oldName = application.ApplicationName;
-            application.ApplicationName = RandomService.GenerateRandomName(); 
+            application.ApplicationName = RandomService.GenerateRandomName();
             bool updated = application.TryUpdate(out IPamaxieApplication updatedApplication);
             Assert.True(updated);
             Assert.NotNull(updatedApplication);
@@ -212,7 +215,7 @@ namespace Test.Base
             string str = JsonConvert.SerializeObject(updatedApplication);
             TestOutputHelper.WriteLine(str);
         }
-        
+
         /// <summary>
         /// Deletes a application
         /// </summary>
@@ -221,12 +224,13 @@ namespace Test.Base
         [MemberData(nameof(AllApplications))]
         public void Delete(string applicationKey)
         {
-            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             bool deleted = application.Delete();
             Assert.True(deleted);
             TestOutputHelper.WriteLine("Deleted {0}", true);
-            
+
             //Add it back, so it will not fail other tests
             TestApplicationData.ListOfApplications.Add(application);
         }
@@ -239,14 +243,15 @@ namespace Test.Base
         [MemberData(nameof(AllApplications))]
         public void GetOwner(string applicationKey)
         {
-            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             IPamaxieUser user = application.GetOwner();
             Assert.NotNull(user);
             string str = JsonConvert.SerializeObject(user);
             TestOutputHelper.WriteLine(str);
         }
-        
+
         /// <summary>
         /// Enable or disable a application
         /// </summary>
@@ -255,14 +260,15 @@ namespace Test.Base
         [MemberData(nameof(AllApplications))]
         public void EnableOrDisable(string applicationKey)
         {
-            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
             bool disabled = application.Disabled;
             IPamaxieApplication enabledOrDisabledApplication = application.EnableOrDisable();
             Assert.NotEqual(disabled, enabledOrDisabledApplication.Disabled);
             TestOutputHelper.WriteLine(enabledOrDisabledApplication.Disabled ? "Enabled" : "Disabled");
         }
-        
+
         /// <summary>
         /// Verifies a application's credentials
         /// </summary>
@@ -271,8 +277,9 @@ namespace Test.Base
         [MemberData(nameof(AllApplications))]
         public void VerifyAuthentication(string applicationKey)
         {
-            IPamaxieApplication application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application); 
+            IPamaxieApplication application =
+                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
+            Assert.NotNull(application);
             //bool verified = application.VerifyAuthentication();
             //Assert.True(verified);
             //TestOutputHelper.WriteLine("Verified {0}", true);

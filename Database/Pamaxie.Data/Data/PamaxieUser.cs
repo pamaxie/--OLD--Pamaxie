@@ -12,7 +12,7 @@ namespace Pamaxie.Data
         /// <inheritdoc/>
         /// </summary>
         public string Key { get; set; }
-        
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

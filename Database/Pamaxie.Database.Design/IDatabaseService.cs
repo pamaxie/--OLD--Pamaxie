@@ -9,6 +9,7 @@ namespace Pamaxie.Database.Design
     public interface IDatabaseService<out T>
     {
         #region Services
+
         /// <summary>
         /// The actual Database Service that we use to connect to the database or database api
         /// </summary>
@@ -36,13 +37,13 @@ namespace Pamaxie.Database.Design
         /// </summary>
         /// <returns><see cref="bool"/> if the connection attempt was successful</returns>
         public bool Connect();
-        
+
         /// <summary>
         /// Validates if the service is available
         /// </summary>
         /// <returns><see cref="bool"/> if the service is available</returns>
         public bool IsServiceAvailable();
-        
+
         /// <summary>
         /// Validates the roundtrip latency to the service
         /// </summary>

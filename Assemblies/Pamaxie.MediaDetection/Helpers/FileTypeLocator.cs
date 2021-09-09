@@ -11,11 +11,9 @@ namespace Pamaxie.MediaDetection
         /// Used to Get the File types via Assembly Reflection
         /// </summary>
         /// <returns></returns>
-        internal static IEnumerable<FileType> GetFileTypes()
-        {
-            return GetFileTypes(typeof(FileTypeLocator).GetTypeInfo().Assembly);
-        }
-        
+        internal static IEnumerable<FileType> GetFileTypes() =>
+            GetFileTypes(typeof(FileTypeLocator).GetTypeInfo().Assembly);
+
         /// <summary>
         /// Used to Get the File types via Assembly Reflection
         /// </summary>
@@ -44,15 +42,13 @@ namespace Pamaxie.MediaDetection
         /// <returns></returns>
         internal static IEnumerable<FileType> GetFileTypes(Assembly assembly, bool includeLocal)
         {
-            var typesInAssembly = GetFileTypes(assembly);
+            IEnumerable<FileType> typesInAssembly = GetFileTypes(assembly);
 
-            if (includeLocal)
-            {
-                var typesThisAssembly = GetFileTypes();
-                return typesInAssembly.Union(typesThisAssembly);
-            }
-            
-            return typesInAssembly;
+            if (!includeLocal)
+                return typesInAssembly;
+            IEnumerable<FileType> typesThisAssembly = GetFileTypes();
+            return typesInAssembly.Union(typesThisAssembly);
+
         }
     }
 }

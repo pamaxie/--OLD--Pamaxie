@@ -34,16 +34,18 @@ namespace Pamaxie.Api.Controllers
         public ActionResult<AuthToken> LoginTask()
         {
             //TODO: Use basic auth here please, do not use a HTTPPost for login.
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest();
+            if (string.IsNullOrEmpty(result))
+                return BadRequest();
 
             PamaxieApplication appData = JsonConvert.DeserializeObject<PamaxieApplication>(result);
 
             if (string.IsNullOrEmpty(appData?.Credentials.AuthorizationToken) || default == appData.Key)
                 return Unauthorized();
 
-            if (!appData.VerifyAuthentication()) return Unauthorized();
+            if (!appData.VerifyAuthentication())
+                return Unauthorized();
 
             AuthToken token = _generator.CreateToken(appData.Key);
             return Ok(token);

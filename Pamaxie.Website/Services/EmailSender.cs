@@ -49,7 +49,7 @@ namespace Pamaxie.Website.Services
 
         private Task Execute(string email, string subject, string body)
         {
-            MailMessage mail = new()
+            MailMessage mail = new MailMessage
             {
                 From = new MailAddress(_email, "Pamaxie"),
                 Subject = subject,
@@ -58,7 +58,7 @@ namespace Pamaxie.Website.Services
             };
             mail.To.Add(email);
 
-            SmtpClient smtpClient = new()
+            SmtpClient smtpClient = new SmtpClient
             {
                 Host = "smtp.privateemail.com",
                 Port = 587,
@@ -98,7 +98,7 @@ namespace Pamaxie.Website.Services
 
         private static string MinifyHtmlPage(string html)
         {
-            HtmlMinifier htmlMinifier = new();
+            HtmlMinifier htmlMinifier = new HtmlMinifier();
             MarkupMinificationResult result = htmlMinifier.Minify(html);
             return result.MinifiedContent;
         }

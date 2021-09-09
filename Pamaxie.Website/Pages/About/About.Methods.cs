@@ -4,8 +4,7 @@
     /// <summary>
     /// Class for the About page
     /// </summary>
-    public partial class About 
+    public partial class About
     {
-        
     }
 }

@@ -15,8 +15,8 @@ namespace Test.Base
         /// <returns>A <see cref="Stream"/> from the <see cref="object"/></returns>
         public static Stream CreateStream(object body)
         {
-            MemoryStream ms = new();
-            StreamWriter sw = new(ms);
+            MemoryStream ms = new MemoryStream();
+            StreamWriter sw = new StreamWriter(ms);
 
             string json = JsonConvert.SerializeObject(body);
 

@@ -38,7 +38,7 @@ namespace Pamaxie.Api.Controllers
             //TODO: Check if the API is fully functional in an efficient way to prevent overload attacks via this request.
             return "Analysis API is available";
         }
-        
+
         /// <summary>
         /// Verifies the content of a sent image
         /// </summary>
@@ -50,26 +50,25 @@ namespace Pamaxie.Api.Controllers
             //TODO: Allow sending/ analysis of binary/raw data
             //TODO: Add response for 102 Processing
             //TODO: DO NOT scan things directly on this controller, that's highly inefficient
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
             string filehash = await ImageProcessing.ImageProcessing.GetFileHash(result);
-            MediaPredictionData data = new(filehash);
-            if (data.TryLoadData(out var knownResult))
-            {
+            MediaPredictionData data = new MediaPredictionData(filehash);
+            if (data.TryLoadData(out MediaData knownResult))
                 return JsonConvert.SerializeObject(knownResult);
-            }
 
             FileInfo image = ImageProcessing.ImageProcessing.DownloadFile(result);
             //Add input data
-            ModelInput input = new()
+            ModelInput input = new ModelInput
             {
                 ImageSource = image.FullName
             };
             //Load model and predict output of sample data
             ConsumeModel.Predict(input, out OutputProperties labelResult);
 
-            MediaData predictionData = new()
+            MediaData predictionData = new MediaData
             {
                 DetectedLabels = labelResult
             };
@@ -89,15 +88,14 @@ namespace Pamaxie.Api.Controllers
         public async Task<ActionResult<string>> GetExistingData()
         {
             //TODO: Use proper status codes for response / failure
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
             string filehash = await ImageProcessing.ImageProcessing.GetFileHash(result);
-            MediaPredictionData data = new(filehash);
+            MediaPredictionData data = new MediaPredictionData(filehash);
             if (data.TryLoadData(out MediaData knownResult))
-            {
                 return JsonConvert.SerializeObject(knownResult);
-            }
 
             return NotFound("The file has not yet been analyzed by our system.");
         }
@@ -110,9 +108,10 @@ namespace Pamaxie.Api.Controllers
         public async Task<ActionResult<string>> GetHash()
         {
             //TODO: Use proper status codes for response / failure
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
             return await ImageProcessing.ImageProcessing.GetFileHash(result);
         }
     }

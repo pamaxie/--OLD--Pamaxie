@@ -13,7 +13,7 @@ namespace Pamaxie.Jwt
         /// The token
         /// </summary>
         public string Token { get; set; }
-        
+
         /// <summary>
         /// The expiration date of the token
         /// </summary>

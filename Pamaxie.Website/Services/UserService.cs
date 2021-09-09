@@ -16,16 +16,17 @@ namespace Pamaxie.Website.Services
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISnackbar? _snackbar;
-        
+
         private readonly string _secret;
-        
+
         public UserService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ISnackbar? snackbar)
         {
             IConfigurationSection jwtTokenSection = configuration.GetSection("JwtToken");
             _secret = jwtTokenSection.GetValue<string>("Secret");
             _httpContextAccessor = httpContextAccessor;
             _snackbar = snackbar;
-            if (_snackbar == null) return;
+            if (_snackbar == null)
+                return;
             _snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
             _snackbar.Configuration.PreventDuplicates = true;
             _snackbar.Configuration.VisibleStateDuration = 10000;
@@ -46,9 +47,9 @@ namespace Pamaxie.Website.Services
             if (googleUser is null)
                 return false;
             IPamaxieUser pamaxieUser = UserDataServiceExtension.Get(googleUser.Key);
-            return pamaxieUser is {EmailVerified: true};
+            return pamaxieUser is { EmailVerified: true };
         }
-        
+
         /// <summary>
         /// Generates a token for EmailConfirmation for a User
         /// </summary>
@@ -59,7 +60,7 @@ namespace Pamaxie.Website.Services
             IBody body = new ConfirmEmailBody(user);
             return JsonWebToken.Encode(body, _secret);
         }
-        
+
         /// <summary>
         /// Confirms the email of a user from a GoogleUserId included in the token
         /// </summary>
@@ -73,7 +74,7 @@ namespace Pamaxie.Website.Services
             IPamaxieUser pamaxieUser = UserDataServiceExtension.Get(body.User.Key);
             return pamaxieUser.EmailAddress == body.User.EmailAddress && body.User.VerifyEmail();
         }
-        
+
         /// <summary>
         /// Shows a Snackbar dialog telling the user to verify their email address.
         /// </summary>

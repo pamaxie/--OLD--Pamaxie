@@ -33,13 +33,13 @@ namespace Pamaxie.Api.Controllers
         [HttpGet("get")]
         public ActionResult<IPamaxieUser> GetTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) 
+            if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
 
             IPamaxieUser user = _dbService.Users.Get(result);
-            
+
             return Ok(user);
         }
 
@@ -51,7 +51,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("create")]
         public ActionResult<IPamaxieUser> CreateTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
@@ -73,7 +73,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("tryCreate")]
         public ActionResult<IPamaxieUser> TryCreateTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
@@ -95,7 +95,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("update")]
         public ActionResult<IPamaxieUser> UpdateTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
@@ -117,7 +117,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("tryUpdate")]
         public ActionResult<IPamaxieUser> TryUpdateTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
@@ -139,7 +139,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("updateOrCreate")]
         public ActionResult<IPamaxieUser> UpdateOrCreateTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
@@ -161,7 +161,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("delete")]
         public ActionResult<bool> DeleteTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
@@ -183,9 +183,9 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("getAllApplications")]
         public ActionResult<IEnumerable<IPamaxieApplication>> GetAllApplicationsTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) 
+            if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
 
             IPamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
@@ -205,7 +205,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("verifyEmail")]
         public ActionResult<bool> VerifyEmailTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
@@ -215,7 +215,7 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest(ErrorHandler.BadData());
 
             bool verified = _dbService.Users.VerifyEmail(user);
-            
+
             return Ok(verified);
         }
     }

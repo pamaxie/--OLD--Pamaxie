@@ -30,16 +30,16 @@ namespace Test.Pamaxie.MediaDetection_Test
         [MemberData(nameof(FileLinksWithFileType))]
         public void DetermineFileType(string url, FileType expectedFileType)
         {
+            Assert.False(string.IsNullOrEmpty(url));
+            Assert.NotNull(expectedFileType);
             Stream stream = FileDetectionUtilities.UrlToStream(url);
             TestOutputHelper.WriteLine("First 10 bytes of file:");
             TestOutputHelper.WriteLine(stream.ReadExactly(10).ToHexString());
             TestOutputHelper.WriteLine("Expected:");
             IEnumerable<FileSpecification> listOfTypeSpecs = expectedFileType.GetFileSpecifications();
-            foreach (FileSpecification fileSpec in (listOfTypeSpecs))
-            {
+            foreach (FileSpecification fileSpec in listOfTypeSpecs)
                 TestOutputHelper.WriteLine(fileSpec.Signature.ToHexString());
-            }
-            
+
             KeyValuePair<FileSpecification, FileType>? fileInformation = stream.DetermineFileType();
             Assert.NotNull(fileInformation);
             Assert.Equal(expectedFileType.GetType(), fileInformation.Value.Value.GetType());

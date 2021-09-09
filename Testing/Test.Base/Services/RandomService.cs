@@ -13,7 +13,7 @@ namespace Test.Base
         /// <returns>Randomly generated key</returns>
         public static string GenerateRandomKey(int length = 19)
         {
-            Random rnd = new();
+            Random rnd = new Random();
             ulong min = ulong.Parse("1" + new string('0', length - 1));
             ulong max = ulong.Parse(new string('9', length));
             ulong uRange = max - min;
@@ -23,7 +23,7 @@ namespace Test.Base
                 byte[] buf = new byte[8];
                 rnd.NextBytes(buf);
                 ulongRand = (ulong)BitConverter.ToInt64(buf, 0);
-            } while (ulongRand > ulong.MaxValue - ((ulong.MaxValue % uRange) + 1) % uRange);
+            } while (ulongRand > ulong.MaxValue - (ulong.MaxValue % uRange + 1) % uRange);
 
             return "10" + ((long)(ulongRand % uRange)).ToString(new string('0', length));
         }
@@ -35,11 +35,11 @@ namespace Test.Base
         /// <returns>Randomly generated name</returns>
         public static string GenerateRandomName(int length = 0)
         {
-            Random r = new();
+            Random r = new Random();
 
             if (length == 0)
                 length = r.Next(4, 9);
-            
+
             string[] consonants =
             {
                 "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "sh", "zh", "t", "v",

@@ -17,14 +17,14 @@ namespace Test.Base
         /// <returns>Mocked IHttpContextAccessor</returns>
         public static IHttpContextAccessor Mock(IEnumerable<Claim> userClaims)
         {
-            ClaimsPrincipal user = new(new ClaimsIdentity(userClaims));
+            ClaimsPrincipal user = new ClaimsPrincipal(new ClaimsIdentity(userClaims));
 
-            DefaultHttpContext context = new()
+            DefaultHttpContext context = new DefaultHttpContext
             {
                 User = user
             };
 
-            Mock<IHttpContextAccessor> mockHttpContextAccessor = new();
+            Mock<IHttpContextAccessor> mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
             mockHttpContextAccessor.Setup(_ => _.HttpContext).Returns(context);
 
             return mockHttpContextAccessor.Object;

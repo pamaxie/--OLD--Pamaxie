@@ -35,19 +35,21 @@ namespace Pamaxie.ImageProcessing
             {
                 responseStream.CopyTo(stream);
             }
+
             KeyValuePair<FileSpecification, FileType>? spec = stream.DetermineFileType();
             if (spec == null)
-                throw new ArgumentException("Unknown filetype detected. Can't analyze filetypes without a specification");
+                throw new ArgumentException(
+                    "Unknown filetype detected. Can't analyze filetypes without a specification");
 
             string fileName = $"{TempImageDirectory}\\{imageNumber}.{spec.Value.Value.Extension}";
 
             Image img = Image.Load(Configuration.Default, stream);
             img.Mutate(x => x
-                 .Resize(400, 400)
-                 .Grayscale());
+                .Resize(400, 400)
+                .Grayscale());
             img.Save(fileName);
             stream.Close();
-            FileInfo file = new(fileName);
+            FileInfo file = new FileInfo(fileName);
             return file;
         }
 #nullable disable
@@ -71,7 +73,7 @@ namespace Pamaxie.ImageProcessing
 
         private static async Task<string> GetHashAsync<T>(Stream stream) where T : HashAlgorithm, new()
         {
-            using T algo = new();
+            using T algo = new T();
             byte[] buffer = new byte[8192];
             int bytesRead;
 
@@ -81,10 +83,11 @@ namespace Pamaxie.ImageProcessing
             algo.TransformFinalBlock(buffer, 0, bytesRead);
 
             // build the hash string
-            StringBuilder sb = new(algo.HashSize / 4);
-            if (algo.Hash != null)
-                foreach (byte b in algo.Hash)
-                    sb.AppendFormat("{0:x2}", b);
+            StringBuilder sb = new StringBuilder(algo.HashSize / 4);
+            if (algo.Hash == null)
+                return sb.ToString();
+            foreach (byte b in algo.Hash)
+                sb.AppendFormat("{0:x2}", b);
             return sb.ToString();
         }
     }

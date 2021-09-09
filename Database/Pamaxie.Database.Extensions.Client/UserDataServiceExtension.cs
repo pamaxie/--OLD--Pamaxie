@@ -10,19 +10,19 @@ namespace Pamaxie.Database.Extensions.Client
     public static class UserDataServiceExtension
     {
         private static IUserDataService UserService => DatabaseService.UserService;
-        
+
         /// <inheritdoc cref="UserDataService.Get"/>
         public static IPamaxieUser Get(string key)
         {
             return UserService.Get(key);
         }
-        
+
         /// <inheritdoc cref="UserDataService.Create"/>
         public static IPamaxieUser Create(this IPamaxieUser value)
         {
             return UserService.Create(value);
         }
-        
+
         /// <inheritdoc cref="UserDataService.TryCreate"/>
         public static bool TryCreate(this IPamaxieUser value, out IPamaxieUser createdValue)
         {
@@ -46,7 +46,7 @@ namespace Pamaxie.Database.Extensions.Client
         {
             return UserService.UpdateOrCreate(value, out databaseValue);
         }
-        
+
         /// <inheritdoc cref="UserDataService.Exists"/>
         public static bool Exists(string value)
         {
@@ -58,12 +58,13 @@ namespace Pamaxie.Database.Extensions.Client
         {
             return UserService.Delete(value);
         }
-        
+
         /// <inheritdoc cref="UserDataService.GetAllApplications"/>
         public static IEnumerable<IPamaxieApplication> GetAllApplications(this IPamaxieUser value)
         {
             return UserService.GetAllApplications(value);
         }
+
         /// <inheritdoc cref="UserDataService.VerifyEmail"/>
         public static bool VerifyEmail(this IPamaxieUser value)
         {

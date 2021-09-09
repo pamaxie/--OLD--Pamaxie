@@ -9,7 +9,7 @@ namespace Pamaxie.Website
     /// </summary>
     public partial class App
     {
-        private readonly MudTheme _darkTheme = new()
+        private readonly MudTheme _darkTheme = new MudTheme
         {
             Palette = new Palette()
             {
@@ -35,7 +35,7 @@ namespace Pamaxie.Website
                 SecondaryContrastText = "rgba(255,255,255, 1)",
                 InfoContrastText = "rgba(255,255,255, 1)",
                 WarningContrastText = "rgba(255,255,255, 1)",
-            
+
                 Error = "#DA4E4B",
                 Warning = "#DAA932"
             }

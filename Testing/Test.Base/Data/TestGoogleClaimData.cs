@@ -15,7 +15,7 @@ namespace Test.Base
         /// List of Google user principle claims.
         /// Used to act as a user being logged into the website.
         /// </summary>
-        public static readonly List<Claim[]> ListOfGoogleUserPrincipleClaims = new()
+        public static readonly List<Claim[]> ListOfGoogleUserPrincipleClaims = new List<Claim[]>
         {
             new[]
             {
@@ -90,12 +90,12 @@ namespace Test.Base
             //Add the claims to the list of principle claims
             Claim[] claims =
             {
-                new(ClaimTypes.NameIdentifier, "101963629560135630792", ClaimValueTypes.String, "Google"),
-                new(ClaimTypes.Name, "PersonalUser", ClaimValueTypes.String, "Google"),
-                new(ClaimTypes.GivenName, "Test", ClaimValueTypes.String, "Google"),
-                new(ClaimTypes.Surname, "The Tester", ClaimValueTypes.String, "Google"),
-                new(ClaimTypes.Email, email, ClaimValueTypes.String, "Google"),
-                new("urn:google:image",
+                new Claim(ClaimTypes.NameIdentifier, "101963629560135630792", ClaimValueTypes.String, "Google"),
+                new Claim(ClaimTypes.Name, "PersonalUser", ClaimValueTypes.String, "Google"),
+                new Claim(ClaimTypes.GivenName, "Test", ClaimValueTypes.String, "Google"),
+                new Claim(ClaimTypes.Surname, "The Tester", ClaimValueTypes.String, "Google"),
+                new Claim(ClaimTypes.Email, email, ClaimValueTypes.String, "Google"),
+                new Claim("urn:google:image",
                     "https://lh3.googleusercontent.com/-K6jEW8D8F4E/YRy0Zw8i-OI/AAAAAAAAAMQ/pJE0bflfklI1iGnB5zqUspjINcPo1yJ3wCMICGAYYCw/s96-c"
                     , ClaimValueTypes.String, "Google")
             };

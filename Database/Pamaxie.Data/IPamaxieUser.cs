@@ -26,7 +26,7 @@ namespace Pamaxie.Data
         /// The Email-Address the user used to register with our services
         /// </summary>
         public string EmailAddress { get; set; }
-        
+
         /// <summary>
         /// Was the email of the user verified
         /// </summary>
@@ -36,7 +36,7 @@ namespace Pamaxie.Data
         /// The url / address where the profile picture of the user resides
         /// </summary>
         public string ProfilePictureAddress { get; set; }
-        
+
         /// <summary>
         /// A list of all application keys the user owns
         /// </summary>

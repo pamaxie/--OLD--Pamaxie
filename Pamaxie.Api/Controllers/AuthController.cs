@@ -35,16 +35,18 @@ namespace Pamaxie.Api.Controllers
         public ActionResult<AuthToken> LoginTask()
         {
             //TODO: Use basic auth here please, do not use a HTTPPost for login.
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             PamaxieApplication? appData = JsonConvert.DeserializeObject<PamaxieApplication>(result);
 
             if (string.IsNullOrEmpty(appData?.Credentials.AuthorizationToken) || default == appData.Key)
                 return Unauthorized(ErrorHandler.UnAuthorized());
 
-            if (!appData.VerifyAuthentication()) return Unauthorized(ErrorHandler.UnAuthorized());
+            if (!appData.VerifyAuthentication())
+                return Unauthorized(ErrorHandler.UnAuthorized());
 
             AuthToken token = _generator.CreateToken(appData.Key);
             return Ok(token);
@@ -63,7 +65,7 @@ namespace Pamaxie.Api.Controllers
             if (string.IsNullOrEmpty(token))
                 return BadRequest("Authentication token for refresh could not be found");
 
-            var userId = TokenGenerator.GetUserKey(token);
+            string userId = TokenGenerator.GetUserKey(token);
             UserDataServiceExtension.Exists(userId);
             AuthToken newToken = _generator.CreateToken(userId);
             return Ok(newToken);

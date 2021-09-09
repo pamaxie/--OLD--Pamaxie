@@ -28,7 +28,7 @@ namespace Test.Pamaxie.API_Test
         [MemberData(nameof(AllUsers))]
         public void GenerateToken_Succeed(string userKey)
         {
-            TokenGenerator tokenGenerator = new(Configuration);
+            TokenGenerator tokenGenerator = new TokenGenerator(Configuration);
             AuthToken result = tokenGenerator.CreateToken(userKey);
             Assert.NotNull(result);
             Assert.NotEmpty(result.Token);

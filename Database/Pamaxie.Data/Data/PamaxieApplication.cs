@@ -11,7 +11,7 @@ namespace Pamaxie.Data
         /// <inheritdoc/>
         /// </summary>
         public string Key { get; set; }
-        
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -31,7 +31,7 @@ namespace Pamaxie.Data
         /// <inheritdoc/>
         /// </summary>
         public string ApplicationName { get; set; }
-        
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -41,7 +41,7 @@ namespace Pamaxie.Data
         /// <inheritdoc/>
         /// </summary>
         public bool RateLimited { get; set; }
-        
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

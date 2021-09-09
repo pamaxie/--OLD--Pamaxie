@@ -15,8 +15,9 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
         public UserDataServiceTest(DatabaseApiFactory fixture, ITestOutputHelper testOutputHelper) : base(
             testOutputHelper)
         {
-            PamaxieDataContext context = new("", Configuration.GetSection("AuthData").GetValue<string>("Token"));
-            DatabaseService service = new(context)
+            PamaxieDataContext context =
+                new PamaxieDataContext("", Configuration.GetSection("AuthData").GetValue<string>("Token"));
+            DatabaseService service = new DatabaseService(context)
             {
                 Service = fixture.CreateClient()
             };

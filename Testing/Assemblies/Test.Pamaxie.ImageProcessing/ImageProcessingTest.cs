@@ -16,12 +16,12 @@ namespace Test.Pamaxie.ImageProcessing_Test
         /// <inheritdoc cref="MemberData.FileLinks"/>
         /// </summary>
         public static IEnumerable<object[]> FileLinks => MemberData.FileLinks;
-        
+
         /// <summary>
         /// <inheritdoc cref="MemberData.FileLinksWithHash"/>
         /// </summary>
         public static IEnumerable<object[]> FileLinksWithHash => MemberData.FileLinksWithHash;
-        
+
         public ImageProcessingTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }

@@ -9,13 +9,13 @@ namespace Pamaxie.Database.Extensions.Client
     {
         /// <inheritdoc/>
         public string DataInstances { get; }
-        
+
         /// <inheritdoc/>
         public string Password { get; }
-        
+
         /// <inheritdoc/>
         public int ReconnectionAttempts { get; }
-        
+
         /// <summary>
         /// Connection properties to a database with a password and a custom amount of reconnection attempts
         /// </summary>
@@ -36,8 +36,10 @@ namespace Pamaxie.Database.Extensions.Client
         /// <param name="instanceName">The instance of the database</param>
         [Obsolete(
             "This should not be used, since this means u don't have a password on your database api, which exposes your database to attacks. Please always make sure to use a password on your database.")]
-        public PamaxieDataContext(string instanceName) : this(instanceName, string.Empty) { }
-        
+        public PamaxieDataContext(string instanceName) : this(instanceName, string.Empty)
+        {
+        }
+
         /// <inheritdoc/>
         public string ConnectionString()
         {

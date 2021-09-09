@@ -8,17 +8,17 @@ namespace Pamaxie.Database.Extensions.Server
     public class DatabaseService : IDatabaseService<ConnectionMultiplexer>
     {
         /// <inheritdoc/>
-        public ConnectionMultiplexer Service { get; private set;  }
-        
+        public ConnectionMultiplexer Service { get; private set; }
+
         /// <inheritdoc/>
         public IPamaxieDataContext DataContext { get; }
-        
+
         /// <inheritdoc/>
         public bool ConnectionSuccess { get; set; }
-        
+
         /// <inheritdoc/>
         public DateTime LastConnectionSuccess { get; set; }
-        
+
         /// <summary>
         /// Contains the service responsible for interacting with user data in the redis database
         /// </summary>
@@ -35,16 +35,16 @@ namespace Pamaxie.Database.Extensions.Server
             Users = new UserDataService(dataContext, this);
             Applications = new ApplicationDataService(dataContext, this);
         }
-        
+
         /// <inheritdoc/>
         public bool Connect()
         {
-            Service = ConnectionMultiplexer.Connect((DataContext.ConnectionString()) ?? string.Empty);
-            if (Service == null) return false;
+            Service = ConnectionMultiplexer.Connect(DataContext.ConnectionString() ?? string.Empty);
+            if (Service == null)
+                return false;
             ConnectionSuccess = true;
             LastConnectionSuccess = DateTime.Now;
             return true;
-
         }
 
         /// <inheritdoc/>

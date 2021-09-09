@@ -27,7 +27,8 @@ namespace Pamaxie.Api
         {
             IConfigurationRoot configuration = new ConfigurationBuilder().AddCommandLine(args).Build();
             string hostUrl = configuration["hosturl"];
-            if (string.IsNullOrEmpty(hostUrl)) hostUrl = "http://0.0.0.0:6000";
+            if (string.IsNullOrEmpty(hostUrl))
+                hostUrl = "http://0.0.0.0:6000";
             return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

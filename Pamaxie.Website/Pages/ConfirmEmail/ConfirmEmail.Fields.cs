@@ -6,6 +6,5 @@
     /// </summary>
     public partial class ConfirmEmail
     {
-        
     }
 }

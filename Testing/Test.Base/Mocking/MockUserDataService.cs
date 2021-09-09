@@ -19,8 +19,8 @@ namespace Test.Base
         /// </summary>
         public static void Mock()
         {
-            UserDataService userDataService = new();
-            Mock<IUserDataService> mockUserDataService = new();
+            UserDataService userDataService = new UserDataService();
+            Mock<IUserDataService> mockUserDataService = new Mock<IUserDataService>();
 
             //Setup for Get
             mockUserDataService.Setup(_ => _.Get(It.IsAny<string>()))

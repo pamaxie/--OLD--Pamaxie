@@ -19,8 +19,8 @@ namespace Test.Base
         /// </summary>
         public static void Mock()
         {
-            ApplicationDataService applicationDataService = new();
-            Mock<IApplicationDataService> mockApplicationDataService = new();
+            ApplicationDataService applicationDataService = new ApplicationDataService();
+            Mock<IApplicationDataService> mockApplicationDataService = new Mock<IApplicationDataService>();
 
             //Setup for Get
             mockApplicationDataService.Setup(_ => _.Get(It.IsAny<string>()))
@@ -78,7 +78,7 @@ namespace Test.Base
             //Setup for GetOwner
             mockApplicationDataService.Setup(_ => _.GetOwner(It.IsAny<IPamaxieApplication>()))
                 .Returns<IPamaxieApplication>((value) => applicationDataService.GetOwner(value));
-            
+
             //Setup for EnableOrDisable
             mockApplicationDataService.Setup(_ => _.EnableOrDisable(It.IsAny<IPamaxieApplication>()))
                 .Returns<IPamaxieApplication>((value) => applicationDataService.EnableOrDisable(value));
@@ -106,7 +106,7 @@ namespace Test.Base
             {
                 if (value == null || !string.IsNullOrEmpty(value.Key))
                     return null;
-                
+
                 string key;
                 do
                 {
@@ -135,7 +135,7 @@ namespace Test.Base
                 } while (TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key) != null);
 
                 value.Key = key;
-                
+
                 IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
                 if (user == null)
                     return false;

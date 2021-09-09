@@ -18,7 +18,7 @@ namespace Pamaxie.Data
         /// The Name of the application
         /// </summary>
         public string ApplicationName { get; set; }
-        
+
         /// <summary>
         /// The date time since last accessed
         /// </summary>
@@ -28,7 +28,7 @@ namespace Pamaxie.Data
         /// Did the application get rate limited
         /// </summary>
         public bool RateLimited { get; set; }
-        
+
         /// <summary>
         /// Did the application get disabled by the user
         /// </summary>

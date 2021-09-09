@@ -9,19 +9,19 @@ namespace Pamaxie.Database.Extensions.Client
     public static class ApplicationDataServiceExtension
     {
         private static IApplicationDataService ApplicationService => DatabaseService.ApplicationService;
-        
+
         /// <inheritdoc cref="ApplicationDataService.Get"/>
         public static IPamaxieApplication Get(string key)
         {
             return ApplicationService.Get(key);
         }
-        
+
         /// <inheritdoc cref="ApplicationDataService.Create"/>
         public static IPamaxieApplication Create(this IPamaxieApplication value)
         {
             return ApplicationService.Create(value);
         }
-        
+
         /// <inheritdoc cref="ApplicationDataService.TryCreate"/>
         public static bool TryCreate(this IPamaxieApplication value, out IPamaxieApplication createdValue)
         {
@@ -45,7 +45,7 @@ namespace Pamaxie.Database.Extensions.Client
         {
             return ApplicationService.UpdateOrCreate(value, out databaseValue);
         }
-        
+
         /// <inheritdoc cref="ApplicationDataService.Exists"/>
         public static bool Exists(string value)
         {
@@ -63,7 +63,7 @@ namespace Pamaxie.Database.Extensions.Client
         {
             return ApplicationService.GetOwner(value);
         }
-        
+
         /// <inheritdoc cref="ApplicationDataService.EnableOrDisable"/>
         public static IPamaxieApplication EnableOrDisable(this IPamaxieApplication value)
         {

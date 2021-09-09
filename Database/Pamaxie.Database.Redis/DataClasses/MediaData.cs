@@ -10,9 +10,8 @@ namespace Pamaxie.Database.Redis.DataClasses
     /// </summary>
     public class MediaPredictionData
     {
-
         /// <summary>
-        /// Creating a new Medida Pediction Data instance
+        /// Creating a new Media Prediction Data instance
         /// </summary>
         /// <param name="mediaHash"></param>
         public MediaPredictionData(string mediaHash)
@@ -38,13 +37,14 @@ namespace Pamaxie.Database.Redis.DataClasses
             {
                 if (_data != null) return _data;
 
-                if (MediaHash == null) throw new InvalidOperationException("Cannot get Data when image hash is null or not set");
-                
+                if (MediaHash == null)
+                    throw new InvalidOperationException("Cannot get Data when image hash is null or not set");
+
                 IDatabase db = RedisData.Redis.GetDatabase();
 
                 //The hash set does not exist in the Database.
-                if (!db.KeyExists(MediaHash)) return null;
-                
+                if (!db.KeyExists(MediaHash))
+                    return null;
 
 
                 RedisValue rawData = db.StringGet(MediaHash);
@@ -58,17 +58,18 @@ namespace Pamaxie.Database.Redis.DataClasses
             set
             {
                 if (string.IsNullOrEmpty(MediaHash))
-                {
                     throw new InvalidOperationException("Cannot set Data when image Hash is null or not set");
-                }
-                if (Equals(_data, value)) return;
+
+                if (Equals(_data, value))
+                    return;
 
                 IDatabase db = RedisData.Redis.GetDatabase();
                 value.LastUpdated = DateTime.Now;
                 string mediaData = JsonConvert.SerializeObject(value);
 
                 //Delete the cached files after 90 days to increase performance and prevent bloating
-                db.StringSet(MediaHash, mediaData, new TimeSpan(90, 0, 0, 0, 0), When.Always, CommandFlags.FireAndForget);
+                db.StringSet(MediaHash, mediaData, new TimeSpan(90, 0, 0, 0, 0), When.Always,
+                    CommandFlags.FireAndForget);
                 _data = value;
             }
         }
@@ -83,7 +84,8 @@ namespace Pamaxie.Database.Redis.DataClasses
             {
                 IDatabase db = RedisData.Redis.GetDatabase();
                 RedisValue rawData = db.StringGet(MediaHash);
-                if (string.IsNullOrEmpty(rawData)) return false;
+                if (string.IsNullOrEmpty(rawData))
+                    return false;
 
                 data = JsonConvert.DeserializeObject<MediaData>(rawData);
                 _data = data;
@@ -100,7 +102,6 @@ namespace Pamaxie.Database.Redis.DataClasses
 
     public class MediaData
     {
-
         /// <summary>
         /// Specifies the detected properties in an image / file
         /// </summary>

@@ -13,10 +13,11 @@ namespace Pamaxie.Website.Pages
     {
         [Inject] private NavigationManager NavigationManager { get; set; }
         [Inject] private UserService UserService { get; set; }
-        
+
         /// <summary>
         /// Email confirmation token
         /// </summary>
-        [Parameter] public string Token {get; set;}
+        [Parameter]
+        public string Token { get; set; }
     }
 }

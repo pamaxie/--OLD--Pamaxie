@@ -247,7 +247,7 @@ namespace Test.Pamaxie.Database.Api_Test
             Assert.IsType<OkObjectResult>(result.Result);
             Assert.True((bool)((ObjectResult)result.Result).Value);
         }
-        
+
         /// <summary>
         /// Test for getting all applications from a user through <see cref="UserController.GetAllApplicationsTask"/>
         /// </summary>

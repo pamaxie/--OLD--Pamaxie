@@ -18,7 +18,7 @@ namespace Pamaxie.Database.Extensions.Server
             DataContext = dataContext;
             Service = service;
         }
-        
+
         /// <inheritdoc/>
         public IEnumerable<IPamaxieApplication> GetAllApplications(IPamaxieUser value)
         {
@@ -54,7 +54,7 @@ namespace Pamaxie.Database.Extensions.Server
                 return false;
 
             value.EmailVerified = true;
-            
+
             string data = JsonConvert.SerializeObject(value);
             db.StringSet(value.Key, data);
             return true;

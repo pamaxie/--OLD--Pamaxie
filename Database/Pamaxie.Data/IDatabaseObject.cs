@@ -13,7 +13,7 @@ namespace Pamaxie.Data
         /// The key to query for the object in the database
         /// </summary>
         public string Key { get; set; }
-        
+
         /// <summary>
         /// Defines the Time To Live for the data object
         /// </summary>

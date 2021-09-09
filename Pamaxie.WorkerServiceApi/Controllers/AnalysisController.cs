@@ -20,7 +20,7 @@ namespace Pamaxie.Api.Controllers
         {
             _logger = logger;
         }
-        
+
         /// <summary>
         /// Creates a new item in the queue to be analysed. Returns the url where the analysis will be put once ready.
         /// </summary>

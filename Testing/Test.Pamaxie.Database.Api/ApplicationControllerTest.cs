@@ -262,11 +262,11 @@ namespace Test.Pamaxie.Database.Api_Test
             IPamaxieApplication application =
                 TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
             Assert.NotNull(application);
-            
+
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
             Controller.Request.Body = body;
-            
+
             //Call controller and get the owner of the application
             ActionResult<IPamaxieUser> result = Controller.GetOwner();
             Assert.IsType<OkObjectResult>(result.Result);
@@ -274,7 +274,7 @@ namespace Test.Pamaxie.Database.Api_Test
             Assert.NotNull(owner);
             TestOutputHelper.WriteLine(JsonConvert.SerializeObject(owner));
         }
-        
+
         /// <summary>
         /// Test for getting all applications from a application through <see cref="ApplicationController.EnableOrDisableTask"/>
         /// </summary>

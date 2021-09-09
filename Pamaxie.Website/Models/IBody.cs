@@ -12,12 +12,12 @@ namespace Pamaxie.Website.Models
         /// The purpose of the email
         /// </summary>
         public EmailPurpose Purpose { get; }
-        
+
         /// <summary>
         /// Expiration date of the email
         /// </summary>
         public DateTime Expiration { get; set; }
-        
+
         /// <summary>
         /// <inheritdoc cref="PamaxieUser"/>
         /// </summary>

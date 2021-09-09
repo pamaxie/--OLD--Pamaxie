@@ -10,7 +10,7 @@ using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
 using Pamaxie.Website.Services;
 
-namespace Pamaxie.Website 
+namespace Pamaxie.Website
 {
     /// <summary>
     /// Startup class, usually gets called by <see cref="Program"/>
@@ -35,7 +35,7 @@ namespace Pamaxie.Website
         public void ConfigureServices(IServiceCollection services)
         {
             IConfigurationSection dbConfigSection = Configuration.GetSection("Pamaxie");
-            string sqlConString =  dbConfigSection.GetValue<string>("PamaxieSqlDb");
+            string sqlConString = dbConfigSection.GetValue<string>("PamaxieSqlDb");
             Environment.SetEnvironmentVariable("PamaxieSqlDb", sqlConString);
             Environment.SetEnvironmentVariable("ApplyMigrations", dbConfigSection.GetValue<string>("Apply Migrations"));
 
@@ -45,9 +45,9 @@ namespace Pamaxie.Website
             services.AddScoped<EmailSender>();
 
             // ReSharper disable once UnusedVariable
-            CookiePolicyOptions cookiePolicy = new()
+            CookiePolicyOptions cookiePolicy = new CookiePolicyOptions
             {
-                Secure = CookieSecurePolicy.Always,
+                Secure = CookieSecurePolicy.Always
             };
 
             //Add the Mudblazor Theme
@@ -61,11 +61,11 @@ namespace Pamaxie.Website
             });
 
             services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            })
+                {
+                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                })
                 .AddCookie();
 
             services.AddAuthentication().AddGoogle(options =>
@@ -77,10 +77,10 @@ namespace Pamaxie.Website
             });
 
             services.AddApplicationInsightsTelemetry();
-            
+
             //Adds access to the HTTP Context
             services.AddHttpContextAccessor();
-            
+
             //TODO Validate connection to Redis
         }
 
@@ -92,9 +92,7 @@ namespace Pamaxie.Website
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
             else
             {
                 app.UseExceptionHandler("/Error");

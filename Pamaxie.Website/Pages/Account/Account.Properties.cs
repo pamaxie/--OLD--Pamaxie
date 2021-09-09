@@ -11,12 +11,12 @@ namespace Pamaxie.Website.Pages
     /// <summary>
     /// <inheritdoc cref="Account"/>
     /// </summary>
-    public partial class Account 
+    public partial class Account
     {
         [Inject] private NavigationManager NavigationManager { get; set; }
         [Inject] private IHttpContextAccessor HttpContextAccessor { get; set; }
         [Inject] private IDialogService DialogService { get; set; }
-        
+
         private bool DisableDeleteData { get; set; }
         private IPamaxieUser? User { get; set; }
     }

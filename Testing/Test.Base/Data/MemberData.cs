@@ -73,7 +73,7 @@ namespace Test.Base
                 List<object[]> list = new List<object[]>();
                 for (int i = 0; i < 6; i++)
                 {
-                    Random rnd = new();
+                    Random rnd = new Random();
                     string ownerKey = TestUserData.ListOfUsers[rnd.Next(TestUserData.ListOfUsers.Count - 1)].Key;
                     string applicationName = RandomService.GenerateRandomName();
                     string authorizationToken = RandomService.GenerateRandomName();

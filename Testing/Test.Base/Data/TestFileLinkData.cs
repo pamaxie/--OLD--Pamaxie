@@ -12,7 +12,7 @@ namespace Test.Base
         /// <summary>
         /// List of file links
         /// </summary>
-        public static readonly List<object[]> ListOfFileLinks = new()
+        public static readonly List<object[]> ListOfFileLinks = new List<object[]>
         {
             new object[]
             {

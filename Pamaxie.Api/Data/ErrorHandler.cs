@@ -22,7 +22,8 @@
         /// Information that a item is not authorized
         /// </summary>
         /// <returns>Text for unauthorized events</returns>
-        public static string UnAuthorized() => "Application-Id or Application-Hash is incorrect or unknown. Please try other credentials.";
+        public static string UnAuthorized() =>
+            "Application-Id or Application-Hash is incorrect or unknown. Please try other credentials.";
 
         /// <summary>
         /// Information that a item already exist
@@ -58,6 +59,7 @@
         /// Information that a item is not in a valid format
         /// </summary>
         /// <returns>Text for invalid format events</returns>
-        internal static string InvalidFormat() => "Image format of sent url is not supported. Please check the documentation for supported file types for image scans.";
+        internal static string InvalidFormat() =>
+            "Image format of sent url is not supported. Please check the documentation for supported file types for image scans.";
     }
 }

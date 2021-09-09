@@ -26,7 +26,7 @@ namespace Pamaxie.Api
                 FileInfo image = ImageProcessing.ImageProcessing.DownloadFile(
                     "https://www.pinclipart.com/picdir/middle/9-93455_what-is-the-meaning-of-png-clipart-download.png");
                 // Add input data
-                ModelInput input = new()
+                ModelInput input = new ModelInput
                 {
                     ImageSource = image.FullName
                 };

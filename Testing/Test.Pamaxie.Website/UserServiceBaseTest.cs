@@ -49,7 +49,7 @@ namespace Test.Pamaxie.Website_Test
             //Mock HttpContext with principle claims
             IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);
 
-            UserService userService = new(Configuration, httpContextAccessor, null);
+            UserService userService = new UserService(Configuration, httpContextAccessor, null);
             Assert.True(userService.IsEmailOfCurrentUserVerified());
         }
 
@@ -69,7 +69,7 @@ namespace Test.Pamaxie.Website_Test
             //Mock HttpContext with principle claims
             IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);
 
-            UserService userService = new(Configuration, httpContextAccessor, null);
+            UserService userService = new UserService(Configuration, httpContextAccessor, null);
             Assert.False(userService.IsEmailOfCurrentUserVerified());
         }
 
@@ -93,7 +93,7 @@ namespace Test.Pamaxie.Website_Test
             IPamaxieUser user = httpContextAccessor.HttpContext?.User.GetGoogleAuthData(out bool _);
             Assert.NotNull(user);
 
-            UserService userService = new(Configuration, httpContextAccessor, null);
+            UserService userService = new UserService(Configuration, httpContextAccessor, null);
             string token = userService.GenerateEmailConfirmationToken(user);
             TestOutputHelper.WriteLine(token);
             Assert.NotEmpty(token);
@@ -121,7 +121,7 @@ namespace Test.Pamaxie.Website_Test
             IPamaxieUser unverifiedPamaxieUser = UserDataServiceExtension.Get(userKey);
             TestOutputHelper.WriteLine("Email verified: {0}", unverifiedPamaxieUser.EmailVerified);
 
-            UserService userService = new(Configuration, httpContextAccessor, null);
+            UserService userService = new UserService(Configuration, httpContextAccessor, null);
             string token = userService.GenerateEmailConfirmationToken(unverifiedPamaxieUser);
             Assert.True(userService.ConfirmEmail(token));
 

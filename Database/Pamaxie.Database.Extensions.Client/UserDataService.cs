@@ -15,7 +15,7 @@ namespace Pamaxie.Database.Extensions.Client
             Service = service;
             Url = DataContext.DataInstances + "/User";
         }
-        
+
         /// <inheritdoc/>
         public IEnumerable<IPamaxieApplication> GetAllApplications(IPamaxieUser value)
         {

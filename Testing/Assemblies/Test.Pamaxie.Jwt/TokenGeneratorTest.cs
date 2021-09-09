@@ -28,7 +28,7 @@ namespace Test.Pamaxie.Jwt_Test
         [MemberData(nameof(AllUsers))]
         public void CreateToken(string userKey)
         {
-            TokenGenerator generator = new(Configuration);
+            TokenGenerator generator = new TokenGenerator(Configuration);
             AuthToken authToken = generator.CreateToken(userKey);
             Assert.NotNull(authToken);
             Assert.NotEmpty(authToken.Token);

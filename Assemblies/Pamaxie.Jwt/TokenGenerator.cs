@@ -27,11 +27,11 @@ namespace Pamaxie.Jwt
         public AuthToken CreateToken(string userId)
         {
             //Authentication successful so generate JWT Token
-            JwtSecurityTokenHandler tokenHandler = new();
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             IConfigurationSection section = _configuration.GetSection("AuthData");
             byte[] key = Encoding.ASCII.GetBytes(section.GetValue<string>("Secret"));
             DateTime expires = DateTime.UtcNow.AddMinutes(section.GetValue<int>("ExpiresInMinutes"));
-            SecurityTokenDescriptor tokenDescriptor = new()
+            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                 {
@@ -54,7 +54,7 @@ namespace Pamaxie.Jwt
         /// <returns></returns>
         public static string GetUserKey(string authToken)
         {
-            JwtSecurityTokenHandler handler = new();
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
             SecurityToken jsonToken = handler.ReadToken(authToken);
             JwtSecurityToken tokenS = jsonToken as JwtSecurityToken;
             return tokenS?.Id;

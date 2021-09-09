@@ -32,13 +32,13 @@ namespace Pamaxie.Api.Controllers
         [HttpGet("get")]
         public ActionResult<IPamaxieApplication> GetTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
 
             IPamaxieApplication application = _dbService.Applications.Get(result);
-            
+
             return Ok(application);
         }
 
@@ -50,7 +50,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("create")]
         public ActionResult<IPamaxieApplication> CreateTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
@@ -72,7 +72,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("tryCreate")]
         public ActionResult<IPamaxieApplication> TryCreateTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
@@ -94,7 +94,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("update")]
         public ActionResult<IPamaxieApplication> UpdateTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
@@ -116,7 +116,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("tryUpdate")]
         public ActionResult<IPamaxieApplication> TryUpdateTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
@@ -138,7 +138,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("updateOrCreate")]
         public ActionResult<IPamaxieApplication> UpdateOrCreateTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
@@ -162,7 +162,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("delete")]
         public ActionResult<bool> DeleteTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
@@ -184,7 +184,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("getOwner")]
         public ActionResult<IPamaxieUser> GetOwner()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
@@ -197,7 +197,7 @@ namespace Pamaxie.Api.Controllers
 
             return Ok(user);
         }
-        
+
         /// <summary>
         /// Enables or disables the <see cref="IPamaxieApplication"/> 
         /// </summary>
@@ -206,7 +206,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("enableOrDisable")]
         public ActionResult<IPamaxieApplication> EnableOrDisableTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
@@ -219,7 +219,7 @@ namespace Pamaxie.Api.Controllers
 
             return Ok(enabledOrDisabledApplication);
         }
-        
+
         /// <summary>
         /// Verify if the <see cref="IPamaxieApplication"/> is authorized
         /// </summary>
@@ -228,7 +228,7 @@ namespace Pamaxie.Api.Controllers
         [HttpPost("verifyAuthentication")]
         public ActionResult<bool> VerifyAuthenticationTask()
         {
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
@@ -242,4 +242,4 @@ namespace Pamaxie.Api.Controllers
             return Ok(authorized);
         }
     }
-}   
+}

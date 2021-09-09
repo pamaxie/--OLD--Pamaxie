@@ -13,7 +13,7 @@ namespace Test.Base
         /// <summary>
         /// List of Test Applications
         /// </summary>
-        public static readonly List<IPamaxieApplication> ListOfApplications = new()
+        public static readonly List<IPamaxieApplication> ListOfApplications = new List<IPamaxieApplication>
         {
             new PamaxieApplication
             {

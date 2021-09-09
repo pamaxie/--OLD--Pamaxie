@@ -17,12 +17,12 @@ namespace Test.Base
         /// <inheritdoc cref="MemberData.AllUsers"/>
         /// </summary>
         public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
-        
+
         /// <summary>
         /// <inheritdoc cref="MemberData.RandomUsers"/>
         /// </summary>
         public static IEnumerable<object[]> RandomUserData => MemberData.RandomUsers;
-        
+
         public TestUserDataService(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             //Mock UserDataService, for UserDataServiceExtension
@@ -61,7 +61,8 @@ namespace Test.Base
                 LastName = lastName,
                 EmailAddress = emailAddress,
                 EmailVerified = false,
-                ProfilePictureAddress = "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
+                ProfilePictureAddress =
+                    "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
                 Disabled = false,
                 Deleted = false
             };
@@ -90,7 +91,8 @@ namespace Test.Base
                 LastName = lastName,
                 EmailAddress = emailAddress,
                 EmailVerified = false,
-                ProfilePictureAddress = "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
+                ProfilePictureAddress =
+                    "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
                 Disabled = false,
                 Deleted = false
             };
@@ -101,7 +103,7 @@ namespace Test.Base
             string str = JsonConvert.SerializeObject(createdUser);
             TestOutputHelper.WriteLine(str);
         }
-        
+
         /// <summary>
         /// Updates a user
         /// </summary>
@@ -113,7 +115,7 @@ namespace Test.Base
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
             string oldEmailAddress = user.EmailAddress;
-            user.EmailAddress = RandomService.GenerateRandomName(); 
+            user.EmailAddress = RandomService.GenerateRandomName();
             IPamaxieUser updatedUser = user.Update();
             Assert.NotNull(updatedUser);
             Assert.NotEqual(oldEmailAddress, updatedUser.EmailAddress);
@@ -121,7 +123,7 @@ namespace Test.Base
             string str = JsonConvert.SerializeObject(updatedUser);
             TestOutputHelper.WriteLine(str);
         }
-        
+
         /// <summary>
         /// Tries to updates a user
         /// </summary>
@@ -133,7 +135,7 @@ namespace Test.Base
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
             string oldEmailAddress = user.EmailAddress;
-            user.EmailAddress = RandomService.GenerateRandomName(); 
+            user.EmailAddress = RandomService.GenerateRandomName();
             bool updated = user.TryUpdate(out IPamaxieUser updatedUser);
             Assert.True(updated);
             Assert.NotNull(updatedUser);
@@ -142,7 +144,7 @@ namespace Test.Base
             string str = JsonConvert.SerializeObject(updatedUser);
             TestOutputHelper.WriteLine(str);
         }
-        
+
         /// <summary>
         /// Tries to updates a user
         /// </summary>
@@ -161,7 +163,8 @@ namespace Test.Base
                 LastName = lastName,
                 EmailAddress = emailAddress,
                 EmailVerified = false,
-                ProfilePictureAddress = "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
+                ProfilePictureAddress =
+                    "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
                 Disabled = false,
                 Deleted = false
             };
@@ -172,7 +175,7 @@ namespace Test.Base
             string str = JsonConvert.SerializeObject(createdUser);
             TestOutputHelper.WriteLine(str);
         }
-        
+
         /// <summary>
         /// Updates or creates a user
         /// </summary>
@@ -184,7 +187,7 @@ namespace Test.Base
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
             string oldEmailAddress = user.EmailAddress;
-            user.EmailAddress = RandomService.GenerateRandomName(); 
+            user.EmailAddress = RandomService.GenerateRandomName();
             bool updated = user.UpdateOrCreate(out IPamaxieUser updatedUser);
             Assert.True(updated);
             Assert.NotNull(updatedUser);
@@ -193,7 +196,7 @@ namespace Test.Base
             string str = JsonConvert.SerializeObject(updatedUser);
             TestOutputHelper.WriteLine(str);
         }
-        
+
         /// <summary>
         /// Deletes a user
         /// </summary>
@@ -207,11 +210,11 @@ namespace Test.Base
             bool deleted = user.Delete();
             Assert.True(deleted);
             TestOutputHelper.WriteLine("Deleted {0}", true);
-            
+
             //Add it back, so it will not fail other tests
             TestUserData.ListOfUsers.Add(user);
         }
-        
+
         /// <summary>
         /// Gets all applications the user owns
         /// </summary>
@@ -224,12 +227,9 @@ namespace Test.Base
             Assert.NotNull(user);
             List<IPamaxieApplication> applications = user.GetAllApplications().ToList();
             Assert.NotNull(applications);
-            foreach (string str in applications.Select(JsonConvert.SerializeObject))
-            {
-                TestOutputHelper.WriteLine(str);
-            }
+            foreach (string str in applications.Select(JsonConvert.SerializeObject)) TestOutputHelper.WriteLine(str);
         }
-        
+
         /// <summary>
         /// Verifies a user's email address
         /// </summary>
@@ -239,7 +239,7 @@ namespace Test.Base
         public void VerifyEmail(string userKey)
         {
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user); 
+            Assert.NotNull(user);
             bool verified = user.VerifyEmail();
             Assert.True(verified);
             TestOutputHelper.WriteLine("Verified Email {0} - {1}", true, user.EmailAddress);

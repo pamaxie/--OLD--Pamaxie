@@ -31,8 +31,8 @@ namespace Pamaxie.Website.Authentication
             if (claims.All(x => x.Issuer != "Google"))
                 return null;
 
-            GoogleAuthData googleClaim = new();
-            foreach(Claim claim in claims.Where(x => x.Issuer == "Google"))
+            GoogleAuthData googleClaim = new GoogleAuthData();
+            foreach (Claim claim in claims.Where(x => x.Issuer == "Google"))
             {
                 switch (claim.Type)
                 {
@@ -59,7 +59,8 @@ namespace Pamaxie.Website.Authentication
 
             //Check if user exists if yes get their id if no create one!
             IPamaxieUser pamaxieUser = UserDataServiceExtension.Get(googleClaim.Key);
-            if (pamaxieUser is not {Deleted: false}) return googleClaim;
+            if (pamaxieUser is not { Deleted: false })
+                return googleClaim;
             hasAccount = true;
             googleClaim.Key = pamaxieUser.Key;
             return googleClaim;

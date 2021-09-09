@@ -12,21 +12,25 @@ namespace Pamaxie.Website.Shared
         /// <summary>
         /// Instance of the popup <see cref="MudDialog"/>
         /// </summary>
-        [CascadingParameter] internal MudDialogInstance? MudDialog { get; set; }
-        
+        [CascadingParameter]
+        internal MudDialogInstance? MudDialog { get; set; }
+
         /// <summary>
         /// Text for the content on the popup dialog
         /// </summary>
-        [Parameter] public string ContentText { get; set; } = string.Empty;
-        
+        [Parameter]
+        public string ContentText { get; set; } = string.Empty;
+
         /// <summary>
         /// Text for the button on the popup dialog
         /// </summary>
-        [Parameter] public string ButtonText { get; set; } = string.Empty;
-        
+        [Parameter]
+        public string ButtonText { get; set; } = string.Empty;
+
         /// <summary>
         /// Color of the popup dialog
         /// </summary>
-        [Parameter] public Color Color { get; set; }
+        [Parameter]
+        public Color Color { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using Pamaxie.Api.Data;
 using Pamaxie.Database.Extensions.Server;
 using Pamaxie.Jwt;
@@ -34,7 +35,6 @@ namespace Pamaxie.Api.Controllers
         public ActionResult<AuthToken> LoginTask()
         {
             //TODO Not yet implemented
-            
 
 
             return Accepted("Success");
@@ -49,15 +49,13 @@ namespace Pamaxie.Api.Controllers
         public ActionResult<string> CreateUserTask()
         {
             //TODO Not yet implemented
-            StreamReader reader = new(Request.Body);
+            StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result)) return BadRequest(ErrorHandler.BadData());
-
-
+            if (string.IsNullOrEmpty(result))
+                return BadRequest(ErrorHandler.BadData());
 
             return Created("https://pamaxie.com/auth/", string.Empty);
         }
-
 
         /// <summary>
         /// Refreshes an exiting oAuth Token
@@ -68,15 +66,12 @@ namespace Pamaxie.Api.Controllers
         public ActionResult<AuthToken> RefreshTask()
         {
             //TODO Not yet implemented
-            var token = Request.Headers["authorization"];
+            StringValues token = Request.Headers["authorization"];
             if (string.IsNullOrEmpty(token))
                 return Unauthorized("Invalid authorization token");
 
             var userId = TokenGenerator.GetUserKey(token);
-            if (_dbService.Users.Exists(userId))
-            {
-                return Unauthorized("Invalid authorization token");
-            }
+            if (_dbService.Users.Exists(userId)) return Unauthorized("Invalid authorization token");
             AuthToken newToken = _generator.CreateToken(userId);
             return Ok(newToken);
         }

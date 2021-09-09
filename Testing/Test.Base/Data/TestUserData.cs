@@ -14,7 +14,7 @@ namespace Test.Base
         /// <summary>
         /// List of Test Users
         /// </summary>
-        public static readonly List<IPamaxieUser> ListOfUsers = new()
+        public static readonly List<IPamaxieUser> ListOfUsers = new List<IPamaxieUser>
         {
             new PamaxieUser
             {
@@ -40,7 +40,7 @@ namespace Test.Base
                 EmailVerified = true,
                 ProfilePictureAddress =
                     "https://lh3.googleusercontent.com/-gN0jNA4zEEc/YRyhZ7pvf4I/AAAAAAAAAKo/a0Zi5AZgM4Umg4hWhtGB0bMz8RAt8bKHgCMICGAYYCw/s96-c",
-                ApplicationKeys = new []{ "1064922", "1053324" },
+                ApplicationKeys = new[] { "1064922", "1053324" },
                 Disabled = false,
                 Deleted = false
             },
@@ -68,7 +68,7 @@ namespace Test.Base
                 EmailVerified = true,
                 ProfilePictureAddress =
                     "https://lh3.googleusercontent.com/-sWl6t08Q35E/YRyhBB8AlkI/AAAAAAAAAJQ/BO8AYPZlG90gQEND_C_W63fGEnRBvLnhQCMICGAYYCw/s96-c",
-                ApplicationKeys = new []{ "1051080", "1065779", "1060105" },
+                ApplicationKeys = new[] { "1051080", "1065779", "1060105" },
                 Disabled = false,
                 Deleted = false
             },
@@ -104,7 +104,7 @@ namespace Test.Base
                     if (!string.IsNullOrEmpty(email))
                     {
                         //Add the user to the list of users
-                        PamaxieUser pamaxieUser = new()
+                        PamaxieUser pamaxieUser = new PamaxieUser
                         {
                             Key = "101963629560135630792",
                             UserName = "PersonalUser",

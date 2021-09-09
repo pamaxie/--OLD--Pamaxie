@@ -35,7 +35,8 @@ namespace Test.Pamaxie.Website_Test
             Assert.False(user.Deleted);
 
             EmailSender emailSender =
-                new(Configuration, MockNavigationManager.Mock(), new UserService(Configuration, null!, null));
+                new EmailSender(Configuration, MockNavigationManager.Mock(),
+                    new UserService(Configuration, null!, null));
             emailSender.SendConfirmationEmail(user);
         }
     }

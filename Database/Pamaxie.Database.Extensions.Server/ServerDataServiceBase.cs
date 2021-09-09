@@ -27,7 +27,8 @@ namespace Pamaxie.Database.Extensions.Server
         public T Get(string key)
         {
             if (Service.Service == null)
-                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll data from it");
+                throw new DataException(
+                    "Please ensure that the Service is connected and initialized before attempting to poll data from it");
 
             IDatabase db = Service.Service.GetDatabase();
             RedisValue rawData = db.StringGet(key);
@@ -38,7 +39,8 @@ namespace Pamaxie.Database.Extensions.Server
         public T Create(T value)
         {
             if (Service.Service == null)
-                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
+                throw new DataException(
+                    "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
 
             IDatabase db = Service.Service.GetDatabase();
             if (db.KeyExists(value.Key))
@@ -54,7 +56,8 @@ namespace Pamaxie.Database.Extensions.Server
         {
             createdValue = default;
             if (Service.Service == null)
-                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
+                throw new DataException(
+                    "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
 
             IDatabase db = Service.Service.GetDatabase();
             if (db.KeyExists(value.Key))
@@ -70,7 +73,8 @@ namespace Pamaxie.Database.Extensions.Server
         public T Update(T value)
         {
             if (Service.Service == null)
-                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
+                throw new DataException(
+                    "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
 
             IDatabase db = Service.Service.GetDatabase();
             if (!db.KeyExists(value.Key))
@@ -86,7 +90,8 @@ namespace Pamaxie.Database.Extensions.Server
         {
             updatedValue = default;
             if (Service.Service == null)
-                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
+                throw new DataException(
+                    "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
 
             IDatabase db = Service.Service.GetDatabase();
             if (!db.KeyExists(value.Key))
@@ -103,7 +108,8 @@ namespace Pamaxie.Database.Extensions.Server
         {
             databaseValue = default;
             if (Service.Service == null)
-                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
+                throw new DataException(
+                    "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
 
             IDatabase db = Service.Service.GetDatabase();
             string data = JsonConvert.SerializeObject(value);
@@ -116,7 +122,8 @@ namespace Pamaxie.Database.Extensions.Server
         public bool Exists(string key)
         {
             if (Service.Service == null)
-                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
+                throw new DataException(
+                    "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
             if (string.IsNullOrEmpty(key))
                 throw new ArgumentException("The key you entered is null or empty.");
             IDatabase db = Service.Service.GetDatabase();
@@ -127,7 +134,8 @@ namespace Pamaxie.Database.Extensions.Server
         public bool Delete(T value)
         {
             if (Service.Service == null)
-                throw new DataException("Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
+                throw new DataException(
+                    "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
 
             IDatabase db = Service.Service.GetDatabase();
 

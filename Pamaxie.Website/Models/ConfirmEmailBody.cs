@@ -12,12 +12,12 @@ namespace Pamaxie.Website.Models
         /// <inheritdoc/>
         /// </summary>
         public EmailPurpose Purpose => EmailPurpose.EMAIL_CONFIRMATION;
-        
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         public DateTime Expiration { get; set; } = DateTime.UtcNow.AddDays(10);
-        
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

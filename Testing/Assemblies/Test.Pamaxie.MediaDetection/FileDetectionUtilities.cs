@@ -13,14 +13,14 @@ namespace Test.Pamaxie.MediaDetection_Test
     /// <summary>
     /// Testing utilities for MediaDetection testing
     /// </summary>
-    public static class FileDetectionUtilities
+    internal static class FileDetectionUtilities
     {
         /// <summary>
         /// Get a <see cref="Stream"/> from a url string
         /// </summary>
         /// <param name="url">Url string that will be used to get the <see cref="Stream"/></param>
         /// <returns>Stream from url</returns>
-        public static Stream UrlToStream(string url)
+        internal static Stream UrlToStream(string url)
         {
             WebRequest req = WebRequest.Create(url);
             HttpWebRequest request = (HttpWebRequest)req;
@@ -34,13 +34,13 @@ namespace Test.Pamaxie.MediaDetection_Test
             responseStream.CopyTo(stream);
             return stream;
         }
-        
+
         /// <summary>
         /// Get all specifications from a file type
         /// </summary>
         /// <param name="fileType">The file type specifications</param>
         /// <returns>A list of specifications for the file type</returns>
-        public static IEnumerable<FileSpecification> GetFileSpecifications(this FileType fileType)
+        internal static IEnumerable<FileSpecification> GetFileSpecifications(this FileType fileType)
         {
             return fileType.GetType().Assembly.GetTypes()
                 .Where(t => typeof(FileSpecification).IsAssignableFrom(t))
@@ -49,7 +49,7 @@ namespace Test.Pamaxie.MediaDetection_Test
                 .Select(Activator.CreateInstance)
                 .OfType<FileSpecification>().Where(_ => _.ReferenceTypeId == fileType.Id);
         }
-        
+
         /// <summary>
         /// Read exactly N bytes of stream
         /// </summary>
@@ -61,7 +61,7 @@ namespace Test.Pamaxie.MediaDetection_Test
         {
             byte[] buffer = new byte[count];
             stream.Position = 0;
-            
+
             while (offset < count)
             {
                 int read = stream.Read(buffer, offset, count - offset);
@@ -72,13 +72,13 @@ namespace Test.Pamaxie.MediaDetection_Test
 
             return buffer;
         }
-        
+
         /// <summary>
         /// Converts a byte array into a readable string of hex
         /// </summary>
         /// <param name="byteArr"><see cref="byte"/> array to convert into a string</param>
         /// <returns>Hex string</returns>
-        public static string ToHexString(this byte[] byteArr)
+        internal static string ToHexString(this byte[] byteArr)
         {
             StringBuilder hex = new StringBuilder(byteArr.Length * 2);
             foreach (byte b in byteArr)

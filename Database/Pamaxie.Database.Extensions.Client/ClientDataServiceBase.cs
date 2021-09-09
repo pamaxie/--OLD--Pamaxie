@@ -28,7 +28,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// The Service that should be used to connect to the database
         /// </summary>
         internal DatabaseService Service { get; init; }
-        
+
         /// <summary>
         /// TODO
         /// </summary>
@@ -37,23 +37,23 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public T Get(string key)
         {
-            HttpRequestMessage requestMessage = new(HttpMethod.Get, Url + "/Get");
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, Url + "/Get");
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
             if (!response.IsSuccessStatusCode)
                 throw new WebException(response.StatusCode.ToString());
             Stream stream = response.Content.ReadAsStream();
-            StreamReader reader = new(stream, Encoding.Default);
+            StreamReader reader = new StreamReader(stream, Encoding.Default);
             string content = reader.ReadToEnd();
             if (string.IsNullOrEmpty(content))
                 throw new WebException("Something went wrong here");
-            T result = JsonConvert.DeserializeObject<T>(content);     
+            T result = JsonConvert.DeserializeObject<T>(content);
             return result;
         }
 
         /// <inheritdoc/>
         public T Create(T value)
         {
-            HttpRequestMessage requestMessage = new(HttpMethod.Post, Url + "/Create");
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, Url + "/Create");
             string body = JsonConvert.SerializeObject(value);
             byte[] bodyBytes = Encoding.ASCII.GetBytes(body);
             requestMessage.Content = new ByteArrayContent(bodyBytes);
@@ -62,7 +62,7 @@ namespace Pamaxie.Database.Extensions.Client
             if (!response.IsSuccessStatusCode)
                 throw new WebException(response.StatusCode.ToString());
             Stream stream = response.Content.ReadAsStream();
-            StreamReader reader = new(stream, Encoding.Default);
+            StreamReader reader = new StreamReader(stream, Encoding.Default);
             string content = reader.ReadToEnd();
             if (string.IsNullOrEmpty(content))
                 throw new WebException("Something went wrong here");
@@ -73,7 +73,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public bool TryCreate(T value, out T createdValue)
         {
-            HttpRequestMessage requestMessage = new(HttpMethod.Post, DataContext.DataInstances);
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, DataContext.DataInstances);
             string body = JsonConvert.SerializeObject(value);
             byte[] bodyBytes = Encoding.ASCII.GetBytes(body);
             requestMessage.Content = new ByteArrayContent(bodyBytes);
@@ -82,7 +82,7 @@ namespace Pamaxie.Database.Extensions.Client
             if (!response.IsSuccessStatusCode)
                 throw new WebException(response.StatusCode.ToString());
             Stream stream = response.Content.ReadAsStream();
-            StreamReader reader = new(stream, Encoding.Default);
+            StreamReader reader = new StreamReader(stream, Encoding.Default);
             string content = reader.ReadToEnd();
             if (string.IsNullOrEmpty(content))
                 throw new WebException("Something went wrong here");

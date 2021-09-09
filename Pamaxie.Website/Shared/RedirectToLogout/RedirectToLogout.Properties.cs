@@ -11,10 +11,11 @@ namespace Pamaxie.Website.Shared
     public partial class RedirectToLogout
     {
         [Inject] private NavigationManager NavigationManager { get; set; }
-        
+
         /// <summary>
         /// Page to return to after logged out
         /// </summary>
-        [Parameter] public string ReturnUrl {get; set;}
+        [Parameter]
+        public string ReturnUrl { get; set; }
     }
 }

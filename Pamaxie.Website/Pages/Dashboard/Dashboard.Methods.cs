@@ -33,7 +33,7 @@ namespace Pamaxie.Website.Pages
             //Has no Account has to create one first before accessing this.
             if (!hasAccount)
                 return Task.CompletedTask;
-            
+
             Applications = User.GetAllApplications().ToList();
             StateHasChanged();
             return Task.CompletedTask;
@@ -57,7 +57,7 @@ namespace Pamaxie.Website.Pages
         private async Task EnableOrDisableApplication(IPamaxieApplication pamaxieApplication)
         {
             bool? result = true;
-            if (!pamaxieApplication.Disabled) 
+            if (!pamaxieApplication.Disabled)
                 result = await DialogService.ShowMessageBox(
                     $"Do you really wanna disable {pamaxieApplication.ApplicationName}?",
                     "Disabling your application will block anyone from accessing it. You can re-enable it any time however! " +

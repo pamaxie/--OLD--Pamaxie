@@ -8,21 +8,21 @@ namespace Pamaxie.Database.Extensions.Client
     public class DatabaseService : IDatabaseService<HttpClient>
     {
         /// <inheritdoc/>
-        public HttpClient Service { get; internal set; } = new();
-        
+        public HttpClient Service { get; internal init; } = new HttpClient();
+
         /// <inheritdoc/>
         public IPamaxieDataContext DataContext { get; }
-        
+
         /// <inheritdoc/>
         public bool ConnectionSuccess { get; set; }
-        
+
         /// <inheritdoc/>
         public DateTime LastConnectionSuccess { get; set; }
-        
+
         /// <summary>
         /// Contains the service responsible for interacting with user data for the Api
         /// </summary>
-        internal static  IUserDataService UserService { get; set; }
+        internal static IUserDataService UserService { get; set; }
 
         /// <summary>
         /// Contains the Service responsible for interacting with application data for the Api

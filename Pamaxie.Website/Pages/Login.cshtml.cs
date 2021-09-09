@@ -25,13 +25,13 @@ namespace Pamaxie.Website.Pages
         {
             const string provider = "Google";
             // Request a redirect to the external login provider.
-            AuthenticationProperties authenticationProperties = new()
+            AuthenticationProperties authenticationProperties = new AuthenticationProperties
             {
                 RedirectUri = Url.Page("./Login", "Callback", new { returnUrl })
             };
             return new ChallengeResult(provider, authenticationProperties);
         }
-        
+
         // ReSharper disable once UnusedMember.Global
         /// <summary>
         /// Gets the Google Account <see cref="ClaimsIdentity"/> after using Google's login page
@@ -41,14 +41,14 @@ namespace Pamaxie.Website.Pages
         {
             // Get the information about the user from the external login provider
             ClaimsIdentity? googleUser = User.Identities.FirstOrDefault();
-            if (googleUser is not {IsAuthenticated: true})
+            if (googleUser is not { IsAuthenticated: true })
                 return LocalRedirect("/");
-            AuthenticationProperties authProperties = new()
+            AuthenticationProperties authProperties = new AuthenticationProperties
             {
                 IsPersistent = true,
                 RedirectUri = Request.Host.Value
             };
-            await HttpContext.SignInAsync( 
+            await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(googleUser),
                 authProperties);

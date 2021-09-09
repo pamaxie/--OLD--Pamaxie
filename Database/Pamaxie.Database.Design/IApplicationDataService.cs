@@ -13,7 +13,7 @@ namespace Pamaxie.Database.Design
         /// <param name="value">The application to get the owner from</param>
         /// <returns>The application's owner</returns>
         public IPamaxieUser GetOwner(IPamaxieApplication value);
-        
+
         /// <summary>
         /// Enables or Disables the application
         /// </summary>

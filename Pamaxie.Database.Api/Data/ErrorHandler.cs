@@ -4,7 +4,7 @@
     /// Contains all error handling information
     /// TODO: Please get rid of this shit. Either use the proper error codes or just like, use the proper file for it (resx) so it can be modified later.
     /// </summary>
-    public class ErrorHandler
+    public static class ErrorHandler
     {
         /// <summary>
         /// Should be called when an Item has been Deleted
@@ -94,7 +94,7 @@
         internal static object BadBadDeveloper()
         {
             return "Never. EVER, EVER. Include your password in the refresh method. " +
-                "We require you to be authenticated for it anyways and sending user passwords should only be done to gather the token";
+                   "We require you to be authenticated for it anyways and sending user passwords should only be done to gather the token";
         }
     }
 }

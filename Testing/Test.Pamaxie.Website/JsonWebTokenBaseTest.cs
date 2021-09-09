@@ -41,7 +41,7 @@ namespace Test.Pamaxie.Website_Test
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
-            ConfirmEmailBody body = new(user);
+            ConfirmEmailBody body = new ConfirmEmailBody(user);
             string token = JsonWebToken.Encode(body, _secret);
             TestOutputHelper.WriteLine(token);
         }
@@ -58,7 +58,7 @@ namespace Test.Pamaxie.Website_Test
             Assert.NotNull(user);
 
             //Newly created token
-            ConfirmEmailBody body = new(user);
+            ConfirmEmailBody body = new ConfirmEmailBody(user);
             string token = JsonWebToken.Encode(body, _secret);
             ConfirmEmailBody decodedBody = JsonWebToken.Decode<ConfirmEmailBody>(token, _secret) as ConfirmEmailBody;
             TestOutputHelper.WriteLine(JsonConvert.SerializeObject(decodedBody));
@@ -76,7 +76,7 @@ namespace Test.Pamaxie.Website_Test
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
-            ConfirmEmailBody body = new(user);
+            ConfirmEmailBody body = new ConfirmEmailBody(user);
             string token = JsonWebToken.Encode(body, _secret);
             //Make the token invalid
             token = token.Replace('s', 'd');
@@ -96,7 +96,7 @@ namespace Test.Pamaxie.Website_Test
             IPamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
 
-            ConfirmEmailBody body = new(user)
+            ConfirmEmailBody body = new ConfirmEmailBody(user)
             {
                 //Expire the token
                 Expiration = DateTime.UtcNow.Subtract(TimeSpan.FromDays(10))

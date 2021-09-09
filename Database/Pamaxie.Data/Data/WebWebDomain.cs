@@ -13,7 +13,7 @@ namespace Pamaxie.Data
         /// <inheritdoc/>
         /// </summary>
         public DomainType DomainType { get; set; }
-        
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

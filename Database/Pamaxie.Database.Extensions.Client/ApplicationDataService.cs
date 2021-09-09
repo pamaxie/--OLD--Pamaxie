@@ -26,7 +26,7 @@ namespace Pamaxie.Database.Extensions.Client
         {
             throw new NotImplementedException();
         }
-        
+
         /// <inheritdoc/>
         public bool VerifyAuthentication(IPamaxieApplication value)
         {

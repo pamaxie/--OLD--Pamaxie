@@ -15,7 +15,7 @@ namespace Test.Base
         /// Database Context
         /// </summary>
         protected IPamaxieDataContext Context { get; init; }
-        
+
         /// <summary>
         /// Database Service
         /// </summary>
@@ -30,7 +30,7 @@ namespace Test.Base
         /// Database Password
         /// </summary>
         protected string Password { get; }
-        
+
         /// <summary>
         /// The Api controller that will be tested against
         /// </summary>
@@ -41,7 +41,7 @@ namespace Test.Base
             //TODO Change these section name, and value names when the appsettings.json is done for Database.Api
             IConfigurationSection dbConfigSection = Configuration.GetSection("DbConfig");
             Instance = dbConfigSection.GetValue<string>("Instances");
-            Password = dbConfigSection.GetValue<string>("Password");;
+            Password = dbConfigSection.GetValue<string>("Password");
         }
     }
 }
