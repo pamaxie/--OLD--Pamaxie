@@ -57,7 +57,7 @@ namespace Test.Pamaxie.MediaDetection_Test
         /// <param name="count">Amount of bytes to read</param>
         /// <param name="offset">Offset of stream position</param>
         /// <returns><see cref="byte"/> array</returns>
-        public static byte[] ReadExactly(this Stream stream, int count, int offset = 0)
+        internal static byte[] ReadExactly(this Stream stream, int count, int offset = 0)
         {
             byte[] buffer = new byte[count];
             stream.Position = 0;

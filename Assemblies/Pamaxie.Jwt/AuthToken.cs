@@ -1,7 +1,5 @@
 ﻿using System;
 
-#pragma warning disable 8618
-
 namespace Pamaxie.Jwt
 {
     /// <summary>
@@ -12,11 +10,11 @@ namespace Pamaxie.Jwt
         /// <summary>
         /// The token
         /// </summary>
-        public string Token { get; set; }
+        public string Token { get; init; }
 
         /// <summary>
         /// The expiration date of the token
         /// </summary>
-        public DateTime ExpirationUtc { get; set; }
+        public DateTime ExpirationUtc { get; init; }
     }
 }

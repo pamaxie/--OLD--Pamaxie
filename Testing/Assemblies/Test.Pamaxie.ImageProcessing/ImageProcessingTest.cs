@@ -34,6 +34,7 @@ namespace Test.Pamaxie.ImageProcessing_Test
         [MemberData(nameof(FileLinks))]
         public void DownloadFile(string url)
         {
+            //Test the DownloadFile method to see if it returns a file
             FileInfo file = ImageProcessing.DownloadFile(url);
             Assert.NotNull(file);
             TestOutputHelper.WriteLine(file.FullName);
@@ -48,7 +49,10 @@ namespace Test.Pamaxie.ImageProcessing_Test
         [MemberData(nameof(FileLinksWithHash))]
         public void GetFileHash(string url, string expectedHash)
         {
+            //Test the GetFileHash method to see if it returns the expected FileHash
             string fileHash = ImageProcessing.GetFileHash(url).Result.ToUpper();
+            TestOutputHelper.WriteLine("Actual:\n" + fileHash);
+            TestOutputHelper.WriteLine("Expected:\n" + expectedHash);
             Assert.Equal(expectedHash, fileHash);
         }
     }

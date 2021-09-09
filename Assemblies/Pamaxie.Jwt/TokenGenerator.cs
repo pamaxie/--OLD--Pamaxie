@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
@@ -55,9 +56,8 @@ namespace Pamaxie.Jwt
         public static string GetUserKey(string authToken)
         {
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            SecurityToken jsonToken = handler.ReadToken(authToken);
-            JwtSecurityToken tokenS = jsonToken as JwtSecurityToken;
-            return tokenS?.Id;
+            JwtSecurityToken token = handler.ReadJwtToken(authToken);
+            return token?.Claims.First(claim => claim.Type == "unique_name").Value;
         }
     }
 }
