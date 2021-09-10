@@ -32,7 +32,6 @@ namespace Pamaxie.Database.Extensions.Server
 
             IDatabase db = Service.Service.GetDatabase();
             RedisValue rawData = db.StringGet(key);
-            string es = rawData.ToString();
             return string.IsNullOrEmpty(rawData) ? default : JsonConvert.DeserializeObject<T>(rawData);
         }
 
@@ -138,7 +137,7 @@ namespace Pamaxie.Database.Extensions.Server
             }
 
             string data = JsonConvert.SerializeObject(value);
-            
+
             if (!db.StringSet(value.Key, data)) return false;
             databaseValue = value;
             return true;

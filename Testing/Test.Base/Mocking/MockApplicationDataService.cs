@@ -98,7 +98,7 @@ namespace Test.Base
             {
                 return string.IsNullOrEmpty(key)
                     ? null
-                    : TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key) as PamaxieApplication;
+                    : TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key);
             }
 
             /// <inheritdoc cref="IApplicationDataService.Create"/>
@@ -226,7 +226,7 @@ namespace Test.Base
                 if (value == null || string.IsNullOrEmpty(value.Key) || string.IsNullOrEmpty(value.OwnerKey))
                     return null;
                 PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
-                return user as PamaxieUser;
+                return user;
             }
 
             /// <inheritdoc cref="IApplicationDataService.EnableOrDisable"/>
@@ -239,7 +239,7 @@ namespace Test.Base
                 if (valueToEnableOrDisable == null)
                     return null;
                 valueToEnableOrDisable.Disabled = !valueToEnableOrDisable.Disabled;
-                return valueToEnableOrDisable as PamaxieApplication;
+                return valueToEnableOrDisable;
             }
 
             /// <inheritdoc cref="IApplicationDataService.VerifyAuthentication"/>

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Pamaxie.Api.Controllers;
 using Pamaxie.Data;
-using Pamaxie.Database.Extensions.Server;
 using Test.Base;
 using Xunit;
 using Xunit.Abstractions;

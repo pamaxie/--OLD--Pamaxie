@@ -20,31 +20,31 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc cref="UserDataService.Create"/>
         public static PamaxieUser Create(this PamaxieUser value)
         {
-            return UserService.Create(value as PamaxieUser);
+            return UserService.Create(value);
         }
 
         /// <inheritdoc cref="UserDataService.TryCreate"/>
         public static bool TryCreate(this PamaxieUser value, out PamaxieUser createdValue)
         {
-            return UserService.TryCreate(value as PamaxieUser, out createdValue);
+            return UserService.TryCreate(value, out createdValue);
         }
 
         /// <inheritdoc cref="UserDataService.Update"/>
         public static PamaxieUser Update(this PamaxieUser value)
         {
-            return UserService.Update(value as PamaxieUser);
+            return UserService.Update(value);
         }
 
         /// <inheritdoc cref="UserDataService.TryUpdate"/>
         public static bool TryUpdate(this PamaxieUser value, out PamaxieUser updatedValue)
         {
-            return UserService.TryUpdate(value as PamaxieUser, out updatedValue);
+            return UserService.TryUpdate(value, out updatedValue);
         }
 
         /// <inheritdoc cref="UserDataService.UpdateOrCreate"/>
         public static bool UpdateOrCreate(this PamaxieUser value, out PamaxieUser databaseValue)
         {
-            return UserService.UpdateOrCreate(value as PamaxieUser, out databaseValue);
+            return UserService.UpdateOrCreate(value, out databaseValue);
         }
 
         /// <inheritdoc cref="UserDataService.Exists"/>
@@ -56,19 +56,19 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc cref="UserDataService.Delete"/>
         public static bool Delete(this PamaxieUser value)
         {
-            return UserService.Delete(value as PamaxieUser);
+            return UserService.Delete(value);
         }
 
         /// <inheritdoc cref="UserDataService.GetAllApplications"/>
         public static IEnumerable<PamaxieApplication> GetAllApplications(this PamaxieUser value)
         {
-            return UserService.GetAllApplications(value as PamaxieUser);
+            return UserService.GetAllApplications(value);
         }
 
         /// <inheritdoc cref="UserDataService.VerifyEmail"/>
         public static bool VerifyEmail(this PamaxieUser value)
         {
-            return UserService.VerifyEmail(value as PamaxieUser);
+            return UserService.VerifyEmail(value);
         }
     }
 }

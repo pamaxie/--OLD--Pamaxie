@@ -93,7 +93,7 @@ namespace Test.Base
         /// Contains a list of file links
         /// </summary>
         public static IEnumerable<object[]> FileLinks =>
-            TestFileLinkData.ListOfFileLinks.AsEnumerable().Select(link => new object[] { link[0] });
+            TestFileLinkData.ListOfFileLinks.AsEnumerable().Select(link => new[] { link[0] });
 
         /// <summary>
         /// Contains a list of file links with expected hash

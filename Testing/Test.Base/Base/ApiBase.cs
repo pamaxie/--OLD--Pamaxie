@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Pamaxie.Database.Design;
-using Pamaxie.Database.Extensions.Server;
-using StackExchange.Redis;
+﻿using Pamaxie.Database.Extensions.Server;
 using Xunit.Abstractions;
 
 namespace Test.Base

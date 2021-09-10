@@ -20,7 +20,7 @@ namespace Test.Base
                 .ConfigureServices(services =>
                 {
                     services.Configure<TestServer>(options => options.AllowSynchronousIO = true);
-                    
+
                     services.AddSingleton(new DatabaseService(null)
                     {
                         Service = MockIConnectionMultiplexer.Mock()

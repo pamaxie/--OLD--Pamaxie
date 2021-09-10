@@ -48,7 +48,6 @@ namespace Pamaxie.MediaDetection
                 return typesInAssembly;
             IEnumerable<FileType> typesThisAssembly = GetFileTypes();
             return typesInAssembly.Union(typesThisAssembly);
-
         }
     }
 }

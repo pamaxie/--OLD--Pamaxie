@@ -35,7 +35,9 @@ namespace Pamaxie.Database.Extensions.Server
         /// <param name="instanceName">The instance of the database</param>
         [Obsolete(
             "This should not be used, since this means u don't have a password on your database, which exposes your database to attacks. Please always make sure to use a password on your database.")]
-        public PamaxieDataContext(string instanceName) : this(instanceName, string.Empty) { }
+        public PamaxieDataContext(string instanceName) : this(instanceName, string.Empty)
+        {
+        }
 
         /// <inheritdoc/>
         public string ConnectionString()

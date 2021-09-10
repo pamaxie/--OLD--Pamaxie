@@ -62,7 +62,7 @@ namespace Pamaxie.MediaDetection
             SortedSet<FileSpecification> fileTypeMatches = stream.FindFileTypes();
             fileTypeMatches.Reverse();
 
-            foreach (FileSpecification item in fileTypeMatches.Select(t => fileTypeMatches.FirstOrDefault())
+            foreach (FileSpecification item in fileTypeMatches.Select(_ => fileTypeMatches.FirstOrDefault())
                 .Where(item => item != null))
             {
                 (_, FileType value) = FileTypes.FirstOrDefault(x => x.Key == item.ReferenceTypeId);
