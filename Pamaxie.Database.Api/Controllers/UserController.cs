@@ -37,6 +37,7 @@ namespace Pamaxie.Api.Controllers
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
                 return BadRequest(ErrorHandler.BadData());
+            result = result.Replace("\"", string.Empty);
 
             PamaxieUser user = _dbService.Users.Get(result);
 

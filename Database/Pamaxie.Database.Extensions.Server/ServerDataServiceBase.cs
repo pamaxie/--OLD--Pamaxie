@@ -32,6 +32,7 @@ namespace Pamaxie.Database.Extensions.Server
 
             IDatabase db = Service.Service.GetDatabase();
             RedisValue rawData = db.StringGet(key);
+            string es = rawData.ToString();
             return string.IsNullOrEmpty(rawData) ? default : JsonConvert.DeserializeObject<T>(rawData);
         }
 
@@ -43,7 +44,15 @@ namespace Pamaxie.Database.Extensions.Server
                     "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
 
             IDatabase db = Service.Service.GetDatabase();
-            if (db.KeyExists(value.Key))
+
+            if (string.IsNullOrEmpty(value.Key))
+            {
+                do
+                {
+                    value.Key = Guid.NewGuid().ToString();
+                } while (db.KeyExists(value.Key));
+            }
+            else if (db.KeyExists(value.Key))
                 throw new ArgumentException("The key u tried to create already exists in our database");
 
             string data = JsonConvert.SerializeObject(value);
@@ -60,12 +69,20 @@ namespace Pamaxie.Database.Extensions.Server
                     "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
 
             IDatabase db = Service.Service.GetDatabase();
-            if (db.KeyExists(value.Key))
+
+            if (string.IsNullOrEmpty(value.Key))
+            {
+                do
+                {
+                    value.Key = Guid.NewGuid().ToString();
+                } while (db.KeyExists(value.Key));
+            }
+            else if (db.KeyExists(value.Key))
                 return false;
 
             string data = JsonConvert.SerializeObject(value);
-            db.StringSet(value.Key, data);
-            createdValue = value;
+            if (db.StringSet(value.Key, data))
+                createdValue = value;
             return true;
         }
 
@@ -98,9 +115,9 @@ namespace Pamaxie.Database.Extensions.Server
                 return false;
 
             string data = JsonConvert.SerializeObject(value);
-            db.StringSet(value.Key, data);
+            if (!db.StringSet(value.Key, data)) return false;
             updatedValue = value;
-            return false;
+            return true;
         }
 
         /// <inheritdoc/>
@@ -112,10 +129,19 @@ namespace Pamaxie.Database.Extensions.Server
                     "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
 
             IDatabase db = Service.Service.GetDatabase();
+            if (string.IsNullOrEmpty(value.Key))
+            {
+                do
+                {
+                    value.Key = Guid.NewGuid().ToString();
+                } while (db.KeyExists(value.Key));
+            }
+
             string data = JsonConvert.SerializeObject(value);
-            bool existed = db.KeyExists(value.Key);
-            db.StringSet(value.Key, data);
-            return existed;
+            
+            if (!db.StringSet(value.Key, data)) return false;
+            databaseValue = value;
+            return true;
         }
 
         /// <inheritdoc/>

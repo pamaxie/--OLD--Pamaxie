@@ -43,7 +43,8 @@ namespace Pamaxie.Website.Services
             ClaimsPrincipal? claimUser = _httpContextAccessor.HttpContext?.User;
             if (claimUser is null)
                 return false;
-            if (claimUser.GetGoogleAuthData(out _) is not PamaxieUser googleUser)
+            PamaxieUser? googleUser = claimUser.GetGoogleAuthData(out _);
+            if (googleUser == null)
                 return false;
             PamaxieUser pamaxieUser = UserDataServiceExtension.Get(googleUser.Key);
             return pamaxieUser is { EmailVerified: true };

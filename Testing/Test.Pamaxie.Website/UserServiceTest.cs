@@ -15,7 +15,7 @@ namespace Test.Pamaxie.Website_Test
     /// <summary>
     /// Testing class for <see cref="UserService"/>
     /// </summary>
-    public sealed class UserServiceTestBaseTest : TestBase
+    public sealed class UserServiceTest : TestBase
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllVerifiedUsers"/>
@@ -27,7 +27,7 @@ namespace Test.Pamaxie.Website_Test
         /// </summary>
         public static IEnumerable<object[]> AllUnverifiedUsers => MemberData.AllUnverifiedUsers;
 
-        public UserServiceTestBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public UserServiceTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             //Mock UserDataService, for UserDataServiceExtension
             MockUserDataService.Mock();
@@ -79,7 +79,7 @@ namespace Test.Pamaxie.Website_Test
         /// <param name="userKey">The user key from inlined data</param>
         [Theory]
         [MemberData(nameof(AllUnverifiedUsers))]
-        public void GenerateEmailConfirmationToken_Success(string userKey)
+        public void GenerateEmailConfirmationToken(string userKey)
         {
             //Get Google Claims from the googleUserId
             Claim[] googleClaims =
@@ -90,7 +90,7 @@ namespace Test.Pamaxie.Website_Test
             IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);
 
             //Get ProfileData from ClaimPrinciple
-            PamaxieUser user = httpContextAccessor.HttpContext?.User.GetGoogleAuthData(out bool _) as PamaxieUser;
+            PamaxieUser user = httpContextAccessor.HttpContext?.User.GetGoogleAuthData(out bool _);
             Assert.NotNull(user);
 
             UserService userService = new UserService(Configuration, httpContextAccessor, null);
@@ -105,7 +105,7 @@ namespace Test.Pamaxie.Website_Test
         /// <param name="userKey">The user key from inlined data</param>
         [Theory]
         [MemberData(nameof(AllUnverifiedUsers))]
-        public void ConfirmEmail_Success(string userKey)
+        public void ConfirmEmail(string userKey)
         {
             //Get Google Claims from the googleUserId
             Claim[] googleClaims =
@@ -127,7 +127,7 @@ namespace Test.Pamaxie.Website_Test
 
             PamaxieUser verifiedPamaxieUser = UserDataServiceExtension.Get(userKey);
             TestOutputHelper.WriteLine("Email verified: {0}", verifiedPamaxieUser.EmailVerified);
-            Assert.True(userService.IsEmailOfCurrentUserVerified());
+            Assert.True(verifiedPamaxieUser.EmailVerified);
         }
     }
 }

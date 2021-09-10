@@ -37,7 +37,7 @@ namespace Pamaxie.Database.Extensions.Server
         }
 
         /// <inheritdoc/>
-        public virtual bool Connect()
+        public bool Connect()
         {
             Service = ConnectionMultiplexer.Connect(DataContext.ConnectionString() ?? string.Empty);
             if (Service == null)

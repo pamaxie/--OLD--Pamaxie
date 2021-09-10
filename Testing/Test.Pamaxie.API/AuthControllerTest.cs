@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pamaxie.Api.Controllers;
 using Pamaxie.Data;
@@ -14,17 +16,22 @@ namespace Test.Pamaxie.API_Test
     /// <summary>
     /// Testing class for <see cref="AuthController"/>
     /// </summary>
-    public sealed class AuthControllerTestBaseTest : ApiTestBase<AuthController>
+    public sealed class AuthControllerTest : ApiTestBase<AuthController>
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.AllApplications"/>
         /// </summary>
         public static IEnumerable<object[]> AllApplications => MemberData.AllApplications;
 
-        public AuthControllerTestBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public AuthControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             //Mock ApplicationDataService, for ApplicationDataServiceExtension
             MockApplicationDataService.Mock();
+            //Instantiate the controller and add a default HttpContext
+            Controller = new AuthController(new TokenGenerator(Configuration))
+            {
+                ControllerContext = { HttpContext = new DefaultHttpContext() }
+            };
         }
 
         /// <summary>
@@ -33,7 +40,7 @@ namespace Test.Pamaxie.API_Test
         /// <param name="applicationKey">The application key from inlined data</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void Login_Succeed(string applicationKey)
+        public void Login(string applicationKey)
         {
             //Get application
             PamaxieApplication application =
@@ -46,6 +53,15 @@ namespace Test.Pamaxie.API_Test
 
             ActionResult<AuthToken> result = Controller.LoginTask();
             Assert.IsType<OkObjectResult>(result.Result);
+        }
+
+        /// <summary>
+        /// Test refreshing an exiting oAuth Token through <see cref="AuthController.RefreshTask"/>
+        /// </summary>
+        [Fact]
+        public void Refresh()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Test.Pamaxie.Database.Api_Test
         /// <inheritdoc cref="MemberData.AllApplications"/>
         /// </summary>
         public static IEnumerable<object[]> AllApplications => MemberData.AllApplications;
-        
+
         /// <summary>
         /// <inheritdoc cref="MemberData.RandomApplications"/>
         /// </summary>
@@ -31,11 +31,8 @@ namespace Test.Pamaxie.Database.Api_Test
 
         public ApplicationControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
-            Context = new PamaxieDataContext(Instance, Password);
-            Service = new FakeDatabaseService(Context);
-            Service.Connect(); //TODO Change all logic behind this depending on where the .Connect method will be called in the future
             //Instantiate the controller and add a default HttpContext
-            Controller = new ApplicationController(Service as FakeDatabaseService)
+            Controller = new ApplicationController(Service)
             {
                 ControllerContext = { HttpContext = new DefaultHttpContext() }
             };
@@ -89,7 +86,7 @@ namespace Test.Pamaxie.Database.Api_Test
                 Disabled = false,
                 Deleted = false
             };
-            
+
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
             Controller.Request.Body = body;
@@ -130,7 +127,7 @@ namespace Test.Pamaxie.Database.Api_Test
                 Disabled = false,
                 Deleted = false
             };
-            
+
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
             Controller.Request.Body = body;
@@ -235,7 +232,7 @@ namespace Test.Pamaxie.Database.Api_Test
                 Disabled = false,
                 Deleted = false
             };
-            
+
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(application);
             Controller.Request.Body = body;

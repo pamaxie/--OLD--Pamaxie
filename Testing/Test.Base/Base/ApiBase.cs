@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Pamaxie.Database.Design;
+using Pamaxie.Database.Extensions.Server;
 using StackExchange.Redis;
 using Xunit.Abstractions;
 
@@ -12,24 +13,9 @@ namespace Test.Base
     public class ApiTestBase<T> : TestBase
     {
         /// <summary>
-        /// Database Context
-        /// </summary>
-        protected IPamaxieDataContext Context { get; init; }
-
-        /// <summary>
         /// Database Service
         /// </summary>
-        protected IDatabaseService<IConnectionMultiplexer> Service { get; init; }
-
-        /// <summary>
-        /// Database Instance
-        /// </summary>
-        protected string Instance { get; }
-
-        /// <summary>
-        /// Database Password
-        /// </summary>
-        protected string Password { get; }
+        protected DatabaseService Service { get; init; }
 
         /// <summary>
         /// The Api controller that will be tested against
@@ -38,10 +24,10 @@ namespace Test.Base
 
         protected ApiTestBase(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
-            //TODO Change these section name, and value names when the appsettings.json is done for Database.Api
-            IConfigurationSection dbConfigSection = Configuration.GetSection("DbConfig");
-            Instance = dbConfigSection.GetValue<string>("Instances");
-            Password = dbConfigSection.GetValue<string>("Password");
+            Service = new DatabaseService(null)
+            {
+                Service = MockIConnectionMultiplexer.Mock()
+            };
         }
     }
 }

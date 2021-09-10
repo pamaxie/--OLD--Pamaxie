@@ -12,21 +12,25 @@ namespace Test.Base
         /// <summary>
         /// Contains a list of all testing users
         /// </summary>
-        public static IEnumerable<object[]> AllUsers => TestUserData.ListOfUsers.Select(_ => _.Key)
-            .Select(key => new object[] { key }).AsEnumerable();
+        public static IEnumerable<object[]> AllUsers =>
+            (from user in TestUserData.ListOfUsers where !user.Deleted select new object[] { user.Key }).AsEnumerable();
 
         /// <summary>
         /// Contains a list of all testing users that have their email verified
         /// </summary>
         public static IEnumerable<object[]> AllVerifiedUsers =>
-            (from user in TestUserData.ListOfUsers where user.EmailVerified select new object[] { user.Key })
+            (from user in TestUserData.ListOfUsers
+                where !user.Deleted && user.EmailVerified
+                select new object[] { user.Key })
             .AsEnumerable();
 
         /// <summary>
         /// Contains a list of all testing users that does not have their email verified
         /// </summary>
         public static IEnumerable<object[]> AllUnverifiedUsers =>
-            (from user in TestUserData.ListOfUsers where !user.EmailVerified select new object[] { user.Key })
+            (from user in TestUserData.ListOfUsers
+                where !user.Deleted && !user.EmailVerified
+                select new object[] { user.Key })
             .AsEnumerable();
 
         /// <summary>

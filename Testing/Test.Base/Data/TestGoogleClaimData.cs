@@ -83,7 +83,7 @@ namespace Test.Base
             IConfigurationSection configurationSection = configuration.GetSection("UserData");
 
             //Check if the two most important claims exists
-            string email = configurationSection.GetValue<string>("Email");
+            string email = configurationSection.GetValue<string>("EmailAddress");
 
             if (string.IsNullOrEmpty(email)) return;
 

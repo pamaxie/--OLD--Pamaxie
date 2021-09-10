@@ -3,7 +3,6 @@ using System.Linq;
 using System.Security.Claims;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Client;
-using Pamaxie.Website.Authentication.Data;
 
 namespace Pamaxie.Website.Authentication
 {
@@ -17,8 +16,8 @@ namespace Pamaxie.Website.Authentication
         /// </summary>
         /// <param name="principle"><see cref="ClaimsPrincipal"/> to get the google claims from</param>
         /// <param name="hasAccount">If the google user have a account on the website</param>
-        /// <returns><see cref="GoogleAuthData"/> that was created via the claim values. Is null if something went wrong.</returns>
-        public static IPamaxieUser? GetGoogleAuthData(this ClaimsPrincipal principle, out bool hasAccount)
+        /// <returns><see cref="PamaxieUser"/> that was created via the claim values. Is null if something went wrong.</returns>
+        public static PamaxieUser? GetGoogleAuthData(this ClaimsPrincipal principle, out bool hasAccount)
         {
             hasAccount = false;
             if (principle.Identity == null)
@@ -31,7 +30,7 @@ namespace Pamaxie.Website.Authentication
             if (claims.All(x => x.Issuer != "Google"))
                 return null;
 
-            GoogleAuthData googleClaim = new GoogleAuthData();
+            PamaxieUser googleClaim = new PamaxieUser();
             foreach (Claim claim in claims.Where(x => x.Issuer == "Google"))
             {
                 switch (claim.Type)

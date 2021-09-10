@@ -11,14 +11,14 @@ namespace Test.Pamaxie.Website_Test
     /// <summary>
     /// Testing class for <see cref="EmailSender"/>
     /// </summary>
-    public sealed class EmailSenderTestBaseTest : TestBase
+    public sealed class EmailSenderTest : TestBase
     {
         /// <summary>
         /// <inheritdoc cref="MemberData.PersonalUser"/>
         /// </summary>
         public static IEnumerable<object[]> PersonalUser => MemberData.PersonalUser;
 
-        public EmailSenderTestBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public EmailSenderTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
 
@@ -28,7 +28,7 @@ namespace Test.Pamaxie.Website_Test
         /// <param name="userKey">The user key from inlined data</param>
         [Theory]
         [MemberData(nameof(PersonalUser))]
-        public void SendConfirmationEmail_Success(string userKey)
+        public void SendConfirmationEmail(string userKey)
         {
             PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);

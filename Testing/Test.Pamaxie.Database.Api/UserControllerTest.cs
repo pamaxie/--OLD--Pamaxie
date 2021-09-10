@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Pamaxie.Api.Controllers;
 using Pamaxie.Data;
-using Pamaxie.Database.Extensions.Server;
 using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
@@ -28,12 +27,15 @@ namespace Test.Pamaxie.Database.Api_Test
         /// </summary>
         public static IEnumerable<object[]> AllUnverifiedUsers => MemberData.AllUnverifiedUsers;
 
+        /// <summary>
+        /// <inheritdoc cref="MemberData.RandomUsers"/>
+        /// </summary>
+        public static IEnumerable<object[]> RandomUsers => MemberData.RandomUsers;
+
         public UserControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
-            Context = new PamaxieDataContext(Instance, Password);
-            Service = new DatabaseService(Context);
             //Instantiate the controller and add a default HttpContext
-            Controller = new UserController(Service as DatabaseService)
+            Controller = new UserController(Service)
             {
                 ControllerContext = { HttpContext = new DefaultHttpContext() }
             };
@@ -62,14 +64,26 @@ namespace Test.Pamaxie.Database.Api_Test
         /// <summary>
         /// Test for creating a user <see cref="UserController.CreateTask"/>
         /// </summary>
-        /// <param name="userKey">The user key from inlined data</param>
+        /// <param name="userName">The username of the user</param>
+        /// <param name="firstName">The firstname of the user</param>
+        /// <param name="lastName">The lastname of the user</param>
+        /// <param name="emailAddress">The email address of the user</param>
         [Theory]
-        [MemberData(nameof(AllUsers))]
-        public void Create(string userKey)
+        [MemberData(nameof(RandomUsers))]
+        public void Create(string userName, string firstName, string lastName, string emailAddress)
         {
-            //Get application
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
+            PamaxieUser user = new PamaxieUser
+            {
+                UserName = userName,
+                FirstName = firstName,
+                LastName = lastName,
+                EmailAddress = emailAddress,
+                EmailVerified = false,
+                ProfilePictureAddress =
+                    "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
+                Disabled = false,
+                Deleted = false
+            };
 
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
@@ -85,15 +99,28 @@ namespace Test.Pamaxie.Database.Api_Test
         }
 
         /// <summary>
+        /// Test for creating a user <see cref="UserController.TryCreateTask"/>
         /// </summary>
-        /// <param name="userKey">The user key from inlined data</param>
+        /// <param name="userName">The username of the user</param>
+        /// <param name="firstName">The firstname of the user</param>
+        /// <param name="lastName">The lastname of the user</param>
+        /// <param name="emailAddress">The email address of the user</param>
         [Theory]
-        [MemberData(nameof(AllUsers))]
-        public void TryCreate(string userKey)
+        [MemberData(nameof(RandomUsers))]
+        public void TryCreate(string userName, string firstName, string lastName, string emailAddress)
         {
-            //Get application
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
+            PamaxieUser user = new PamaxieUser
+            {
+                UserName = userName,
+                FirstName = firstName,
+                LastName = lastName,
+                EmailAddress = emailAddress,
+                EmailVerified = false,
+                ProfilePictureAddress =
+                    "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
+                Disabled = false,
+                Deleted = false
+            };
 
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);
@@ -173,14 +200,26 @@ namespace Test.Pamaxie.Database.Api_Test
         /// <summary>
         /// Test for creating a user through <see cref="UserController.UpdateOrCreateTask"/>
         /// </summary>
-        /// <param name="userKey">The user key from inlined data</param>
+        /// <param name="userName">The username of the user</param>
+        /// <param name="firstName">The firstname of the user</param>
+        /// <param name="lastName">The lastname of the user</param>
+        /// <param name="emailAddress">The email address of the user</param>
         [Theory]
-        [MemberData(nameof(AllUsers))]
-        public void UpdateOrCreate_Create(string userKey)
+        [MemberData(nameof(RandomUsers))]
+        public void UpdateOrCreate_Create(string userName, string firstName, string lastName, string emailAddress)
         {
-            //Get application
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
+            PamaxieUser user = new PamaxieUser
+            {
+                UserName = userName,
+                FirstName = firstName,
+                LastName = lastName,
+                EmailAddress = emailAddress,
+                EmailVerified = false,
+                ProfilePictureAddress =
+                    "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
+                Disabled = false,
+                Deleted = false
+            };
 
             //Parse the application to a request body and send it to the controller
             Stream body = ControllerService.CreateStream(user);

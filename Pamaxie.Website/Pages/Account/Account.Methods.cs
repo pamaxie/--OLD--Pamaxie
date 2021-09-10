@@ -38,7 +38,7 @@ namespace Pamaxie.Website.Pages
             if (user == null)
                 return Task.CompletedTask;
 
-            User = user.GetGoogleAuthData(out bool hasAccount) as PamaxieUser;
+            User = user.GetGoogleAuthData(out bool hasAccount);
 
             //Disable the delete button. Not like it would affect anything but no need to have it active either.
             if (!hasAccount)

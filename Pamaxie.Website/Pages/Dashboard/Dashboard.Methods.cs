@@ -22,7 +22,7 @@ namespace Pamaxie.Website.Pages
             if (user == null)
                 return Task.CompletedTask;
 
-            User = user.GetGoogleAuthData(out bool hasAccount) as PamaxieUser;
+            User = user.GetGoogleAuthData(out bool hasAccount);
             //Something weird is going on. Logout the user to make sure we are not de-syncing or anything.
             if (User == null)
             {

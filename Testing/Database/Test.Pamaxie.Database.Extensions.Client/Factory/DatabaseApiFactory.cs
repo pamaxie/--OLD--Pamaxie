@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pamaxie.Api;
+using Pamaxie.Database.Extensions.Server;
 
-namespace Test.Pamaxie.Database.Extensions.Client_Test
+namespace Test.Base
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     public sealed class DatabaseApiFactory : WebApplicationFactory<Startup>
@@ -19,6 +20,11 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
                 .ConfigureServices(services =>
                 {
                     services.Configure<TestServer>(options => options.AllowSynchronousIO = true);
+                    
+                    services.AddSingleton(new DatabaseService(null)
+                    {
+                        Service = MockIConnectionMultiplexer.Mock()
+                    });
                 })
                 //.ConfigureTestServices(services =>
                 //{

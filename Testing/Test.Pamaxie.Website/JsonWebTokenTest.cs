@@ -15,7 +15,7 @@ namespace Test.Pamaxie.Website_Test
     /// <summary>
     /// Testing class for <see cref="JsonWebToken"/>
     /// </summary>
-    public sealed class JsonWebTokenTestBaseTest : TestBase
+    public sealed class JsonWebTokenTest : TestBase
     {
         private readonly string _secret;
 
@@ -24,7 +24,7 @@ namespace Test.Pamaxie.Website_Test
         /// </summary>
         public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
 
-        public JsonWebTokenTestBaseTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public JsonWebTokenTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             IConfigurationSection configurationSection = Configuration.GetSection("JwtToken");
             _secret = configurationSection.GetValue<string>("Secret");
@@ -36,7 +36,7 @@ namespace Test.Pamaxie.Website_Test
         /// <param name="userKey">The user key from inlined data</param>
         [Theory]
         [MemberData(nameof(AllUsers))]
-        public void Encode_Success(string userKey)
+        public void Encode(string userKey)
         {
             PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
             Assert.NotNull(user);
