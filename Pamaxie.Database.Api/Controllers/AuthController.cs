@@ -1,8 +1,8 @@
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
-using Pamaxie.Api.Data;
 using Pamaxie.Database.Extensions.Server;
 using Pamaxie.Jwt;
 
@@ -20,6 +20,11 @@ namespace Pamaxie.Api.Controllers
         private readonly TokenGenerator _generator;
         private readonly DatabaseService _dbService;
 
+        /// <summary>
+        /// Constructor for <see cref="AuthController"/>
+        /// </summary>
+        /// <param name="generator">Token generator</param>
+        /// <param name="dbService">Database Service</param>
         public AuthController(TokenGenerator generator, DatabaseService dbService)
         {
             _generator = generator;
@@ -52,7 +57,7 @@ namespace Pamaxie.Api.Controllers
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             return Created("https://pamaxie.com/auth/", string.Empty);
         }

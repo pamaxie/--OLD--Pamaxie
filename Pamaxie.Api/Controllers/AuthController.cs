@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
@@ -38,15 +39,15 @@ namespace Pamaxie.Api.Controllers
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             PamaxieApplication? appData = JsonConvert.DeserializeObject<PamaxieApplication>(result);
 
             if (string.IsNullOrEmpty(appData?.Credentials.AuthorizationToken) || default == appData.Key)
-                return Unauthorized(ErrorHandler.UnAuthorized());
+                return StatusCode(StatusCodes.Status401Unauthorized);
 
             if (!appData.VerifyAuthentication())
-                return Unauthorized(ErrorHandler.UnAuthorized());
+                return StatusCode(StatusCodes.Status401Unauthorized);
 
             AuthToken token = _generator.CreateToken(appData.Key);
             return Ok(token);

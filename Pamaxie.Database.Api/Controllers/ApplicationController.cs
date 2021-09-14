@@ -1,8 +1,7 @@
-using System.IO;
+using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Pamaxie.Api.Data;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Server;
 
@@ -19,6 +18,10 @@ namespace Pamaxie.Api.Controllers
         // ReSharper disable once NotAccessedField.Local
         private readonly DatabaseService _dbService;
 
+        /// <summary>
+        /// Constructor for <see cref="ApplicationController"/>
+        /// </summary>
+        /// <param name="dbService">Database Service</param>
         public ApplicationController(DatabaseService dbService)
         {
             _dbService = dbService;
@@ -27,220 +30,286 @@ namespace Pamaxie.Api.Controllers
         /// <summary>
         /// Gets a application from the database with a application key from the request body
         /// </summary>
+        /// <param name="key">Unique Key of the application</param>
         /// <returns>A <see cref="PamaxieApplication"/> from the database</returns>
         [Authorize]
-        [HttpGet("get")]
-        public ActionResult<PamaxieApplication> GetTask()
+        [HttpGet("{key}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PamaxieApplication))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PamaxieApplication> GetTask(string key)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
-            result = result.Replace("\"", string.Empty);
-            
-            PamaxieApplication application = _dbService.Applications.Get(result);
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            return Ok(application);
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
+
+            return Ok(_dbService.Applications.Get(key));
         }
 
         /// <summary>
         /// Creates a new <see cref="PamaxieApplication"/>
         /// </summary>
+        /// <param name="application">Application to be created</param>
         /// <returns>Created <see cref="PamaxieApplication"/></returns>
         [Authorize]
-        [HttpPost("create")]
-        public ActionResult<PamaxieApplication> CreateTask()
+        [HttpPost("Create")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PamaxieApplication> CreateTask(PamaxieApplication application)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
-                return BadRequest(ErrorHandler.BadData());
+            {
+                return BadRequest();
+            }
 
-            PamaxieApplication createdApplication = _dbService.Applications.Create(application);
-
-            return Ok(createdApplication);
+            return Created("", _dbService.Applications.Create(application));
         }
 
         /// <summary>
         /// Tries to create a new <see cref="PamaxieApplication"/>
         /// </summary>
+        /// <param name="application">Application to be created</param>
         /// <returns>Created <see cref="PamaxieApplication"/></returns>
         [Authorize]
-        [HttpPost("tryCreate")]
-        public ActionResult<PamaxieApplication> TryCreateTask()
+        [HttpPost("TryCreate")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PamaxieApplication> TryCreateTask(PamaxieApplication application)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
-                return BadRequest(ErrorHandler.BadData());
+            {
+                return BadRequest();
+            }
 
-            bool created = _dbService.Applications.TryCreate(application, out PamaxieApplication createdApplication);
+            if (_dbService.Applications.TryCreate(application, out PamaxieApplication createdApplication))
+            {
+                return Created("", createdApplication);
+            }
 
-            return Ok(createdApplication); //TODO find a solution to involve the boolean "created"
+            return Problem();
         }
 
         /// <summary>
         /// Updates a <see cref="PamaxieApplication"/>
         /// </summary>
+        /// <param name="application">Updated values on <see cref="PamaxieApplication"/></param>
         /// <returns>Updated <see cref="PamaxieApplication"/></returns>
         [Authorize]
-        [HttpPost("update")]
-        public ActionResult<PamaxieApplication> UpdateTask()
+        [HttpPut("Update")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PamaxieApplication> UpdateTask(PamaxieApplication application)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
-                return BadRequest(ErrorHandler.BadData());
+            {
+                return BadRequest();
+            }
 
-            PamaxieApplication updatedApplication = _dbService.Applications.Update(application);
-
-            return Ok(updatedApplication);
+            return Ok(_dbService.Applications.Update(application));
         }
 
         /// <summary>
         /// Tries to update a <see cref="PamaxieApplication"/>
         /// </summary>
+        /// <param name="application">Updated values on <see cref="PamaxieApplication"/></param>
         /// <returns>Updated <see cref="PamaxieApplication"/></returns>
         [Authorize]
-        [HttpPost("tryUpdate")]
-        public ActionResult<PamaxieApplication> TryUpdateTask()
+        [HttpPut("TryUpdate")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PamaxieApplication> TryUpdateTask(PamaxieApplication application)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
-                return BadRequest(ErrorHandler.BadData());
+            {
+                return BadRequest();
+            }
 
-            bool updated = _dbService.Applications.TryUpdate(application, out PamaxieApplication updatedApplication);
+            if (_dbService.Applications.TryUpdate(application, out PamaxieApplication updatedApplication))
+            {
+                return Ok(updatedApplication);
+            }
 
-            return Ok(updatedApplication); //TODO find a solution to involve the boolean "updated"
+            return Problem();
         }
 
         /// <summary>
         /// Updates or creates a <see cref="PamaxieApplication"/>
         /// </summary>
+        /// <param name="application">Application to be created, or updated values on <see cref="PamaxieApplication"/></param>
         /// <returns>Updated or created <see cref="PamaxieApplication"/></returns>
         [Authorize]
-        [HttpPost("updateOrCreate")]
-        public ActionResult<PamaxieApplication> UpdateOrCreateTask()
+        [HttpPost("UpdateOrCreate")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PamaxieApplication> UpdateOrCreateTask(PamaxieApplication application)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
-                return BadRequest(ErrorHandler.BadData());
+            {
+                return BadRequest();
+            }
 
-            bool updatedOrCreated =
-                _dbService.Applications.UpdateOrCreate(application,
-                    out PamaxieApplication updatedOrCreatedApplication);
+            if (_dbService.Applications.UpdateOrCreate(application, out PamaxieApplication updatedOrCreatedApplication))
+            {
+                return Created("", updatedOrCreatedApplication);
+            }
 
-            return Ok(updatedOrCreatedApplication); //TODO find a solution to involve the boolean "updatedOrCreated"
+            return Ok(updatedOrCreatedApplication);
         }
 
         /// <summary>
         /// Deletes a <see cref="PamaxieApplication"/>
         /// </summary>
+        /// <param name="application">Application to be deleted</param>
         /// <returns><see cref="bool"/> if <see cref="PamaxieApplication"/> is deleted</returns>
         [Authorize]
-        [HttpPost("delete")]
-        public ActionResult<bool> DeleteTask()
+        [HttpDelete("Delete")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<bool> DeleteTask(PamaxieApplication application)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
-                return BadRequest(ErrorHandler.BadData());
+            {
+                return BadRequest();
+            }
 
-            bool deleted = _dbService.Applications.Delete(application);
+            if (_dbService.Applications.Delete(application))
+            {
+                return Ok();
+            }
 
-            return Ok(deleted);
+            return Problem();
         }
 
         /// <summary>
         /// Gets the owner from a <see cref="PamaxieApplication"/>
         /// </summary>
+        /// <param name="application">Application to get owner from</param>
         /// <returns>The owner of the application</returns>
         [Authorize]
-        [HttpPost("getOwner")]
-        public ActionResult<PamaxieUser> GetOwner()
+        [HttpGet("GetOwner")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PamaxieUser> GetOwner(PamaxieApplication application)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
-                return BadRequest(ErrorHandler.BadData());
+            {
+                return BadRequest();
+            }
 
-            PamaxieUser user = _dbService.Applications.GetOwner(application);
-
-            return Ok(user);
+            return Ok(_dbService.Applications.GetOwner(application));
         }
 
         /// <summary>
         /// Enables or disables the <see cref="PamaxieApplication"/> 
         /// </summary>
+        /// <param name="application">Application to enable or disable</param>
         /// <returns>Enabled or disabled <see cref="PamaxieApplication"/></returns>
         [Authorize]
-        [HttpPost("enableOrDisable")]
-        public ActionResult<PamaxieApplication> EnableOrDisableTask()
+        [HttpPost("EnableOrDisable")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PamaxieApplication> EnableOrDisableTask(PamaxieApplication application)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
-                return BadRequest(ErrorHandler.BadData());
+            {
+                return BadRequest();
+            }
 
-            PamaxieApplication enabledOrDisabledApplication = _dbService.Applications.EnableOrDisable(application);
-
-            return Ok(enabledOrDisabledApplication);
+            return Ok(_dbService.Applications.EnableOrDisable(application));
         }
 
         /// <summary>
         /// Verify if the <see cref="PamaxieApplication"/> is authorized
         /// </summary>
+        /// <param name="application">Application to verify authentication</param>
         /// <returns><see cref="bool"/> if the <see cref="PamaxieApplication"/>is authorized</returns>
         [Authorize]
-        [HttpPost("verifyAuthentication")]
-        public ActionResult<bool> VerifyAuthenticationTask()
+        [HttpPost("VerifyAuthentication")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult VerifyAuthenticationTask(PamaxieApplication application)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(result);
             if (application == null)
-                return BadRequest(ErrorHandler.BadData());
+            {
+                return BadRequest();
+            }
 
-            bool authorized = _dbService.Applications.VerifyAuthentication(application);
+            if (_dbService.Applications.VerifyAuthentication(application))
+            {
+                return Ok();
+            }
 
-            return Ok(authorized);
+            return Unauthorized();
         }
     }
 }

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Pamaxie.Api.Data;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Server;
 
@@ -20,6 +20,10 @@ namespace Pamaxie.Api.Controllers
         // ReSharper disable once NotAccessedField.Local
         private readonly DatabaseService _dbService;
 
+        /// <summary>
+        /// Constructor for <see cref="UserController"/>
+        /// </summary>
+        /// <param name="dbService">Database Service</param>
         public UserController(DatabaseService dbService)
         {
             _dbService = dbService;
@@ -36,7 +40,7 @@ namespace Pamaxie.Api.Controllers
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
             result = result.Replace("\"", string.Empty);
 
             PamaxieUser user = _dbService.Users.Get(result);
@@ -55,11 +59,11 @@ namespace Pamaxie.Api.Controllers
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             PamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             PamaxieUser createdUser = _dbService.Users.Create(user);
 
@@ -77,11 +81,11 @@ namespace Pamaxie.Api.Controllers
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             PamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             bool created = _dbService.Users.TryCreate(user, out PamaxieUser createdUser);
 
@@ -99,11 +103,11 @@ namespace Pamaxie.Api.Controllers
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             PamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             PamaxieUser updatedUser = _dbService.Users.Update(user);
 
@@ -121,11 +125,11 @@ namespace Pamaxie.Api.Controllers
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             PamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             bool updated = _dbService.Users.TryUpdate(user, out PamaxieUser updatedUser);
 
@@ -143,11 +147,11 @@ namespace Pamaxie.Api.Controllers
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             PamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             bool updateOrCreate = _dbService.Users.UpdateOrCreate(user, out PamaxieUser updatedOrCreatedUser);
 
@@ -165,11 +169,11 @@ namespace Pamaxie.Api.Controllers
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             PamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             bool deleted = _dbService.Users.Delete(user);
 
@@ -187,11 +191,11 @@ namespace Pamaxie.Api.Controllers
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             PamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             IEnumerable<PamaxieApplication> applications = _dbService.Users.GetAllApplications(user);
 
@@ -209,11 +213,11 @@ namespace Pamaxie.Api.Controllers
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             PamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             bool verified = _dbService.Users.VerifyEmail(user);
 

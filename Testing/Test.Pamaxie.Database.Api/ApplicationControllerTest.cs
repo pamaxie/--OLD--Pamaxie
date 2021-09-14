@@ -43,19 +43,28 @@ namespace Test.Pamaxie.Database.Api_Test
         /// <param name="applicationKey">The application key from inlined data</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void Get(string applicationKey)
+        public void Get_Succeed(string applicationKey)
         {
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(applicationKey);
-            Controller.Request.Body = body;
-
             //Call controller and get result
-            ActionResult<PamaxieApplication> result = Controller.GetTask();
+            ActionResult<PamaxieApplication> result = Controller.GetTask(applicationKey);
 
             //Check if application is not null
-            PamaxieApplication application = ((ObjectResult)result.Result).Value as PamaxieApplication;
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            PamaxieApplication application = GetObjectResultContent(result);
             Assert.NotNull(application);
             TestOutputHelper.WriteLine(JsonConvert.SerializeObject(application));
+        }
+
+        /// <summary>
+        /// Test for failing <see cref="ApplicationController.GetTask"/> with no data
+        /// </summary>
+        [Fact]
+        public void Get_Failure_BadRequest()
+        {
+            ActionResult<PamaxieApplication> result = Controller.GetTask(null);
+            Assert.Equal(StatusCodes.Status400BadRequest, GetObjectResultStatusCode(result));
+            PamaxieApplication application = GetObjectResultContent(result);
+            Assert.Null(application);
         }
 
         /// <summary>
@@ -80,22 +89,16 @@ namespace Test.Pamaxie.Database.Api_Test
                 },
                 OwnerKey = ownerKey,
                 ApplicationName = applicationName,
-                LastAuth = DateTime.Now,
-                RateLimited = false,
-                Disabled = false,
-                Deleted = false
+                LastAuth = DateTime.Now
             };
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(application);
-            Controller.Request.Body = body;
-
             //Call controller and get result
-            ActionResult<PamaxieApplication> result = Controller.CreateTask();
+            ActionResult<PamaxieApplication> result = Controller.CreateTask(application);
             Assert.IsType<OkObjectResult>(result.Result);
 
             //Check if application is created
-            PamaxieApplication createdApplication = ((ObjectResult)result.Result).Value as PamaxieApplication;
+            Assert.Equal(StatusCodes.Status201Created, GetObjectResultStatusCode(result));
+            PamaxieApplication createdApplication = GetObjectResultContent(result);
             Assert.NotNull(createdApplication);
         }
 
@@ -121,10 +124,7 @@ namespace Test.Pamaxie.Database.Api_Test
                 },
                 OwnerKey = ownerKey,
                 ApplicationName = applicationName,
-                LastAuth = DateTime.Now,
-                RateLimited = false,
-                Disabled = false,
-                Deleted = false
+                LastAuth = DateTime.Now
             };
 
             //Parse the application to a request body and send it to the controller

@@ -122,6 +122,7 @@ namespace Pamaxie.Database.Extensions.Server
         /// <inheritdoc/>
         public bool UpdateOrCreate(T value, out T databaseValue)
         {
+            //TODO make sure it tries to update first, if no T is found, then create
             databaseValue = default;
             if (Service.Service == null)
                 throw new DataException(

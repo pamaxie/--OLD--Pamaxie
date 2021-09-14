@@ -1,4 +1,5 @@
-﻿using Pamaxie.Database.Extensions.Server;
+﻿using Microsoft.AspNetCore.Mvc;
+using Pamaxie.Database.Extensions.Server;
 using Xunit.Abstractions;
 
 namespace Test.Base
@@ -23,7 +24,27 @@ namespace Test.Base
         {
             Service = new DatabaseService(null)
             {
-                Service = MockIConnectionMultiplexer.Mock()
+                Service = MockIConnectionMultiplexer.Mock(),
+                ConnectionSuccess = true
+            };
+        }
+
+        protected static TR GetObjectResultContent<TR>(ActionResult<TR> result)
+        {
+            return result.Result switch
+            {
+                ObjectResult objectResult => (TR)objectResult.Value,
+                _ => default
+            };
+        }
+
+        protected static int? GetObjectResultStatusCode<TS>(ActionResult<TS> result)
+        {
+            return result.Result switch
+            {
+                ObjectResult objectResult => objectResult.StatusCode,
+                StatusCodeResult codeResult => codeResult.StatusCode,
+                _ => 0
             };
         }
     }

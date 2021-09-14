@@ -281,6 +281,7 @@ namespace Test.Database.Extensions.Server_Test
             Assert.NotNull(application);
             bool verified = Service.Applications.VerifyAuthentication(application);
             Assert.True(verified);
+            
             TestOutputHelper.WriteLine("Verified {0}", true);
         }
     }

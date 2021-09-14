@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -53,7 +54,7 @@ namespace Pamaxie.Api.Controllers
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
             string filehash = await ImageProcessing.ImageProcessing.GetFileHash(result);
             MediaPredictionData data = new MediaPredictionData(filehash);
             if (data.TryLoadData(out MediaData knownResult))
@@ -91,7 +92,7 @@ namespace Pamaxie.Api.Controllers
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
             string filehash = await ImageProcessing.ImageProcessing.GetFileHash(result);
             MediaPredictionData data = new MediaPredictionData(filehash);
             if (data.TryLoadData(out MediaData knownResult))
@@ -111,7 +112,7 @@ namespace Pamaxie.Api.Controllers
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
             if (string.IsNullOrEmpty(result))
-                return BadRequest(ErrorHandler.BadData());
+                return StatusCode(StatusCodes.Status400BadRequest);
             return await ImageProcessing.ImageProcessing.GetFileHash(result);
         }
     }
