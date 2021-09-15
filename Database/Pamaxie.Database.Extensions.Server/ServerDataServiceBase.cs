@@ -122,26 +122,36 @@ namespace Pamaxie.Database.Extensions.Server
         /// <inheritdoc/>
         public bool UpdateOrCreate(T value, out T databaseValue)
         {
-            //TODO make sure it tries to update first, if no T is found, then create
+            bool created = false;
             databaseValue = default;
+
             if (Service.Service == null)
+            {
                 throw new DataException(
                     "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
+            }
 
             IDatabase db = Service.Service.GetDatabase();
+
             if (string.IsNullOrEmpty(value.Key))
             {
                 do
                 {
                     value.Key = Guid.NewGuid().ToString();
                 } while (db.KeyExists(value.Key));
+
+                created = true;
             }
 
             string data = JsonConvert.SerializeObject(value);
 
-            if (!db.StringSet(value.Key, data)) return false;
+            if (!db.StringSet(value.Key, data))
+            {
+                throw new RedisServerException("Problems with creating or updating the value");
+            }
+
             databaseValue = value;
-            return true;
+            return created;
         }
 
         /// <inheritdoc/>

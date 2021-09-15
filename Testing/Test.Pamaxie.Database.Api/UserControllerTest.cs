@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -17,19 +15,16 @@ namespace Test.Pamaxie.Database.Api_Test
     /// </summary>
     public sealed class UserControllerTest : ApiTestBase<UserController>
     {
-        /// <summary>
+        /// <inheritdoc cref="MemberData.AllUserKeys"/>
+        public static IEnumerable<object[]> AllUserKeys => MemberData.AllUserKeys;
+
         /// <inheritdoc cref="MemberData.AllUsers"/>
-        /// </summary>
         public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
 
-        /// <summary>
         /// <inheritdoc cref="MemberData.AllUnverifiedUsers"/>
-        /// </summary>
         public static IEnumerable<object[]> AllUnverifiedUsers => MemberData.AllUnverifiedUsers;
 
-        /// <summary>
         /// <inheritdoc cref="MemberData.RandomUsers"/>
-        /// </summary>
         public static IEnumerable<object[]> RandomUsers => MemberData.RandomUsers;
 
         public UserControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
@@ -42,275 +37,194 @@ namespace Test.Pamaxie.Database.Api_Test
         }
 
         /// <summary>
-        /// Test for getting a user through <see cref="UserController.GetTask"/>
+        /// Test for getting a <see cref="PamaxieUser"/> through <see cref="UserController.GetTask"/>
         /// </summary>
-        /// <param name="userKey">The user key from inlined data</param>
+        /// <param name="userKey">The <see cref="PamaxieUser"/> key from inlined data</param>
         [Theory]
-        [MemberData(nameof(AllUsers))]
+        [MemberData(nameof(AllUserKeys))]
         public void Get(string userKey)
         {
-            //Parse the user to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(userKey);
-            Controller.Request.Body = body;
+            //Act
+            ActionResult<PamaxieUser> result = Controller.GetTask(userKey);
 
-            //Call controller and get result
-            ActionResult<PamaxieUser> result = Controller.GetTask();
-
-            //Check if user is not null
-            PamaxieUser user = ((ObjectResult)result.Result).Value as PamaxieUser;
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            PamaxieUser user = GetObjectResultContent(result);
             Assert.NotNull(user);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(user));
         }
 
         /// <summary>
-        /// Test for creating a user <see cref="UserController.CreateTask"/>
+        /// Test for failing <see cref="UserController.GetTask"/> with no data
         /// </summary>
-        /// <param name="userName">The username of the user</param>
-        /// <param name="firstName">The firstname of the user</param>
-        /// <param name="lastName">The lastname of the user</param>
-        /// <param name="emailAddress">The email address of the user</param>
+        [Fact]
+        public void Get_Failure_BadRequest()
+        {
+            //Act
+            ActionResult<PamaxieUser> result = Controller.GetTask(null);
+
+            //Assert
+            Assert.Equal(StatusCodes.Status400BadRequest, GetObjectResultStatusCode(result));
+            PamaxieUser user = GetObjectResultContent(result);
+            Assert.Null(user);
+        }
+
+        /// <summary>
+        /// Test for creating a <see cref="PamaxieUser"/> <see cref="UserController.CreateTask"/>
+        /// </summary>
+        /// <param name="user">Random test <see cref="PamaxieUser"/></param>
         [Theory]
         [MemberData(nameof(RandomUsers))]
-        public void Create(string userName, string firstName, string lastName, string emailAddress)
+        public void Create(PamaxieUser user)
         {
-            PamaxieUser user = new PamaxieUser
-            {
-                UserName = userName,
-                FirstName = firstName,
-                LastName = lastName,
-                EmailAddress = emailAddress,
-                EmailVerified = false,
-                ProfilePictureAddress =
-                    "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
-                Disabled = false,
-                Deleted = false
-            };
+            //Act
+            ActionResult<PamaxieUser> result = Controller.CreateTask(user);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(user);
-            Controller.Request.Body = body;
-
-            //Call controller and get result
-            ActionResult<PamaxieUser> result = Controller.CreateTask();
-            Assert.IsType<OkObjectResult>(result.Result);
-
-            //Check if user is created
-            PamaxieUser createdUser = ((ObjectResult)result.Result).Value as PamaxieUser;
+            //Assert
+            Assert.Equal(StatusCodes.Status201Created, GetObjectResultStatusCode(result));
+            PamaxieUser createdUser = GetObjectResultContent(result);
             Assert.NotNull(createdUser);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(createdUser));
         }
 
         /// <summary>
-        /// Test for creating a user <see cref="UserController.TryCreateTask"/>
+        /// Test for creating a <see cref="PamaxieUser"/> <see cref="UserController.TryCreateTask"/>
         /// </summary>
-        /// <param name="userName">The username of the user</param>
-        /// <param name="firstName">The firstname of the user</param>
-        /// <param name="lastName">The lastname of the user</param>
-        /// <param name="emailAddress">The email address of the user</param>
+        /// <param name="user">Random test <see cref="PamaxieUser"/></param>
         [Theory]
         [MemberData(nameof(RandomUsers))]
-        public void TryCreate(string userName, string firstName, string lastName, string emailAddress)
+        public void TryCreate(PamaxieUser user)
         {
-            PamaxieUser user = new PamaxieUser
-            {
-                UserName = userName,
-                FirstName = firstName,
-                LastName = lastName,
-                EmailAddress = emailAddress,
-                EmailVerified = false,
-                ProfilePictureAddress =
-                    "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
-                Disabled = false,
-                Deleted = false
-            };
+            //Act
+            ActionResult<PamaxieUser> result = Controller.TryCreateTask(user);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(user);
-            Controller.Request.Body = body;
-
-            //Call controller and get result
-            ActionResult<PamaxieUser> result = Controller.TryCreateTask();
-            Assert.IsType<OkObjectResult>(result.Result);
-
-            //Check if user is created
-            PamaxieUser createdUser = ((ObjectResult)result.Result).Value as PamaxieUser;
+            //Assert
+            Assert.Equal(StatusCodes.Status201Created, GetObjectResultStatusCode(result));
+            PamaxieUser createdUser = GetObjectResultContent(result);
             Assert.NotNull(createdUser);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(createdUser));
         }
 
         /// <summary>
-        /// Test for updating a user through <see cref="UserController.UpdateTask"/>
+        /// Test for updating a <see cref="PamaxieUser"/> through <see cref="UserController.UpdateTask"/>
         /// </summary>
-        /// <param name="userKey">The user key from inlined data</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllUsers))]
-        public void Update(string userKey)
+        public void Update(PamaxieUser user)
         {
+            //Arrange
             const string newEmail = "UpdatedEmail@testmail.com";
 
-            //Get application
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
-
-            //Update User
+            //Act
             user.EmailAddress = newEmail;
+            ActionResult<PamaxieUser> result = Controller.UpdateTask(user);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(user);
-            Controller.Request.Body = body;
-
-            //Call controller and get result
-            ActionResult<PamaxieUser> result = Controller.UpdateTask();
-            Assert.IsType<OkObjectResult>(result.Result);
-
-            //Check if user is updated
-            PamaxieUser updatedUser = ((ObjectResult)result.Result).Value as PamaxieUser;
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            PamaxieUser updatedUser = GetObjectResultContent(result);
             Assert.NotNull(updatedUser);
             Assert.Equal(newEmail, updatedUser.EmailAddress);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(updatedUser));
         }
 
         /// <summary>
-        /// Test for trying to update a user through <see cref="UserController.UpdateTask"/>
+        /// Test for trying to update a <see cref="PamaxieUser"/> through <see cref="UserController.UpdateTask"/>
         /// </summary>
-        /// <param name="userKey">The user key from inlined data</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllUsers))]
-        public void TryUpdate(string userKey)
+        public void TryUpdate(PamaxieUser user)
         {
+            //Arrange
             const string newEmail = "UpdatedEmail@testmail.com";
 
-            //Get application
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
-
-            //Update User
+            //Act
             user.EmailAddress = newEmail;
+            ActionResult<PamaxieUser> result = Controller.TryUpdateTask(user);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(user);
-            Controller.Request.Body = body;
-
-            //Call controller and get result
-            ActionResult<PamaxieUser> result = Controller.TryUpdateTask();
-            Assert.IsType<OkObjectResult>(result.Result);
-
-            //Check if user is updated
-            PamaxieUser updatedUser = ((ObjectResult)result.Result).Value as PamaxieUser;
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            PamaxieUser updatedUser = GetObjectResultContent(result);
             Assert.NotNull(updatedUser);
             Assert.Equal(newEmail, updatedUser.EmailAddress);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(updatedUser));
         }
 
         /// <summary>
-        /// Test for creating a user through <see cref="UserController.UpdateOrCreateTask"/>
+        /// Test for creating a <see cref="PamaxieUser"/> through <see cref="UserController.UpdateOrCreateTask"/>
         /// </summary>
-        /// <param name="userName">The username of the user</param>
-        /// <param name="firstName">The firstname of the user</param>
-        /// <param name="lastName">The lastname of the user</param>
-        /// <param name="emailAddress">The email address of the user</param>
+        /// <param name="user">Random test <see cref="PamaxieUser"/></param>
         [Theory]
         [MemberData(nameof(RandomUsers))]
-        public void UpdateOrCreate_Create(string userName, string firstName, string lastName, string emailAddress)
+        public void UpdateOrCreate_Create(PamaxieUser user)
         {
-            PamaxieUser user = new PamaxieUser
-            {
-                UserName = userName,
-                FirstName = firstName,
-                LastName = lastName,
-                EmailAddress = emailAddress,
-                EmailVerified = false,
-                ProfilePictureAddress =
-                    "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
-                Disabled = false,
-                Deleted = false
-            };
+            //Act
+            ActionResult<PamaxieUser> result = Controller.UpdateOrCreateTask(user);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(user);
-            Controller.Request.Body = body;
-
-            //Call controller and get result
-            ActionResult<PamaxieUser> result = Controller.UpdateOrCreateTask();
-            Assert.IsType<OkObjectResult>(result.Result);
-
-            //Check if user is updated or created
-            PamaxieUser createdUser = ((ObjectResult)result.Result).Value as PamaxieUser;
+            //Assert
+            Assert.Equal(StatusCodes.Status201Created, GetObjectResultStatusCode(result));
+            PamaxieUser createdUser = GetObjectResultContent(result);
             Assert.NotNull(createdUser);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(createdUser));
         }
 
         /// <summary>
-        /// Test for updating a user through <see cref="UserController.UpdateOrCreateTask"/>
+        /// Test for updating a <see cref="PamaxieUser"/> through <see cref="UserController.UpdateOrCreateTask"/>
         /// </summary>
-        /// <param name="userKey">The user key from inlined data</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllUsers))]
-        public void UpdateOrCreate_Update(string userKey)
+        public void UpdateOrCreate_Update(PamaxieUser user)
         {
+            //Arrange
             const string newEmail = "UpdatedEmail@testmail.com";
 
-            //Get application
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
-
-            //Update User
+            //Act
             user.EmailAddress = newEmail;
+            ActionResult<PamaxieUser> result = Controller.UpdateOrCreateTask(user);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(user);
-            Controller.Request.Body = body;
-
-            //Call controller and get result
-            ActionResult<PamaxieUser> result = Controller.UpdateOrCreateTask();
-            Assert.IsType<OkObjectResult>(result.Result);
-
-            //Check if user is updated or created
-            PamaxieUser updatedUser = ((ObjectResult)result.Result).Value as PamaxieUser;
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            PamaxieUser updatedUser = GetObjectResultContent(result);
             Assert.NotNull(updatedUser);
             Assert.Equal(newEmail, updatedUser.EmailAddress);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(updatedUser));
         }
 
         /// <summary>
-        /// Test for deleting a user through <see cref="UserController.DeleteTask"/>
+        /// Test for deleting a <see cref="PamaxieUser"/> through <see cref="UserController.DeleteTask"/>
         /// </summary>
-        /// <param name="userKey">The user key from inlined data</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllUsers))]
-        public void Delete(string userKey)
+        public void Delete(PamaxieUser user)
         {
-            //Get application
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
+            //Act
+            ActionResult<bool> result = Controller.DeleteTask(user);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(user);
-            Controller.Request.Body = body;
-
-            //Call controller and check if user is deleted
-            ActionResult<bool> result = Controller.DeleteTask();
-            Assert.IsType<OkObjectResult>(result.Result);
-            Assert.True((bool)((ObjectResult)result.Result).Value);
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            Assert.True(GetObjectResultContent(result));
         }
 
         /// <summary>
-        /// Test for getting all applications from a user through <see cref="UserController.GetAllApplicationsTask"/>
+        /// Test for getting all <see cref="PamaxieApplication"/>s from a <see cref="PamaxieUser"/>
+        /// through <see cref="UserController.GetAllApplicationsTask"/>
         /// </summary>
-        /// <param name="userKey">The user key from inlined data</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllUsers))]
-        public void GetAllApplications(string userKey)
+        public void GetAllApplications(PamaxieUser user)
         {
-            //Get application
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
+            //Act
+            ActionResult<IEnumerable<PamaxieApplication>> result = Controller.GetAllApplicationsTask(user);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(user);
-            Controller.Request.Body = body;
-
-            //Call controller and get result
-            ActionResult<IEnumerable<PamaxieApplication>> result = Controller.GetAllApplicationsTask();
-            Assert.IsType<OkObjectResult>(result.Result);
-
-            //Check if user is updated or created
-            IEnumerable<PamaxieApplication> applications =
-                ((ObjectResult)result.Result).Value as IEnumerable<PamaxieApplication>;
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            IEnumerable<PamaxieApplication> applications = GetObjectResultContent(result);
             Assert.NotNull(applications);
+
             foreach (PamaxieApplication application in applications)
             {
                 string applicationStr = JsonConvert.SerializeObject(application);
@@ -319,23 +233,18 @@ namespace Test.Pamaxie.Database.Api_Test
         }
 
         /// <summary>
-        /// Test for verify a user through <see cref="UserController.VerifyEmailTask"/>
+        /// Test for verify a <see cref="PamaxieUser"/> through <see cref="UserController.VerifyEmailTask"/>
         /// </summary>
-        /// <param name="userKey">The user key from inlined data</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllUnverifiedUsers))]
-        public void VerifyEmail(string userKey)
+        public void VerifyEmail(PamaxieUser user)
         {
-            //Get application
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
+            //Act
             Assert.NotNull(user);
+            ActionResult<bool> result = Controller.VerifyEmailTask(user);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(user);
-            Controller.Request.Body = body;
-
-            //Call controller and check if user is verified
-            ActionResult<bool> result = Controller.VerifyEmailTask();
+            //Assert
             Assert.IsType<OkObjectResult>(result.Result);
             Assert.True((bool)((ObjectResult)result.Result).Value);
         }

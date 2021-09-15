@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -18,14 +15,13 @@ namespace Test.Pamaxie.Database.Api_Test
     /// </summary>
     public sealed class ApplicationControllerTest : ApiTestBase<ApplicationController>
     {
-        /// <summary>
+        /// <inheritdoc cref="MemberData.AllApplicationKeys"/>
+        public static IEnumerable<object[]> AllApplicationKeys => MemberData.AllApplicationKeys;
+
         /// <inheritdoc cref="MemberData.AllApplications"/>
-        /// </summary>
         public static IEnumerable<object[]> AllApplications => MemberData.AllApplications;
 
-        /// <summary>
         /// <inheritdoc cref="MemberData.RandomApplications"/>
-        /// </summary>
         public static IEnumerable<object[]> RandomApplications => MemberData.RandomApplications;
 
         public ApplicationControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
@@ -38,17 +34,17 @@ namespace Test.Pamaxie.Database.Api_Test
         }
 
         /// <summary>
-        /// Test for getting a application through <see cref="ApplicationController.GetTask"/>
+        /// Test for getting a <see cref="PamaxieApplication"/> through <see cref="ApplicationController.GetTask"/>
         /// </summary>
-        /// <param name="applicationKey">The application key from inlined data</param>
+        /// <param name="applicationKey">The <see cref="PamaxieApplication"/> key from inlined data</param>
         [Theory]
-        [MemberData(nameof(AllApplications))]
+        [MemberData(nameof(AllApplicationKeys))]
         public void Get_Succeed(string applicationKey)
         {
-            //Call controller and get result
+            //Act
             ActionResult<PamaxieApplication> result = Controller.GetTask(applicationKey);
 
-            //Check if application is not null
+            //Assert
             Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
             PamaxieApplication application = GetObjectResultContent(result);
             Assert.NotNull(application);
@@ -61,313 +57,207 @@ namespace Test.Pamaxie.Database.Api_Test
         [Fact]
         public void Get_Failure_BadRequest()
         {
+            //Act
             ActionResult<PamaxieApplication> result = Controller.GetTask(null);
+
+            //Assert
             Assert.Equal(StatusCodes.Status400BadRequest, GetObjectResultStatusCode(result));
             PamaxieApplication application = GetObjectResultContent(result);
             Assert.Null(application);
         }
 
         /// <summary>
-        /// Test for creating a application <see cref="ApplicationController.CreateTask"/>
+        /// Test for creating a <see cref="PamaxieApplication"/> <see cref="ApplicationController.CreateTask"/>
         /// </summary>
-        /// /// <param name="ownerKey">The key of the application owner</param>
-        /// /// <param name="applicationName">The application name</param>
-        /// /// <param name="authorizationToken">The authorization token</param>
+        /// <param name="application">Random test <see cref="PamaxieApplication"/></param>
         [Theory]
         [MemberData(nameof(RandomApplications))]
-        public void Create(string ownerKey, string applicationName, string authorizationToken)
+        public void Create(PamaxieApplication application)
         {
-            //Create application
-            PamaxieApplication application = new PamaxieApplication
-            {
-                TTL = DateTime.Now,
-                Credentials = new AppAuthCredentials
-                {
-                    AuthorizationToken = authorizationToken,
-                    AuthorizationTokenCipher = "",
-                    LastAuth = DateTime.Now
-                },
-                OwnerKey = ownerKey,
-                ApplicationName = applicationName,
-                LastAuth = DateTime.Now
-            };
-
-            //Call controller and get result
+            //Act
             ActionResult<PamaxieApplication> result = Controller.CreateTask(application);
-            Assert.IsType<OkObjectResult>(result.Result);
 
-            //Check if application is created
+            //Assert
             Assert.Equal(StatusCodes.Status201Created, GetObjectResultStatusCode(result));
             PamaxieApplication createdApplication = GetObjectResultContent(result);
             Assert.NotNull(createdApplication);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(createdApplication));
         }
 
         /// <summary>
-        /// Test for trying to create a application <see cref="ApplicationController.CreateTask"/>
+        /// Test for trying to create a <see cref="PamaxieApplication"/> <see cref="ApplicationController.CreateTask"/>
         /// </summary>
-        /// /// <param name="ownerKey">The key of the application owner</param>
-        /// /// <param name="applicationName">The application name</param>
-        /// /// <param name="authorizationToken">The authorization token</param>
+        /// <param name="application">Random test <see cref="PamaxieApplication"/></param>
         [Theory]
         [MemberData(nameof(RandomApplications))]
-        public void TryCreate(string ownerKey, string applicationName, string authorizationToken)
+        public void TryCreate(PamaxieApplication application)
         {
-            //Create application
-            PamaxieApplication application = new PamaxieApplication
-            {
-                TTL = DateTime.Now,
-                Credentials = new AppAuthCredentials
-                {
-                    AuthorizationToken = authorizationToken,
-                    AuthorizationTokenCipher = "",
-                    LastAuth = DateTime.Now
-                },
-                OwnerKey = ownerKey,
-                ApplicationName = applicationName,
-                LastAuth = DateTime.Now
-            };
+            //Act
+            ActionResult<PamaxieApplication> result = Controller.TryCreateTask(application);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(application);
-            Controller.Request.Body = body;
-
-            //Call controller and get result
-            ActionResult<PamaxieApplication> result = Controller.TryCreateTask();
-            Assert.IsType<OkObjectResult>(result.Result);
-
-            //Check if application is created
-            PamaxieApplication createdApplication = ((ObjectResult)result.Result).Value as PamaxieApplication;
+            //Assert
+            Assert.Equal(StatusCodes.Status201Created, GetObjectResultStatusCode(result));
+            PamaxieApplication createdApplication = GetObjectResultContent(result);
             Assert.NotNull(createdApplication);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(createdApplication));
         }
 
         /// <summary>
-        /// Test for updating a application through <see cref="ApplicationController.UpdateTask"/>
+        /// Test for updating a <see cref="PamaxieApplication"/> through <see cref="ApplicationController.UpdateTask"/>
         /// </summary>
-        /// <param name="applicationKey">The application key from inlined data</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void Update(string applicationKey)
+        public void Update(PamaxieApplication application)
         {
+            //Arrange
             const string newName = "UpdatedName";
 
-            //Get application
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
-
-            //Update application
+            //Act
             application.ApplicationName = newName;
+            ActionResult<PamaxieApplication> result = Controller.UpdateTask(application);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(application);
-            Controller.Request.Body = body;
-
-            //Call controller and get result
-            ActionResult<PamaxieApplication> result = Controller.UpdateTask();
-            Assert.IsType<OkObjectResult>(result.Result);
-
-            //Check if application is updated
-            PamaxieApplication updatedApplication = ((ObjectResult)result.Result).Value as PamaxieApplication;
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            PamaxieApplication updatedApplication = GetObjectResultContent(result);
             Assert.NotNull(updatedApplication);
             Assert.Equal(newName, updatedApplication.ApplicationName);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(updatedApplication));
         }
 
         /// <summary>
-        /// Test for trying to update a application through <see cref="ApplicationController.UpdateTask"/>
+        /// Test for trying to update a <see cref="PamaxieApplication"/> through <see cref="ApplicationController.UpdateTask"/>
         /// </summary>
-        /// <param name="applicationKey">The application key from inlined data</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void TryUpdate(string applicationKey)
+        public void TryUpdate(PamaxieApplication application)
         {
+            //Arrange
             const string newName = "UpdatedName";
 
-            //Get application
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
-
-            //Update application
+            //Act
             application.ApplicationName = newName;
+            ActionResult<PamaxieApplication> result = Controller.TryUpdateTask(application);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(application);
-            Controller.Request.Body = body;
-
-            //Call controller and get result
-            ActionResult<PamaxieApplication> result = Controller.TryUpdateTask();
-            Assert.IsType<OkObjectResult>(result.Result);
-
-            //Check if application is updated
-            PamaxieApplication updatedApplication = ((ObjectResult)result.Result).Value as PamaxieApplication;
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            PamaxieApplication updatedApplication = GetObjectResultContent(result);
             Assert.NotNull(updatedApplication);
             Assert.Equal(newName, updatedApplication.ApplicationName);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(updatedApplication));
         }
 
         /// <summary>
-        /// Test for creating a application through <see cref="ApplicationController.UpdateOrCreateTask"/>
+        /// Test for creating a <see cref="PamaxieApplication"/> through <see cref="ApplicationController.UpdateOrCreateTask"/>
         /// </summary>
-        /// /// <param name="ownerKey">The key of the application owner</param>
-        /// /// <param name="applicationName">The application name</param>
-        /// /// <param name="authorizationToken">The authorization token</param>
+        /// <param name="application">Random test <see cref="PamaxieApplication"/></param>
         [Theory]
         [MemberData(nameof(RandomApplications))]
-        public void UpdateOrCreate_Create(string ownerKey, string applicationName, string authorizationToken)
+        public void UpdateOrCreate_Create(PamaxieApplication application)
         {
-            //Create application
-            PamaxieApplication application = new PamaxieApplication
-            {
-                TTL = DateTime.Now,
-                Credentials = new AppAuthCredentials
-                {
-                    AuthorizationToken = authorizationToken,
-                    AuthorizationTokenCipher = "",
-                    LastAuth = DateTime.Now
-                },
-                OwnerKey = ownerKey,
-                ApplicationName = applicationName,
-                LastAuth = DateTime.Now,
-                RateLimited = false,
-                Disabled = false,
-                Deleted = false
-            };
+            //Act
+            ActionResult<PamaxieApplication> result = Controller.UpdateOrCreateTask(application);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(application);
-            Controller.Request.Body = body;
-
-            //Call controller and get result
-            ActionResult<PamaxieApplication> result = Controller.UpdateOrCreateTask();
-            Assert.IsType<OkObjectResult>(result.Result);
-
-            //Check if application is updated or created
-            PamaxieApplication createdApplication = ((ObjectResult)result.Result).Value as PamaxieApplication;
+            //Assert
+            Assert.Equal(StatusCodes.Status201Created, GetObjectResultStatusCode(result));
+            PamaxieApplication createdApplication = GetObjectResultContent(result);
             Assert.NotNull(createdApplication);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(createdApplication));
         }
 
         /// <summary>
-        /// Test for updating a application through <see cref="ApplicationController.UpdateOrCreateTask"/>
+        /// Test for updating a <see cref="PamaxieApplication"/> through <see cref="ApplicationController.UpdateOrCreateTask"/>
         /// </summary>
-        /// <param name="applicationKey">The application key from inlined data</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void UpdateOrCreate_Update(string applicationKey)
+        public void UpdateOrCreate_Update(PamaxieApplication application)
         {
+            //Arrange
             const string newName = "UpdatedName";
 
-            //Get application
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
-
-            //Update application
+            //Act
             application.ApplicationName = newName;
+            ActionResult<PamaxieApplication> result = Controller.UpdateOrCreateTask(application);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(application);
-            Controller.Request.Body = body;
-
-            //Call controller and get result
-            ActionResult<PamaxieApplication> result = Controller.UpdateOrCreateTask();
-            Assert.IsType<OkObjectResult>(result.Result);
-
-            //Check if application is updated or created
-            PamaxieApplication updatedApplication = ((ObjectResult)result.Result).Value as PamaxieApplication;
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            PamaxieApplication updatedApplication = GetObjectResultContent(result);
             Assert.NotNull(updatedApplication);
             Assert.Equal(newName, updatedApplication.ApplicationName);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(updatedApplication));
         }
 
         /// <summary>
-        /// Test for deleting a application through <see cref="ApplicationController.DeleteTask"/>
+        /// Test for deleting a <see cref="PamaxieApplication"/> through <see cref="ApplicationController.DeleteTask"/>
         /// </summary>
-        /// <param name="applicationKey">The application key from inlined data</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void Delete(string applicationKey)
+        public void Delete(PamaxieApplication application)
         {
-            //Get application
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
+            //Act
+            ActionResult<bool> result = Controller.DeleteTask(application);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(application);
-            Controller.Request.Body = body;
-
-            //Call controller and check if applications is deleted
-            ActionResult<bool> result = Controller.DeleteTask();
-            Assert.IsType<OkObjectResult>(result.Result);
-            Assert.True((bool)((ObjectResult)result.Result).Value);
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            Assert.True(GetObjectResultContent(result));
         }
 
         /// <summary>
-        /// Test for getting the owner from a application through <see cref="ApplicationController.GetOwner"/>
+        /// Test for getting the owner from a <see cref="PamaxieApplication"/> through <see cref="ApplicationController.GetOwner"/>
         /// </summary>
-        /// <param name="applicationKey">The application key from inlined data</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void GetOwner(string applicationKey)
+        public void GetOwner(PamaxieApplication application)
         {
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
+            //Act
+            ActionResult<PamaxieUser> result = Controller.GetOwner(application);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(application);
-            Controller.Request.Body = body;
-
-            //Call controller and get the owner of the application
-            ActionResult<PamaxieUser> result = Controller.GetOwner();
-            Assert.IsType<OkObjectResult>(result.Result);
-            PamaxieUser owner = ((ObjectResult)result.Result).Value as PamaxieUser;
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            PamaxieUser owner = GetObjectResultContent(result);
             Assert.NotNull(owner);
             TestOutputHelper.WriteLine(JsonConvert.SerializeObject(owner));
         }
 
         /// <summary>
-        /// Test for getting all applications from a application through <see cref="ApplicationController.EnableOrDisableTask"/>
+        /// Test for enabling or disabling a <see cref="PamaxieApplication"/> through <see cref="ApplicationController.EnableOrDisableTask"/>
         /// </summary>
-        /// <param name="applicationKey">The application key from inlined data</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void EnableOrDisable(string applicationKey)
+        public void EnableOrDisable(PamaxieApplication application)
         {
-            //Get application
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
+            //Arrange
+            bool disabled = application.Disabled;
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(application);
-            Controller.Request.Body = body;
+            //Act
+            ActionResult<PamaxieApplication> result = Controller.EnableOrDisableTask(application);
 
-            //Call controller and check if application is enabled or disabled
-            ActionResult<PamaxieApplication> result = Controller.EnableOrDisableTask();
-            Assert.IsType<OkObjectResult>(result.Result);
-            Assert.Equal(!application.Disabled, ((PamaxieApplication)((ObjectResult)result.Result).Value).Disabled);
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            PamaxieApplication disabledOrEnabledApplication = GetObjectResultContent(result);
+            Assert.NotEqual(disabled, disabledOrEnabledApplication.Disabled);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(disabledOrEnabledApplication));
         }
 
         /// <summary>
-        /// Test for verify a application through <see cref="ApplicationController.VerifyAuthenticationTask"/>
+        /// Test for verify a <see cref="PamaxieApplication"/> through <see cref="ApplicationController.VerifyAuthenticationTask"/>
         /// </summary>
-        /// <param name="applicationKey">The application key from inlined data</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void VerifyAuthentication(string applicationKey)
+        public void VerifyAuthentication(PamaxieApplication application)
         {
-            //Get application
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
+            //Act
+            ActionResult<bool> result = Controller.VerifyAuthenticationTask(application);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(application);
-            Controller.Request.Body = body;
-
-            //Call controller and check if application is verified
-            ActionResult<bool> result = Controller.VerifyAuthenticationTask();
-            Assert.IsType<OkObjectResult>(result.Result);
-            Assert.True((bool)((ObjectResult)result.Result).Value);
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            Assert.True(GetObjectResultContent(result));
         }
     }
 }

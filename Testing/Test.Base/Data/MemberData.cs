@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Pamaxie.Data;
 
 namespace Test.Base
 {
@@ -10,57 +11,94 @@ namespace Test.Base
     public static class MemberData
     {
         /// <summary>
-        /// Contains a list of all testing users
+        /// Contains a list of all testing <see cref="PamaxieUser"/> keys
+        /// </summary>
+        public static IEnumerable<object[]> AllUserKeys =>
+            TestUserData.ListOfUsers.Where(_ => _.Deleted == false)
+                .Select(user => new object[] { user.Key });
+
+        /// <summary>
+        /// Contains a list of all testing <see cref="PamaxieUser"/>s
         /// </summary>
         public static IEnumerable<object[]> AllUsers =>
-            (from user in TestUserData.ListOfUsers where !user.Deleted select new object[] { user.Key }).AsEnumerable();
+            TestUserData.ListOfUsers.Select(user => new object[] { user });
 
         /// <summary>
-        /// Contains a list of all testing users that have their email verified
+        /// Contains a list of all testing <see cref="PamaxieUser"/> keys that have their email verified
+        /// </summary>
+        public static IEnumerable<object[]> AllVerifiedUserKeys =>
+            TestUserData.ListOfUsers.Where(_ => _.Deleted == false && _.EmailVerified)
+                .Select(user => new object[] { user.Key });
+
+        /// <summary>
+        /// Contains a list of all testing <see cref="PamaxieUser"/>s that have their email verified
         /// </summary>
         public static IEnumerable<object[]> AllVerifiedUsers =>
-            (from user in TestUserData.ListOfUsers
-                where !user.Deleted && user.EmailVerified
-                select new object[] { user.Key })
-            .AsEnumerable();
+            TestUserData.ListOfUsers.Where(_ => _.Deleted == false && _.EmailVerified)
+                .Select(user => new object[] { user });
 
         /// <summary>
-        /// Contains a list of all testing users that does not have their email verified
+        /// Contains a list of all testing <see cref="PamaxieUser"/> keys that does not have their email verified
+        /// </summary>
+        public static IEnumerable<object[]> AllUnverifiedUserKeys =>
+            TestUserData.ListOfUsers.Where(_ => _.Deleted == false && _.EmailVerified == false)
+                .Select(user => new object[] { user.Key });
+
+        /// <summary>
+        /// Contains a list of all testing  <see cref="PamaxieUser"/>s that does not have their email verified
         /// </summary>
         public static IEnumerable<object[]> AllUnverifiedUsers =>
-            (from user in TestUserData.ListOfUsers
-                where !user.Deleted && !user.EmailVerified
-                select new object[] { user.Key })
-            .AsEnumerable();
+            TestUserData.ListOfUsers.Where(_ => _.Deleted == false && _.EmailVerified == false)
+                .Select(user => new object[] { user });
 
         /// <summary>
-        /// Contains the ID of the personal testing user
+        /// Contains the ID of the personal testing <see cref="PamaxieUser"/>
+        /// </summary>
+        public static IEnumerable<object[]> PersonalUserKey =>
+            new List<object[]> { new object[] { "101963629560135630792" } };
+
+        /// <summary>
+        /// Contains the personal testing <see cref="PamaxieUser"/>
         /// </summary>
         public static IEnumerable<object[]> PersonalUser =>
-            new List<object[]> { new object[] { "101963629560135630792" } }.AsEnumerable();
+            TestUserData.ListOfUsers.Where(_ => _.Key == "101963629560135630792")
+                .Select(user => new object[] { user });
 
         /// <summary>
-        /// Contains a list of all applications
+        /// Contains a list of all <see cref="PamaxieApplication"/> keys
         /// </summary>
-        public static IEnumerable<object[]> AllApplications => TestApplicationData.ListOfApplications.Select(_ => _.Key)
-            .Select(key => new object[] { key }).AsEnumerable();
+        public static IEnumerable<object[]> AllApplicationKeys =>
+            TestApplicationData.ListOfApplications.Where(_ => _.Deleted == false)
+                .Select(application => new object[] { application.Key });
 
         /// <summary>
-        /// Contains a list of unused user keys which can be used to create new users
+        /// Contains a list of all <see cref="PamaxieApplication"/>s
+        /// </summary>
+        public static IEnumerable<object[]> AllApplications =>
+            TestApplicationData.ListOfApplications.Where(_ => _.Deleted == false)
+                .Select(application => new object[] { application });
+
+        /// <summary>
+        /// Contains a list of random test <see cref="PamaxieUser"/>s
         /// </summary>
         public static IEnumerable<object[]> RandomUsers
         {
             get
             {
                 List<object[]> list = new List<object[]>();
+
                 for (int i = 0; i < 6; i++)
                 {
-                    string userName = RandomService.GenerateRandomName();
-                    string firstName = RandomService.GenerateRandomName();
-                    string lastName = RandomService.GenerateRandomName();
-                    string emailAddress = $"{firstName}.{lastName}@fakemail.com";
-
-                    list.Add(new object[] { userName, firstName, lastName, emailAddress });
+                    PamaxieUser user = new PamaxieUser
+                    {
+                        UserName = RandomService.GenerateRandomName(),
+                        FirstName = RandomService.GenerateRandomName(),
+                        LastName = RandomService.GenerateRandomName(),
+                        ProfilePictureAddress =
+                            "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
+                    };
+                    user.EmailAddress = $"{user.FirstName}.{user.LastName}@fakemail.com";
+                    list.Add(new object[] { user });
                 }
 
                 return list;
@@ -68,21 +106,31 @@ namespace Test.Base
         }
 
         /// <summary>
-        /// Contains a list of unused user keys which can be used to create new users
+        /// Contains a list of random test <see cref="PamaxieApplication"/>s
         /// </summary>
         public static IEnumerable<object[]> RandomApplications
         {
             get
             {
                 List<object[]> list = new List<object[]>();
+
                 for (int i = 0; i < 6; i++)
                 {
                     Random rnd = new Random();
-                    string ownerKey = TestUserData.ListOfUsers[rnd.Next(TestUserData.ListOfUsers.Count - 1)].Key;
-                    string applicationName = RandomService.GenerateRandomName();
-                    string authorizationToken = RandomService.GenerateRandomName();
-
-                    list.Add(new object[] { ownerKey, applicationName, authorizationToken });
+                    PamaxieApplication application = new PamaxieApplication
+                    {
+                        TTL = DateTime.Now,
+                        Credentials = new AppAuthCredentials
+                        {
+                            AuthorizationToken = RandomService.GenerateRandomName(),
+                            AuthorizationTokenCipher = "",
+                            LastAuth = DateTime.Now
+                        },
+                        OwnerKey = TestUserData.ListOfUsers[rnd.Next(TestUserData.ListOfUsers.Count - 1)].Key,
+                        ApplicationName = RandomService.GenerateRandomName(),
+                        LastAuth = DateTime.Now
+                    };
+                    list.Add(new object[] { application });
                 }
 
                 return list;
