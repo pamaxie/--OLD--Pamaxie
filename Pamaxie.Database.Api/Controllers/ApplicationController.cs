@@ -35,6 +35,7 @@ namespace Pamaxie.Api.Controllers
         [HttpGet("{key}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PamaxieApplication))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> GetTask(string key)
         {
@@ -46,6 +47,11 @@ namespace Pamaxie.Api.Controllers
             if (string.IsNullOrEmpty(key))
             {
                 return BadRequest();
+            }
+
+            if (!_dbService.Applications.Exists(key))
+            {
+                return NotFound();
             }
 
             return Ok(_dbService.Applications.Get(key));
