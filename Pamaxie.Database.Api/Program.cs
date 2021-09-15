@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 namespace Pamaxie.Api
 {
     /// <summary>
+    /// Class for the Main entry point
     /// BUG: This is just here for future proofing. This is a concept idea to have the data flow over this api instead of the ML Apis
     /// </summary>
     public static class Program
@@ -26,9 +27,13 @@ namespace Pamaxie.Api
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder().AddCommandLine(args).Build();
-            string hostUrl = configuration["hosturl"];
+            string hostUrl = configuration["hosturl"]; //TODO Either use or remove this variable
+
             if (string.IsNullOrEmpty(hostUrl))
+            {
                 hostUrl = "http://0.0.0.0:6000";
+            }
+
             return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

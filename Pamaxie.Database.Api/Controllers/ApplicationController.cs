@@ -8,14 +8,13 @@ using Pamaxie.Database.Extensions.Server;
 namespace Pamaxie.Api.Controllers
 {
     /// <summary>
-    /// Api Controller for handling all application interactions
+    /// Api Controller for handling all <see cref="PamaxieApplication"/> interactions
     /// </summary>
     [Authorize]
     [ApiController]
     [Route("[controller]")]
     public sealed class ApplicationController : ControllerBase
     {
-        // ReSharper disable once NotAccessedField.Local
         private readonly DatabaseService _dbService;
 
         /// <summary>
@@ -28,9 +27,9 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        /// Gets a application from the database with a application key from the request body
+        /// Gets a <see cref="PamaxieApplication"/> from the database by a key
         /// </summary>
-        /// <param name="key">Unique Key of the application</param>
+        /// <param name="key">Unique Key of the <see cref="PamaxieApplication"/></param>
         /// <returns>A <see cref="PamaxieApplication"/> from the database</returns>
         [Authorize]
         [HttpGet("{key}")]
@@ -53,9 +52,9 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        /// Creates a new <see cref="PamaxieApplication"/>
+        /// Creates a new <see cref="PamaxieApplication"/> in the database
         /// </summary>
-        /// <param name="application">Application to be created</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> to be created</param>
         /// <returns>Created <see cref="PamaxieApplication"/></returns>
         [Authorize]
         [HttpPost("Create")]
@@ -79,9 +78,9 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        /// Tries to create a new <see cref="PamaxieApplication"/>
+        /// Tries to create a new <see cref="PamaxieApplication"/> in the database
         /// </summary>
-        /// <param name="application">Application to be created</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> to be created</param>
         /// <returns>Created <see cref="PamaxieApplication"/></returns>
         [Authorize]
         [HttpPost("TryCreate")]
@@ -110,7 +109,7 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        /// Updates a <see cref="PamaxieApplication"/>
+        /// Updates a <see cref="PamaxieApplication"/> in the database
         /// </summary>
         /// <param name="application">Updated values on <see cref="PamaxieApplication"/></param>
         /// <returns>Updated <see cref="PamaxieApplication"/></returns>
@@ -136,7 +135,7 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        /// Tries to update a <see cref="PamaxieApplication"/>
+        /// Tries to update a <see cref="PamaxieApplication"/> in the database
         /// </summary>
         /// <param name="application">Updated values on <see cref="PamaxieApplication"/></param>
         /// <returns>Updated <see cref="PamaxieApplication"/></returns>
@@ -167,9 +166,10 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        /// Updates or creates a <see cref="PamaxieApplication"/>
+        /// Tries to update a <see cref="PamaxieApplication"/> in the database,
+        /// if the <see cref="PamaxieApplication"/> does not exist, then a new one will be created
         /// </summary>
-        /// <param name="application">Application to be created, or updated values on <see cref="PamaxieApplication"/></param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> to be created, or updated values on <see cref="PamaxieApplication"/></param>
         /// <returns>Updated or created <see cref="PamaxieApplication"/></returns>
         [Authorize]
         [HttpPost("UpdateOrCreate")]
@@ -199,9 +199,9 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        /// Deletes a <see cref="PamaxieApplication"/>
+        /// Deletes a <see cref="PamaxieApplication"/> in the database
         /// </summary>
-        /// <param name="application">Application to be deleted</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> to be deleted</param>
         /// <returns><see cref="bool"/> if <see cref="PamaxieApplication"/> is deleted</returns>
         [Authorize]
         [HttpDelete("Delete")]
@@ -232,8 +232,8 @@ namespace Pamaxie.Api.Controllers
         /// <summary>
         /// Gets the owner from a <see cref="PamaxieApplication"/>
         /// </summary>
-        /// <param name="application">Application to get owner from</param>
-        /// <returns>The owner of the application</returns>
+        /// <param name="application">The <see cref="PamaxieApplication"/> to get owner from</param>
+        /// <returns>The owner of the <see cref="PamaxieApplication"/></returns>
         [Authorize]
         [HttpGet("GetOwner")]
         [Consumes(MediaTypeNames.Application.Json)]
@@ -258,7 +258,7 @@ namespace Pamaxie.Api.Controllers
         /// <summary>
         /// Enables or disables the <see cref="PamaxieApplication"/> 
         /// </summary>
-        /// <param name="application">Application to enable or disable</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> to enable or disable</param>
         /// <returns>Enabled or disabled <see cref="PamaxieApplication"/></returns>
         [Authorize]
         [HttpPost("EnableOrDisable")]
@@ -282,7 +282,7 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        /// Verify if the <see cref="PamaxieApplication"/> is authorized
+        /// Verify if the <see cref="AppAuthCredentials"/> is authorized from a <see cref="PamaxieApplication"/>
         /// </summary>
         /// <param name="application">Application to verify authentication</param>
         /// <returns><see cref="bool"/> if the <see cref="PamaxieApplication"/>is authorized</returns>

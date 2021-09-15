@@ -9,16 +9,16 @@ namespace Pamaxie.Database.Design
     public interface IUserDataService : IDataServiceBase<PamaxieUser>
     {
         /// <summary>
-        /// Gets a list of <see cref="PamaxieApplication"/> from a user
+        /// Gets a list of <see cref="PamaxieApplication"/> from a <see cref="PamaxieUser"/>
         /// </summary>
-        /// <param name="value">The key of the user who owns the applications</param>
-        /// <returns>A list of all applications the user owns</returns>
+        /// <param name="value">The key of the <see cref="PamaxieUser"/> who owns the applications</param>
+        /// <returns>A list of all applications the <see cref="PamaxieUser"/> owns</returns>
         public IEnumerable<PamaxieApplication> GetAllApplications(PamaxieUser value);
 
         /// <summary>
-        /// Verifies the email of the user
+        /// Verifies the email of the <see cref="PamaxieUser"/>
         /// </summary>
-        /// <param name="value">The user that will have their email verified</param>
+        /// <param name="value">The <see cref="PamaxieUser"/> that will have their email verified</param>
         /// <returns><see cref="bool"/> if the operation was successful and the email was verified</returns>
         public bool VerifyEmail(PamaxieUser value);
     }

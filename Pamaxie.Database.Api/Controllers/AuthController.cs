@@ -1,4 +1,3 @@
-using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +15,6 @@ namespace Pamaxie.Api.Controllers
     [Route("[controller]")]
     public sealed class AuthController : ControllerBase
     {
-        // ReSharper disable once NotAccessedField.Local
         private readonly TokenGenerator _generator;
         private readonly DatabaseService _dbService;
 
@@ -36,13 +34,32 @@ namespace Pamaxie.Api.Controllers
         /// </summary>
         /// <returns><see cref="AuthToken"/> Token for Authentication</returns>
         [AllowAnonymous]
-        [HttpPost("login")]
+        [HttpPost("Login")]
+        //[Consumes(MediaTypeNames.Application.Json)] Use if a param is added
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<AuthToken> LoginTask()
         {
             //TODO Not yet implemented
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
+            //if ({Value to use} == null)
+            //if (string.IsNullOrEmpty({Value to use}))
+            //{
+            //    return BadRequest();
+            //}
 
-            return Accepted("Success");
+            //if ({Logic on the user that will be logged in and return a bool})
+            //{
+            //    return Status202Accepted();
+            //}
+
+            return Unauthorized();
         }
 
         /// <summary>
@@ -50,33 +67,64 @@ namespace Pamaxie.Api.Controllers
         /// </summary>
         /// <returns><see cref="string"/> Success?</returns>
         [AllowAnonymous]
-        [HttpPost("createUser")]
+        [HttpPost("CreateUser")]
+        //[Consumes(MediaTypeNames.Application.Json)] Use if a param is added
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<string> CreateUserTask()
         {
             //TODO Not yet implemented
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return StatusCode(StatusCodes.Status400BadRequest);
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            return Created("https://pamaxie.com/auth/", string.Empty);
+            //if ({Value to use} == null)
+            //if (string.IsNullOrEmpty({Value to use}))
+            //{
+            //    return BadRequest();
+            //}
+
+            //if ({Logic on the user that will be created and return a bool and out the user})
+            //{
+            //    return Created("https://pamaxie.com/auth/", {the created user});
+            //}
+
+            return Problem();
         }
 
         /// <summary>
-        /// Refreshes an exiting oAuth Token
+        /// Refreshes an exiting <see cref="AuthToken"/>
         /// </summary>
-        /// <returns><see cref="AuthToken"/> Refreshed Token</returns>
+        /// <returns>Refreshed <see cref="AuthToken"/></returns>
         [Authorize]
-        [HttpPost("refresh")]
+        [HttpPost("Refresh")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<AuthToken> RefreshTask()
         {
-            //TODO Not yet implemented
-            StringValues token = Request.Headers["authorization"];
-            if (string.IsNullOrEmpty(token))
-                return Unauthorized("Invalid authorization token");
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            var userId = TokenGenerator.GetUserKey(token);
-            if (_dbService.Users.Exists(userId)) return Unauthorized("Invalid authorization token");
+            StringValues token = Request.Headers["authorization"];
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return BadRequest();
+            }
+
+            string userId = TokenGenerator.GetUserKey(token);
+
+            if (_dbService.Users.Exists(userId))
+            {
+                return Unauthorized();
+            }
+
             AuthToken newToken = _generator.CreateToken(userId);
             return Ok(newToken);
         }

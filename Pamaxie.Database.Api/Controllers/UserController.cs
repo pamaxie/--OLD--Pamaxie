@@ -1,23 +1,21 @@
 using System.Collections.Generic;
-using System.IO;
+using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Server;
 
 namespace Pamaxie.Api.Controllers
 {
     /// <summary>
-    /// Api Controller for handling all user interactions
+    /// Api Controller for handling all <see cref="PamaxieUser"/> interactions
     /// </summary>
     [Authorize]
     [ApiController]
     [Route("[controller]")]
     public sealed class UserController : ControllerBase
     {
-        // ReSharper disable once NotAccessedField.Local
         private readonly DatabaseService _dbService;
 
         /// <summary>
@@ -30,198 +28,263 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        /// Get a user from the database with a user key from the request body
+        /// Get a <see cref="PamaxieUser"/> from the database by a key
         /// </summary>
+        /// <param name="key">Unique Key of the <see cref="PamaxieUser"/></param>
         /// <returns>A <see cref="PamaxieUser"/> from the database</returns>
         [Authorize]
-        [HttpGet("get")]
-        public ActionResult<PamaxieUser> GetTask()
+        [HttpGet("{key}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PamaxieUser))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PamaxieUser> GetTask(string key)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return StatusCode(StatusCodes.Status400BadRequest);
-            result = result.Replace("\"", string.Empty);
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieUser user = _dbService.Users.Get(result);
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
 
-            return Ok(user);
+            return Ok(_dbService.Users.Get(key));
         }
 
         /// <summary>
-        /// Creates a new <see cref="PamaxieUser"/>
+        /// Creates a new <see cref="PamaxieUser"/> in the database
         /// </summary>
+        /// <param name="user"><see cref="PamaxieUser"/> to be created</param>
         /// <returns>Created <see cref="PamaxieUser"/></returns>
         [Authorize]
-        [HttpPost("create")]
-        public ActionResult<PamaxieUser> CreateTask()
+        [HttpPost("Create")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PamaxieUser> CreateTask(PamaxieUser user)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return StatusCode(StatusCodes.Status400BadRequest);
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
-                return StatusCode(StatusCodes.Status400BadRequest);
+            {
+                return BadRequest();
+            }
 
-            PamaxieUser createdUser = _dbService.Users.Create(user);
-
-            return Ok(createdUser);
+            return Created("", _dbService.Users.Create(user));
         }
 
         /// <summary>
-        /// Tries to create a new <see cref="PamaxieUser"/>
+        /// Tries to create a new <see cref="PamaxieUser"/> in the database
         /// </summary>
+        /// <param name="user"><see cref="PamaxieUser"/> to be created</param>
         /// <returns>Created <see cref="PamaxieUser"/></returns>
         [Authorize]
-        [HttpPost("tryCreate")]
-        public ActionResult<PamaxieUser> TryCreateTask()
+        [HttpPost("TryCreate")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PamaxieUser> TryCreateTask(PamaxieUser user)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return StatusCode(StatusCodes.Status400BadRequest);
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
-                return StatusCode(StatusCodes.Status400BadRequest);
+            {
+                return BadRequest();
+            }
 
-            bool created = _dbService.Users.TryCreate(user, out PamaxieUser createdUser);
+            if (_dbService.Users.TryCreate(user, out PamaxieUser createdUser))
+            {
+                return Created("", createdUser);
+            }
 
-            return Ok(createdUser); //TODO find a solution to involve the boolean "created"
+            return Problem();
         }
 
         /// <summary>
-        /// Updates a <see cref="PamaxieUser"/>
+        /// Updates a <see cref="PamaxieUser"/> in the database
         /// </summary>
+        /// <param name="user">Updated values on <see cref="PamaxieUser"/></param>
         /// <returns>Updated <see cref="PamaxieUser"/></returns>
         [Authorize]
-        [HttpPost("update")]
-        public ActionResult<PamaxieUser> UpdateTask()
+        [HttpPut("Update")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PamaxieUser> UpdateTask(PamaxieUser user)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return StatusCode(StatusCodes.Status400BadRequest);
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
-                return StatusCode(StatusCodes.Status400BadRequest);
+            {
+                return BadRequest();
+            }
 
-            PamaxieUser updatedUser = _dbService.Users.Update(user);
-
-            return Ok(updatedUser);
+            return Ok(_dbService.Users.Update(user));
         }
 
         /// <summary>
-        /// Tries to update a <see cref="PamaxieUser"/>
+        /// Tries to update a <see cref="PamaxieUser"/> in the database
         /// </summary>
+        /// <param name="user">Updated values on <see cref="PamaxieUser"/></param>
         /// <returns>Updated <see cref="PamaxieUser"/></returns>
         [Authorize]
-        [HttpPost("tryUpdate")]
-        public ActionResult<PamaxieUser> TryUpdateTask()
+        [HttpPut("TryUpdate")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PamaxieUser> TryUpdateTask(PamaxieUser user)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return StatusCode(StatusCodes.Status400BadRequest);
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
-                return StatusCode(StatusCodes.Status400BadRequest);
+            {
+                return BadRequest();
+            }
 
-            bool updated = _dbService.Users.TryUpdate(user, out PamaxieUser updatedUser);
+            if (_dbService.Users.TryUpdate(user, out PamaxieUser updatedUser))
+            {
+                return Ok(updatedUser);
+            }
 
-            return Ok(updatedUser); //TODO find a solution to involve the boolean "updated"
+            return Problem();
         }
 
         /// <summary>
-        /// Updates or creates a <see cref="PamaxieUser"/>
+        /// Tries to update a <see cref="PamaxieUser"/> in the database,
+        /// if the <see cref="PamaxieUser"/> does not exist, then a new one will be created
         /// </summary>
+        /// <param name="user">The <see cref="PamaxieUser"/> to be created, or updated values on <see cref="PamaxieUser"/></param>
         /// <returns>Updated or created <see cref="PamaxieUser"/></returns>
         [Authorize]
-        [HttpPost("updateOrCreate")]
-        public ActionResult<PamaxieUser> UpdateOrCreateTask()
+        [HttpPost("UpdateOrCreate")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PamaxieUser> UpdateOrCreateTask(PamaxieUser user)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return StatusCode(StatusCodes.Status400BadRequest);
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
-                return StatusCode(StatusCodes.Status400BadRequest);
+            {
+                return BadRequest();
+            }
 
-            bool updateOrCreate = _dbService.Users.UpdateOrCreate(user, out PamaxieUser updatedOrCreatedUser);
+            if (_dbService.Users.UpdateOrCreate(user, out PamaxieUser updatedOrCreatedUser))
+            {
+                return Created("", updatedOrCreatedUser);
+            }
 
-            return Ok(updatedOrCreatedUser); //TODO find a solution to involve the boolean "updatedOrCreated"
+            return Ok(updatedOrCreatedUser);
         }
 
         /// <summary>
-        /// Deletes a <see cref="PamaxieUser"/>
+        /// Deletes a <see cref="PamaxieUser"/> in the database
         /// </summary>
+        /// <param name="user"><see cref="PamaxieUser"/> to be deleted</param>
         /// <returns><see cref="bool"/> if <see cref="PamaxieUser"/> is deleted</returns>
         [Authorize]
-        [HttpPost("delete")]
-        public ActionResult<bool> DeleteTask()
+        [HttpDelete("Delete")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<bool> DeleteTask(PamaxieUser user)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return StatusCode(StatusCodes.Status400BadRequest);
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
-                return StatusCode(StatusCodes.Status400BadRequest);
+            {
+                return BadRequest();
+            }
 
-            bool deleted = _dbService.Users.Delete(user);
+            if (_dbService.Users.Delete(user))
+            {
+                return Ok();
+            }
 
-            return Ok(deleted);
+            return Problem();
         }
 
         /// <summary>
         /// Get all <see cref="PamaxieApplication"/>s the user owns
         /// </summary>
-        /// <returns>A list of all <see cref="PamaxieApplication"/>s the user owns</returns>
+        /// <param name="user">The <see cref="PamaxieUser"/> of the applications</param>
+        /// <returns>A list of all <see cref="PamaxieApplication"/>s the <see cref="PamaxieUser"/> owns</returns>
         [Authorize]
-        [HttpPost("getAllApplications")]
-        public ActionResult<IEnumerable<PamaxieApplication>> GetAllApplicationsTask()
+        [HttpGet("GetAllApplications")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<IEnumerable<PamaxieApplication>> GetAllApplicationsTask(PamaxieUser user)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return StatusCode(StatusCodes.Status400BadRequest);
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
-                return StatusCode(StatusCodes.Status400BadRequest);
+            {
+                return BadRequest();
+            }
 
-            IEnumerable<PamaxieApplication> applications = _dbService.Users.GetAllApplications(user);
-
-            return Ok(applications);
+            return Ok(_dbService.Users.GetAllApplications(user));
         }
 
         /// <summary>
-        /// Verifies the user's email address
+        /// Verifies the <see cref="PamaxieUser"/>'s email address
         /// </summary>
+        /// <param name="user"><see cref="PamaxieUser"/> to be deleted</param>
         /// <returns><see cref="bool"/> if the user got verified</returns>
         [Authorize]
-        [HttpPost("verifyEmail")]
-        public ActionResult<bool> VerifyEmailTask()
+        [HttpPost("VerifyEmail")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<bool> VerifyEmailTask(PamaxieUser user)
         {
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return StatusCode(StatusCodes.Status400BadRequest);
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
 
-            PamaxieUser user = JsonConvert.DeserializeObject<PamaxieUser>(result);
             if (user == null)
-                return StatusCode(StatusCodes.Status400BadRequest);
+            {
+                return BadRequest();
+            }
 
-            bool verified = _dbService.Users.VerifyEmail(user);
+            if (_dbService.Users.VerifyEmail(user))
+            {
+                return Ok();
+            }
 
-            return Ok(verified);
+            return Problem();
         }
     }
 }
