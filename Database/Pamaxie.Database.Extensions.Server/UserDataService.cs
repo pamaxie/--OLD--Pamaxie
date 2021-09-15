@@ -23,23 +23,39 @@ namespace Pamaxie.Database.Extensions.Server
         public IEnumerable<PamaxieApplication> GetAllApplications(PamaxieUser value)
         {
             if (Service.Service == null)
+            {
                 throw new DataException(
                     "Please ensure that the Service is connected and initialized before attempting to poll data from it");
+            }
 
             IDatabase db = Service.Service.GetDatabase();
+
             if (!db.KeyExists(value.Key))
+            {
                 throw new ArgumentException("The key u entered does not exist in our database yet");
+            }
 
             IEnumerable<string> applicationKeys = value.ApplicationKeys;
-            List<PamaxieApplication> applications = (from key in applicationKeys
-                select db.StringGet(key)
-                into rawData
-                where !string.IsNullOrEmpty(rawData)
-                select JsonConvert.DeserializeObject<PamaxieApplication>(rawData)
-                into application
-                where application != null
-                where application.OwnerKey != value.Key
-                select application).ToList();
+            List<PamaxieApplication> applications = new List<PamaxieApplication>();
+
+            foreach (string applicationKey in applicationKeys)
+            {
+                RedisValue rawData = db.StringGet(applicationKey);
+
+                if (!string.IsNullOrEmpty(rawData))
+                {
+                    PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(rawData);
+
+                    if (application != null)
+                    {
+                        if (application.OwnerKey != value.Key)
+                        {
+                            applications.Add(application);
+                        }
+                    }
+                }
+            }
+
             return applications.AsEnumerable();
         }
 
@@ -47,11 +63,16 @@ namespace Pamaxie.Database.Extensions.Server
         public bool VerifyEmail(PamaxieUser value)
         {
             if (Service.Service == null)
+            {
                 return false;
+            }
 
             IDatabase db = Service.Service.GetDatabase();
+
             if (!db.KeyExists(value.Key))
+            {
                 return false;
+            }
 
             value.EmailVerified = true;
 

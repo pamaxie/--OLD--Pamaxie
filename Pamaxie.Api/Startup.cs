@@ -14,7 +14,7 @@ namespace Pamaxie.Api
     /// <summary>
     /// Startup class, usually gets called by <see cref="Program"/>
     /// </summary>
-    public class Startup
+    public sealed class Startup
     {
         /// <summary>
         /// Initializer
@@ -82,7 +82,10 @@ namespace Pamaxie.Api
         /// <param name="env">Web-host Environment</param>
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
             //app.UseClientRateLimiting();
             app.UseRouting();

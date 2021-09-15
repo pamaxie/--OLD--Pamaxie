@@ -21,8 +21,10 @@ namespace Pamaxie.Database.Extensions.Server
         public PamaxieUser GetOwner(PamaxieApplication value)
         {
             if (Service.Service == null)
+            {
                 throw new DataException(
                     "Please ensure that the Service is connected and initialized before attempting to poll data from it");
+            }
 
             IDatabase db = Service.Service.GetDatabase();
             RedisValue rawData = db.StringGet(value.OwnerKey);
@@ -33,12 +35,17 @@ namespace Pamaxie.Database.Extensions.Server
         public PamaxieApplication EnableOrDisable(PamaxieApplication value)
         {
             if (Service.Service == null)
+            {
                 throw new DataException(
                     "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
+            }
 
             IDatabase db = Service.Service.GetDatabase();
+
             if (!db.KeyExists(value.Key))
+            {
                 throw new ArgumentException("The key u entered does not exist in our database yet");
+            }
 
             value.Disabled = !value.Disabled;
 

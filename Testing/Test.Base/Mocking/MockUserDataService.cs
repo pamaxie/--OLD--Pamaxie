@@ -186,8 +186,7 @@ namespace Test.Base
                     return false;
                 }
 
-                if (string.IsNullOrEmpty(value.Key) ||
-                    TestApplicationData.ListOfApplications.All(_ => _.Key != value.Key))
+                if (string.IsNullOrEmpty(value.Key) || TestUserData.ListOfUsers.All(_ => _.Key != value.Key))
                 {
                     string key = value.Key;
 
@@ -201,6 +200,7 @@ namespace Test.Base
 
                     value.Key = key;
                     TestUserData.ListOfUsers.Add(value);
+                    updatedOrCreatedValue = value;
                     return true;
                 }
                 else
@@ -215,7 +215,7 @@ namespace Test.Base
             /// <inheritdoc cref="IApplicationDataService.Exists"/>
             public bool Exists(string key)
             {
-                return !string.IsNullOrEmpty(key) && TestApplicationData.ListOfApplications.Any(_ => _.Key == key);
+                return !string.IsNullOrEmpty(key) && TestUserData.ListOfUsers.Any(_ => _.Key == key);
             }
 
             /// <inheritdoc cref="IUserDataService.Delete"/>

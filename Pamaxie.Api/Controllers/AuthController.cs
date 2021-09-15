@@ -1,10 +1,8 @@
-﻿using System.IO;
+﻿using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
-using Newtonsoft.Json;
-using Pamaxie.Api.Data;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Client;
 using Pamaxie.Jwt;
@@ -12,7 +10,7 @@ using Pamaxie.Jwt;
 namespace Pamaxie.Api.Controllers
 {
     /// <summary>
-    /// Controller to handle application authentication
+    /// Controller to handle <see cref="PamaxieApplication"/> authentication
     /// </summary>
     [Authorize]
     [ApiController]
@@ -28,28 +26,28 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
-        /// Signs in a user via Basic authentication and returns a token.
+        /// Signs in a <see cref="PamaxieApplication"/> via Basic authentication and returns a <see cref="AuthToken"/>.
         /// </summary>
-        /// <returns><see cref="AuthToken"/> Token for AppAuthCredentials</returns>
+        /// <returns><see cref="AuthToken"/> Token for <see cref="AppAuthCredentials"/></returns>
         [AllowAnonymous]
-        [HttpPost("login")]
+        [HttpPost("Login")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthToken))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult<AuthToken> LoginTask(PamaxieApplication application)
         {
             //TODO: Use basic auth here please, do not use a HTTPPost for login.
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return StatusCode(StatusCodes.Status400BadRequest);
+            if (string.IsNullOrEmpty(application.Credentials.AuthorizationToken) || default == application.Key)
+            {
+                return Unauthorized();
+            }
 
-            PamaxieApplication? appData = JsonConvert.DeserializeObject<PamaxieApplication>(result);
+            if (!application.VerifyAuthentication())
+            {
+                return Unauthorized();
+            }
 
-            if (string.IsNullOrEmpty(appData?.Credentials.AuthorizationToken) || default == appData.Key)
-                return StatusCode(StatusCodes.Status401Unauthorized);
-
-            if (!appData.VerifyAuthentication())
-                return StatusCode(StatusCodes.Status401Unauthorized);
-
-            AuthToken token = _generator.CreateToken(appData.Key);
+            AuthToken token = _generator.CreateToken(application.Key);
             return Ok(token);
         }
 
@@ -58,16 +56,25 @@ namespace Pamaxie.Api.Controllers
         /// </summary>
         /// <returns><see cref="AuthToken"/> Refreshed Token</returns>
         [Authorize]
-        [HttpPost("refresh")]
+        [HttpPost("Refresh")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthToken))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<AuthToken> RefreshTask()
         {
             //TODO Not yet implemented
             StringValues token = Request.Headers["authorization"];
+
             if (string.IsNullOrEmpty(token))
+            {
                 return BadRequest("Authentication token for refresh could not be found");
+            }
 
             string userId = TokenGenerator.GetUserKey(token);
-            UserDataServiceExtension.Exists(userId);
+
+            if (!UserDataServiceExtension.Exists(userId))
+            {
+                return BadRequest("Invalid token");
+            }
             AuthToken newToken = _generator.CreateToken(userId);
             return Ok(newToken);
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
@@ -44,7 +43,7 @@ namespace Test.Pamaxie.MediaDetection_Test
         {
             List<FileSpecification> fileSpecifications = new List<FileSpecification>();
 
-            Type[] types =  fileType.GetType().Assembly.GetTypes();
+            Type[] types = fileType.GetType().Assembly.GetTypes();
             foreach (Type type in types)
             {
                 if (typeof(FileSpecification).IsAssignableFrom(type) && !type.GetTypeInfo().IsAbstract)
@@ -57,7 +56,7 @@ namespace Test.Pamaxie.MediaDetection_Test
                         {
                             if (info.DeclaringType != null)
                             {
-                                object instance  = Activator.CreateInstance(info.DeclaringType);
+                                object instance = Activator.CreateInstance(info.DeclaringType);
                                 if (instance != null && ((FileSpecification)instance).ReferenceTypeId == fileType.Id)
                                 {
                                     fileSpecifications.Add((FileSpecification)instance);

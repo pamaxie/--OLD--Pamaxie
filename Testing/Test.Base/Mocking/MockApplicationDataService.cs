@@ -114,6 +114,7 @@ namespace Test.Base
                 {
                     key = RandomService.GenerateRandomKey(6);
                 } while (TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key) != null);
+
                 value.Key = key;
 
                 PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
@@ -143,6 +144,7 @@ namespace Test.Base
                 {
                     key = RandomService.GenerateRandomKey(6);
                 } while (TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key) != null);
+
                 value.Key = key;
 
                 PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
@@ -207,7 +209,8 @@ namespace Test.Base
                     throw new Exception("Bad data");
                 }
 
-                if (string.IsNullOrEmpty(value.Key) || TestApplicationData.ListOfApplications.All(_ => _.Key != value.Key))
+                if (string.IsNullOrEmpty(value.Key) ||
+                    TestApplicationData.ListOfApplications.All(_ => _.Key != value.Key))
                 {
                     string key = value.Key;
 
@@ -224,7 +227,7 @@ namespace Test.Base
 
                     if (user == null)
                     {
-                        return true;
+                        throw new Exception("No owner for the application");
                     }
 
                     user.ApplicationKeys.ToList().Add(value.OwnerKey);

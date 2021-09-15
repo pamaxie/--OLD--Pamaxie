@@ -60,7 +60,7 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpPost("Create")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PamaxieUser))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> CreateTask(PamaxieUser user)
@@ -86,7 +86,7 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpPost("TryCreate")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PamaxieUser))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> TryCreateTask(PamaxieUser user)
@@ -117,7 +117,7 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpPut("Update")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PamaxieUser))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> UpdateTask(PamaxieUser user)
@@ -143,7 +143,7 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpPut("TryUpdate")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PamaxieUser))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> TryUpdateTask(PamaxieUser user)
@@ -175,8 +175,8 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpPost("UpdateOrCreate")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PamaxieUser))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PamaxieUser))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> UpdateOrCreateTask(PamaxieUser user)
@@ -207,7 +207,7 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpDelete("Delete")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PamaxieUser))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> DeleteTask(PamaxieUser user)
@@ -238,7 +238,7 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpGet("GetAllApplications")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PamaxieApplication>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<IEnumerable<PamaxieApplication>> GetAllApplicationsTask(PamaxieUser user)
@@ -264,7 +264,7 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpPost("VerifyEmail")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> VerifyEmailTask(PamaxieUser user)

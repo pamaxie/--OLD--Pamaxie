@@ -59,7 +59,7 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpPost("Create")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PamaxieApplication))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> CreateTask(PamaxieApplication application)
@@ -85,7 +85,7 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpPost("TryCreate")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PamaxieApplication))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> TryCreateTask(PamaxieApplication application)
@@ -116,7 +116,7 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpPut("Update")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PamaxieApplication))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> UpdateTask(PamaxieApplication application)
@@ -142,7 +142,7 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpPut("TryUpdate")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PamaxieApplication))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> TryUpdateTask(PamaxieApplication application)
@@ -174,8 +174,8 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpPost("UpdateOrCreate")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PamaxieApplication))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PamaxieApplication))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> UpdateOrCreateTask(PamaxieApplication application)
@@ -206,7 +206,7 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpDelete("Delete")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PamaxieApplication))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> DeleteTask(PamaxieApplication application)
@@ -237,7 +237,7 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpGet("GetOwner")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PamaxieApplication))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> GetOwner(PamaxieApplication application)
@@ -263,7 +263,7 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpPost("EnableOrDisable")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PamaxieApplication))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> EnableOrDisableTask(PamaxieApplication application)
@@ -289,7 +289,7 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpPost("VerifyAuthentication")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> VerifyAuthenticationTask(PamaxieApplication application)

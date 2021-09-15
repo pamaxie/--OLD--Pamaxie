@@ -21,7 +21,7 @@ namespace Test.Base
 
                 foreach (PamaxieUser user in TestUserData.ListOfUsers)
                 {
-                    if (!user.Deleted)
+                    if (user.Deleted)
                     {
                         continue;
                     }
@@ -46,10 +46,8 @@ namespace Test.Base
                 {
                     if (!user.Deleted)
                     {
-                        continue;
+                        list.Add(new object[] { user });
                     }
-
-                    list.Add(new object[] { user });
                 }
 
                 return list;
@@ -69,10 +67,8 @@ namespace Test.Base
                 {
                     if (!user.Deleted && !user.EmailVerified)
                     {
-                        continue;
+                        list.Add(new object[] { user });
                     }
-
-                    list.Add(new object[] { user });
                 }
 
                 return list;
@@ -92,14 +88,12 @@ namespace Test.Base
                 {
                     if (!user.EmailVerified)
                     {
-                        continue;
-                    }
-
-                    foreach (Claim[] claimUser in TestGoogleClaimData.ListOfGoogleUserPrincipleClaims)
-                    {
-                        if (user.Key == claimUser[0].Value)
+                        foreach (Claim[] claimUser in TestGoogleClaimData.ListOfGoogleUserPrincipleClaims)
                         {
-                            list.Add(new object[] { claimUser });
+                            if (user.Key == claimUser[0].Value)
+                            {
+                                list.Add(new object[] { claimUser });
+                            }
                         }
                     }
                 }
@@ -119,16 +113,14 @@ namespace Test.Base
 
                 foreach (PamaxieUser user in TestUserData.ListOfUsers)
                 {
-                    if (user.EmailVerified)
+                    if (!user.EmailVerified)
                     {
-                        continue;
-                    }
-
-                    foreach (Claim[] claimUser in TestGoogleClaimData.ListOfGoogleUserPrincipleClaims)
-                    {
-                        if (user.Key == claimUser[0].Value)
+                        foreach (Claim[] claimUser in TestGoogleClaimData.ListOfGoogleUserPrincipleClaims)
                         {
-                            list.Add(new object[] { claimUser });
+                            if (user.Key == claimUser[0].Value)
+                            {
+                                list.Add(new object[] { claimUser });
+                            }
                         }
                     }
                 }
@@ -171,10 +163,8 @@ namespace Test.Base
                 {
                     if (!application.Deleted)
                     {
-                        continue;
+                        list.Add(new object[] { application.Key });
                     }
-
-                    list.Add(new object[] { application.Key });
                 }
 
                 return list;
@@ -194,10 +184,8 @@ namespace Test.Base
                 {
                     if (!application.Deleted)
                     {
-                        continue;
+                        list.Add(new object[] { application });
                     }
-
-                    list.Add(new object[] { application });
                 }
 
                 return list;
@@ -221,7 +209,7 @@ namespace Test.Base
                         FirstName = RandomService.GenerateRandomName(),
                         LastName = RandomService.GenerateRandomName(),
                         ProfilePictureAddress =
-                            "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
+                            "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c"
                     };
                     user.EmailAddress = $"{user.FirstName}.{user.LastName}@fakemail.com";
                     list.Add(new object[] { user });

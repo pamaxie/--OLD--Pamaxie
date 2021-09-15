@@ -39,13 +39,21 @@ namespace Pamaxie.Database.Extensions.Client
         {
             HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, Url + "/Get");
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
+
             if (!response.IsSuccessStatusCode)
+            {
                 throw new WebException(response.StatusCode.ToString());
+            }
+
             Stream stream = response.Content.ReadAsStream();
             StreamReader reader = new StreamReader(stream, Encoding.Default);
             string content = reader.ReadToEnd();
+
             if (string.IsNullOrEmpty(content))
+            {
                 throw new WebException("Something went wrong here");
+            }
+
             T result = JsonConvert.DeserializeObject<T>(content);
             return result;
         }
@@ -59,13 +67,21 @@ namespace Pamaxie.Database.Extensions.Client
             requestMessage.Content = new ByteArrayContent(bodyBytes);
             requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
+
             if (!response.IsSuccessStatusCode)
+            {
                 throw new WebException(response.StatusCode.ToString());
+            }
+
             Stream stream = response.Content.ReadAsStream();
             StreamReader reader = new StreamReader(stream, Encoding.Default);
             string content = reader.ReadToEnd();
+
             if (string.IsNullOrEmpty(content))
+            {
                 throw new WebException("Something went wrong here");
+            }
+
             T result = JsonConvert.DeserializeObject<T>(content);
             return result;
         }
@@ -79,13 +95,21 @@ namespace Pamaxie.Database.Extensions.Client
             requestMessage.Content = new ByteArrayContent(bodyBytes);
             requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
+
             if (!response.IsSuccessStatusCode)
+            {
                 throw new WebException(response.StatusCode.ToString());
+            }
+
             Stream stream = response.Content.ReadAsStream();
             StreamReader reader = new StreamReader(stream, Encoding.Default);
             string content = reader.ReadToEnd();
+
             if (string.IsNullOrEmpty(content))
+            {
                 throw new WebException("Something went wrong here");
+            }
+
             createdValue = JsonConvert.DeserializeObject<T>(content);
             return true;
         }

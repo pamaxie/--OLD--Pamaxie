@@ -14,6 +14,11 @@ namespace Test.Base
     public sealed class TestUserDataService : TestBase
     {
         /// <summary>
+        /// <inheritdoc cref="MemberData.AllUserKeys"/>
+        /// </summary>
+        public static IEnumerable<object[]> AllUserKeys => MemberData.AllUserKeys;
+
+        /// <summary>
         /// <inheritdoc cref="MemberData.AllUsers"/>
         /// </summary>
         public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
@@ -34,7 +39,7 @@ namespace Test.Base
         /// </summary>
         /// <param name="userKey">The key of the <see cref="PamaxieUser"/></param>
         [Theory]
-        [MemberData(nameof(AllUsers))]
+        [MemberData(nameof(AllUserKeys))]
         public void Get(string userKey)
         {
             //Act
@@ -179,10 +184,10 @@ namespace Test.Base
             user.EmailAddress = RandomService.GenerateRandomName();
 
             //Act
-            bool updated = user.UpdateOrCreate(out PamaxieUser updatedUser);
+            bool created = user.UpdateOrCreate(out PamaxieUser updatedUser);
 
             //Assert
-            Assert.True(updated);
+            Assert.False(created);
             Assert.NotNull(updatedUser);
             Assert.NotEqual(oldEmailAddress, updatedUser.EmailAddress);
             Assert.Equal(user.EmailAddress, updatedUser.EmailAddress);

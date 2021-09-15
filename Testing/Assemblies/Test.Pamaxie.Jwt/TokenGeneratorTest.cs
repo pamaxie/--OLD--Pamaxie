@@ -14,7 +14,7 @@ namespace Test.Pamaxie.Jwt_Test
         /// <summary>
         /// <inheritdoc cref="MemberData.AllUsers"/>
         /// </summary>
-        public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
+        public static IEnumerable<object[]> AllUserKeys => MemberData.AllUserKeys;
 
         public TokenGeneratorTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
@@ -25,7 +25,7 @@ namespace Test.Pamaxie.Jwt_Test
         /// </summary>
         /// <param name="userKey">The user key from inlined data</param>
         [Theory]
-        [MemberData(nameof(AllUsers))]
+        [MemberData(nameof(AllUserKeys))]
         public void CreateToken(string userKey)
         {
             //Arrange
@@ -36,7 +36,7 @@ namespace Test.Pamaxie.Jwt_Test
 
             //Assert
             Assert.NotNull(authToken);
-            Assert.NotEmpty(authToken.Token);
+            Assert.False(string.IsNullOrEmpty(authToken.Token));
             TestOutputHelper.WriteLine("Token: {0}", authToken.Token);
             TestOutputHelper.WriteLine("Expires at {0:R}", authToken.ExpirationUtc.ToLocalTime());
         }
@@ -46,7 +46,7 @@ namespace Test.Pamaxie.Jwt_Test
         /// </summary>
         /// <param name="expectedUserKey">The expected user key from inlined data</param>
         [Theory]
-        [MemberData(nameof(AllUsers))]
+        [MemberData(nameof(AllUserKeys))]
         public void GetUserKey(string expectedUserKey)
         {
             //Arrange

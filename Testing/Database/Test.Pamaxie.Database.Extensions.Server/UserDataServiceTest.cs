@@ -177,10 +177,10 @@ namespace Test.Database.Extensions.Server_Test
             user.EmailAddress = RandomService.GenerateRandomName();
 
             //Act
-            bool updated = Service.Users.UpdateOrCreate(user, out PamaxieUser updatedUser);
+            bool created = Service.Users.UpdateOrCreate(user, out PamaxieUser updatedUser);
 
             //Assert
-            Assert.True(updated);
+            Assert.False(created);
             Assert.NotNull(updatedUser);
             Assert.NotEqual(oldEmailAddress, updatedUser.EmailAddress);
             Assert.Equal(user.EmailAddress, updatedUser.EmailAddress);

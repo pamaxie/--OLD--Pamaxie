@@ -17,7 +17,7 @@ namespace Test.Database.Extensions.Server_Test
         /// <inheritdoc cref="MemberData.AllApplicationKeys"/>
         /// </summary>
         public static IEnumerable<object[]> AllApplicationKeys => MemberData.AllApplicationKeys;
-        
+
         /// <summary>
         /// <inheritdoc cref="MemberData.AllApplications"/>
         /// </summary>

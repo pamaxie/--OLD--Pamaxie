@@ -27,8 +27,10 @@ namespace Pamaxie.Database.Extensions.Server
         public T Get(string key)
         {
             if (Service.Service == null)
+            {
                 throw new DataException(
                     "Please ensure that the Service is connected and initialized before attempting to poll data from it");
+            }
 
             IDatabase db = Service.Service.GetDatabase();
             RedisValue rawData = db.StringGet(key);
@@ -39,8 +41,10 @@ namespace Pamaxie.Database.Extensions.Server
         public T Create(T value)
         {
             if (Service.Service == null)
+            {
                 throw new DataException(
                     "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
+            }
 
             IDatabase db = Service.Service.GetDatabase();
 
@@ -52,7 +56,9 @@ namespace Pamaxie.Database.Extensions.Server
                 } while (db.KeyExists(value.Key));
             }
             else if (db.KeyExists(value.Key))
+            {
                 throw new ArgumentException("The key u tried to create already exists in our database");
+            }
 
             string data = JsonConvert.SerializeObject(value);
             db.StringSet(value.Key, data);
@@ -64,8 +70,10 @@ namespace Pamaxie.Database.Extensions.Server
         {
             createdValue = default;
             if (Service.Service == null)
+            {
                 throw new DataException(
                     "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
+            }
 
             IDatabase db = Service.Service.GetDatabase();
 
@@ -77,11 +85,17 @@ namespace Pamaxie.Database.Extensions.Server
                 } while (db.KeyExists(value.Key));
             }
             else if (db.KeyExists(value.Key))
+            {
                 return false;
+            }
 
             string data = JsonConvert.SerializeObject(value);
+
             if (db.StringSet(value.Key, data))
+            {
                 createdValue = value;
+            }
+
             return true;
         }
 
@@ -89,12 +103,17 @@ namespace Pamaxie.Database.Extensions.Server
         public T Update(T value)
         {
             if (Service.Service == null)
+            {
                 throw new DataException(
                     "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
+            }
 
             IDatabase db = Service.Service.GetDatabase();
+
             if (!db.KeyExists(value.Key))
+            {
                 throw new ArgumentException("The key u entered does not exist in our database yet");
+            }
 
             string data = JsonConvert.SerializeObject(value);
             db.StringSet(value.Key, data);
@@ -106,15 +125,25 @@ namespace Pamaxie.Database.Extensions.Server
         {
             updatedValue = default;
             if (Service.Service == null)
+            {
                 throw new DataException(
                     "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
+            }
 
             IDatabase db = Service.Service.GetDatabase();
+
             if (!db.KeyExists(value.Key))
+            {
                 return false;
+            }
 
             string data = JsonConvert.SerializeObject(value);
-            if (!db.StringSet(value.Key, data)) return false;
+
+            if (!db.StringSet(value.Key, data))
+            {
+                return false;
+            }
+
             updatedValue = value;
             return true;
         }
@@ -158,10 +187,16 @@ namespace Pamaxie.Database.Extensions.Server
         public bool Exists(string key)
         {
             if (Service.Service == null)
+            {
                 throw new DataException(
                     "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
+            }
+
             if (string.IsNullOrEmpty(key))
+            {
                 throw new ArgumentException("The key you entered is null or empty.");
+            }
+
             IDatabase db = Service.Service.GetDatabase();
             return db.KeyExists(key);
         }
@@ -170,13 +205,17 @@ namespace Pamaxie.Database.Extensions.Server
         public bool Delete(T value)
         {
             if (Service.Service == null)
+            {
                 throw new DataException(
                     "Please ensure that the Service is connected and initialized before attempting to poll or push data from/to it");
+            }
 
             IDatabase db = Service.Service.GetDatabase();
 
             if (!db.KeyExists(value.Key))
+            {
                 throw new ArgumentException("The key you entered does not exist in our database yet");
+            }
 
             return db.KeyDelete(value.Key);
         }

@@ -5,7 +5,7 @@ using StackExchange.Redis;
 namespace Pamaxie.Database.Extensions.Server
 {
     /// <inheritdoc/>
-    public class DatabaseService : IDatabaseService<IConnectionMultiplexer>
+    public sealed class DatabaseService : IDatabaseService<IConnectionMultiplexer>
     {
         /// <inheritdoc/>
         public IConnectionMultiplexer Service { get; internal set; }
@@ -40,8 +40,12 @@ namespace Pamaxie.Database.Extensions.Server
         public bool Connect()
         {
             Service = ConnectionMultiplexer.Connect(DataContext.ConnectionString() ?? string.Empty);
+
             if (Service == null)
+            {
                 return false;
+            }
+
             ConnectionSuccess = true;
             LastConnectionSuccess = DateTime.Now;
             return true;

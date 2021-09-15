@@ -1,11 +1,11 @@
 ﻿using System.IO;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Pamaxie.Api.Data;
 using Pamaxie.Database.Redis.DataClasses;
 using Pamaxie.ImageScanning;
 
@@ -32,7 +32,7 @@ namespace Pamaxie.Api.Controllers
         /// mostly used for now for load balancers to check if everything is working
         /// </summary>
         /// <returns>oAuth Token</returns>
-        [HttpGet("status")]
+        [HttpGet("Status")]
         [AllowAnonymous]
         public static ActionResult<string> ProbeApiTask()
         {
@@ -43,24 +43,33 @@ namespace Pamaxie.Api.Controllers
         /// <summary>
         /// Verifies the content of a sent image
         /// </summary>
+        /// <param name="fileStream">The file stream</param>
         /// <returns>oAuth Token</returns>
-        [HttpPost("scanImage")]
-        public async Task<ActionResult<string>> ScanImageTask()
+        [AllowAnonymous]
+        [HttpPost("ScanImage")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<string>> ScanImageTask(string fileStream)
         {
             //TODO: FORWARD the request to the WorkerService or the analysis method directly depending on what the user sets (single server mode)
             //TODO: Allow sending/ analysis of binary/raw data
             //TODO: Add response for 102 Processing
             //TODO: DO NOT scan things directly on this controller, that's highly inefficient
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return StatusCode(StatusCodes.Status400BadRequest);
-            string filehash = await ImageProcessing.ImageProcessing.GetFileHash(result);
-            MediaPredictionData data = new MediaPredictionData(filehash);
-            if (data.TryLoadData(out MediaData knownResult))
-                return JsonConvert.SerializeObject(knownResult);
+            if (string.IsNullOrEmpty(fileStream))
+            {
+                return BadRequest();
+            }
 
-            FileInfo image = ImageProcessing.ImageProcessing.DownloadFile(result);
+            string filehash = await ImageProcessing.ImageProcessing.GetFileHash(fileStream);
+            MediaPredictionData data = new MediaPredictionData(filehash);
+
+            if (data.TryLoadData(out MediaData knownResult))
+            {
+                return Ok(JsonConvert.SerializeObject(knownResult));
+            }
+
+            FileInfo image = ImageProcessing.ImageProcessing.DownloadFile(fileStream);
             //Add input data
             ModelInput input = new ModelInput
             {
@@ -78,25 +87,34 @@ namespace Pamaxie.Api.Controllers
             image.Delete();
             //scanFile.Dispose();
             // Create the response
-            return JsonConvert.SerializeObject(labelResult);
+            return Ok(JsonConvert.SerializeObject(labelResult));
         }
 
         /// <summary>
         /// Gets any existing data already present in the database, if none exist we return 404 to tell the user it doesn't exist.
         /// </summary>
+        /// <param name="fileStream">The file stream</param>
         /// <returns>oAuth Token</returns>
-        [HttpPost("getExistingData")]
-        public async Task<ActionResult<string>> GetExistingData()
+        [AllowAnonymous]
+        [HttpPost("GetExistingData")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<string>> GetExistingData(string fileStream)
         {
-            //TODO: Use proper status codes for response / failure
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return StatusCode(StatusCodes.Status400BadRequest);
-            string filehash = await ImageProcessing.ImageProcessing.GetFileHash(result);
+            if (string.IsNullOrEmpty(fileStream))
+            {
+                return BadRequest();
+            }
+
+            string filehash = await ImageProcessing.ImageProcessing.GetFileHash(fileStream);
             MediaPredictionData data = new MediaPredictionData(filehash);
+
             if (data.TryLoadData(out MediaData knownResult))
-                return JsonConvert.SerializeObject(knownResult);
+            {
+                return Ok(JsonConvert.SerializeObject(knownResult));
+            }
 
             return NotFound("The file has not yet been analyzed by our system.");
         }
@@ -104,16 +122,28 @@ namespace Pamaxie.Api.Controllers
         /// <summary>
         /// Gets the Files File Hash
         /// </summary>
+        /// <param name="fileStream">The file stream</param>
         /// <returns>oAuth Token</returns>
-        [HttpPost("getHash")]
-        public async Task<ActionResult<string>> GetHash()
+        [AllowAnonymous]
+        [HttpPost("GetHash")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<string>> GetHash(string fileStream)
         {
-            //TODO: Use proper status codes for response / failure
-            StreamReader reader = new StreamReader(Request.Body);
-            string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
-                return StatusCode(StatusCodes.Status400BadRequest);
-            return await ImageProcessing.ImageProcessing.GetFileHash(result);
+            if (string.IsNullOrEmpty(fileStream))
+            {
+                return BadRequest();
+            }
+
+            string hash = await ImageProcessing.ImageProcessing.GetFileHash(fileStream);
+
+            if (string.IsNullOrEmpty(hash))
+            {
+                return BadRequest();
+            }
+
+            return Ok(hash);
         }
     }
 }
