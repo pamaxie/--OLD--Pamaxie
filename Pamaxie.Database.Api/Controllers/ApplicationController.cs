@@ -223,7 +223,7 @@ namespace Pamaxie.Api.Controllers
 
             if (_dbService.Applications.Delete(application))
             {
-                return Ok();
+                return Ok(true);
             }
 
             return Problem();
@@ -292,7 +292,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult VerifyAuthenticationTask(PamaxieApplication application)
+        public ActionResult<bool> VerifyAuthenticationTask(PamaxieApplication application)
         {
             if (!_dbService.ConnectionSuccess)
             {
@@ -306,7 +306,7 @@ namespace Pamaxie.Api.Controllers
 
             if (_dbService.Applications.VerifyAuthentication(application))
             {
-                return Ok();
+                return Ok(true);
             }
 
             return Unauthorized();

@@ -224,7 +224,7 @@ namespace Pamaxie.Api.Controllers
 
             if (_dbService.Users.Delete(user))
             {
-                return Ok();
+                return Ok(true);
             }
 
             return Problem();
@@ -281,7 +281,7 @@ namespace Pamaxie.Api.Controllers
 
             if (_dbService.Users.VerifyEmail(user))
             {
-                return Ok();
+                return Ok(true);
             }
 
             return Problem();
