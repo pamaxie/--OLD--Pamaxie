@@ -14,7 +14,7 @@ namespace Test.Base
         /// Mocks the <see cref="IHttpContextAccessor"/> for testing usage
         /// </summary>
         /// <param name="userClaims">Claims of the user who is logged in</param>
-        /// <returns>Mocked IHttpContextAccessor</returns>
+        /// <returns>Mocked <see cref="IHttpContextAccessor"/></returns>
         public static IHttpContextAccessor Mock(IEnumerable<Claim> userClaims)
         {
             ClaimsPrincipal user = new ClaimsPrincipal(new ClaimsIdentity(userClaims));

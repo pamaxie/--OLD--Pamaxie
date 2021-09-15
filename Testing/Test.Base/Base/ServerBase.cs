@@ -12,7 +12,7 @@ namespace Test.Base
         /// <summary>
         /// Database Context
         /// </summary>
-        protected PamaxieDataContext Context { get; }
+        private PamaxieDataContext Context { get; }
 
         /// <summary>
         /// Database Service

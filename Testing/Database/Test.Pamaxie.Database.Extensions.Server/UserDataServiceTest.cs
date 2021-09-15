@@ -14,14 +14,13 @@ namespace Test.Database.Extensions.Server_Test
     /// </summary>
     public sealed class UserDataServiceTest : ServerBase
     {
-        /// <summary>
         /// <inheritdoc cref="MemberData.AllUsers"/>
-        /// </summary>
+        public static IEnumerable<object[]> AllUserKeys => MemberData.AllUserKeys;
+
+        /// <inheritdoc cref="MemberData.AllUsers"/>
         public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
 
-        /// <summary>
         /// <inheritdoc cref="MemberData.RandomUsers"/>
-        /// </summary>
         public static IEnumerable<object[]> RandomUserData => MemberData.RandomUsers;
 
         public UserDataServiceTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
@@ -29,184 +28,182 @@ namespace Test.Database.Extensions.Server_Test
         }
 
         /// <summary>
-        /// Get a user
+        /// Get a <see cref="PamaxieUser"/>
         /// </summary>
-        /// <param name="userKey">The key of the user</param>
+        /// <param name="userKey">The key of the <see cref="PamaxieUser"/></param>
         [Theory]
-        [MemberData(nameof(AllUsers))]
+        [MemberData(nameof(AllUserKeys))]
         public void Get(string userKey)
         {
+            //Act
             PamaxieUser user = Service.Users.Get(userKey);
+
+            //Assert
             Assert.NotNull(user);
             string str = JsonConvert.SerializeObject(user);
             TestOutputHelper.WriteLine(str);
         }
 
         /// <summary>
-        /// Create a user
+        /// Create a <see cref="PamaxieUser"/>
         /// </summary>
-        /// <param name="userName">The username of the user</param>
-        /// <param name="firstName">The firstname of the user</param>
-        /// <param name="lastName">The lastname of the user</param>
-        /// <param name="emailAddress">The email address of the user</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> to create</param>
         [Theory]
         [MemberData(nameof(RandomUserData))]
-        public void Create(string userName, string firstName, string lastName, string emailAddress)
+        public void Create(PamaxieUser user)
         {
-            PamaxieUser user = new PamaxieUser
-            {
-                UserName = userName,
-                FirstName = firstName,
-                LastName = lastName,
-                EmailAddress = emailAddress,
-                EmailVerified = false,
-                ProfilePictureAddress =
-                    "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
-                Disabled = false,
-                Deleted = false
-            };
+            //Act
             PamaxieUser createdUser = Service.Users.Create(user);
+
+            //Assert
             Assert.NotNull(createdUser);
-            Assert.NotEmpty(createdUser.Key);
+            Assert.False(string.IsNullOrEmpty(createdUser.Key));
             string str = JsonConvert.SerializeObject(createdUser);
             TestOutputHelper.WriteLine(str);
+
+            //Delete after being created or it will slow down other tests
+            Service.Users.Delete(user);
         }
 
         /// <summary>
-        /// Tries to create a user
+        /// Tries to create a <see cref="PamaxieUser"/>
         /// </summary>
-        /// <param name="userName">The username of the user</param>
-        /// <param name="firstName">The firstname of the user</param>
-        /// <param name="lastName">The lastname of the user</param>
-        /// <param name="emailAddress">The email address of the user</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> to create</param>
         [Theory]
         [MemberData(nameof(RandomUserData))]
-        public void TryCreate(string userName, string firstName, string lastName, string emailAddress)
+        public void TryCreate(PamaxieUser user)
         {
-            PamaxieUser user = new PamaxieUser
-            {
-                UserName = userName,
-                FirstName = firstName,
-                LastName = lastName,
-                EmailAddress = emailAddress,
-                EmailVerified = false,
-                ProfilePictureAddress =
-                    "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
-                Disabled = false,
-                Deleted = false
-            };
+            //Act
             bool created = Service.Users.TryCreate(user, out PamaxieUser createdUser);
+
+            //Assert
             Assert.True(created);
             Assert.NotNull(createdUser);
-            Assert.NotEmpty(createdUser.Key);
+            Assert.False(string.IsNullOrEmpty(createdUser.Key));
             string str = JsonConvert.SerializeObject(createdUser);
             TestOutputHelper.WriteLine(str);
+
+            //Delete after being created or it will slow down other tests
+            Service.Users.Delete(user);
         }
 
         /// <summary>
-        /// Updates a user
+        /// Updates a <see cref="PamaxieUser"/>
         /// </summary>
-        /// <param name="userKey">Key of the user</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> to update</param>
         [Theory]
         [MemberData(nameof(AllUsers))]
-        public void Update(string userKey)
+        public void Update(PamaxieUser user)
         {
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
+            //Arrange
             string oldEmailAddress = user.EmailAddress;
             user.EmailAddress = RandomService.GenerateRandomName();
+
+            //Act
             PamaxieUser updatedUser = Service.Users.Update(user);
+
+            //Assert
             Assert.NotNull(updatedUser);
             Assert.NotEqual(oldEmailAddress, updatedUser.EmailAddress);
             Assert.Equal(user.EmailAddress, updatedUser.EmailAddress);
             string str = JsonConvert.SerializeObject(updatedUser);
             TestOutputHelper.WriteLine(str);
+
+            //Change the email address back, to avoid confusing between tests
+            user.EmailAddress = oldEmailAddress;
+            Service.Users.Update(user);
         }
 
         /// <summary>
-        /// Tries to updates a user
+        /// Tries to update a <see cref="PamaxieUser"/>
         /// </summary>
-        /// <param name="userKey">Key of the user</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> to update</param>
         [Theory]
         [MemberData(nameof(AllUsers))]
-        public void TryUpdate(string userKey)
+        public void TryUpdate(PamaxieUser user)
         {
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
+            //Arrange
             string oldEmailAddress = user.EmailAddress;
             user.EmailAddress = RandomService.GenerateRandomName();
+
+            //Act
             bool updated = Service.Users.TryUpdate(user, out PamaxieUser updatedUser);
+
+            //Assert
             Assert.True(updated);
             Assert.NotNull(updatedUser);
             Assert.NotEqual(oldEmailAddress, updatedUser.EmailAddress);
             Assert.Equal(user.EmailAddress, updatedUser.EmailAddress);
             string str = JsonConvert.SerializeObject(updatedUser);
             TestOutputHelper.WriteLine(str);
+
+            //Change the email address back, to avoid confusing between tests
+            user.EmailAddress = oldEmailAddress;
+            Service.Users.Update(user);
         }
 
         /// <summary>
-        /// Tries to updates a user
+        /// Tries to create a <see cref="PamaxieUser"/>
         /// </summary>
-        /// <param name="userName">The username of the user</param>
-        /// <param name="firstName">The firstname of the user</param>
-        /// <param name="lastName">The lastname of the user</param>
-        /// <param name="emailAddress">The email address of the user</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> to create</param>
         [Theory]
         [MemberData(nameof(RandomUserData))]
-        public void UpdateOrCreate_Create(string userName, string firstName, string lastName, string emailAddress)
+        public void UpdateOrCreate_Create(PamaxieUser user)
         {
-            PamaxieUser user = new PamaxieUser
-            {
-                UserName = userName,
-                FirstName = firstName,
-                LastName = lastName,
-                EmailAddress = emailAddress,
-                EmailVerified = false,
-                ProfilePictureAddress =
-                    "https://lh3.googleusercontent.com/--uodKwFP09o/YTBmgn0JnUI/AAAAAAAAAOw/vPRY_cexRuQnj8du8aFuuqJWn1fZAPW3gCMICGAYYCw/s96-c",
-                Disabled = false,
-                Deleted = false
-            };
+            //Act
             bool created = Service.Users.UpdateOrCreate(user, out PamaxieUser createdUser);
+
+            //Assert
             Assert.True(created);
             Assert.NotNull(createdUser);
-            Assert.NotEmpty(createdUser.Key);
+            Assert.False(string.IsNullOrEmpty(createdUser.Key));
             string str = JsonConvert.SerializeObject(createdUser);
             TestOutputHelper.WriteLine(str);
+
+            //Delete after being created or it will slow down other tests
+            Service.Users.Delete(user);
         }
 
         /// <summary>
-        /// Updates or creates a user
+        /// Updates or creates a <see cref="PamaxieUser"/>
         /// </summary>
-        /// <param name="userKey">Key of the user</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> to update</param>
         [Theory]
         [MemberData(nameof(AllUsers))]
-        public void UpdateOrCreate_Update(string userKey)
+        public void UpdateOrCreate_Update(PamaxieUser user)
         {
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
+            //Arrange
             string oldEmailAddress = user.EmailAddress;
             user.EmailAddress = RandomService.GenerateRandomName();
+
+            //Act
             bool updated = Service.Users.UpdateOrCreate(user, out PamaxieUser updatedUser);
+
+            //Assert
             Assert.True(updated);
             Assert.NotNull(updatedUser);
             Assert.NotEqual(oldEmailAddress, updatedUser.EmailAddress);
             Assert.Equal(user.EmailAddress, updatedUser.EmailAddress);
             string str = JsonConvert.SerializeObject(updatedUser);
             TestOutputHelper.WriteLine(str);
+
+            //Change the email address back, to avoid confusing between tests
+            user.EmailAddress = oldEmailAddress;
+            Service.Users.Update(user);
         }
 
         /// <summary>
-        /// Deletes a user
+        /// Deletes a <see cref="PamaxieUser"/>
         /// </summary>
-        /// <param name="userKey">Key of the user</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> to update</param>
         [Theory]
         [MemberData(nameof(AllUsers))]
-        public void Delete(string userKey)
+        public void Delete(PamaxieUser user)
         {
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
+            //Act
             bool deleted = Service.Users.Delete(user);
+
+            //Assert
             Assert.True(deleted);
             TestOutputHelper.WriteLine("Deleted {0}", true);
 
@@ -215,31 +212,37 @@ namespace Test.Database.Extensions.Server_Test
         }
 
         /// <summary>
-        /// Gets all applications the user owns
+        /// Gets all <see cref="PamaxieApplication"/>s the <see cref="PamaxieUser"/> owns
         /// </summary>
-        /// <param name="userKey">Key of the user</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> to get <see cref="PamaxieApplication"/>s from</param>
         [Theory]
         [MemberData(nameof(AllUsers))]
-        public void GetAllApplications(string userKey)
+        public void GetAllApplications(PamaxieUser user)
         {
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
+            //Act
             List<PamaxieApplication> applications = Service.Users.GetAllApplications(user).ToList();
+
+            //Assert
             Assert.NotNull(applications);
-            foreach (string str in applications.Select(JsonConvert.SerializeObject)) TestOutputHelper.WriteLine(str);
+
+            foreach (string str in applications.Select(JsonConvert.SerializeObject))
+            {
+                TestOutputHelper.WriteLine(str);
+            }
         }
 
         /// <summary>
-        /// Verifies a user's email address
+        /// Verifies a <see cref="PamaxieUser"/>'s email address
         /// </summary>
-        /// <param name="userKey">Key of the user</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> to update</param>
         [Theory]
         [MemberData(nameof(AllUsers))]
-        public void VerifyEmail(string userKey)
+        public void VerifyEmail(PamaxieUser user)
         {
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
+            //Act
             bool verified = Service.Users.VerifyEmail(user);
+
+            //Assert
             Assert.True(verified);
             TestOutputHelper.WriteLine("Verified Email {0} - {1}", true, user.EmailAddress);
         }

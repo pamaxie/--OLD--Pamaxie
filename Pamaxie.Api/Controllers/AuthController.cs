@@ -33,7 +33,7 @@ namespace Pamaxie.Api.Controllers
         /// <returns><see cref="AuthToken"/> Token for AppAuthCredentials</returns>
         [AllowAnonymous]
         [HttpPost("login")]
-        public ActionResult<AuthToken> LoginTask()
+        public ActionResult<AuthToken> LoginTask(PamaxieApplication application)
         {
             //TODO: Use basic auth here please, do not use a HTTPPost for login.
             StreamReader reader = new StreamReader(Request.Body);

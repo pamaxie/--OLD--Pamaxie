@@ -30,20 +30,27 @@ namespace Test.Pamaxie.MediaDetection_Test
         [MemberData(nameof(FileLinksWithFileType))]
         public void DetermineFileType(string url, FileType expectedFileType)
         {
-            //Get the stream of the file from the url
-            Stream stream = FileDetectionUtilities.UrlToStream(url);
-            //Write the 10 first bytes of the stream in Hex
+            //Arrange
+            Stream stream = FileDetectionUtilities.UrlToStream(url); //Get the stream of the file from the url
+
+            //Information shown for the tester
+            //  Write the 10 first bytes of the stream in Hex
             TestOutputHelper.WriteLine("First 10 bytes of file:");
             TestOutputHelper.WriteLine(stream.ReadExactly(10).ToHexString());
-            //Get the list of file specifications the FileType is linked to through the id
-            //This is done to show the expected magic number of the file type.
+            //  Get the list of file specifications the FileType is linked to through the id
+            //  This is done to show the expected magic number of the file type.
             TestOutputHelper.WriteLine("Expected:");
             IEnumerable<FileSpecification> listOfTypeSpecs = expectedFileType.GetFileSpecifications();
-            foreach (FileSpecification fileSpec in listOfTypeSpecs)
-                TestOutputHelper.WriteLine(fileSpec.Signature.ToHexString());
 
-            //Test the DetermineFileType method to see if it returns the expected FileType it should.
+            foreach (FileSpecification fileSpec in listOfTypeSpecs)
+            {
+                TestOutputHelper.WriteLine(fileSpec.Signature.ToHexString());
+            }
+
+            //Act
             FileType fileType = stream.DetermineFileType()?.Value;
+
+            //Assert
             Assert.NotNull(fileType);
             Assert.Equal(expectedFileType.GetType(), fileType.GetType());
             TestOutputHelper.WriteLine("\nFile type: ." + fileType.Extension);

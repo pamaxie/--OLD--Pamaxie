@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Pamaxie.Data;
@@ -33,77 +32,80 @@ namespace Test.Pamaxie.Website_Test
         /// <summary>
         /// Testing for encoding IBody to token string.
         /// </summary>
-        /// <param name="userKey">The user key from inlined data</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllUsers))]
-        public void Encode(string userKey)
+        public void Encode(PamaxieUser user)
         {
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
-
+            //Act
             ConfirmEmailBody body = new ConfirmEmailBody(user);
             string token = JsonWebToken.Encode(body, _secret);
+
+            //Assert
+            Assert.False(string.IsNullOrEmpty(token));
             TestOutputHelper.WriteLine(token);
         }
 
         /// <summary>
-        /// Testing to check if the token is valid.
+        /// Testing to check if the token is valid with a newly created token
         /// </summary>
-        /// <param name="userKey">The user key from inlined data</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllUsers))]
-        public void Decode_Success(string userKey)
+        public void Decode_Success(PamaxieUser user)
         {
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
-
-            //Newly created token
+            //Arrange
             ConfirmEmailBody body = new ConfirmEmailBody(user);
             string token = JsonWebToken.Encode(body, _secret);
+
+            //Act
             ConfirmEmailBody decodedBody = JsonWebToken.Decode<ConfirmEmailBody>(token, _secret) as ConfirmEmailBody;
-            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(decodedBody));
+
+            //Assert
             Assert.NotNull(decodedBody);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(decodedBody));
         }
 
         /// <summary>
-        /// Testing to check if the token is invalid if changed.
+        /// Testing to check if the token is invalid
         /// </summary>
-        /// <param name="userKey">The user key from inlined data</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllUsers))]
-        public void Decode_Failure_Invalid(string userKey)
+        public void Decode_Failure_Invalid(PamaxieUser user)
         {
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
-
+            //Arrange
             ConfirmEmailBody body = new ConfirmEmailBody(user);
             string token = JsonWebToken.Encode(body, _secret);
-            //Make the token invalid
-            token = token.Replace('s', 'd');
+
+            //Act
+            token = token.Replace('s', 'd'); //Make the token invalid
             ConfirmEmailBody decodedBody = JsonWebToken.Decode<ConfirmEmailBody>(token, _secret) as ConfirmEmailBody;
-            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(decodedBody));
+
+            //Assert
             Assert.Null(decodedBody);
         }
 
         /// <summary>
         /// Testing to check if the token is invalid when expired.
         /// </summary>
-        /// <param name="userKey">The user key from inlined data</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllUsers))]
-        public void Decode_Failure_Expired(string userKey)
+        public void Decode_Failure_Expired(PamaxieUser user)
         {
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
-
+            //Arrange
             ConfirmEmailBody body = new ConfirmEmailBody(user)
             {
                 //Expire the token
                 Expiration = DateTime.UtcNow.Subtract(TimeSpan.FromDays(10))
             };
             string token = JsonWebToken.Encode(body, _secret);
+
+            //Act
             ConfirmEmailBody decodedBody = JsonWebToken.Decode<ConfirmEmailBody>(token, _secret) as ConfirmEmailBody;
-            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(decodedBody));
+
+            //Assert
             Assert.Null(decodedBody);
         }
     }

@@ -17,7 +17,7 @@ namespace Test.Base
         /// <summary>
         /// Mocks the <see cref="IConnectionMultiplexer"/> for testing usage
         /// </summary>
-        /// <returns>Mocked IHttpContextAccessor</returns>
+        /// <returns>Mocked <see cref="IConnectionMultiplexer"/></returns>
         public static IConnectionMultiplexer Mock()
         {
             _listOfEverything = new List<string[]>(TestApplicationData.ListOfApplications.Select(application =>

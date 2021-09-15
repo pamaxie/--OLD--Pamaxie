@@ -36,18 +36,39 @@ namespace Test.Pamaxie.MediaDetection_Test
         }
 
         /// <summary>
-        /// Get all specifications from a file type
+        /// Get all <see cref="FileSpecification"/> from a file type
         /// </summary>
-        /// <param name="fileType">The file type specifications</param>
-        /// <returns>A list of specifications for the file type</returns>
+        /// <param name="fileType">The <see cref="FileType"/> to get <see cref="FileSpecification"/></param>
+        /// <returns>A list of <see cref="FileSpecification"/> for the file type</returns>
         internal static IEnumerable<FileSpecification> GetFileSpecifications(this FileType fileType)
         {
-            return fileType.GetType().Assembly.GetTypes()
-                .Where(t => typeof(FileSpecification).IsAssignableFrom(t))
-                .Where(t => !t.GetTypeInfo().IsAbstract)
-                .Where(t => t.GetConstructors().Any(c => c.GetParameters().Length == 0))
-                .Select(Activator.CreateInstance)
-                .OfType<FileSpecification>().Where(_ => _.ReferenceTypeId == fileType.Id);
+            List<FileSpecification> fileSpecifications = new List<FileSpecification>();
+
+            Type[] types =  fileType.GetType().Assembly.GetTypes();
+            foreach (Type type in types)
+            {
+                if (typeof(FileSpecification).IsAssignableFrom(type) && !type.GetTypeInfo().IsAbstract)
+                {
+                    ConstructorInfo[] infos = type.GetConstructors();
+
+                    foreach (ConstructorInfo info in infos)
+                    {
+                        if (info.GetParameters().Length == 0)
+                        {
+                            if (info.DeclaringType != null)
+                            {
+                                object instance  = Activator.CreateInstance(info.DeclaringType);
+                                if (instance != null && ((FileSpecification)instance).ReferenceTypeId == fileType.Id)
+                                {
+                                    fileSpecifications.Add((FileSpecification)instance);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return fileSpecifications;
         }
 
         /// <summary>
@@ -65,8 +86,12 @@ namespace Test.Pamaxie.MediaDetection_Test
             while (offset < count)
             {
                 int read = stream.Read(buffer, offset, count - offset);
+
                 if (read == 0)
+                {
                     break;
+                }
+
                 offset += read;
             }
 
@@ -81,8 +106,12 @@ namespace Test.Pamaxie.MediaDetection_Test
         internal static string ToHexString(this byte[] byteArr)
         {
             StringBuilder hex = new StringBuilder(byteArr.Length * 2);
+
             foreach (byte b in byteArr)
+            {
                 hex.AppendFormat("{0:x2} ", b);
+            }
+
             return hex.ToString().ToUpper();
         }
     }

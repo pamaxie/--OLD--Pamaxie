@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Pamaxie.WorkerServiceApi\Pamaxie.WorkerService.Api.csproj" />
       <ProjectReference Include="..\Test.Base\Test.Base.csproj" />
     </ItemGroup>
 

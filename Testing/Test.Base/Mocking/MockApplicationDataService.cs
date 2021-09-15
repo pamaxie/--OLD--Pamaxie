@@ -15,7 +15,7 @@ namespace Test.Base
         private delegate void OutAction<in T, TOut>(T val, out TOut outVal);
 
         /// <summary>
-        /// Mocks the <see cref="ApplicationDataService"/> and applies it to the ApplicationDataServiceExtension for testing usage
+        /// Mocks the <see cref="ApplicationDataService"/> and applies it to the <see cref="ApplicationDataServiceExtension"/> for testing usage
         /// </summary>
         public static void Mock()
         {
@@ -105,18 +105,24 @@ namespace Test.Base
             public PamaxieApplication Create(PamaxieApplication value)
             {
                 if (value == null || !string.IsNullOrEmpty(value.Key))
+                {
                     return null;
+                }
 
                 string key;
                 do
                 {
                     key = RandomService.GenerateRandomKey(6);
                 } while (TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key) != null);
-
                 value.Key = key;
+
                 PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
+
                 if (user == null)
+                {
                     return null;
+                }
+
                 user.ApplicationKeys.ToList().Add(value.OwnerKey);
                 TestApplicationData.ListOfApplications.Add(value);
                 return value;
@@ -126,19 +132,26 @@ namespace Test.Base
             public bool TryCreate(PamaxieApplication value, out PamaxieApplication createdValue)
             {
                 createdValue = null;
+
                 if (value == null || !string.IsNullOrEmpty(value.Key))
+                {
                     return false;
+                }
+
                 string key;
                 do
                 {
                     key = RandomService.GenerateRandomKey(6);
                 } while (TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key) != null);
-
                 value.Key = key;
 
                 PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
+
                 if (user == null)
+                {
                     return false;
+                }
+
                 user.ApplicationKeys.ToList().Add(value.OwnerKey);
                 TestApplicationData.ListOfApplications.Add(value);
                 createdValue = value;
@@ -149,9 +162,15 @@ namespace Test.Base
             public PamaxieApplication Update(PamaxieApplication value)
             {
                 if (value == null || string.IsNullOrEmpty(value.Key))
+                {
                     return null;
+                }
+
                 if (TestApplicationData.ListOfApplications.Any(_ => _.Key == value.Key))
+                {
                     return value;
+                }
+
                 TestApplicationData.ListOfApplications.Add(value);
                 return value;
             }
@@ -160,11 +179,19 @@ namespace Test.Base
             public bool TryUpdate(PamaxieApplication value, out PamaxieApplication updatedValue)
             {
                 updatedValue = null;
+
                 if (value == null || string.IsNullOrEmpty(value.Key))
+                {
                     return false;
+                }
+
                 int indexToUpdate = TestApplicationData.ListOfApplications.FindIndex(_ => _.Key == value.Key);
+
                 if (indexToUpdate == -1)
+                {
                     return false;
+                }
+
                 TestApplicationData.ListOfApplications[indexToUpdate] = value;
                 updatedValue = value;
                 return true;
@@ -174,31 +201,44 @@ namespace Test.Base
             public bool UpdateOrCreate(PamaxieApplication value, out PamaxieApplication updatedOrCreatedValue)
             {
                 updatedOrCreatedValue = null;
-                if (value == null || string.IsNullOrEmpty(value.Key))
-                    return false;
-                if (TestApplicationData.ListOfApplications.Any(_ => _.Key != value.Key))
+
+                if (value == null)
                 {
-                    string key;
-                    do
+                    throw new Exception("Bad data");
+                }
+
+                if (string.IsNullOrEmpty(value.Key) || TestApplicationData.ListOfApplications.All(_ => _.Key != value.Key))
+                {
+                    string key = value.Key;
+
+                    if (string.IsNullOrEmpty(key))
                     {
-                        key = RandomService.GenerateRandomKey(6);
-                    } while (TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key) != null);
+                        do
+                        {
+                            key = RandomService.GenerateRandomKey(6);
+                        } while (TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key) != null);
+                    }
 
                     value.Key = key;
                     PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
+
                     if (user == null)
-                        return false;
+                    {
+                        return true;
+                    }
+
                     user.ApplicationKeys.ToList().Add(value.OwnerKey);
                     TestApplicationData.ListOfApplications.Add(value);
+                    updatedOrCreatedValue = value;
+                    return true;
                 }
                 else
                 {
                     int indexToUpdate = TestApplicationData.ListOfApplications.FindIndex(_ => _.Key == value.Key);
                     TestApplicationData.ListOfApplications[indexToUpdate] = value;
+                    updatedOrCreatedValue = value;
+                    return false;
                 }
-
-                updatedOrCreatedValue = value;
-                return true;
             }
 
             /// <inheritdoc cref="IApplicationDataService.Exists"/>
@@ -211,11 +251,18 @@ namespace Test.Base
             public bool Delete(PamaxieApplication value)
             {
                 if (value == null || string.IsNullOrEmpty(value.Key))
+                {
                     return false;
+                }
+
                 PamaxieApplication valueToRemove =
                     TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == value.Key);
+
                 if (valueToRemove == null)
+                {
                     return false;
+                }
+
                 TestApplicationData.ListOfApplications.Remove(valueToRemove);
                 return true;
             }
@@ -224,7 +271,10 @@ namespace Test.Base
             public PamaxieUser GetOwner(PamaxieApplication value)
             {
                 if (value == null || string.IsNullOrEmpty(value.Key) || string.IsNullOrEmpty(value.OwnerKey))
+                {
                     return null;
+                }
+
                 PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
                 return user;
             }
@@ -233,11 +283,18 @@ namespace Test.Base
             public PamaxieApplication EnableOrDisable(PamaxieApplication value)
             {
                 if (value == null || string.IsNullOrEmpty(value.Key))
+                {
                     return null;
+                }
+
                 PamaxieApplication valueToEnableOrDisable =
                     TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == value.Key);
+
                 if (valueToEnableOrDisable == null)
+                {
                     return null;
+                }
+
                 valueToEnableOrDisable.Disabled = !valueToEnableOrDisable.Disabled;
                 return valueToEnableOrDisable;
             }

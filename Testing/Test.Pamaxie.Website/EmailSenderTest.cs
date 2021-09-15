@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Pamaxie.Data;
 using Pamaxie.Website.Services;
 using Test.Base;
@@ -23,21 +22,20 @@ namespace Test.Pamaxie.Website_Test
         }
 
         /// <summary>
-        /// Sends a confirmation email to the personal email inside appsettings.test.json, will fail if no email have been put in
+        /// Sends a confirmation email to the personal email inside appsettings.test.json,
+        /// MemberData will be empty if no email address have been put in
         /// </summary>
-        /// <param name="userKey">The user key from inlined data</param>
+        /// <param name="user">The <see cref="PamaxieUser"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(PersonalUser))]
-        public void SendConfirmationEmail(string userKey)
+        public void SendConfirmationEmail(PamaxieUser user)
         {
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == userKey);
-            Assert.NotNull(user);
-            Assert.False(user.Deleted);
-
+            //Act
             EmailSender emailSender =
                 new EmailSender(Configuration, MockNavigationManager.Mock(),
                     new UserService(Configuration, null!, null));
             emailSender.SendConfirmationEmail(user);
+            TestOutputHelper.WriteLine("Email sent to your personal email address!");
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Pamaxie.Api.Controllers;
 using Pamaxie.Data;
 using Pamaxie.Jwt;
@@ -35,28 +34,25 @@ namespace Test.Pamaxie.API_Test
         }
 
         /// <summary>
-        /// Test for login of a application
+        /// Test for login of a <see cref="PamaxieApplication"/>
         /// </summary>
-        /// <param name="applicationKey">The application key from inlined data</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void Login(string applicationKey)
+        public void Login(PamaxieApplication application)
         {
-            //Get application
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
+            //Act
+            ActionResult<AuthToken> result = Controller.LoginTask(application);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = ControllerService.CreateStream(application);
-            Controller.Request.Body = body;
-
-            ActionResult<AuthToken> result = Controller.LoginTask();
-            Assert.IsType<OkObjectResult>(result.Result);
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            AuthToken token = GetObjectResultContent(result);
+            Assert.NotNull(token);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(token));
         }
 
         /// <summary>
-        /// Test refreshing an exiting oAuth Token through <see cref="AuthController.RefreshTask"/>
+        /// Test refreshing an exiting <see cref="AuthToken"/> through <see cref="AuthController.RefreshTask"/>
         /// </summary>
         [Fact]
         public void Refresh()

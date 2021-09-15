@@ -18,6 +18,7 @@ namespace Test.Base
             ulong max = ulong.Parse(new string('9', length));
             ulong uRange = max - min;
             ulong ulongRand;
+
             do
             {
                 byte[] buf = new byte[8];
@@ -38,7 +39,9 @@ namespace Test.Base
             Random r = new Random();
 
             if (length == 0)
+            {
                 length = r.Next(4, 9);
+            }
 
             string[] consonants =
             {
@@ -51,6 +54,7 @@ namespace Test.Base
             name = char.ToUpper(name[0]) + name[1..];
             name += vowels[r.Next(vowels.Length)];
             int b = 2;
+
             while (b < length)
             {
                 name += consonants[r.Next(consonants.Length)];

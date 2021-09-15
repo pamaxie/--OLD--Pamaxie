@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Client;
@@ -14,14 +12,13 @@ namespace Test.Base
     /// </summary>
     public sealed class TestApplicationDataService : TestBase
     {
-        /// <summary>
+        /// <inheritdoc cref="MemberData.AllApplicationKeys"/>
+        public static IEnumerable<object[]> AllApplicationKeys => MemberData.AllApplicationKeys;
+
         /// <inheritdoc cref="MemberData.AllApplications"/>
-        /// </summary>
         public static IEnumerable<object[]> AllApplications => MemberData.AllApplications;
 
-        /// <summary>
         /// <inheritdoc cref="MemberData.RandomApplications"/>
-        /// </summary>
         public static IEnumerable<object[]> RandomApplications => MemberData.RandomApplications;
 
         public TestApplicationDataService(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
@@ -31,203 +28,182 @@ namespace Test.Base
         }
 
         /// <summary>
-        /// Get a application
+        /// Get a <see cref="PamaxieApplication"/>
         /// </summary>
         /// <param name="applicationKey">The key of the application</param>
         [Theory]
-        [MemberData(nameof(AllApplications))]
+        [MemberData(nameof(AllApplicationKeys))]
         public void Get(string applicationKey)
         {
+            //Act
             PamaxieApplication application = ApplicationDataServiceExtension.Get(applicationKey);
+
+            //Assert
             Assert.NotNull(application);
             string str = JsonConvert.SerializeObject(application);
             TestOutputHelper.WriteLine(str);
         }
 
         /// <summary>
-        /// Create a application
+        /// Create a <see cref="PamaxieApplication"/>
         /// </summary>
-        /// /// <param name="ownerKey">The key of the application owner</param>
-        /// /// <param name="applicationName">The application name</param>
-        /// /// <param name="authorizationToken">The authorization token</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> to create</param>
         [Theory]
         [MemberData(nameof(RandomApplications))]
-        public void Create(string ownerKey, string applicationName, string authorizationToken)
+        public void Create(PamaxieApplication application)
         {
-            PamaxieApplication application = new PamaxieApplication
-            {
-                TTL = DateTime.Now,
-                Credentials = new AppAuthCredentials
-                {
-                    AuthorizationToken = authorizationToken,
-                    AuthorizationTokenCipher = "",
-                    LastAuth = DateTime.Now
-                },
-                OwnerKey = ownerKey,
-                ApplicationName = applicationName,
-                LastAuth = DateTime.Now,
-                RateLimited = false,
-                Disabled = false,
-                Deleted = false
-            };
+            //Act
             PamaxieApplication createdApplication = application.Create();
+
+            //Assert
             Assert.NotNull(createdApplication);
-            Assert.NotEmpty(createdApplication.Key);
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == createdApplication.OwnerKey);
-            Assert.NotNull(user);
+            Assert.False(string.IsNullOrEmpty(createdApplication.Key));
             string str = JsonConvert.SerializeObject(createdApplication);
             TestOutputHelper.WriteLine(str);
+
+            //Delete after being created or it will slow down other tests
+            application.Delete();
         }
 
         /// <summary>
-        /// Tries to create a application
+        /// Tries to create a <see cref="PamaxieApplication"/>
         /// </summary>
-        /// /// <param name="ownerKey">The key of the application owner</param>
-        /// /// <param name="applicationName">The application name</param>
-        /// /// <param name="authorizationToken">The authorization token</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> to create</param>
         [Theory]
         [MemberData(nameof(RandomApplications))]
-        public void TryCreate(string ownerKey, string applicationName, string authorizationToken)
+        public void TryCreate(PamaxieApplication application)
         {
-            PamaxieApplication application = new PamaxieApplication
-            {
-                TTL = DateTime.Now,
-                Credentials = new AppAuthCredentials
-                {
-                    AuthorizationToken = authorizationToken,
-                    AuthorizationTokenCipher = "",
-                    LastAuth = DateTime.Now
-                },
-                OwnerKey = ownerKey,
-                ApplicationName = applicationName,
-                LastAuth = DateTime.Now,
-                RateLimited = false,
-                Disabled = false,
-                Deleted = false
-            };
+            //Act
             bool created = application.TryCreate(out PamaxieApplication createdApplication);
+
+            //Assert
             Assert.True(created);
             Assert.NotNull(createdApplication);
-            Assert.NotEmpty(createdApplication.Key);
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == createdApplication.OwnerKey);
-            Assert.NotNull(user);
+            Assert.False(string.IsNullOrEmpty(createdApplication.Key));
             string str = JsonConvert.SerializeObject(createdApplication);
             TestOutputHelper.WriteLine(str);
+
+            //Delete after being created or it will slow down other tests
+            application.Delete();
         }
 
         /// <summary>
-        /// Updates a application
+        /// Updates a <see cref="PamaxieApplication"/>
         /// </summary>
-        /// <param name="applicationKey">The key of the application</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> to update</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void Update(string applicationKey)
+        public void Update(PamaxieApplication application)
         {
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
+            //Arrange
             string oldName = application.ApplicationName;
             application.ApplicationName = RandomService.GenerateRandomName();
+
+            //Act
             PamaxieApplication updatedApplication = application.Update();
+
+            //Assert
             Assert.NotNull(updatedApplication);
             Assert.NotEqual(oldName, updatedApplication.ApplicationName);
             Assert.Equal(application.ApplicationName, updatedApplication.ApplicationName);
             string str = JsonConvert.SerializeObject(updatedApplication);
             TestOutputHelper.WriteLine(str);
+
+            //Change the name back, to avoid confusing between tests
+            application.ApplicationName = oldName;
+            application.Update();
         }
 
         /// <summary>
-        /// Tries to updates a application
+        /// Tries to update a <see cref="PamaxieApplication"/>
         /// </summary>
-        /// <param name="applicationKey">The key of the application</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> to update</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void TryUpdate(string applicationKey)
+        public void TryUpdate(PamaxieApplication application)
         {
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
+            //Arrange
             string oldName = application.ApplicationName;
             application.ApplicationName = RandomService.GenerateRandomName();
+
+            //Act
             bool updated = application.TryUpdate(out PamaxieApplication updatedApplication);
+
+            //Assert
             Assert.True(updated);
             Assert.NotNull(updatedApplication);
             Assert.NotEqual(oldName, updatedApplication.ApplicationName);
             Assert.Equal(application.ApplicationName, updatedApplication.ApplicationName);
             string str = JsonConvert.SerializeObject(updatedApplication);
             TestOutputHelper.WriteLine(str);
+
+            //Change the name back, to avoid confusing between tests
+            application.ApplicationName = oldName;
+            application.Update();
         }
 
         /// <summary>
-        /// Tries to create a application
+        /// Tries to create a <see cref="PamaxieApplication"/>
         /// </summary>
-        /// /// <param name="ownerKey">The key of the application owner</param>
-        /// /// <param name="applicationName">The application name</param>
-        /// /// <param name="authorizationToken">The authorization token</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> to create</param>
         [Theory]
         [MemberData(nameof(RandomApplications))]
-        public void UpdateOrCreate_Create(string ownerKey, string applicationName, string authorizationToken)
+        public void UpdateOrCreate_Create(PamaxieApplication application)
         {
-            PamaxieApplication application = new PamaxieApplication
-            {
-                TTL = DateTime.Now,
-                Credentials = new AppAuthCredentials
-                {
-                    AuthorizationToken = authorizationToken,
-                    AuthorizationTokenCipher = "",
-                    LastAuth = DateTime.Now
-                },
-                OwnerKey = ownerKey,
-                ApplicationName = applicationName,
-                LastAuth = DateTime.Now,
-                RateLimited = false,
-                Disabled = false,
-                Deleted = false
-            };
-            bool created = application.TryCreate(out PamaxieApplication createdApplication);
+            //Act
+            bool created = application.UpdateOrCreate(out PamaxieApplication createdApplication);
+
+            //Assert
             Assert.True(created);
             Assert.NotNull(createdApplication);
-            Assert.NotEmpty(createdApplication.Key);
-            PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == createdApplication.OwnerKey);
-            Assert.NotNull(user);
+            Assert.False(string.IsNullOrEmpty(createdApplication.Key));
             string str = JsonConvert.SerializeObject(createdApplication);
             TestOutputHelper.WriteLine(str);
+
+            //Delete after being created or it will slow down other tests
+            application.Delete();
         }
 
         /// <summary>
-        /// Tries to updates a application
+        /// Tries to update a <see cref="PamaxieApplication"/>
         /// </summary>
-        /// <param name="applicationKey">The key of the application</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> to update</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void UpdateOrCreate_Update(string applicationKey)
+        public void UpdateOrCreate_Update(PamaxieApplication application)
         {
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
+            //Arrange
             string oldName = application.ApplicationName;
             application.ApplicationName = RandomService.GenerateRandomName();
-            bool updated = application.TryUpdate(out PamaxieApplication updatedApplication);
-            Assert.True(updated);
+
+            //Act
+            bool created = application.UpdateOrCreate(out PamaxieApplication updatedApplication);
+
+            //Assert
+            Assert.False(created);
             Assert.NotNull(updatedApplication);
             Assert.NotEqual(oldName, updatedApplication.ApplicationName);
             Assert.Equal(application.ApplicationName, updatedApplication.ApplicationName);
             string str = JsonConvert.SerializeObject(updatedApplication);
             TestOutputHelper.WriteLine(str);
+
+            //Change the name back, to avoid confusing between tests
+            application.ApplicationName = oldName;
+            application.Update();
         }
 
         /// <summary>
-        /// Deletes a application
+        /// Deletes a <see cref="PamaxieApplication"/>
         /// </summary>
-        /// <param name="applicationKey">The key of the application</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> to delete</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void Delete(string applicationKey)
+        public void Delete(PamaxieApplication application)
         {
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
+            //Act
             bool deleted = application.Delete();
+
+            //Assert
             Assert.True(deleted);
             TestOutputHelper.WriteLine("Deleted {0}", true);
 
@@ -236,53 +212,58 @@ namespace Test.Base
         }
 
         /// <summary>
-        /// Enable or disable a application
+        /// Enable or disable a <see cref="PamaxieApplication"/>
         /// </summary>
-        /// <param name="applicationKey">The key of the application</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> to get owner from</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void GetOwner(string applicationKey)
+        public void GetOwner(PamaxieApplication application)
         {
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
+            //Act
             PamaxieUser user = application.GetOwner();
+
+            //Assert
             Assert.NotNull(user);
             string str = JsonConvert.SerializeObject(user);
             TestOutputHelper.WriteLine(str);
         }
 
         /// <summary>
-        /// Enable or disable a application
+        /// Enable or disable a <see cref="PamaxieApplication"/>
         /// </summary>
-        /// <param name="applicationKey">The key of the application</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> to enable or disable</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void EnableOrDisable(string applicationKey)
+        public void EnableOrDisable(PamaxieApplication application)
         {
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
+            //Arrange
             bool disabled = application.Disabled;
+
+            //Act
             PamaxieApplication enabledOrDisabledApplication = application.EnableOrDisable();
+
+            //Assert
             Assert.NotEqual(disabled, enabledOrDisabledApplication.Disabled);
             TestOutputHelper.WriteLine(enabledOrDisabledApplication.Disabled ? "Enabled" : "Disabled");
+
+            //Change it back before to avoid conflicts between other tests
+            application.EnableOrDisable();
         }
 
         /// <summary>
-        /// Verifies a application's credentials
+        /// Verifies a <see cref="PamaxieApplication"/>'s credentials
         /// </summary>
-        /// <param name="applicationKey">The key of the application</param>
+        /// <param name="application">The <see cref="PamaxieApplication"/> to verify</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void VerifyAuthentication(string applicationKey)
+        public void VerifyAuthentication(PamaxieApplication application)
         {
-            PamaxieApplication application =
-                TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == applicationKey);
-            Assert.NotNull(application);
-            //bool verified = application.VerifyAuthentication();
-            //Assert.True(verified);
-            //TestOutputHelper.WriteLine("Verified {0}", true);
+            //Act
+            bool verified = application.VerifyAuthentication();
+
+            //Assert
+            Assert.True(verified);
+            TestOutputHelper.WriteLine("Verified {0}", true);
         }
     }
 }

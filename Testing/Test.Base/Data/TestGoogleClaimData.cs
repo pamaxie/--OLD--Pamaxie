@@ -77,15 +77,27 @@ namespace Test.Base
         static TestGoogleClaimData()
         {
             //Check if configuration file exists before adding personal testing data
-            if (!File.Exists("appsettings.test.json")) return;
+            if (!File.Exists("appsettings.test.json"))
+            {
+                return;
+            }
+
             IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
-            if (configuration.GetChildren().All(_ => _.Key != "UserData")) return;
+
+            if (configuration.GetChildren().All(_ => _.Key != "UserData"))
+            {
+                return;
+            }
+
             IConfigurationSection configurationSection = configuration.GetSection("UserData");
 
             //Check if the two most important claims exists
             string email = configurationSection.GetValue<string>("EmailAddress");
 
-            if (string.IsNullOrEmpty(email)) return;
+            if (string.IsNullOrEmpty(email))
+            {
+                return;
+            }
 
             //Add the claims to the list of principle claims
             Claim[] claims =

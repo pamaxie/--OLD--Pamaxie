@@ -22,7 +22,7 @@ namespace Test.Pamaxie.Database.Api_Test
         }
 
         /// <summary>
-        /// Test for getting a application through <see cref="AuthController.LoginTask"/>
+        /// Test for <see cref="AuthController.LoginTask"/>
         /// </summary>
         [Fact] //TODO Needs testing data
         public void Login()
@@ -31,7 +31,7 @@ namespace Test.Pamaxie.Database.Api_Test
         }
 
         /// <summary>
-        /// Test for getting a application through <see cref="AuthController.CreateUserTask"/>
+        /// Test for <see cref="AuthController.CreateUserTask"/>
         /// </summary>
         [Fact] //TODO Needs testing data
         public void CreateUser()
@@ -40,7 +40,7 @@ namespace Test.Pamaxie.Database.Api_Test
         }
 
         /// <summary>
-        /// Test for getting a application through <see cref="AuthController.RefreshTask"/>
+        /// Test for <see cref="AuthController.RefreshTask"/>
         /// </summary>
         [Fact] //TODO Needs testing data
         public void Refresh()

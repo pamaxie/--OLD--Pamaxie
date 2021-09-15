@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Pamaxie.Api.Controllers;
 using Pamaxie.Data;
+using Pamaxie.Database.Extensions.Client;
 using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
@@ -203,6 +204,9 @@ namespace Test.Pamaxie.Database.Api_Test
             //Assert
             Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
             Assert.True(GetObjectResultContent(result));
+
+            //Add it back, so it will not fail other tests
+            application.Create();
         }
 
         /// <summary>

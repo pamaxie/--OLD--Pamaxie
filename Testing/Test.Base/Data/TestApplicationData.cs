@@ -27,10 +27,7 @@ namespace Test.Base
                     LastAuth = DateTime.Now
                 },
                 ApplicationName = "Sparkle",
-                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
-                RateLimited = false,
-                Disabled = false,
-                Deleted = false
+                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE"))
             },
             new PamaxieApplication
             {
@@ -44,10 +41,7 @@ namespace Test.Base
                     LastAuth = DateTime.Now
                 },
                 ApplicationName = "Droop",
-                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
-                RateLimited = false,
-                Disabled = false,
-                Deleted = false
+                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE"))
             },
             new PamaxieApplication
             {
@@ -61,10 +55,7 @@ namespace Test.Base
                     LastAuth = DateTime.Now
                 },
                 ApplicationName = "Cornwall",
-                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
-                RateLimited = false,
-                Disabled = false,
-                Deleted = false
+                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE"))
             },
             new PamaxieApplication
             {
@@ -78,10 +69,7 @@ namespace Test.Base
                     LastAuth = DateTime.Now
                 },
                 ApplicationName = "Crystal",
-                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
-                RateLimited = false,
-                Disabled = false,
-                Deleted = false
+                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE"))
             },
             new PamaxieApplication
             {
@@ -95,10 +83,7 @@ namespace Test.Base
                     LastAuth = DateTime.Now
                 },
                 ApplicationName = "Penny",
-                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
-                RateLimited = false,
-                Disabled = false,
-                Deleted = false
+                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE"))
             }
         };
     }

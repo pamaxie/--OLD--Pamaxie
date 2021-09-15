@@ -28,9 +28,13 @@ namespace Test.Pamaxie.Jwt_Test
         [MemberData(nameof(AllUsers))]
         public void CreateToken(string userKey)
         {
-            //Test the CreateToken method to see if it creates a valid token
+            //Arrange
             TokenGenerator generator = new TokenGenerator(Configuration);
+
+            //Act
             AuthToken authToken = generator.CreateToken(userKey);
+
+            //Assert
             Assert.NotNull(authToken);
             Assert.NotEmpty(authToken.Token);
             TestOutputHelper.WriteLine("Token: {0}", authToken.Token);
@@ -45,12 +49,15 @@ namespace Test.Pamaxie.Jwt_Test
         [MemberData(nameof(AllUsers))]
         public void GetUserKey(string expectedUserKey)
         {
-            //Create a auth token from the user key
+            //Arrange
             TokenGenerator generator = new TokenGenerator(Configuration);
             AuthToken authToken = generator.CreateToken(expectedUserKey);
             Assert.NotNull(authToken);
-            //Test the GetUserKey method to see if it returns the user's key
+
+            //Act
             string userKey = TokenGenerator.GetUserKey(authToken.Token);
+
+            //Assert
             Assert.False(string.IsNullOrEmpty(userKey));
             TestOutputHelper.WriteLine("Actual user key {0}", userKey);
             TestOutputHelper.WriteLine("Expected user key {0}", expectedUserKey);

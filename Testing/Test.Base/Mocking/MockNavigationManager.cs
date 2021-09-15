@@ -10,7 +10,7 @@ namespace Test.Base
         /// <summary>
         /// Mocks the <see cref="NavigationManager"/> so a url can be made for the EmailSender.
         /// </summary>
-        /// <returns>Mocked NavigationManager</returns>
+        /// <returns>Mocked <see cref="NavigationManager"/></returns>
         public static NavigationManager Mock()
         {
             return new MockedNavigationManager();

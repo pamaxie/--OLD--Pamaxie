@@ -26,9 +26,7 @@ namespace Test.Base
                 EmailVerified = false,
                 ProfilePictureAddress =
                     "https://lh3.googleusercontent.com/-KHm9C7OfwHE/YRygoiMAYaI/AAAAAAAAAIU/EtHpaiw9rqQiXwbtloPiN-hhxuRRJmJFwCMICGAYYCw/s96-c",
-                ApplicationKeys = new List<string>().AsEnumerable(),
-                Disabled = false,
-                Deleted = false
+                ApplicationKeys = new List<string>().AsEnumerable()
             },
             new PamaxieUser
             {
@@ -40,9 +38,7 @@ namespace Test.Base
                 EmailVerified = true,
                 ProfilePictureAddress =
                     "https://lh3.googleusercontent.com/-gN0jNA4zEEc/YRyhZ7pvf4I/AAAAAAAAAKo/a0Zi5AZgM4Umg4hWhtGB0bMz8RAt8bKHgCMICGAYYCw/s96-c",
-                ApplicationKeys = new[] { "1064922", "1053324" },
-                Disabled = false,
-                Deleted = false
+                ApplicationKeys = new[] { "1064922", "1053324" }
             },
             new PamaxieUser
             {
@@ -54,9 +50,7 @@ namespace Test.Base
                 EmailVerified = false,
                 ProfilePictureAddress =
                     "https://lh3.googleusercontent.com/-ZoqFDMxHwW8/YRyhOXy4usI/AAAAAAAAAKI/aYF2Yf-OkgA1A5Q4h2H5Kl1uyEpH3FwsgCMICGAYYCw/s96-c",
-                ApplicationKeys = new List<string>().AsEnumerable(),
-                Disabled = false,
-                Deleted = false
+                ApplicationKeys = new List<string>().AsEnumerable()
             },
             new PamaxieUser
             {
@@ -68,9 +62,7 @@ namespace Test.Base
                 EmailVerified = true,
                 ProfilePictureAddress =
                     "https://lh3.googleusercontent.com/-sWl6t08Q35E/YRyhBB8AlkI/AAAAAAAAAJQ/BO8AYPZlG90gQEND_C_W63fGEnRBvLnhQCMICGAYYCw/s96-c",
-                ApplicationKeys = new[] { "1051080", "1065779", "1060105" },
-                Disabled = false,
-                Deleted = false
+                ApplicationKeys = new[] { "1051080", "1065779", "1060105" }
             },
             new PamaxieUser
             {
@@ -82,9 +74,7 @@ namespace Test.Base
                 EmailVerified = false,
                 ProfilePictureAddress =
                     "https://lh3.googleusercontent.com/-njVNd76BfGQ/YRyhHMcQWRI/AAAAAAAAAJw/dLEOLMKV7Tk8-NrNNRyh5r-lAGd1DPmqwCMICGAYYCw/s96-c",
-                ApplicationKeys = new List<string>().AsEnumerable(),
-                Disabled = false,
-                Deleted = false
+                ApplicationKeys = new List<string>().AsEnumerable()
             }
         };
 
@@ -94,6 +84,7 @@ namespace Test.Base
             if (File.Exists("appsettings.test.json"))
             {
                 IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
+
                 if (configuration.GetChildren().Any(_ => _.Key == "UserData"))
                 {
                     IConfigurationSection configurationSection = configuration.GetSection("UserData");

@@ -98,7 +98,10 @@ namespace Test.Base
             public PamaxieUser Create(PamaxieUser value)
             {
                 if (value == null || !string.IsNullOrEmpty(value.Key))
+                {
                     return null;
+                }
+
                 string key;
                 do
                 {
@@ -106,6 +109,7 @@ namespace Test.Base
                 } while (TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == key) != null);
 
                 value.Key = key;
+
                 TestUserData.ListOfUsers.Add(value);
                 return value;
             }
@@ -114,8 +118,12 @@ namespace Test.Base
             public bool TryCreate(PamaxieUser value, out PamaxieUser createdValue)
             {
                 createdValue = null;
+
                 if (value == null || !string.IsNullOrEmpty(value.Key))
+                {
                     return false;
+                }
+
                 string key;
                 do
                 {
@@ -123,6 +131,7 @@ namespace Test.Base
                 } while (TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == key) != null);
 
                 value.Key = key;
+
                 TestUserData.ListOfUsers.Add(value);
                 createdValue = value;
                 return true;
@@ -132,9 +141,15 @@ namespace Test.Base
             public PamaxieUser Update(PamaxieUser value)
             {
                 if (value == null || string.IsNullOrEmpty(value.Key))
+                {
                     return null;
+                }
+
                 if (TestUserData.ListOfUsers.Any(_ => _.Key == value.Key))
+                {
                     return value;
+                }
+
                 TestUserData.ListOfUsers.Add(value);
                 return value;
             }
@@ -143,11 +158,19 @@ namespace Test.Base
             public bool TryUpdate(PamaxieUser value, out PamaxieUser updatedValue)
             {
                 updatedValue = null;
+
                 if (value == null || string.IsNullOrEmpty(value.Key))
+                {
                     return false;
+                }
+
                 int indexToUpdate = TestUserData.ListOfUsers.FindIndex(_ => _.Key == value.Key);
+
                 if (indexToUpdate == -1)
+                {
                     return false;
+                }
+
                 TestUserData.ListOfUsers[indexToUpdate] = value;
                 updatedValue = value;
                 return true;
@@ -157,27 +180,36 @@ namespace Test.Base
             public bool UpdateOrCreate(PamaxieUser value, out PamaxieUser updatedOrCreatedValue)
             {
                 updatedOrCreatedValue = null;
+
                 if (value == null)
-                    return false;
-                if (string.IsNullOrEmpty(value.Key))
                 {
-                    string key;
-                    do
+                    return false;
+                }
+
+                if (string.IsNullOrEmpty(value.Key) ||
+                    TestApplicationData.ListOfApplications.All(_ => _.Key != value.Key))
+                {
+                    string key = value.Key;
+
+                    if (string.IsNullOrEmpty(key))
                     {
-                        key = RandomService.GenerateRandomKey();
-                    } while (TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == key) != null);
+                        do
+                        {
+                            key = RandomService.GenerateRandomKey();
+                        } while (TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == key) != null);
+                    }
 
                     value.Key = key;
                     TestUserData.ListOfUsers.Add(value);
+                    return true;
                 }
                 else
                 {
                     int indexToUpdate = TestUserData.ListOfUsers.FindIndex(_ => _.Key == value.Key);
                     TestUserData.ListOfUsers[indexToUpdate] = value;
+                    updatedOrCreatedValue = value;
+                    return false;
                 }
-
-                updatedOrCreatedValue = value;
-                return true;
             }
 
             /// <inheritdoc cref="IApplicationDataService.Exists"/>
@@ -190,10 +222,17 @@ namespace Test.Base
             public bool Delete(PamaxieUser value)
             {
                 if (value == null || string.IsNullOrEmpty(value.Key))
+                {
                     return false;
+                }
+
                 PamaxieUser valueToRemove = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.Key);
+
                 if (valueToRemove == null)
+                {
                     return false;
+                }
+
                 TestUserData.ListOfUsers.Remove(valueToRemove);
                 return true;
             }
@@ -202,10 +241,20 @@ namespace Test.Base
             public IEnumerable<PamaxieApplication> GetAllApplications(PamaxieUser value)
             {
                 if (value == null || string.IsNullOrEmpty(value.Key))
+                {
                     return null;
-                List<PamaxieApplication> applications = value.ApplicationKeys
-                    .Select(key => TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key))
-                    .Where(application => application != null).ToList();
+                }
+
+                List<PamaxieApplication> applications = new List<PamaxieApplication>();
+
+                foreach (PamaxieApplication application in TestApplicationData.ListOfApplications)
+                {
+                    if (application.OwnerKey == value.Key)
+                    {
+                        applications.Add(application);
+                    }
+                }
+
                 return applications.AsEnumerable();
             }
 
@@ -213,10 +262,17 @@ namespace Test.Base
             public bool VerifyEmail(PamaxieUser value)
             {
                 if (value == null || string.IsNullOrEmpty(value.Key))
+                {
                     return false;
+                }
+
                 PamaxieUser valueToVerify = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.Key);
+
                 if (valueToVerify == null)
+                {
                     return false;
+                }
+
                 valueToVerify.EmailVerified = true;
                 return true;
             }

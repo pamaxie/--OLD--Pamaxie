@@ -26,10 +26,6 @@ namespace Test.Base
                         Service = MockIConnectionMultiplexer.Mock()
                     });
                 })
-                //.ConfigureTestServices(services =>
-                //{
-                //    services.AddMvc(options => options.Filters.Add(new AllowAnonymousFilter()));
-                //})
                 .ConfigureAppConfiguration(config =>
                 {
                     Configuration = new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();

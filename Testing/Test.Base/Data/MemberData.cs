@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Security.Claims;
 using Pamaxie.Data;
 
 namespace Test.Base
@@ -13,70 +13,196 @@ namespace Test.Base
         /// <summary>
         /// Contains a list of all testing <see cref="PamaxieUser"/> keys
         /// </summary>
-        public static IEnumerable<object[]> AllUserKeys =>
-            TestUserData.ListOfUsers.Where(_ => _.Deleted == false)
-                .Select(user => new object[] { user.Key });
+        public static IEnumerable<object[]> AllUserKeys
+        {
+            get
+            {
+                List<object[]> list = new List<object[]>();
+
+                foreach (PamaxieUser user in TestUserData.ListOfUsers)
+                {
+                    if (!user.Deleted)
+                    {
+                        continue;
+                    }
+
+                    list.Add(new object[] { user.Key });
+                }
+
+                return list;
+            }
+        }
 
         /// <summary>
         /// Contains a list of all testing <see cref="PamaxieUser"/>s
         /// </summary>
-        public static IEnumerable<object[]> AllUsers =>
-            TestUserData.ListOfUsers.Select(user => new object[] { user });
+        public static IEnumerable<object[]> AllUsers
+        {
+            get
+            {
+                List<object[]> list = new List<object[]>();
+
+                foreach (PamaxieUser user in TestUserData.ListOfUsers)
+                {
+                    if (!user.Deleted)
+                    {
+                        continue;
+                    }
+
+                    list.Add(new object[] { user });
+                }
+
+                return list;
+            }
+        }
 
         /// <summary>
-        /// Contains a list of all testing <see cref="PamaxieUser"/> keys that have their email verified
+        /// Contains a list of all testing <see cref="PamaxieUser"/>s that does not have their email verified
         /// </summary>
-        public static IEnumerable<object[]> AllVerifiedUserKeys =>
-            TestUserData.ListOfUsers.Where(_ => _.Deleted == false && _.EmailVerified)
-                .Select(user => new object[] { user.Key });
+        public static IEnumerable<object[]> AllUnverifiedUsers
+        {
+            get
+            {
+                List<object[]> list = new List<object[]>();
+
+                foreach (PamaxieUser user in TestUserData.ListOfUsers)
+                {
+                    if (!user.Deleted && !user.EmailVerified)
+                    {
+                        continue;
+                    }
+
+                    list.Add(new object[] { user });
+                }
+
+                return list;
+            }
+        }
 
         /// <summary>
-        /// Contains a list of all testing <see cref="PamaxieUser"/>s that have their email verified
+        /// Contains a list of all testing Google Claim users that does not have their email verified
         /// </summary>
-        public static IEnumerable<object[]> AllVerifiedUsers =>
-            TestUserData.ListOfUsers.Where(_ => _.Deleted == false && _.EmailVerified)
-                .Select(user => new object[] { user });
+        public static IEnumerable<object[]> AllVerifiedGoogleClaimUsers
+        {
+            get
+            {
+                List<object[]> list = new List<object[]>();
+
+                foreach (PamaxieUser user in TestUserData.ListOfUsers)
+                {
+                    if (!user.EmailVerified)
+                    {
+                        continue;
+                    }
+
+                    foreach (Claim[] claimUser in TestGoogleClaimData.ListOfGoogleUserPrincipleClaims)
+                    {
+                        if (user.Key == claimUser[0].Value)
+                        {
+                            list.Add(new object[] { claimUser });
+                        }
+                    }
+                }
+
+                return list;
+            }
+        }
 
         /// <summary>
-        /// Contains a list of all testing <see cref="PamaxieUser"/> keys that does not have their email verified
+        /// Contains a list of all testing Google Claim users that does not have their email verified
         /// </summary>
-        public static IEnumerable<object[]> AllUnverifiedUserKeys =>
-            TestUserData.ListOfUsers.Where(_ => _.Deleted == false && _.EmailVerified == false)
-                .Select(user => new object[] { user.Key });
+        public static IEnumerable<object[]> AllUnverifiedGoogleClaimUsers
+        {
+            get
+            {
+                List<object[]> list = new List<object[]>();
 
-        /// <summary>
-        /// Contains a list of all testing  <see cref="PamaxieUser"/>s that does not have their email verified
-        /// </summary>
-        public static IEnumerable<object[]> AllUnverifiedUsers =>
-            TestUserData.ListOfUsers.Where(_ => _.Deleted == false && _.EmailVerified == false)
-                .Select(user => new object[] { user });
+                foreach (PamaxieUser user in TestUserData.ListOfUsers)
+                {
+                    if (user.EmailVerified)
+                    {
+                        continue;
+                    }
 
-        /// <summary>
-        /// Contains the ID of the personal testing <see cref="PamaxieUser"/>
-        /// </summary>
-        public static IEnumerable<object[]> PersonalUserKey =>
-            new List<object[]> { new object[] { "101963629560135630792" } };
+                    foreach (Claim[] claimUser in TestGoogleClaimData.ListOfGoogleUserPrincipleClaims)
+                    {
+                        if (user.Key == claimUser[0].Value)
+                        {
+                            list.Add(new object[] { claimUser });
+                        }
+                    }
+                }
+
+                return list;
+            }
+        }
 
         /// <summary>
         /// Contains the personal testing <see cref="PamaxieUser"/>
         /// </summary>
-        public static IEnumerable<object[]> PersonalUser =>
-            TestUserData.ListOfUsers.Where(_ => _.Key == "101963629560135630792")
-                .Select(user => new object[] { user });
+        public static IEnumerable<object[]> PersonalUser
+        {
+            get
+            {
+                List<object[]> list = new List<object[]>();
+
+                foreach (PamaxieUser user in TestUserData.ListOfUsers)
+                {
+                    if (user.Key == "101963629560135630792" && !user.Deleted)
+                    {
+                        list.Add(new object[] { user });
+                    }
+                }
+
+                return list;
+            }
+        }
 
         /// <summary>
         /// Contains a list of all <see cref="PamaxieApplication"/> keys
         /// </summary>
-        public static IEnumerable<object[]> AllApplicationKeys =>
-            TestApplicationData.ListOfApplications.Where(_ => _.Deleted == false)
-                .Select(application => new object[] { application.Key });
+        public static IEnumerable<object[]> AllApplicationKeys
+        {
+            get
+            {
+                List<object[]> list = new List<object[]>();
+
+                foreach (PamaxieApplication application in TestApplicationData.ListOfApplications)
+                {
+                    if (!application.Deleted)
+                    {
+                        continue;
+                    }
+
+                    list.Add(new object[] { application.Key });
+                }
+
+                return list;
+            }
+        }
 
         /// <summary>
         /// Contains a list of all <see cref="PamaxieApplication"/>s
         /// </summary>
-        public static IEnumerable<object[]> AllApplications =>
-            TestApplicationData.ListOfApplications.Where(_ => _.Deleted == false)
-                .Select(application => new object[] { application });
+        public static IEnumerable<object[]> AllApplications
+        {
+            get
+            {
+                List<object[]> list = new List<object[]>();
+
+                foreach (PamaxieApplication application in TestApplicationData.ListOfApplications)
+                {
+                    if (!application.Deleted)
+                    {
+                        continue;
+                    }
+
+                    list.Add(new object[] { application });
+                }
+
+                return list;
+            }
+        }
 
         /// <summary>
         /// Contains a list of random test <see cref="PamaxieUser"/>s
@@ -140,19 +266,55 @@ namespace Test.Base
         /// <summary>
         /// Contains a list of file links
         /// </summary>
-        public static IEnumerable<object[]> FileLinks =>
-            TestFileLinkData.ListOfFileLinks.AsEnumerable().Select(link => new[] { link[0] });
+        public static IEnumerable<object[]> FileLinks
+        {
+            get
+            {
+                List<object[]> list = new List<object[]>();
+
+                foreach (object[] fileLink in TestFileLinkData.ListOfFileLinks)
+                {
+                    list.Add(new[] { fileLink[0] });
+                }
+
+                return list;
+            }
+        }
 
         /// <summary>
         /// Contains a list of file links with expected hash
         /// </summary>
-        public static IEnumerable<object[]> FileLinksWithHash =>
-            TestFileLinkData.ListOfFileLinks.AsEnumerable().Select(link => new[] { link[0], link[1] });
+        public static IEnumerable<object[]> FileLinksWithHash
+        {
+            get
+            {
+                List<object[]> list = new List<object[]>();
+
+                foreach (object[] fileLink in TestFileLinkData.ListOfFileLinks)
+                {
+                    list.Add(new[] { fileLink[0], fileLink[1] });
+                }
+
+                return list;
+            }
+        }
 
         /// <summary>
         /// Contains a list of file links with file type
         /// </summary>
-        public static IEnumerable<object[]> FileLinksWithFileType => TestFileLinkData.ListOfFileLinks.AsEnumerable()
-            .Select(link => new[] { link[0], link[2] });
+        public static IEnumerable<object[]> FileLinksWithFileType
+        {
+            get
+            {
+                List<object[]> list = new List<object[]>();
+
+                foreach (object[] fileLink in TestFileLinkData.ListOfFileLinks)
+                {
+                    list.Add(new[] { fileLink[0], fileLink[2] });
+                }
+
+                return list;
+            }
+        }
     }
 }
