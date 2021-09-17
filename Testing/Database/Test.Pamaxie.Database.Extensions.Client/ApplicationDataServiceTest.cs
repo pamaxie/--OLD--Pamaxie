@@ -3,13 +3,10 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Client;
-using Pamaxie.Database.Extensions.Server;
 using Pamaxie.Jwt;
 using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
-using DatabaseService = Pamaxie.Database.Extensions.Client.DatabaseService;
-using PamaxieDataContext = Pamaxie.Database.Extensions.Client.PamaxieDataContext;
 
 namespace Test.Pamaxie.Database.Extensions.Client_Test
 {
@@ -30,8 +27,7 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
         public ApplicationDataServiceTest(DatabaseApiFactory fixture, ITestOutputHelper testOutputHelper) : base(
             testOutputHelper)
         {
-            PamaxieDataContext context = new PamaxieDataContext("", "");
-            DatabaseService service = new DatabaseService(context)
+            DatabaseService service = new DatabaseService(new PamaxieDataContext("", ""))
             {
                 Service = fixture.CreateClient()
             };
