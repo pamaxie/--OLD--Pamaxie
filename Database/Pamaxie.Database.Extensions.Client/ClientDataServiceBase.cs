@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -37,7 +36,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public T Get(string key)
         {
-            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, Url + "/Get");
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, Url + "/" + key);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -51,7 +50,7 @@ namespace Pamaxie.Database.Extensions.Client
 
             if (string.IsNullOrEmpty(content))
             {
-                throw new WebException("Something went wrong here");
+                throw new WebException("Bad data");
             }
 
             T result = JsonConvert.DeserializeObject<T>(content);
@@ -89,7 +88,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public bool TryCreate(T value, out T createdValue)
         {
-            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, DataContext.DataInstances);
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, Url + "/TryCreate");
             string body = JsonConvert.SerializeObject(value);
             byte[] bodyBytes = Encoding.ASCII.GetBytes(body);
             requestMessage.Content = new ByteArrayContent(bodyBytes);
@@ -117,31 +116,147 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public T Update(T value)
         {
-            throw new NotImplementedException();
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Put, Url + "/Update");
+            string body = JsonConvert.SerializeObject(value);
+            byte[] bodyBytes = Encoding.ASCII.GetBytes(body);
+            requestMessage.Content = new ByteArrayContent(bodyBytes);
+            requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new WebException(response.StatusCode.ToString());
+            }
+
+            Stream stream = response.Content.ReadAsStream();
+            StreamReader reader = new StreamReader(stream, Encoding.Default);
+            string content = reader.ReadToEnd();
+
+            if (string.IsNullOrEmpty(content))
+            {
+                throw new WebException("Something went wrong here");
+            }
+
+            T result = JsonConvert.DeserializeObject<T>(content);
+            return result;
         }
 
         /// <inheritdoc/>
         public bool TryUpdate(T value, out T updatedValue)
         {
-            throw new NotImplementedException();
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Put, Url + "/TryUpdate");
+            string body = JsonConvert.SerializeObject(value);
+            byte[] bodyBytes = Encoding.ASCII.GetBytes(body);
+            requestMessage.Content = new ByteArrayContent(bodyBytes);
+            requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new WebException(response.StatusCode.ToString());
+            }
+
+            Stream stream = response.Content.ReadAsStream();
+            StreamReader reader = new StreamReader(stream, Encoding.Default);
+            string content = reader.ReadToEnd();
+
+            if (string.IsNullOrEmpty(content))
+            {
+                throw new WebException("Something went wrong here");
+            }
+
+            updatedValue = JsonConvert.DeserializeObject<T>(content);
+            return true;
         }
 
         /// <inheritdoc/>
         public bool UpdateOrCreate(T value, out T updatedOrCreatedValue)
         {
-            throw new NotImplementedException();
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, Url + "/UpdateOrCreate");
+            string body = JsonConvert.SerializeObject(value);
+            byte[] bodyBytes = Encoding.ASCII.GetBytes(body);
+            requestMessage.Content = new ByteArrayContent(bodyBytes);
+            requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new WebException(response.StatusCode.ToString());
+            }
+
+            Stream stream = response.Content.ReadAsStream();
+            StreamReader reader = new StreamReader(stream, Encoding.Default);
+            string content = reader.ReadToEnd();
+
+            if (string.IsNullOrEmpty(content))
+            {
+                throw new WebException("Something went wrong here");
+            }
+
+            updatedOrCreatedValue = JsonConvert.DeserializeObject<T>(content);
+
+            if (response.StatusCode == HttpStatusCode.Created)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <inheritdoc/>
         public bool Exists(string key)
         {
-            throw new NotImplementedException();
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, Url + "/Exists");
+            string body = JsonConvert.SerializeObject(key);
+            byte[] bodyBytes = Encoding.ASCII.GetBytes(body);
+            requestMessage.Content = new ByteArrayContent(bodyBytes);
+            requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new WebException(response.StatusCode.ToString());
+            }
+
+            Stream stream = response.Content.ReadAsStream();
+            StreamReader reader = new StreamReader(stream, Encoding.Default);
+            string content = reader.ReadToEnd();
+
+            if (string.IsNullOrEmpty(content))
+            {
+                throw new WebException("Something went wrong here");
+            }
+
+            bool result = JsonConvert.DeserializeObject<bool>(content);
+            return result;
         }
 
         /// <inheritdoc/>
         public bool Delete(T value)
         {
-            throw new NotImplementedException();
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Delete, Url + "/Delete");
+            string body = JsonConvert.SerializeObject(value);
+            byte[] bodyBytes = Encoding.ASCII.GetBytes(body);
+            requestMessage.Content = new ByteArrayContent(bodyBytes);
+            requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new WebException(response.StatusCode.ToString());
+            }
+
+            Stream stream = response.Content.ReadAsStream();
+            StreamReader reader = new StreamReader(stream, Encoding.Default);
+            string content = reader.ReadToEnd();
+
+            if (string.IsNullOrEmpty(content))
+            {
+                throw new WebException("Something went wrong here");
+            }
+
+            bool result = JsonConvert.DeserializeObject<bool>(content);
+            return result;
         }
     }
 }

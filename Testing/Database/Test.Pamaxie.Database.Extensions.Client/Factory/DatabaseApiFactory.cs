@@ -23,7 +23,8 @@ namespace Test.Base
 
                     services.AddSingleton(new DatabaseService(null)
                     {
-                        Service = MockIConnectionMultiplexer.Mock()
+                        Service = MockIConnectionMultiplexer.Mock(),
+                        ConnectionSuccess = true
                     });
                 })
                 .ConfigureAppConfiguration(config =>

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Pamaxie.Api.Controllers;
 using Pamaxie.Data;
-using Pamaxie.Database.Extensions.Client;
 using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
@@ -191,6 +190,22 @@ namespace Test.Pamaxie.Database.Api_Test
         }
 
         /// <summary>
+        /// Test for checking if a <see cref="PamaxieApplication"/> exists in the database through <see cref="ApplicationController.ExistsTask"/>
+        /// </summary>
+        /// <param name="applicationKey">The <see cref="PamaxieApplication"/> key from inlined data</param>
+        [Theory]
+        [MemberData(nameof(AllApplicationKeys))]
+        public void Exists(string applicationKey)
+        {
+            //Act
+            ActionResult<bool> result = Controller.ExistsTask(applicationKey);
+
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            Assert.True(GetObjectResultContent(result));
+        }
+
+        /// <summary>
         /// Test for deleting a <see cref="PamaxieApplication"/> through <see cref="ApplicationController.DeleteTask"/>
         /// </summary>
         /// <param name="application">The <see cref="PamaxieApplication"/> from inlined data</param>
@@ -206,7 +221,7 @@ namespace Test.Pamaxie.Database.Api_Test
             Assert.True(GetObjectResultContent(result));
 
             //Add it back, so it will not fail other tests
-            application.Create();
+            Controller.CreateTask(application);
         }
 
         /// <summary>

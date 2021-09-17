@@ -61,6 +61,7 @@ namespace Test.Base
 
             mockConnectionMultiplexer.Setup(_ => _.GetDatabase(It.IsAny<int>(), It.IsAny<object>()))
                 .Returns(mockDatabase.Object);
+
             return mockConnectionMultiplexer.Object;
         }
     }

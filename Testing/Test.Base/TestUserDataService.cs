@@ -13,19 +13,13 @@ namespace Test.Base
     /// </summary>
     public sealed class TestUserDataService : TestBase
     {
-        /// <summary>
         /// <inheritdoc cref="MemberData.AllUserKeys"/>
-        /// </summary>
         public static IEnumerable<object[]> AllUserKeys => MemberData.AllUserKeys;
 
-        /// <summary>
         /// <inheritdoc cref="MemberData.AllUsers"/>
-        /// </summary>
         public static IEnumerable<object[]> AllUsers => MemberData.AllUsers;
 
-        /// <summary>
         /// <inheritdoc cref="MemberData.RandomUsers"/>
-        /// </summary>
         public static IEnumerable<object[]> RandomUserData => MemberData.RandomUsers;
 
         public TestUserDataService(ITestOutputHelper testOutputHelper) : base(testOutputHelper)

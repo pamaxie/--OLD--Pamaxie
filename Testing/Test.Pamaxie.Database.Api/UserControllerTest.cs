@@ -193,6 +193,22 @@ namespace Test.Pamaxie.Database.Api_Test
         }
 
         /// <summary>
+        /// Test for checking if a <see cref="PamaxieUser"/> exists in the database through <see cref="UserController.ExistsTask"/>
+        /// </summary>
+        /// <param name="userKey">The <see cref="PamaxieUser"/> key from inlined data</param>
+        [Theory]
+        [MemberData(nameof(AllUserKeys))]
+        public void Exists(string userKey)
+        {
+            //Act
+            ActionResult<bool> result = Controller.ExistsTask(userKey);
+
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            Assert.True(GetObjectResultContent(result));
+        }
+
+        /// <summary>
         /// Test for deleting a <see cref="PamaxieUser"/> through <see cref="UserController.DeleteTask"/>
         /// </summary>
         /// <param name="user">The <see cref="PamaxieUser"/> from inlined data</param>
@@ -206,6 +222,9 @@ namespace Test.Pamaxie.Database.Api_Test
             //Assert
             Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
             Assert.True(GetObjectResultContent(result));
+
+            //Add it back, so it will not fail other tests
+            Controller.CreateTask(user);
         }
 
         /// <summary>

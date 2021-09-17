@@ -206,6 +206,32 @@ namespace Pamaxie.Api.Controllers
         }
 
         /// <summary>
+        /// Checks if a <see cref="PamaxieUser"/> exists in the database
+        /// </summary>
+        /// <param name="key">Unique Key of the <see cref="PamaxieUser"/></param>
+        /// <returns><see cref="bool"/> if <see cref="PamaxieUser"/> exists in the database</returns>
+        [Authorize]
+        [HttpGet("Exists")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<bool> ExistsTask(string key)
+        {
+            if (!_dbService.ConnectionSuccess)
+            {
+                return Problem();
+            }
+
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
+
+            return Ok(_dbService.Users.Exists(key));
+        }
+
+        /// <summary>
         /// Deletes a <see cref="PamaxieUser"/> in the database
         /// </summary>
         /// <param name="user"><see cref="PamaxieUser"/> to be deleted</param>
@@ -213,7 +239,7 @@ namespace Pamaxie.Api.Controllers
         [Authorize]
         [HttpDelete("Delete")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PamaxieUser))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> DeleteTask(PamaxieUser user)
