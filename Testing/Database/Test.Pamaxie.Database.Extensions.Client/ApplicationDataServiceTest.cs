@@ -112,6 +112,10 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
             Assert.Equal(application.ApplicationName, updatedApplication.ApplicationName);
             string str = JsonConvert.SerializeObject(updatedApplication);
             TestOutputHelper.WriteLine(str);
+
+            //Change the email address back, to avoid confusing between tests
+            application.ApplicationName = oldName;
+            application.Update();
         }
 
         /// <summary>
@@ -136,6 +140,10 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
             Assert.Equal(application.ApplicationName, updatedApplication.ApplicationName);
             string str = JsonConvert.SerializeObject(updatedApplication);
             TestOutputHelper.WriteLine(str);
+
+            //Change the email address back, to avoid confusing between tests
+            application.ApplicationName = oldName;
+            application.Update();
         }
 
         /// <summary>
@@ -179,6 +187,10 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
             Assert.Equal(application.ApplicationName, updatedApplication.ApplicationName);
             string str = JsonConvert.SerializeObject(updatedApplication);
             TestOutputHelper.WriteLine(str);
+
+            //Change the email address back, to avoid confusing between tests
+            application.ApplicationName = oldName;
+            application.Update();
         }
 
         /// <summary>
@@ -234,6 +246,9 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
             //Assert
             Assert.NotEqual(disabled, enabledOrDisabledApplication.Disabled);
             TestOutputHelper.WriteLine(enabledOrDisabledApplication.Disabled ? "Enabled" : "Disabled");
+
+            //Change it back before to avoid conflicts between other tests
+            application.EnableOrDisable();
         }
 
         /// <summary>

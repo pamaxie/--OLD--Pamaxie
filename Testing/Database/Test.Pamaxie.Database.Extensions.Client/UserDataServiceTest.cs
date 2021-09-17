@@ -113,6 +113,10 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
             Assert.Equal(user.EmailAddress, updatedUser.EmailAddress);
             string str = JsonConvert.SerializeObject(updatedUser);
             TestOutputHelper.WriteLine(str);
+
+            //Change the email address back, to avoid confusing between tests
+            user.EmailAddress = oldEmailAddress;
+            user.Update();
         }
 
         /// <summary>
@@ -137,6 +141,10 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
             Assert.Equal(user.EmailAddress, updatedUser.EmailAddress);
             string str = JsonConvert.SerializeObject(updatedUser);
             TestOutputHelper.WriteLine(str);
+
+            //Change the email address back, to avoid confusing between tests
+            user.EmailAddress = oldEmailAddress;
+            user.Update();
         }
 
         /// <summary>
@@ -180,6 +188,10 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
             Assert.Equal(user.EmailAddress, updatedUser.EmailAddress);
             string str = JsonConvert.SerializeObject(updatedUser);
             TestOutputHelper.WriteLine(str);
+
+            //Change the email address back, to avoid confusing between tests
+            user.EmailAddress = oldEmailAddress;
+            user.Update();
         }
 
         /// <summary>

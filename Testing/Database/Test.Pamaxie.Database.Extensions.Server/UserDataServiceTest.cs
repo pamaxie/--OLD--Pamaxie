@@ -208,7 +208,7 @@ namespace Test.Database.Extensions.Server_Test
             TestOutputHelper.WriteLine("Deleted {0}", true);
 
             //Add it back, so it will not fail other tests
-            TestUserData.ListOfUsers.Add(user);
+            Service.Users.Create(user);
         }
 
         /// <summary>
