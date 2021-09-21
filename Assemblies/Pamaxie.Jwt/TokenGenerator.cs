@@ -2,9 +2,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Spectre.Console;
 
 namespace Pamaxie.Jwt
 {
@@ -58,6 +61,16 @@ namespace Pamaxie.Jwt
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
             JwtSecurityToken token = handler.ReadJwtToken(authToken);
             return token?.Claims.First(claim => claim.Type == "unique_name").Value;
+        }
+
+        public static string GenerateSecret()
+        {
+            using (RNGCryptoServiceProvider cryptRng = new RNGCryptoServiceProvider())
+            {
+                byte[] tokenBuffer = new byte[64];
+                cryptRng.GetBytes(tokenBuffer);
+                return Convert.ToBase64String(tokenBuffer);
+            }
         }
     }
 }

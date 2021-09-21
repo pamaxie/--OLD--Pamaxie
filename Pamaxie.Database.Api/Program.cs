@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -27,11 +29,17 @@ namespace Pamaxie.Api
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder().AddCommandLine(args).Build();
-            string hostUrl = configuration["hosturl"]; //TODO Either use or remove this variable
+            List<string> hostUrl = new List<string>();
+            string nameString =  configuration["hosturl"];
 
-            if (string.IsNullOrEmpty(hostUrl))
+            if (string.IsNullOrEmpty(nameString))
             {
-                hostUrl = "http://0.0.0.0:6000";
+                //Default Url if nothing was specified, this is basically the "default" server url
+                nameString = "http://0.0.0.0:5000";
+            }
+            else if (nameString.Contains(","))
+            {
+                hostUrl = nameString.Split(',').ToList();
             }
 
             return Host.CreateDefaultBuilder(args)
@@ -40,7 +48,7 @@ namespace Pamaxie.Api
                     webBuilder.UseStartup<Startup>()
                         .UseConfiguration(configuration)
                         .UseKestrel()
-                        .UseUrls("http://0.0.0.0:5003", "http://localhost:5004")
+                        .UseUrls(hostUrl.Any() ? hostUrl.ToArray() : new string[1] { nameString })
                         .UseIISIntegration();
                 });
         }

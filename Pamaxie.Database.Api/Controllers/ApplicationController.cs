@@ -32,7 +32,7 @@ namespace Pamaxie.Api.Controllers
         /// <param name="key">Unique Key of the <see cref="PamaxieApplication"/></param>
         /// <returns>A <see cref="PamaxieApplication"/> from the database</returns>
         [Authorize]
-        [HttpGet("{key}")]
+        [HttpGet("Get={key}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PamaxieApplication))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -210,7 +210,7 @@ namespace Pamaxie.Api.Controllers
         /// <param name="key">Unique Key of the <see cref="PamaxieApplication"/></param>
         /// <returns><see cref="bool"/> if <see cref="PamaxieApplication"/> exists in the database</returns>
         [Authorize]
-        [HttpGet("Exists")]
+        [HttpGet("Exists={key}")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
