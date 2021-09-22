@@ -32,7 +32,7 @@ namespace Pamaxie.Website.Pages
         {
             if (HttpContextAccessor.HttpContext?.User == null)
                 NavigationManager.NavigateTo("/Login", true);
-            
+
             ClaimsPrincipal? user = HttpContextAccessor.HttpContext?.User;
             if (user == null)
                 return Task.CompletedTask;

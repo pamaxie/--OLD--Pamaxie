@@ -247,8 +247,10 @@ namespace Test.Base
 
                 List<PamaxieApplication> applications = new List<PamaxieApplication>();
 
-                foreach (PamaxieApplication application in TestApplicationData.ListOfApplications)
+                for (int i = 0; i < TestApplicationData.ListOfApplications.Count; i++)
                 {
+                    PamaxieApplication application = TestApplicationData.ListOfApplications[i];
+
                     if (application.OwnerKey == value.Key)
                     {
                         applications.Add(application);

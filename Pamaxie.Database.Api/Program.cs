@@ -30,7 +30,7 @@ namespace Pamaxie.Api
         {
             IConfigurationRoot configuration = new ConfigurationBuilder().AddCommandLine(args).Build();
             List<string> hostUrl = new List<string>();
-            string nameString =  configuration["hosturl"];
+            string nameString = configuration["hosturl"];
 
             if (string.IsNullOrEmpty(nameString))
             {

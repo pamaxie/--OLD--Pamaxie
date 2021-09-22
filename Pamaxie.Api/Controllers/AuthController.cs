@@ -75,6 +75,7 @@ namespace Pamaxie.Api.Controllers
             {
                 return BadRequest("Invalid token");
             }
+
             AuthToken newToken = _generator.CreateToken(userId);
             return Ok(newToken);
         }

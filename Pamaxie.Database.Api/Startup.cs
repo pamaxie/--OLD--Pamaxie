@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.PerformanceData;
 using System.IO;
-using System.Net.Mime;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
-using System.Threading;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,10 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Pamaxie.Api.Controllers;
 using Pamaxie.Database.Extensions.Server;
 using Pamaxie.Jwt;
 using Spectre.Console;
@@ -59,17 +51,18 @@ namespace Pamaxie.Api
                     return false;
                 }
 
-                //TODO: Save the settings after this :derp:
+                //TODO: Save the settings after this
                 do
                 {
                     Console.Clear();
                 } while (!GenerateConfig());
 
-                System.Environment.Exit(-501);
+                Environment.Exit(-501);
             }
 
             //TODO: Validate Redis connection and that all instances can be connected to
             IConfigurationSection authSection = Configuration.GetSection("AuthData");
+
             if (authSection == null)
             {
                 additionalIssue = "The authentication section ";
@@ -84,12 +77,13 @@ namespace Pamaxie.Api
         /// Generates the configuration for the api
         /// </summary>
         /// <returns></returns>
-        private bool GenerateConfig()
+        private static bool GenerateConfig()
         {
-            var ruler = new Rule("[yellow]Configuration Setup[/]");
-            ruler.Alignment = Justify.Left;
-            AnsiConsole.Render(ruler);
-            ruler.Title = "[yellow]Jwt Bearer Setup[/]";
+            Rule ruler = new Rule()
+            {
+                Alignment = Justify.Left,
+                Title = "[yellow]Jwt Bearer Setup[/]"
+            };
             AnsiConsole.Render(ruler);
             string secret;
 
@@ -108,18 +102,21 @@ namespace Pamaxie.Api
                             return ValidationResult.Success();
                         }));
             }
-
-            secret = TokenGenerator.GenerateSecret();
+            else
+            {
+                secret = TokenGenerator.GenerateSecret();
+            }
 
             if (AnsiConsole.Confirm(
                 "Show the set token now? [yellow]It will also be put into the configuration file so u can always see it.[/]",
                 false))
+            {
                 AnsiConsole.WriteLine(secret);
+            }
 
-            var timeout = AnsiConsole.Ask<int>(
+            int timeout = AnsiConsole.Ask(
                 "How long in minutes should the timeout for the Jwt bearer be? \n" +
                 "[yellow]We usually recommend anywhere between 5 - 15 minutes lifespan[/]", 10);
-
 
             dynamic authObj = new JObject();
             authObj.Secret = secret;
@@ -131,15 +128,16 @@ namespace Pamaxie.Api
                 "Usually with the provided installer for this software you were instructed to install redis on another server or this one.\n" +
                 "In the following steps we will help you configure these redis databases.\n" +
                 "Please ensure this configuration is correct otherwise we are unable to handle any requests.");
-            var setupType = AnsiConsole.Prompt(new SelectionPrompt<string>()
+            string setupType = AnsiConsole.Prompt(new SelectionPrompt<string>()
                 .Title("--Please select the type of database you are using--")
                 .PageSize(10)
                 .AddChoices(new[]
                 {
-                        "Local Instance", "Remote Instance"
+                    "Local Instance", "Remote Instance"
                 }));
 
             dynamic redisObj = new JObject();
+
             if (setupType == "Local Instance")
             {
                 ruler.Title = "[yellow]Local Instance setup[/]";
@@ -150,7 +148,7 @@ namespace Pamaxie.Api
             {
                 //TODO: Finish generating configurations for multiple servers (have a peek at the documentation if you wanna know how to do this)
                 ruler.Title = "[yellow]Remote Instance setup[/]";
-                int instances = AnsiConsole.Ask<int>("How many redis servers [red](NOT INSTANCES)[/] do you have?", 1);
+                int instances = AnsiConsole.Ask("How many redis servers [red](NOT INSTANCES)[/] do you have?", 1);
                 for (int i = 0; i < instances; i++)
                 {
                     string instanceName = AnsiConsole.Ask<string>("Please tell us your instance address");
@@ -166,11 +164,12 @@ namespace Pamaxie.Api
             dynamic obj = new JObject();
             obj.AuthData = authObj;
             obj.RedisData = redisObj;
-            var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(obj, Formatting.Indented);
+            dynamic jsonString = JsonConvert.SerializeObject(obj, Formatting.Indented);
             AnsiConsole.WriteLine("The generated configuration looks like this:");
             AnsiConsole.Render(new Markup($"[yellow]{jsonString}[/]\n"));
             return AnsiConsole.Ask(
-                "Are you happy with this configuration? (If not we'll guide you through it again from the start)", false);
+                "Are you happy with this configuration? (If not we'll guide you through it again from the start)",
+                false);
         }
 
         /// <summary>
@@ -178,14 +177,13 @@ namespace Pamaxie.Api
         /// </summary>
         /// <param name="serverAddress">the instance address / name</param>
         /// <returns></returns>
-        private string GenerateServerOptions(string serverAddress = "redis")
+        private static string GenerateServerOptions(string serverAddress = "redis")
         {
             ConfigurationOptions options = new ConfigurationOptions();
-            
-            var port = AnsiConsole.Ask<int>(
+            int port = AnsiConsole.Ask(
                 "Whats the port number of the local redis instance?", 6379);
 
-            if (AnsiConsole.Ask<bool>("Do you want to use a password for the database (this is HIGHLY recommended)",
+            if (AnsiConsole.Ask("Do you want to use a password for the database (this is HIGHLY recommended)",
                 true))
             {
                 options.Password = AnsiConsole.Prompt(
@@ -196,13 +194,16 @@ namespace Pamaxie.Api
                         .Validate(token =>
                         {
                             if (token.Length < 8)
+                            {
                                 return ValidationResult.Error(
                                     "[red]The entered password was too short, please ensure its at least 8 Characters.[/]");
+                            }
+
                             return ValidationResult.Success();
                         }));
             }
 
-            var instanceCount = AnsiConsole.Ask<int>("How many redis instances are running locally?", 16);
+            int instanceCount = AnsiConsole.Ask("How many redis instances are running locally?", 16);
             int[] instances = new int[instanceCount];
 
             for (int i = 0; i < instanceCount; i++)
@@ -210,7 +211,7 @@ namespace Pamaxie.Api
                 instances[i] = i;
             }
 
-            var selectedInstances = AnsiConsole.Prompt(
+            List<int> selectedInstances = AnsiConsole.Prompt(
                 new MultiSelectionPrompt<int>()
                     .Title("Please select the Redis instances we should use")
                     .Required()
@@ -220,14 +221,14 @@ namespace Pamaxie.Api
                         "[grey](Press [blue]<space>[/] to toggle an instance, " +
                         "[green]<enter>[/] to accept)[/]")
                     .AddChoices(instances));
-            var reconnectionPolicy = AnsiConsole.Prompt(new SelectionPrompt<string>()
+            string reconnectionPolicy = AnsiConsole.Prompt(new SelectionPrompt<string>()
                 .Title("--Please select the reconnection policy that should be used if the connection is ever lost--")
                 .PageSize(10)
                 .AddChoices(new[]
                 {
                     "Linear", "Exponential"
                 }));
-            var reconnectionAttempts = AnsiConsole.Ask<int>("How many reconnection attempts should we do?", 5000);
+            int reconnectionAttempts = AnsiConsole.Ask("How many reconnection attempts should we do?", 5000);
 
             if (reconnectionPolicy == "Linear")
             {
@@ -238,9 +239,9 @@ namespace Pamaxie.Api
                 options.ReconnectRetryPolicy = new ExponentialRetry(reconnectionAttempts);
             }
 
-            foreach (var instance in selectedInstances)
+            for (int i = 0; i < selectedInstances.Count; i++)
             {
-                options.EndPoints.Add(serverAddress + instance, port);
+                options.EndPoints.Add(serverAddress + selectedInstances[i], port);
             }
 
             AnsiConsole.WriteLine("The generated redis configuration looks like this:");
@@ -254,13 +255,13 @@ namespace Pamaxie.Api
         /// <param name="services"><see cref="IServiceCollection"/> to add</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            if (!ValidateSettings(out var issue))
+            if (!ValidateSettings(out string issue))
             {
                 Console.WriteLine(
                     "The applications configuration was in an incorrect or unaccepted format. The detailed problem was: \n" +
                     issue);
                 //TODO: add status code 501 to the list of status codes as "wrong configuration"
-                System.Environment.Exit(-501);
+                Environment.Exit(-501);
             }
 
             services.AddControllers();
@@ -281,7 +282,7 @@ namespace Pamaxie.Api
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
                         ValidateIssuer = false,
-                        ValidateAudience = false,
+                        ValidateAudience = false
                     };
                 });
 

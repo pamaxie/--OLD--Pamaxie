@@ -19,8 +19,10 @@ namespace Test.Base
             {
                 List<object[]> list = new List<object[]>();
 
-                foreach (PamaxieUser user in TestUserData.ListOfUsers)
+                for (int i = 0; i < TestUserData.ListOfUsers.Count; i++)
                 {
+                    PamaxieUser user = TestUserData.ListOfUsers[i];
+
                     if (user.Deleted)
                     {
                         continue;
@@ -42,8 +44,10 @@ namespace Test.Base
             {
                 List<object[]> list = new List<object[]>();
 
-                foreach (PamaxieUser user in TestUserData.ListOfUsers)
+                for (int i = 0; i < TestUserData.ListOfUsers.Count; i++)
                 {
+                    PamaxieUser user = TestUserData.ListOfUsers[i];
+
                     if (!user.Deleted)
                     {
                         list.Add(new object[] { user });
@@ -63,8 +67,10 @@ namespace Test.Base
             {
                 List<object[]> list = new List<object[]>();
 
-                foreach (PamaxieUser user in TestUserData.ListOfUsers)
+                for (int i = 0; i < TestUserData.ListOfUsers.Count; i++)
                 {
+                    PamaxieUser user = TestUserData.ListOfUsers[i];
+
                     if (!user.Deleted && !user.EmailVerified)
                     {
                         list.Add(new object[] { user });
@@ -84,12 +90,15 @@ namespace Test.Base
             {
                 List<object[]> list = new List<object[]>();
 
-                foreach (PamaxieUser user in TestUserData.ListOfUsers)
+                for (int i = 0; i < TestUserData.ListOfUsers.Count; i++)
                 {
+                    PamaxieUser user = TestUserData.ListOfUsers[i];
                     if (!user.EmailVerified)
                     {
-                        foreach (Claim[] claimUser in TestGoogleClaimData.ListOfGoogleUserPrincipleClaims)
+                        for (int j = 0; j < TestGoogleClaimData.ListOfGoogleUserPrincipleClaims.Count; j++)
                         {
+                            Claim[] claimUser = TestGoogleClaimData.ListOfGoogleUserPrincipleClaims[j];
+
                             if (user.Key == claimUser[0].Value)
                             {
                                 list.Add(new object[] { claimUser });
@@ -111,12 +120,15 @@ namespace Test.Base
             {
                 List<object[]> list = new List<object[]>();
 
-                foreach (PamaxieUser user in TestUserData.ListOfUsers)
+                for (int i = 0; i < TestUserData.ListOfUsers.Count; i++)
                 {
+                    PamaxieUser user = TestUserData.ListOfUsers[i];
                     if (!user.EmailVerified)
                     {
-                        foreach (Claim[] claimUser in TestGoogleClaimData.ListOfGoogleUserPrincipleClaims)
+                        for (int j = 0; j < TestGoogleClaimData.ListOfGoogleUserPrincipleClaims.Count; j++)
                         {
+                            Claim[] claimUser = TestGoogleClaimData.ListOfGoogleUserPrincipleClaims[j];
+
                             if (user.Key == claimUser[0].Value)
                             {
                                 list.Add(new object[] { claimUser });
@@ -138,8 +150,10 @@ namespace Test.Base
             {
                 List<object[]> list = new List<object[]>();
 
-                foreach (PamaxieUser user in TestUserData.ListOfUsers)
+                for (int i = 0; i < TestUserData.ListOfUsers.Count; i++)
                 {
+                    PamaxieUser user = TestUserData.ListOfUsers[i];
+
                     if (user.Key == "101963629560135630792" && !user.Deleted)
                     {
                         list.Add(new object[] { user });
@@ -159,8 +173,10 @@ namespace Test.Base
             {
                 List<object[]> list = new List<object[]>();
 
-                foreach (PamaxieApplication application in TestApplicationData.ListOfApplications)
+                for (int i = 0; i < TestApplicationData.ListOfApplications.Count; i++)
                 {
+                    PamaxieApplication application = TestApplicationData.ListOfApplications[i];
+
                     if (!application.Deleted)
                     {
                         list.Add(new object[] { application.Key });
@@ -180,8 +196,10 @@ namespace Test.Base
             {
                 List<object[]> list = new List<object[]>();
 
-                foreach (PamaxieApplication application in TestApplicationData.ListOfApplications)
+                for (int i = 0; i < TestApplicationData.ListOfApplications.Count; i++)
                 {
+                    PamaxieApplication application = TestApplicationData.ListOfApplications[i];
+
                     if (!application.Deleted)
                     {
                         list.Add(new object[] { application });
@@ -201,7 +219,7 @@ namespace Test.Base
             {
                 List<object[]> list = new List<object[]>();
 
-                for (int i = 0; i < 6; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     PamaxieUser user = new PamaxieUser
                     {
@@ -228,7 +246,7 @@ namespace Test.Base
             {
                 List<object[]> list = new List<object[]>();
 
-                for (int i = 0; i < 6; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     Random rnd = new Random();
                     PamaxieApplication application = new PamaxieApplication
@@ -260,8 +278,9 @@ namespace Test.Base
             {
                 List<object[]> list = new List<object[]>();
 
-                foreach (object[] fileLink in TestFileLinkData.ListOfFileLinks)
+                for (int i = 0; i < TestFileLinkData.ListOfFileLinks.Count; i++)
                 {
+                    object[] fileLink = TestFileLinkData.ListOfFileLinks[i];
                     list.Add(new[] { fileLink[0] });
                 }
 
@@ -278,8 +297,9 @@ namespace Test.Base
             {
                 List<object[]> list = new List<object[]>();
 
-                foreach (object[] fileLink in TestFileLinkData.ListOfFileLinks)
+                for (int i = 0; i < TestFileLinkData.ListOfFileLinks.Count; i++)
                 {
+                    object[] fileLink = TestFileLinkData.ListOfFileLinks[i];
                     list.Add(new[] { fileLink[0], fileLink[1] });
                 }
 
@@ -296,8 +316,9 @@ namespace Test.Base
             {
                 List<object[]> list = new List<object[]>();
 
-                foreach (object[] fileLink in TestFileLinkData.ListOfFileLinks)
+                for (int i = 0; i < TestFileLinkData.ListOfFileLinks.Count; i++)
                 {
+                    object[] fileLink = TestFileLinkData.ListOfFileLinks[i];
                     list.Add(new[] { fileLink[0], fileLink[2] });
                 }
 

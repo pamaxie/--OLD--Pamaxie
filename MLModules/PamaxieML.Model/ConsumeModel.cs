@@ -10,8 +10,11 @@ namespace Pamaxie.ImageScanning
     /// </summary>
     public class ConsumeModel
     {
-        private static Lazy<PredictionEngine<ModelInput, ModelOutput>> PredictionEngine = new Lazy<PredictionEngine<ModelInput, ModelOutput>>(CreatePredictionEngine);
-        public static readonly String ModelPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Pamaxie/MLModel.zip";
+        private static Lazy<PredictionEngine<ModelInput, ModelOutput>> PredictionEngine =
+            new Lazy<PredictionEngine<ModelInput, ModelOutput>>(CreatePredictionEngine);
+
+        public static readonly string ModelPath =
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Pamaxie/MLModel.zip";
 
         // For more info on consuming ML.NET models, visit https://aka.ms/mlnet-consume
         // Method for consuming model in your app

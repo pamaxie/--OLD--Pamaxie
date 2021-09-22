@@ -1,14 +1,14 @@
 ﻿<!--Mud Blazor components for fancy schmancy UI-->
 <div>
-    <MudThemeProvider Theme="@_darkTheme" />
-    <MudDialogProvider />
-    <MudSnackbarProvider />
-    
+    <MudThemeProvider Theme="@_darkTheme"/>
+    <MudDialogProvider/>
+    <MudSnackbarProvider/>
+
     <Router AppAssembly="@typeof(Program).Assembly">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
-                    <Pamaxie.Website.Shared.RedirectToLogin />
+                    <Pamaxie.Website.Shared.RedirectToLogin/>
                 </NotAuthorized>
             </AuthorizeRouteView>
         </Found>

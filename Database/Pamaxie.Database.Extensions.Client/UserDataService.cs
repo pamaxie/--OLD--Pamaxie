@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using Newtonsoft.Json;
 using Pamaxie.Data;
 using Pamaxie.Database.Design;
 using Pamaxie.Database.Extensions.Client.Extensions;
@@ -25,11 +22,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public IEnumerable<PamaxieApplication> GetAllApplications(PamaxieUser value)
         {
-            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, Url + "/GetAllApplications");
-            string body = JsonConvert.SerializeObject(value);
-            byte[] bodyBytes = Encoding.ASCII.GetBytes(body);
-            requestMessage.Content = new ByteArrayContent(bodyBytes);
-            requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpRequestMessage requestMessage = WebExtensions.PostRequestMessage(new Uri(Url + "/GetAllApplications"));
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -37,28 +30,13 @@ namespace Pamaxie.Database.Extensions.Client
                 throw new WebException(response.StatusCode.ToString());
             }
 
-            Stream stream = response.Content.ReadAsStream();
-            StreamReader reader = new StreamReader(stream, Encoding.Default);
-            string content = reader.ReadToEnd();
-
-            if (string.IsNullOrEmpty(content))
-            {
-                throw new WebException("Something went wrong here");
-            }
-
-            IEnumerable<PamaxieApplication> result =
-                JsonConvert.DeserializeObject<IEnumerable<PamaxieApplication>>(content);
-            return result;
+            return response.ReadJsonResponse<IEnumerable<PamaxieApplication>>();
         }
 
         /// <inheritdoc/>
         public bool VerifyEmail(PamaxieUser value)
         {
-            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, Url + "/VerifyEmail");
-            string body = JsonConvert.SerializeObject(value);
-            byte[] bodyBytes = Encoding.ASCII.GetBytes(body);
-            requestMessage.Content = new ByteArrayContent(bodyBytes);
-            requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpRequestMessage requestMessage = WebExtensions.PostRequestMessage(new Uri(Url + "/VerifyEmail"));
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -66,17 +44,7 @@ namespace Pamaxie.Database.Extensions.Client
                 throw new WebException(response.StatusCode.ToString());
             }
 
-            Stream stream = response.Content.ReadAsStream();
-            StreamReader reader = new StreamReader(stream, Encoding.Default);
-            string content = reader.ReadToEnd();
-
-            if (string.IsNullOrEmpty(content))
-            {
-                throw new WebException("Something went wrong here");
-            }
-
-            bool result = JsonConvert.DeserializeObject<bool>(content);
-            return result;
+            return response.ReadJsonResponse<bool>();
         }
     }
 }

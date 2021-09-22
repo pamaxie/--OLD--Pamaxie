@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Pamaxie.Database.Extensions.Client
 {
@@ -20,8 +20,9 @@ namespace Pamaxie.Database.Extensions.Client
         /// <param name="value">Optional value to send to the api</param>
         /// <param name="baseMessage">This is the original request (if deviance from standard procedure gets are required !!if a uri is specified the original uri is overwritten!!)</param>
         /// <returns><see cref="HttpRequestMessage"/> for the request</returns>
-        public static HttpRequestMessage PostRequestMessage(Uri uri, object value = null, HttpRequestMessage baseMessage = null)
-                                              => GetMessage(uri, HttpMethod.Post, value, baseMessage);
+        public static HttpRequestMessage PostRequestMessage(Uri uri, object value = null,
+            HttpRequestMessage baseMessage = null)
+            => GetMessage(uri, HttpMethod.Post, value, baseMessage);
 
         /// <summary>
         /// Creates a HTTP Request via an endpoint url
@@ -30,8 +31,9 @@ namespace Pamaxie.Database.Extensions.Client
         /// <param name="value">Optional value to send to the api</param>
         /// <param name="baseMessage">This is the original request (if deviance from standard procedure gets are required !!if a uri is specified the original uri is overwritten!!)</param>
         /// <returns><see cref="HttpRequestMessage"/> for the request</returns>
-        public static HttpRequestMessage PutRequestMessage(Uri uri, object value = null, HttpRequestMessage baseMessage = null)
-                                              => GetMessage(uri, HttpMethod.Put, value, baseMessage);
+        public static HttpRequestMessage PutRequestMessage(Uri uri, object value = null,
+            HttpRequestMessage baseMessage = null)
+            => GetMessage(uri, HttpMethod.Put, value, baseMessage);
 
         /// <summary>
         /// Creates a HTTP Request via an endpoint url
@@ -40,8 +42,9 @@ namespace Pamaxie.Database.Extensions.Client
         /// <param name="value">Optional value to send to the api</param>
         /// <param name="baseMessage">This is the original request (if deviance from standard procedure gets are required !!if a uri is specified the original uri is overwritten!!)</param>
         /// <returns><see cref="HttpRequestMessage"/> for the request</returns>
-        public static HttpRequestMessage GetRequestMessage(Uri uri, object value = null, HttpRequestMessage baseMessage = null)
-                                         => GetMessage(uri, HttpMethod.Get, value, baseMessage);
+        public static HttpRequestMessage GetRequestMessage(Uri uri, object value = null,
+            HttpRequestMessage baseMessage = null)
+            => GetMessage(uri, HttpMethod.Get, value, baseMessage);
 
         /// <summary>
         /// Creates a HTTP Request via an endpoint url
@@ -50,8 +53,9 @@ namespace Pamaxie.Database.Extensions.Client
         /// <param name="value">Optional value to send to the api</param>
         /// <param name="baseMessage">This is the original request (if deviance from standard procedure gets are required !!if a uri is specified the original uri is overwritten!!)</param>
         /// <returns><see cref="HttpRequestMessage"/> for the request</returns>
-        public static HttpRequestMessage DeleteRequestMessage(Uri uri, object value = null, HttpRequestMessage baseMessage = null)
-                                        => GetMessage(uri, HttpMethod.Delete, value, baseMessage);
+        public static HttpRequestMessage DeleteRequestMessage(Uri uri, object value = null,
+            HttpRequestMessage baseMessage = null)
+            => GetMessage(uri, HttpMethod.Delete, value, baseMessage);
 
         /// <summary>
         /// Creates a new Request with the defined method type. This is a very generalized implementation of requests.
@@ -62,7 +66,8 @@ namespace Pamaxie.Database.Extensions.Client
         /// <param name="baseMessage">Overwrites the internally created HttpRequestMessage to allow for customizations in the message for specific method types (Put, set, get, ect...)</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        private static HttpRequestMessage GetMessage(Uri uri, HttpMethod messageMethod, object value, HttpRequestMessage baseMessage)
+        private static HttpRequestMessage GetMessage(Uri uri, HttpMethod messageMethod, object value,
+            HttpRequestMessage baseMessage)
         {
             HttpRequestMessage requestMessage = null;
             if (baseMessage != null)

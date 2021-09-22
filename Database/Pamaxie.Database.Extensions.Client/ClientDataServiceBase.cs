@@ -1,10 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using Newtonsoft.Json;
 using Pamaxie.Data;
 using Pamaxie.Database.Design;
 using Pamaxie.Database.Extensions.Client.Extensions;
@@ -37,7 +33,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public T Get(string key)
         {
-            var requestMessage = WebExtensions.GetRequestMessage(new Uri(Url + "/Get=" + key));
+            HttpRequestMessage requestMessage = WebExtensions.GetRequestMessage(new Uri(Url + "/Get=" + key));
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -51,7 +47,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public T Create(T value)
         {
-            var requestMessage = WebExtensions.PostRequestMessage(new Uri(Url + "/Create"), value);
+            HttpRequestMessage requestMessage = WebExtensions.PostRequestMessage(new Uri(Url + "/Create"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -65,7 +61,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public bool TryCreate(T value, out T createdValue)
         {
-            var requestMessage = WebExtensions.PostRequestMessage(new Uri(Url + "/TryCreate"), value);
+            HttpRequestMessage requestMessage = WebExtensions.PostRequestMessage(new Uri(Url + "/TryCreate"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -80,7 +76,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public T Update(T value)
         {
-            var requestMessage = WebExtensions.PutRequestMessage(new Uri(Url + "/Update"), value);
+            HttpRequestMessage requestMessage = WebExtensions.PutRequestMessage(new Uri(Url + "/Update"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -88,13 +84,13 @@ namespace Pamaxie.Database.Extensions.Client
                 throw new WebException(response.StatusCode.ToString());
             }
 
-            return  response.ReadJsonResponse<T>();
+            return response.ReadJsonResponse<T>();
         }
 
         /// <inheritdoc/>
         public bool TryUpdate(T value, out T updatedValue)
         {
-            var requestMessage = WebExtensions.PutRequestMessage(new Uri(Url + "/TryUpdate"), value);
+            HttpRequestMessage requestMessage = WebExtensions.PutRequestMessage(new Uri(Url + "/TryUpdate"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
 
@@ -111,7 +107,8 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public bool UpdateOrCreate(T value, out T updatedOrCreatedValue)
         {
-            var requestMessage = WebExtensions.PostRequestMessage(new Uri(Url + "/UpdateOrCreate"), value);
+            HttpRequestMessage requestMessage =
+                WebExtensions.PostRequestMessage(new Uri(Url + "/UpdateOrCreate"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -132,7 +129,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public bool Exists(string key)
         {
-            var requestMessage = WebExtensions.GetRequestMessage(new Uri(Url + "/Exists=" + key));
+            HttpRequestMessage requestMessage = WebExtensions.GetRequestMessage(new Uri(Url + "/Exists=" + key));
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -147,7 +144,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public bool Delete(T value)
         {
-            var requestMessage = WebExtensions.GetRequestMessage(new Uri(Url + "/Delete"), value);
+            HttpRequestMessage requestMessage = WebExtensions.DeleteRequestMessage(new Uri(Url + "/Delete"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)

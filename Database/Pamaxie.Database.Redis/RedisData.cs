@@ -10,7 +10,8 @@ namespace Pamaxie.Database.Redis
         /// </summary>
         internal static readonly ConnectionMultiplexer Redis =
 #if DEBUG
-            ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariable("PamaxiePublicRedisAddr") ?? "localhost:6379");
+            ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariable("PamaxiePublicRedisAddr") ??
+                                          "localhost:6379");
 #else
             ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariable("PamaxieRedisAddr") ?? string.Empty);
 #endif

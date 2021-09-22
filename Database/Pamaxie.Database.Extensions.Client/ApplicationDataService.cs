@@ -1,10 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using Newtonsoft.Json;
 using Pamaxie.Data;
 using Pamaxie.Database.Design;
 using Pamaxie.Database.Extensions.Client.Extensions;
@@ -25,7 +21,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public PamaxieUser GetOwner(PamaxieApplication value)
         {
-            var requestMessage = WebExtensions.GetRequestMessage(new Uri(Url + "/GetOwner"), value);
+            HttpRequestMessage requestMessage = WebExtensions.GetRequestMessage(new Uri(Url + "/GetOwner"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -39,7 +35,8 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public PamaxieApplication EnableOrDisable(PamaxieApplication value)
         {
-            var requestMessage = WebExtensions.PutRequestMessage(new Uri(Url + "/EnableOrDisable"), value);
+            HttpRequestMessage requestMessage =
+                WebExtensions.PutRequestMessage(new Uri(Url + "/EnableOrDisable"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -53,7 +50,8 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public bool VerifyAuthentication(PamaxieApplication value)
         {
-            var requestMessage = WebExtensions.GetRequestMessage(new Uri(Url + "/VerifyAuthentication"), value);
+            HttpRequestMessage requestMessage =
+                WebExtensions.GetRequestMessage(new Uri(Url + "/VerifyAuthentication"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
