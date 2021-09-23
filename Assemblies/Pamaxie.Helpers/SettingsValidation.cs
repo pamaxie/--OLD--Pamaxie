@@ -8,6 +8,8 @@ namespace Pamaxie.Helpers
 {
     public static class SettingsValidation
     {
+        private const string ConfigurationFileName = "app.configuration.json"; //TODO Do we wanna change our configuration file name to this, or appsettings.json?
+
         /// <summary>
         /// Validates that the settings exist and are correct
         /// </summary>
@@ -16,7 +18,7 @@ namespace Pamaxie.Helpers
         {
             if (!UnitTest.IsRunningFromUnitTests)
             {
-                if (!File.Exists("app.configuration"))
+                if (!File.Exists(ConfigurationFileName))
                 {
                     if (!Console.IsInputRedirected)
                     {
@@ -29,11 +31,14 @@ namespace Pamaxie.Helpers
                         }
                     }
 
-                    //TODO: Save the settings after this
+                    dynamic jsonString;
+
                     do
                     {
                         Console.Clear();
-                    } while (!SettingsGeneration.GenerateConfig());
+                    } while (!SettingsGeneration.GenerateConfig(out jsonString));
+
+                    File.WriteAllText(ConfigurationFileName, jsonString);
 
                     Environment.Exit(-501);
                 }
@@ -55,7 +60,19 @@ namespace Pamaxie.Helpers
 
             if (authSection == null)
             {
-                issue = "The authentication section ";
+                issue = "The authentication section is missing";
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(authSection.GetValue<string>("Secret")))
+            {
+                issue = "No secret provided";
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(authSection.GetValue<string>("ExpiresInMinutes")))
+            {
+                issue = "No expiration time provided";
                 return false;
             }
 
@@ -66,11 +83,21 @@ namespace Pamaxie.Helpers
         /// Validates that the settings for the Redis database are correct
         /// </summary>
         /// <param name="configuation">Application's configurations</param>
+        /// <param name="issue">Issue of the validation if failed</param>
         /// <param name="databaseService">Newly instantiated <see cref="DatabaseService"/> if succeeded</param>
         /// <returns><see cref="bool"/> if the settings was successfully validated</returns>
-        public static bool ValidateRedisSettings(IConfiguration configuation, out DatabaseService databaseService)
+        public static bool ValidateRedisSettings(IConfiguration configuation, out string issue, out DatabaseService databaseService)
         {
+            databaseService = null;
+            issue = string.Empty;
             IConfigurationSection dbSection = configuation.GetSection("Redis");
+
+            if (dbSection == null)
+            {
+                issue = "The redis database section is missing";
+                return false;
+            }
+
             PamaxieDataContext dataContext = new PamaxieDataContext(
                 dbSection.GetValue<string>("Instances"),
                 dbSection.GetValue<string>("Password"),

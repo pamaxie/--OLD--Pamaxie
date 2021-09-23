@@ -13,13 +13,59 @@ namespace Pamaxie.Helpers
         /// Generates the configuration for the api
         /// </summary>
         /// <returns></returns>
-        public static bool GenerateConfig()
+        public static bool GenerateConfig(out dynamic jsonString)
         {
             Rule ruler = new Rule()
             {
                 Alignment = Justify.Left,
-                Title = "[yellow]Jwt Bearer Setup[/]"
+                Title = "[yellow]Configuration Setup[/]"
             };
+            AnsiConsole.Render(ruler);
+
+            dynamic obj = new JObject();
+
+            //TODO use a flag system to say how much should be generated instead of asking the user
+
+            //Authentication Setup
+            if (AnsiConsole.Confirm("Would you like to generate a section for authentication?"))
+            {
+                GenerateAuthenticationSettings(ruler, obj);
+            }
+
+            //Redis Setup
+            if (AnsiConsole.Confirm("Would you like to generate a section for Redis database?"))
+            {
+                GenerateRedisDatabaseSettings(ruler, obj);
+            }
+
+            //Logging Setup
+            dynamic objLogging = new JObject();
+            dynamic objLogLevel = new JObject();
+            objLogLevel.Default = "Debug";
+            objLogLevel.System = "Information";
+            objLogLevel.Microsoft = "Information";
+            objLogging.LogLevel = objLogLevel;
+            obj.Logging = objLogging;
+
+            //Finishing touches
+            ruler.Title = "[yellow]Finishing touches[/]";
+            AnsiConsole.Render(ruler);
+            jsonString = JsonConvert.SerializeObject(obj, Formatting.Indented);
+            AnsiConsole.WriteLine("The generated configuration looks like this:");
+            AnsiConsole.Render(new Markup($"[yellow]{jsonString}[/]\n"));
+            return AnsiConsole.Confirm(
+                "Are you happy with this configuration? (If not we'll guide you through it again from the start)",
+                false);
+        }
+
+        /// <summary>
+        /// Generates the authentication section for configuration file
+        /// </summary>
+        /// <param name="ruler">Reusable Horizontal ruler for Ansi</param>
+        /// <param name="obj"><see cref="JObject"/> containing all sections</param>
+        private static void GenerateAuthenticationSettings(Rule ruler, dynamic obj)
+        {
+            ruler.Title = "[yellow]Jwt Bearer Setup[/]";
             AnsiConsole.Render(ruler);
             string secret;
 
@@ -53,65 +99,61 @@ namespace Pamaxie.Helpers
             int timeout = AnsiConsole.Ask(
                 "How long in minutes should the timeout for the Jwt bearer be? \n" +
                 "[yellow]We usually recommend anywhere between 5 - 15 minutes lifespan[/]", 10);
-
             dynamic authObj = new JObject();
             authObj.Secret = secret;
             authObj.ExpiresInMinutes = timeout;
-            ruler.Title = "[yellow]Redis setup[/]";
-            AnsiConsole.Render(ruler);
-            AnsiConsole.WriteLine(
-                "For using this service you require a redis database to be configured and installed on the current system.\n" +
-                "Usually with the provided installer for this software you were instructed to install redis on another server or this one.\n" +
-                "In the following steps we will help you configure these redis databases.\n" +
-                "Please ensure this configuration is correct otherwise we are unable to handle any requests.");
-            string setupType = AnsiConsole.Prompt(new SelectionPrompt<string>()
-                .Title("--Please select the type of database you are using--")
-                .PageSize(10)
-                .AddChoices(new[]
-                {
-                    "Local Instance", "Remote Instance"
-                }));
-
-            dynamic redisObj = new JObject();
-
-            if (setupType == "Local Instance")
-            {
-                ruler.Title = "[yellow]Local Instance setup[/]";
-                AnsiConsole.Render(ruler);
-                redisObj = GenerateServerOptions();
-            }
-            else
-            {
-                //TODO: Finish generating configurations for multiple servers (have a peek at the documentation if you wanna know how to do this)
-                ruler.Title = "[yellow]Remote Instance setup[/]";
-                int instances = AnsiConsole.Ask("How many redis servers [red](NOT INSTANCES)[/] do you have?", 1);
-                for (int i = 0; i < instances; i++)
-                {
-                    string instanceName = AnsiConsole.Ask<string>("Please tell us your instance address");
-                    GenerateServerOptions(instanceName);
-                }
-
-                AnsiConsole.Render(ruler);
-            }
-
-            ruler.Title = "[yellow]Finishing touches[/]";
-            AnsiConsole.Render(ruler);
-            dynamic obj = new JObject();
             obj.AuthData = authObj;
-            obj.RedisData = redisObj;
-            dynamic jsonString = JsonConvert.SerializeObject(obj, Formatting.Indented);
-            AnsiConsole.WriteLine("The generated configuration looks like this:");
-            AnsiConsole.Render(new Markup($"[yellow]{jsonString}[/]\n"));
-            return AnsiConsole.Ask(
-                "Are you happy with this configuration? (If not we'll guide you through it again from the start)",
-                false);
+        }
+
+        /// <summary>
+        /// Generates the Redis database section for configuration file
+        /// </summary>
+        /// <param name="ruler">Reusable Horizontal ruler for Ansi</param>
+        /// <param name="obj"><see cref="JObject"/> containing all sections</param>
+        private static void GenerateRedisDatabaseSettings(Rule ruler, dynamic obj)
+        {
+            ruler.Title = "[yellow]Redis setup[/]";
+                AnsiConsole.Render(ruler);
+                AnsiConsole.WriteLine(
+                    "For using this service you require a redis database to be configured and installed on the current system.\n" +
+                    "Usually with the provided installer for this software you were instructed to install redis on another server or this one.\n" +
+                    "In the following steps we will help you configure these redis databases.\n" +
+                    "Please ensure this configuration is correct otherwise we are unable to handle any requests.");
+                string setupType = AnsiConsole.Prompt(new SelectionPrompt<string>()
+                    .Title("--Please select the type of database you are using--")
+                    .PageSize(10)
+                    .AddChoices("Local Instance", "Remote Instance"));
+
+                dynamic redisObj = new JObject();
+
+                if (setupType == "Local Instance")
+                {
+                    ruler.Title = "[yellow]Local Instance setup[/]";
+                    AnsiConsole.Render(ruler);
+                    redisObj = GenerateServerOptions();
+                }
+                else
+                {
+                    //TODO: Finish generating configurations for multiple servers (have a peek at the documentation if you wanna know how to do this)
+                    ruler.Title = "[yellow]Remote Instance setup[/]";
+                    int instances = AnsiConsole.Ask("How many redis servers [red](NOT INSTANCES)[/] do you have?", 1);
+
+                    for (int i = 0; i < instances; i++)
+                    {
+                        string instanceName = AnsiConsole.Ask<string>("Please tell us your instance address");
+                        GenerateServerOptions(instanceName);
+                    }
+
+                    AnsiConsole.Render(ruler);
+                }
+                obj.RedisData = redisObj;
         }
 
         /// <summary>
         /// Generates the server options for connecting to the redis database
         /// </summary>
         /// <param name="serverAddress">the instance address / name</param>
-        /// <returns></returns>
+        /// <returns>The server options</returns>
         private static string GenerateServerOptions(string serverAddress = "redis")
         {
             ConfigurationOptions options = new ConfigurationOptions();

@@ -39,7 +39,7 @@ namespace Pamaxie.Api
             DatabaseService databaseService = null;
             if (!SettingsValidation.ValidateSettings() ||
                 !SettingsValidation.ValidateAuthenticationSettings(Configuration, out issue) ||
-                !SettingsValidation.ValidateRedisSettings(Configuration, out databaseService))
+                !SettingsValidation.ValidateRedisSettings(Configuration, out issue, out databaseService))
             {
                 Console.WriteLine(
                     "The applications configuration was in an incorrect or unaccepted format. The detailed problem was: \n" +
