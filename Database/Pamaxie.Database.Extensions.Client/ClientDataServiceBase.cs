@@ -10,9 +10,9 @@ using Pamaxie.Database.Extensions.Client.Extensions;
 namespace Pamaxie.Database.Extensions.Client
 {
     /// <summary>
-    /// TODO
+    /// Database Api integrations
     /// </summary>
-    /// <typeparam name="T">TODO</typeparam>
+    /// <typeparam name="T"><inheritdoc cref="IDataServiceBase{T}"/></typeparam>
     internal class ClientDataServiceBase<T> : IDataServiceBase<T> where T : IDatabaseObject
     {
         /// <summary>
@@ -26,7 +26,7 @@ namespace Pamaxie.Database.Extensions.Client
         internal DatabaseService Service { get; init; }
 
         /// <summary>
-        /// TODO
+        /// The base url of the Api
         /// </summary>
         internal string Url { get; init; }
 
@@ -93,8 +93,6 @@ namespace Pamaxie.Database.Extensions.Client
             HttpRequestMessage requestMessage = WebExtensions.PutRequestMessage(new Uri(Url + "/TryUpdate"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
-
-            //TODO: return false if we get a 404 status code here.
             if (!response.IsSuccessStatusCode)
             {
                 throw new WebException(response.StatusCode.ToString());

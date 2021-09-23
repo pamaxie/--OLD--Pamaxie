@@ -305,7 +305,7 @@ namespace Test.Base
             /// <inheritdoc cref="IApplicationDataService.VerifyAuthentication"/>
             public bool VerifyAuthentication(PamaxieApplication value)
             {
-                throw new NotImplementedException(); //TODO
+                throw new NotImplementedException();
             }
         }
     }

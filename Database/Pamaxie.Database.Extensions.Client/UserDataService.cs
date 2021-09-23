@@ -16,13 +16,13 @@ namespace Pamaxie.Database.Extensions.Client
         {
             DataContext = dataContext;
             Service = service;
-            Url = DataContext.DataInstances + "/User";
+            Url = DataContext.DataInstances + "User";
         }
 
         /// <inheritdoc/>
         public IEnumerable<PamaxieApplication> GetAllApplications(PamaxieUser value)
         {
-            HttpRequestMessage requestMessage = WebExtensions.PostRequestMessage(new Uri(Url + "/GetAllApplications"));
+            HttpRequestMessage requestMessage = WebExtensions.GetRequestMessage(new Uri(Url + "/GetAllApplications"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -36,7 +36,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public bool VerifyEmail(PamaxieUser value)
         {
-            HttpRequestMessage requestMessage = WebExtensions.PostRequestMessage(new Uri(Url + "/VerifyEmail"));
+            HttpRequestMessage requestMessage = WebExtensions.PostRequestMessage(new Uri(Url + "/VerifyEmail"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)

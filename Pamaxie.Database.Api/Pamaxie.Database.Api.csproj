@@ -24,6 +24,7 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\Assemblies\Pamaxie.Helpers\Pamaxie.Helpers.csproj" />
     <ProjectReference Include="..\Assemblies\Pamaxie.Jwt\Pamaxie.Jwt.csproj" />
     <ProjectReference Include="..\Database\Pamaxie.Database.Extensions.Server\Pamaxie.Database.Extensions.Server.csproj" />
   </ItemGroup>
@@ -40,7 +41,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
-    <PackageReference Include="Spectre.Console" Version="0.41.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.1" />
   </ItemGroup>
 

@@ -13,9 +13,8 @@ namespace Pamaxie.Database.Extensions.Server
     public sealed class UserDataService : ServerDataServiceBase<PamaxieUser>, IUserDataService
     {
         /// <inheritdoc/>
-        internal UserDataService(IPamaxieDataContext dataContext, DatabaseService service)
+        internal UserDataService(DatabaseService service)
         {
-            DataContext = dataContext;
             Service = service;
         }
 
@@ -48,7 +47,7 @@ namespace Pamaxie.Database.Extensions.Server
 
                     if (application != null)
                     {
-                        if (application.OwnerKey != value.Key)
+                        if (application.OwnerKey == value.Key)
                         {
                             applications.Add(application);
                         }

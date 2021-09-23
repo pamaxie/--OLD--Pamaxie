@@ -5,6 +5,7 @@ namespace Pamaxie.Database.Design
     /// <summary>
     /// Interface that defines integrations to a service
     /// </summary>
+    /// <typeparam name="T">The type the service works with</typeparam>
     public interface IDataServiceBase<T>
     {
         /// <summary>
@@ -13,6 +14,7 @@ namespace Pamaxie.Database.Design
         /// <param name="key">The key of the <see cref="T"/> value in the service (unique value like a hash to identify the value)</param>
         /// <returns>Returns a <see cref="T"/> value</returns>
         public T Get(string key);
+
 
         /// <summary>
         /// Creates a new <see cref="T"/> value in the service, throws exception inside the service if the value already exists

@@ -28,7 +28,7 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
         public UserDataServiceTest(DatabaseApiFactory fixture, ITestOutputHelper testOutputHelper) : base(
             testOutputHelper)
         {
-            DatabaseService service = new DatabaseService(new PamaxieDataContext("", ""))
+            DatabaseService service = new DatabaseService(new PamaxieDataContext("http://localhost/", ""))
             {
                 Service = fixture.CreateClient()
             };

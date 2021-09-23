@@ -1,7 +1,7 @@
 ﻿namespace Pamaxie.Database.Design
 {
     /// <summary>
-    /// TODO
+    /// DataContext class used for the connection information to the database api and the Redis database
     /// </summary>
     public interface IPamaxieDataContext
     {

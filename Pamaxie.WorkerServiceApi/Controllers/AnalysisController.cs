@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
+#pragma warning disable 1998 //TODO Remove when methods have been implemented (1998, Lacks await)
+
 namespace Pamaxie.Api.Controllers
 {
     /// <summary>

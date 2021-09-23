@@ -48,7 +48,7 @@ namespace Pamaxie.Api
                     webBuilder.UseStartup<Startup>()
                         .UseConfiguration(configuration)
                         .UseKestrel()
-                        .UseUrls(hostUrl.Any() ? hostUrl.ToArray() : new string[1] { nameString })
+                        .UseUrls(hostUrl.Any() ? hostUrl.ToArray() : new[] { nameString })
                         .UseIISIntegration();
                 });
         }

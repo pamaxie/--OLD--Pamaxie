@@ -32,8 +32,8 @@ namespace Pamaxie.Database.Extensions.Server
         public DatabaseService(IPamaxieDataContext dataContext)
         {
             DataContext = dataContext;
-            Users = new UserDataService(dataContext, this);
-            Applications = new ApplicationDataService(dataContext, this);
+            Users = new UserDataService(this);
+            Applications = new ApplicationDataService(this);
         }
 
         /// <inheritdoc/>

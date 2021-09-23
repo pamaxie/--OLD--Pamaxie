@@ -8,16 +8,11 @@ using StackExchange.Redis;
 namespace Pamaxie.Database.Extensions.Server
 {
     /// <summary>
-    /// TODO
+    /// Redis database integrations
     /// </summary>
-    /// <typeparam name="T">TODO</typeparam>
+    /// <typeparam name="T"><inheritdoc cref="IDataServiceBase{T}"/></typeparam>
     public class ServerDataServiceBase<T> : IDataServiceBase<T> where T : IDatabaseObject
     {
-        /// <summary>
-        /// Data Context responsible for connecting to Pamaxie
-        /// </summary>
-        internal IPamaxieDataContext DataContext { get; set; }
-
         /// <summary>
         /// The Service that should be used to connect to the database
         /// </summary>

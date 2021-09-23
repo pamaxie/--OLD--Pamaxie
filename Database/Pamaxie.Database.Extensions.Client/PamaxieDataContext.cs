@@ -47,12 +47,12 @@ namespace Pamaxie.Database.Extensions.Client
         }
 
         /// <summary>
-        /// TODO
+        /// Gets the <see cref="AuthenticationHeaderValue"/> used for the HttpClient.DefaultRequestHeaders.Authorization
         /// </summary>
-        /// <returns>TODO</returns>
+        /// <returns>A <see cref="AuthenticationHeaderValue"/> with a Bearer scheme authentication</returns>
         public AuthenticationHeaderValue GetAuthenticationRequestHeader()
         {
-            return new AuthenticationHeaderValue("Basic", Password);
+            return new AuthenticationHeaderValue("Bearer", Password); //TODO use something else than Password
         }
     }
 }
