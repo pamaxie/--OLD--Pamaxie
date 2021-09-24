@@ -5,13 +5,13 @@ using Pamaxie.Database.Design;
 namespace Pamaxie.Database.Extensions.Client
 {
     /// <inheritdoc/>
-    public sealed class DatabaseService : IDatabaseService<HttpClient>
+    public sealed class DatabaseService : IDatabaseService<HttpClient, PamaxieDataContext>
     {
         /// <inheritdoc/>
         public HttpClient Service { get; internal init; } = new HttpClient();
 
         /// <inheritdoc/>
-        public IPamaxieDataContext DataContext { get; }
+        public PamaxieDataContext DataContext { get; }
 
         /// <inheritdoc/>
         public bool ConnectionSuccess { get; set; }
@@ -40,6 +40,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public bool Connect()
         {
+            //TODO: This technically needs network credentials to connect for the first time. After that use a timer to automatically refresh the token in UserService
             throw new NotImplementedException();
         }
 

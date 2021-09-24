@@ -12,7 +12,7 @@ namespace Pamaxie.Database.Extensions.Client
     internal sealed class UserDataService : ClientDataServiceBase<PamaxieUser>, IUserDataService
     {
         /// <inheritdoc/>
-        internal UserDataService(IPamaxieDataContext dataContext, DatabaseService service)
+        internal UserDataService(PamaxieDataContext dataContext, DatabaseService service)
         {
             DataContext = dataContext;
             Service = service;
@@ -22,7 +22,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public IEnumerable<PamaxieApplication> GetAllApplications(PamaxieUser value)
         {
-            HttpRequestMessage requestMessage = WebExtensions.GetRequestMessage(new Uri(Url + "/GetAllApplications"), value);
+            HttpRequestMessage requestMessage = DataContext.GetRequestMessage(new Uri(Url + "/GetAllApplications"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -36,7 +36,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public bool VerifyEmail(PamaxieUser value)
         {
-            HttpRequestMessage requestMessage = WebExtensions.PostRequestMessage(new Uri(Url + "/VerifyEmail"), value);
+            HttpRequestMessage requestMessage = DataContext.PostRequestMessage(new Uri(Url + "/VerifyEmail"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Net;
+using Microsoft.Extensions.Configuration;
 using Pamaxie.Database.Extensions.Server;
 using Xunit.Abstractions;
 
@@ -12,7 +13,7 @@ namespace Test.Base
         /// <summary>
         /// Database Context
         /// </summary>
-        private PamaxieDataContext Context { get; }
+        protected PamaxieDataContext Context { get; }
 
         /// <summary>
         /// Database Service
@@ -35,7 +36,7 @@ namespace Test.Base
             }
             else
             {
-                Context = new PamaxieDataContext(instance, password, reconAttempts);
+                Context = new PamaxieDataContext(instance, new NetworkCredential(string.Empty, password), reconAttempts);
                 Service = new DatabaseService(Context);
             }
         }

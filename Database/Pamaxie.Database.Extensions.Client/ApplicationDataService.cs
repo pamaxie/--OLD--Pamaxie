@@ -11,7 +11,7 @@ namespace Pamaxie.Database.Extensions.Client
     internal sealed class ApplicationDataService : ClientDataServiceBase<PamaxieApplication>, IApplicationDataService
     {
         /// <inheritdoc/>
-        internal ApplicationDataService(IPamaxieDataContext dataContext, DatabaseService service)
+        internal ApplicationDataService(PamaxieDataContext dataContext, DatabaseService service)
         {
             DataContext = dataContext;
             Service = service;
@@ -21,7 +21,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public PamaxieUser GetOwner(PamaxieApplication value)
         {
-            HttpRequestMessage requestMessage = WebExtensions.GetRequestMessage(new Uri(Url + "/GetOwner"), value);
+            HttpRequestMessage requestMessage = DataContext.GetRequestMessage(new Uri(Url + "/GetOwner"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -36,7 +36,7 @@ namespace Pamaxie.Database.Extensions.Client
         public PamaxieApplication EnableOrDisable(PamaxieApplication value)
         {
             HttpRequestMessage requestMessage =
-                WebExtensions.PutRequestMessage(new Uri(Url + "/EnableOrDisable"), value);
+                DataContext.PutRequestMessage(new Uri(Url + "/EnableOrDisable"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -51,7 +51,7 @@ namespace Pamaxie.Database.Extensions.Client
         public bool VerifyAuthentication(PamaxieApplication value)
         {
             HttpRequestMessage requestMessage =
-                WebExtensions.GetRequestMessage(new Uri(Url + "/VerifyAuthentication"), value);
+                DataContext.GetRequestMessage(new Uri(Url + "/VerifyAuthentication"), value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
