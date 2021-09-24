@@ -19,24 +19,14 @@ namespace Test.Base
         /// </summary>
         protected DatabaseService Service { get; }
 
-        /// <summary>
-        /// Database Instance
-        /// </summary>
-        private string Instance { get; }
-
-        /// <summary>
-        /// Database Password
-        /// </summary>
-        private string Password { get; }
-
         protected ServerBase(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
-            //TODO Change these section name, and value names when the appsettings.json is done for Database.Api
-            IConfigurationSection dbConfigSection = Configuration.GetSection("DbConfig");
-            Instance = dbConfigSection.GetValue<string>("Instances");
-            Password = dbConfigSection.GetValue<string>("Password");
+            IConfigurationSection dbConfigSection = Configuration.GetSection("RedisData");
+            string instance = dbConfigSection.GetValue<string>("Instances");
+            string password = dbConfigSection.GetValue<string>("Password");
+            int reconAttempts = dbConfigSection.GetValue<int>("ReconAttempts");
 
-            if (string.IsNullOrEmpty(Instance) || string.IsNullOrEmpty(Password))
+            if (string.IsNullOrEmpty(instance) || string.IsNullOrEmpty(password) || reconAttempts == default)
             {
                 Service = new DatabaseService(null)
                 {
@@ -45,7 +35,7 @@ namespace Test.Base
             }
             else
             {
-                Context = new PamaxieDataContext(Instance, Password);
+                Context = new PamaxieDataContext(instance, password, reconAttempts);
                 Service = new DatabaseService(Context);
             }
         }

@@ -12,8 +12,9 @@ namespace Pamaxie.Helpers
 
         static UnitTest()
         {
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            for (int i = 0; i < AppDomain.CurrentDomain.GetAssemblies().Length; i++)
             {
+                Assembly assembly = AppDomain.CurrentDomain.GetAssemblies()[i];
                 if (assembly.FullName != null && assembly.FullName.ToLowerInvariant().StartsWith("xunit"))
                 {
                     IsRunningFromUnitTests = true;

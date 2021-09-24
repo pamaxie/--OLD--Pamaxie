@@ -12,7 +12,7 @@ namespace Pamaxie.Helpers
         /// <summary>
         /// Generates the configuration for the api
         /// </summary>
-        /// <returns></returns>
+        /// <returns><see cref="bool"/> if the generation succeeded</returns>
         public static bool GenerateConfig(out dynamic jsonString)
         {
             Rule ruler = new Rule()

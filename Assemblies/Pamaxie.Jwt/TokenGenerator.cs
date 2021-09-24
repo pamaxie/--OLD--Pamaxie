@@ -63,12 +63,10 @@ namespace Pamaxie.Jwt
 
         public static string GenerateSecret()
         {
-            using (RNGCryptoServiceProvider cryptRng = new RNGCryptoServiceProvider())
-            {
-                byte[] tokenBuffer = new byte[64];
-                cryptRng.GetBytes(tokenBuffer);
-                return Convert.ToBase64String(tokenBuffer);
-            }
+            using RNGCryptoServiceProvider cryptRng = new RNGCryptoServiceProvider();
+            byte[] tokenBuffer = new byte[64];
+            cryptRng.GetBytes(tokenBuffer);
+            return Convert.ToBase64String(tokenBuffer);
         }
     }
 }

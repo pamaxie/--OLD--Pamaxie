@@ -81,7 +81,7 @@ namespace Pamaxie.Website
             //Adds access to the HTTP Context
             services.AddHttpContextAccessor();
 
-            //TODO Validate connection to Redis
+            //TODO Validate connection to the database api
         }
 
         /// <summary>
