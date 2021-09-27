@@ -12,7 +12,7 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
     /// <summary>
     /// Testing class for <see cref="UserDataService"/>
     /// </summary>
-    public sealed class UserDataServiceTest : ClientTestBase, IClassFixture<DatabaseApiFactory>
+    public sealed class UserDataServiceTest : ClientTestBase
     {
         /// <inheritdoc cref="MemberData.AllUserKeys"/>
         public static IEnumerable<object[]> AllUserKeys => MemberData.AllUserKeys;
@@ -23,8 +23,7 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
         /// <inheritdoc cref="MemberData.RandomUsers"/>
         public static IEnumerable<object[]> RandomUserData => MemberData.RandomUsers;
 
-        public UserDataServiceTest(DatabaseApiFactory fixture, ITestOutputHelper testOutputHelper) : base(
-            fixture, testOutputHelper)
+        public UserDataServiceTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
 

@@ -87,11 +87,12 @@ namespace Pamaxie.Helpers
         /// <param name="issue">Issue of the validation if failed</param>
         /// <param name="databaseService">Newly instantiated <see cref="DatabaseService"/> if succeeded</param>
         /// <returns><see cref="bool"/> if the settings was successfully validated</returns>
-        public static bool ValidateRedisSettings(IConfiguration configuation, out string issue, out DatabaseService databaseService)
+        public static bool ValidateRedisSettings(IConfiguration configuation, out string issue,
+            out DatabaseService databaseService)
         {
             databaseService = null;
             issue = string.Empty;
-            IConfigurationSection dbSection = configuation.GetSection("Redis");
+            IConfigurationSection dbSection = configuation.GetSection("RedisData");
             string connectionString = dbSection.GetValue<string>("ConnectionString");
 
             if (dbSection == null)
@@ -100,14 +101,34 @@ namespace Pamaxie.Helpers
                 return false;
             }
 
-            databaseService = new DatabaseService(ConfigurationOptions.Parse(connectionString));
+            ConfigurationOptions configurationOptions;
 
-            if (!UnitTest.IsRunningFromUnitTests)
+            if (string.IsNullOrEmpty(connectionString) && UnitTest.IsRunningFromUnitTests)
+            {
+                configurationOptions = null;
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(connectionString))
+                {
+                    issue = "No connection string was provided";
+                    return false;
+                }
+
+                configurationOptions = ConfigurationOptions.Parse(connectionString);
+            }
+
+            databaseService = new DatabaseService(configurationOptions);
+
+            if (!string.IsNullOrEmpty(connectionString))
             {
                 if (databaseService.Connect())
                 {
-                    AnsiConsole.WriteLine("[red]Cannot connect to the Redis Database[/]");
-                    return false;
+                    if (!UnitTest.IsRunningFromUnitTests)
+                    {
+                        AnsiConsole.WriteLine("[red]Cannot connect to the Redis Database[/]");
+                        return false;
+                    }
                 }
             }
 
