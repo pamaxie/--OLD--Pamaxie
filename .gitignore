@@ -352,5 +352,5 @@ MigrationBackup/
 
 #Ignore Specific configuration files or files that may contain private data (Disabled for this checkin since confugrations changed)
 *appsettings.Development.json
-appsettings.test.json
+*appsettings.test.json
 *appsettings.json
