@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Pamaxie.Api.Controllers;
 using Pamaxie.Data;
+using Pamaxie.Database.Extensions.Client;
 using Pamaxie.Jwt;
 using Test.Base;
 using Xunit;
@@ -25,7 +26,7 @@ namespace Test.Pamaxie.API_Test
         public AuthControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             //Mock ApplicationDataService, for ApplicationDataServiceExtension
-            MockApplicationDataService.Mock();
+            DatabaseService.ApplicationService = MockApplicationDataService.Mock();
             //Instantiate the controller and add a default HttpContext
             Controller = new AuthController(new TokenGenerator(Configuration))
             {

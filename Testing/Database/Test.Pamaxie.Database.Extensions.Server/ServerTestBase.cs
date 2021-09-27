@@ -1,19 +1,16 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Pamaxie.Database.Extensions.Server;
+using StackExchange.Redis;
+using Test.Base;
 using Xunit.Abstractions;
 
-namespace Test.Base
+namespace Test.Database.Extensions.Server_Test
 {
     /// <summary>
     /// Base testing class for Database.Server
     /// </summary>
     public class ServerBase : TestBase
     {
-        /// <summary>
-        /// Database Context
-        /// </summary>
-        private PamaxieDataContext Context { get; }
-
         /// <summary>
         /// Database Service
         /// </summary>
@@ -22,11 +19,9 @@ namespace Test.Base
         protected ServerBase(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             IConfigurationSection dbConfigSection = Configuration.GetSection("RedisData");
-            string instance = dbConfigSection.GetValue<string>("Instances");
-            string password = dbConfigSection.GetValue<string>("Password");
-            int reconAttempts = dbConfigSection.GetValue<int>("ReconAttempts");
+            string connectionString = dbConfigSection.GetValue<string>("ConnectionString");
 
-            if (string.IsNullOrEmpty(instance) || string.IsNullOrEmpty(password) || reconAttempts == default)
+            if (string.IsNullOrEmpty(connectionString))
             {
                 Service = new DatabaseService(null)
                 {
@@ -35,8 +30,7 @@ namespace Test.Base
             }
             else
             {
-                Context = new PamaxieDataContext(instance, password, reconAttempts);
-                Service = new DatabaseService(Context);
+                Service = new DatabaseService(ConfigurationOptions.Parse(connectionString));
             }
         }
     }

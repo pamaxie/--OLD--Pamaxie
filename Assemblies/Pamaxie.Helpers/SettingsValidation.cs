@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using Pamaxie.Database.Extensions.Server;
 using Spectre.Console;
+using StackExchange.Redis;
 
 namespace Pamaxie.Helpers
 {
@@ -91,6 +92,7 @@ namespace Pamaxie.Helpers
             databaseService = null;
             issue = string.Empty;
             IConfigurationSection dbSection = configuation.GetSection("Redis");
+            string connectionString = dbSection.GetValue<string>("ConnectionString");
 
             if (dbSection == null)
             {
@@ -98,11 +100,7 @@ namespace Pamaxie.Helpers
                 return false;
             }
 
-            PamaxieDataContext dataContext = new PamaxieDataContext(
-                dbSection.GetValue<string>("Instances"),
-                dbSection.GetValue<string>("Password"),
-                dbSection.GetValue<int>("ReconAttempts"));
-            databaseService = new DatabaseService(dataContext);
+            databaseService = new DatabaseService(ConfigurationOptions.Parse(connectionString));
 
             if (!UnitTest.IsRunningFromUnitTests)
             {

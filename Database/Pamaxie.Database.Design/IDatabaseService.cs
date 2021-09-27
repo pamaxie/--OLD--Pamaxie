@@ -6,7 +6,7 @@ namespace Pamaxie.Database.Design
     /// Service responsible for handling interaction with the database or database api. This automatically detects
     /// the connection context.
     /// </summary>
-    public interface IDatabaseService<out T>
+    public interface IDatabaseService<out T, out T2>
     {
         #region Services
 
@@ -20,7 +20,7 @@ namespace Pamaxie.Database.Design
         /// <summary>
         /// The data context that should be used for connecting to instances
         /// </summary>
-        public IPamaxieDataContext DataContext { get; }
+        public T2 DataContext { get; }
 
         /// <summary>
         /// Is set if <see cref="Connect"/> ran successfully, please see <see cref="LastConnectionSuccess"/> when the last connection was successful

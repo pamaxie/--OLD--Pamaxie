@@ -5,7 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Database\Pamaxie.Data\Pamaxie.Data.csproj" />
       <ProjectReference Include="..\..\Pamaxie.Website\Pamaxie.Website.csproj" />
       <ProjectReference Include="..\Test.Base\Test.Base.csproj" />
     </ItemGroup>

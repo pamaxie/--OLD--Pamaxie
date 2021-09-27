@@ -1,5 +1,4 @@
 ﻿using Pamaxie.Api.Controllers;
-using Test.Base;
 using Xunit.Abstractions;
 
 namespace Test.Pamaxie.API_Test

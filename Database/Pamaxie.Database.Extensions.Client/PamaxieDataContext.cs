@@ -1,49 +1,33 @@
 ﻿using System;
 using System.Net.Http.Headers;
-using Pamaxie.Database.Design;
+using Pamaxie.Jwt;
 
 namespace Pamaxie.Database.Extensions.Client
 {
-    /// <inheritdoc/>
-    public sealed class PamaxieDataContext : IPamaxieDataContext
+    /// <summary>
+    /// DataContext class used for the connection information to the database api and the Redis database
+    /// </summary>
+    public sealed class PamaxieDataContext
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Defines the url of the api that will be 
+        /// </summary>
         public string DataInstances { get; }
 
-        /// <inheritdoc/>
-        public string Password { get; }
-
-        /// <inheritdoc/>
-        public int ReconnectionAttempts { get; }
+        /// <summary>
+        /// Defines the password to use for the instances
+        /// </summary>
+        public AuthToken Token { get; }
 
         /// <summary>
-        /// Connection properties to a database with a password and a custom amount of reconnection attempts
+        /// Connection properties to a api
         /// </summary>
-        /// <param name="instanceName">The instance of the database</param>
-        /// <param name="password">Password to use for the database</param>
-        /// <param name="reconnectionAttempts">How many attempts should be made to connect to the database</param>
-        // ReSharper disable once MemberCanBePrivate.Global
-        public PamaxieDataContext(string instanceName, string password, int reconnectionAttempts = 3)
+        /// <param name="instance">The url of the api</param>
+        /// <param name="token">Token to use for the api authentication</param>
+        public PamaxieDataContext(string instance, AuthToken token)
         {
-            DataInstances = instanceName;
-            Password = password;
-            ReconnectionAttempts = reconnectionAttempts;
-        }
-
-        /// <summary>
-        /// Connection properties to a database without a password !!THIS IS NOT RECOMMENDED!!
-        /// </summary>
-        /// <param name="instanceName">The instance of the database</param>
-        [Obsolete(
-            "This should not be used, since this means u don't have a password on your database api, which exposes your database to attacks. Please always make sure to use a password on your database.")]
-        public PamaxieDataContext(string instanceName) : this(instanceName, string.Empty)
-        {
-        }
-
-        /// <inheritdoc/>
-        public string ConnectionString()
-        {
-            throw new NotSupportedException("Cannot use connection strings for connecting to the client as of now.");
+            DataInstances = instance;
+            Token = token;
         }
 
         /// <summary>
@@ -52,7 +36,10 @@ namespace Pamaxie.Database.Extensions.Client
         /// <returns>A <see cref="AuthenticationHeaderValue"/> with a Bearer scheme authentication</returns>
         public AuthenticationHeaderValue GetAuthenticationRequestHeader()
         {
-            return new AuthenticationHeaderValue("Bearer", Password); //TODO use something else than Password
+            if (Token == null)
+                throw new InvalidOperationException("Please make sure that the token are initialized before calling this method");
+
+            return new AuthenticationHeaderValue("Bearer", Token.Token);
         }
     }
 }
