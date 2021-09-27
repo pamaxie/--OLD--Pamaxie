@@ -353,9 +353,3 @@ MigrationBackup/
 #Ignore Specific configuration files or files that may contain private data (Disabled for this checkin since confugrations changed)
 *appsettings.Development.json
 *appsettings.json
-
-#END OF FILE
-
-Pamaxie.Website/appsettings.json
-
-Pamaxie.Website/appsettings.Development.json
