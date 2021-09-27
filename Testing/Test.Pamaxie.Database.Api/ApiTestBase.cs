@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 namespace Test.Pamaxie.Database.Api_Test
 {
     /// <summary>
-    /// Base testing class for Api
+    /// Base testing class for Database.Api
     /// </summary>
     /// <typeparam name="T">The Api controller that will be tested against</typeparam>
     public class ApiTestBase<T> : TestBase
