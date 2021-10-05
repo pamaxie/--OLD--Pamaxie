@@ -26,12 +26,12 @@ namespace Test.Base
         /// <summary>
         /// Configurations for testing methods
         /// </summary>
-        protected IConfiguration Configuration { get; } =
-            new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
+        protected IConfiguration Configuration { get; }
 
         protected TestBase(ITestOutputHelper testOutputHelper)
         {
             TestOutputHelper = testOutputHelper;
+            Configuration = ConfigurationService.GenerateConfiguration();
         }
     }
 }

@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Client;
-using Pamaxie.Jwt;
 using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
@@ -14,7 +12,7 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
     /// <summary>
     /// Testing class for <see cref="UserDataService"/>
     /// </summary>
-    public sealed class UserDataServiceTest : TestBase, IClassFixture<DatabaseApiFactory>
+    public sealed class UserDataServiceTest : ClientTestBase
     {
         /// <inheritdoc cref="MemberData.AllUserKeys"/>
         public static IEnumerable<object[]> AllUserKeys => MemberData.AllUserKeys;
@@ -25,17 +23,8 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
         /// <inheritdoc cref="MemberData.RandomUsers"/>
         public static IEnumerable<object[]> RandomUserData => MemberData.RandomUsers;
 
-        public UserDataServiceTest(DatabaseApiFactory fixture, ITestOutputHelper testOutputHelper) : base(
-            testOutputHelper)
+        public UserDataServiceTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
-            DatabaseService service = new DatabaseService(new PamaxieDataContext("http://localhost/", ""))
-            {
-                Service = fixture.CreateClient()
-            };
-
-            TokenGenerator tokenGenerator = new TokenGenerator(Configuration);
-            AuthToken token = tokenGenerator.CreateToken("101963629560135630792");
-            service.Service.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
         }
 
         /// <summary>

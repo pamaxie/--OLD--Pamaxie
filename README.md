@@ -1,7 +1,8 @@
 ![**Pamaxie**](https://i.imgur.com/UzSZPs2.png)
 
 [![CodeQL Check](https://github.com/deamonicnet/Pamaxie/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/deamonicnet/Pamaxie/actions/workflows/codeql-analysis.yml)
-[![.NET Build Test](https://github.com/deamonicnet/Pamaxie/actions/workflows/dotnet.yml/badge.svg)](https://github.com/deamonicnet/Pamaxie/actions/workflows/dotnet.yml)  
+[![.NET Build Test](https://github.com/deamonicnet/Pamaxie/actions/workflows/dotnet.yml/badge.svg)](https://github.com/deamonicnet/Pamaxie/actions/workflows/dotnet.yml)
+[![SecurityCodeScan](https://github.com/pamaxie/Pamaxie/actions/workflows/securitycodescan-analysis.yml/badge.svg)](https://github.com/pamaxie/Pamaxie/actions/workflows/securitycodescan-analysis.yml)
 
 Documentation for this project can be found at [Pamaxies wiki](https://wiki.pamaxie.com/). API Credentials can be created at [Pamaxies website](https://pamaxie.com/). Please let us know if the API misbehaves in any way. We will assist you as soon as possible.
 
@@ -20,4 +21,4 @@ The end goal of the project is to make the internet a more secure place to brows
 Our API can be either trained with your own data. 
 If you don't want to train your own data, you can just access our API for free by just creating an account on our website. 
 
-### We will release further updates on the wiki once the API is available for public signup.
+### We will release further updates on the wiki once the API is available for public signup

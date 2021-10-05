@@ -3,7 +3,6 @@ using System.Linq;
 using Moq;
 using Pamaxie.Data;
 using Pamaxie.Database.Design;
-using Pamaxie.Database.Extensions.Client;
 
 namespace Test.Base
 {
@@ -15,9 +14,9 @@ namespace Test.Base
         private delegate void OutAction<in T, TOut>(T val, out TOut outVal);
 
         /// <summary>
-        /// Mocks the <see cref="ApplicationDataService"/> and applies it to the <see cref="ApplicationDataServiceExtension"/> for testing usage
+        /// Mocks the <see cref="ApplicationDataService"/> and applies it to the ApplicationDataServiceExtension for testing usage
         /// </summary>
-        public static void Mock()
+        public static IApplicationDataService Mock()
         {
             ApplicationDataService applicationDataService = new ApplicationDataService();
             Mock<IApplicationDataService> mockApplicationDataService = new Mock<IApplicationDataService>();
@@ -87,7 +86,7 @@ namespace Test.Base
             mockApplicationDataService.Setup(_ => _.VerifyAuthentication(It.IsAny<PamaxieApplication>()))
                 .Returns<PamaxieApplication>((value) => applicationDataService.VerifyAuthentication(value));
 
-            DatabaseService.ApplicationService = mockApplicationDataService.Object;
+            return mockApplicationDataService.Object;
         }
 
         /// <inheritdoc cref="IApplicationDataService"/>

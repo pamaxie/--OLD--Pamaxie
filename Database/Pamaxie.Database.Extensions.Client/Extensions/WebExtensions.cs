@@ -17,6 +17,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <summary>
         /// Creates a HTTP Request via an endpoint url
         /// </summary>
+        /// <param name="context">Data context, used to get the authentication</param>
         /// <param name="uri">URI for the request to be send to</param>
         /// <param name="value">Optional value to send to the api</param>
         /// <param name="baseMessage">This is the original request (if deviance from standard procedure gets are required !!if a uri is specified the original uri is overwritten!!)</param>
@@ -28,6 +29,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <summary>
         /// Creates a HTTP Request via an endpoint url
         /// </summary>
+        /// <param name="context">Data context, used to get the authentication</param>
         /// <param name="uri">URI for the request to be send to</param>
         /// <param name="value">Optional value to send to the api</param>
         /// <param name="baseMessage">This is the original request (if deviance from standard procedure gets are required !!if a uri is specified the original uri is overwritten!!)</param>
@@ -39,6 +41,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <summary>
         /// Creates a HTTP Request via an endpoint url
         /// </summary>
+        /// <param name="context">Data context, used to get the authentication</param>
         /// <param name="uri">URI for the request to be send to</param>
         /// <param name="value">Optional value to send to the api</param>
         /// <param name="baseMessage">This is the original request (if deviance from standard procedure gets are required !!if a uri is specified the original uri is overwritten!!)</param>
@@ -50,6 +53,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <summary>
         /// Creates a HTTP Request via an endpoint url
         /// </summary>
+        /// <param name="context">Data context, used to get the authentication</param>
         /// <param name="uri">URI for the request to be send to</param>
         /// <param name="value">Optional value to send to the api</param>
         /// <param name="baseMessage">This is the original request (if deviance from standard procedure gets are required !!if a uri is specified the original uri is overwritten!!)</param>
@@ -61,6 +65,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <summary>
         /// Creates a new Request with the defined method type. This is a very generalized implementation of requests.
         /// </summary>
+        /// <param name="context">Data context, used to get the authentication</param>
         /// <param name="uri">The endpoint url this request is targeting</param>
         /// <param name="messageMethod">The method that should be used for the request</param>
         /// <param name="value">The value that should be written to the http message, depending on the type of message setting this value makes more or less sense</param>

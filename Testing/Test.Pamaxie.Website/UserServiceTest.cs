@@ -32,8 +32,7 @@ namespace Test.Pamaxie.Website_Test
 
         public UserServiceTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
-            //Mock UserDataService, for UserDataServiceExtension
-            MockUserDataService.Mock();
+            DatabaseService.UserService = MockUserDataService.Mock();
         }
 
         /// <summary>
