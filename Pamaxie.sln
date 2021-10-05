@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29215.179
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31717.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assemblies", "Assemblies", "{F55228AE-1F0F-487D-B7F5-41E0ED19782A}"
 EndProject
@@ -56,21 +56,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.WorkerService.Api",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.WorkerService", "ClusterServices\Pamaxie.WorkerService\Pamaxie.WorkerService.csproj", "{24D66F76-C8C1-47C6-A751-6C9184F3D647}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Pamaxie.Database.Api", "Testing\Test.Pamaxie.Database.Api\Test.Pamaxie.Database.Api.csproj", "{3F1EDD45-7063-4405-B24B-5BC6C2A50579}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Pamaxie.Database.Api", "Testing\Test.Pamaxie.Database.Api\Test.Pamaxie.Database.Api.csproj", "{3F1EDD45-7063-4405-B24B-5BC6C2A50579}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Pamaxie.WorkerService.Api", "Testing\Test.Pamaxie.WorkerService.Api\Test.Pamaxie.WorkerService.Api.csproj", "{A3308295-CBD9-428E-BD22-45CF031682FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Pamaxie.WorkerService.Api", "Testing\Test.Pamaxie.WorkerService.Api\Test.Pamaxie.WorkerService.Api.csproj", "{A3308295-CBD9-428E-BD22-45CF031682FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Pamaxie.Jwt", "Testing\Assemblies\Test.Pamaxie.Jwt\Test.Pamaxie.Jwt.csproj", "{91285A1D-499F-4733-AC9F-F98897E2D613}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Pamaxie.Jwt", "Testing\Assemblies\Test.Pamaxie.Jwt\Test.Pamaxie.Jwt.csproj", "{91285A1D-499F-4733-AC9F-F98897E2D613}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorkerServices", "WorkerServices", "{1D19EA8C-3027-447F-942B-5F4AE7F87D7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Pamaxie.WorkerService", "Testing\WorkerServices\Test.Pamaxie.WorkerService\Test.Pamaxie.WorkerService.csproj", "{B586C5FA-3CB9-494A-A5EF-48F6BA2E5099}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Pamaxie.WorkerService", "Testing\WorkerServices\Test.Pamaxie.WorkerService\Test.Pamaxie.WorkerService.csproj", "{B586C5FA-3CB9-494A-A5EF-48F6BA2E5099}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Pamaxie.ImageProcessing", "Testing\Assemblies\Test.Pamaxie.ImageProcessing\Test.Pamaxie.ImageProcessing.csproj", "{649112B8-98D0-430B-8768-85CAD2EE4FB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Pamaxie.ImageProcessing", "Testing\Assemblies\Test.Pamaxie.ImageProcessing\Test.Pamaxie.ImageProcessing.csproj", "{649112B8-98D0-430B-8768-85CAD2EE4FB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Pamaxie.MediaDetection", "Testing\Assemblies\Test.Pamaxie.MediaDetection\Test.Pamaxie.MediaDetection.csproj", "{3846654F-6A61-4897-95FC-0318F73E7C2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Pamaxie.MediaDetection", "Testing\Assemblies\Test.Pamaxie.MediaDetection\Test.Pamaxie.MediaDetection.csproj", "{3846654F-6A61-4897-95FC-0318F73E7C2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pamaxie.Helpers", "Assemblies\Pamaxie.Helpers\Pamaxie.Helpers.csproj", "{CE4BDA1D-39D3-4D15-AB02-D1D775EEA60C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.Helpers", "Assemblies\Pamaxie.Helpers\Pamaxie.Helpers.csproj", "{CE4BDA1D-39D3-4D15-AB02-D1D775EEA60C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{3431A2C4-F005-4379-9B8E-25818AB28DE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test.Pamaxie.Database.Client", "test.Pamaxie.Database.Client\test.Pamaxie.Database.Client.csproj", "{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1451,6 +1455,56 @@ Global
 		{CE4BDA1D-39D3-4D15-AB02-D1D775EEA60C}.Release|x64.Build.0 = Release|Any CPU
 		{CE4BDA1D-39D3-4D15-AB02-D1D775EEA60C}.Release|x86.ActiveCfg = Release|Any CPU
 		{CE4BDA1D-39D3-4D15-AB02-D1D775EEA60C}.Release|x86.Build.0 = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.All|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.All|Any CPU.Build.0 = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.All|ARM.ActiveCfg = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.All|ARM.Build.0 = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.All|ARM64.ActiveCfg = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.All|ARM64.Build.0 = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.All|x64.ActiveCfg = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.All|x64.Build.0 = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.All|x86.ActiveCfg = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.All|x86.Build.0 = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Apply Migrations|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Apply Migrations|Any CPU.Build.0 = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Apply Migrations|ARM.ActiveCfg = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Apply Migrations|ARM.Build.0 = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Apply Migrations|ARM64.ActiveCfg = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Apply Migrations|ARM64.Build.0 = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Apply Migrations|x64.ActiveCfg = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Apply Migrations|x64.Build.0 = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Apply Migrations|x86.ActiveCfg = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Apply Migrations|x86.Build.0 = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Blazor Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Blazor Release|Any CPU.Build.0 = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Blazor Release|ARM.ActiveCfg = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Blazor Release|ARM.Build.0 = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Blazor Release|ARM64.ActiveCfg = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Blazor Release|ARM64.Build.0 = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Blazor Release|x64.ActiveCfg = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Blazor Release|x64.Build.0 = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Blazor Release|x86.ActiveCfg = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Blazor Release|x86.Build.0 = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Debug|ARM.Build.0 = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Debug|x64.Build.0 = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Debug|x86.Build.0 = Debug|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Release|ARM.ActiveCfg = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Release|ARM.Build.0 = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Release|ARM64.Build.0 = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Release|x64.ActiveCfg = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Release|x64.Build.0 = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Release|x86.ActiveCfg = Release|Any CPU
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1482,6 +1536,8 @@ Global
 		{649112B8-98D0-430B-8768-85CAD2EE4FB4} = {37C54DFB-BDD0-4B87-A2DC-7C0B742ECE9B}
 		{3846654F-6A61-4897-95FC-0318F73E7C2E} = {37C54DFB-BDD0-4B87-A2DC-7C0B742ECE9B}
 		{CE4BDA1D-39D3-4D15-AB02-D1D775EEA60C} = {F55228AE-1F0F-487D-B7F5-41E0ED19782A}
+		{3431A2C4-F005-4379-9B8E-25818AB28DE8} = {3D245451-8A7A-418B-8375-C36C46FDE81E}
+		{A5DCEE3B-F10B-4022-9168-BFAFB3C231F8} = {3431A2C4-F005-4379-9B8E-25818AB28DE8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7548869C-04B6-4F88-A5AF-48310959D2D3}

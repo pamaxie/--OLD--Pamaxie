@@ -24,6 +24,7 @@ namespace Test.Base
                 builder.UseTestServer()
                     .ConfigureServices(services =>
                     {
+<<<<<<< Updated upstream:Testing/Database/Test.Pamaxie.Database.Extensions.Client/DatabaseApiFactory.cs
                         services.Configure<TestServer>(options => options.AllowSynchronousIO = true);
 
                         services.AddSingleton(new DatabaseService(null)
@@ -35,6 +36,17 @@ namespace Test.Base
                     .ConfigureAppConfiguration((_, config) => { config.AddConfiguration(configuration); });
             });
             return factory;
+=======
+                        Service = MockIConnectionMultiplexer.Mock(),
+                        IsConnected = true
+                    });
+                })
+                .ConfigureAppConfiguration(config =>
+                {
+                    Configuration = new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
+                    config.AddConfiguration(Configuration);
+                });
+>>>>>>> Stashed changes:Testing/Database/Test.Pamaxie.Database.Extensions.Client/Factory/DatabaseApiFactory.cs
         }
     }
 }

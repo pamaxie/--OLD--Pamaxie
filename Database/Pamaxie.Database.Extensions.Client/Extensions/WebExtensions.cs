@@ -22,9 +22,9 @@ namespace Pamaxie.Database.Extensions.Client
         /// <param name="value">Optional value to send to the api</param>
         /// <param name="baseMessage">This is the original request (if deviance from standard procedure gets are required !!if a uri is specified the original uri is overwritten!!)</param>
         /// <returns><see cref="HttpRequestMessage"/> for the request</returns>
-        public static HttpRequestMessage PostRequestMessage(this PamaxieDataContext context, Uri uri, object value = null,
+        public static HttpRequestMessage PostRequestMessage(this PamaxieDataContext context, string path, object value = null,
             HttpRequestMessage baseMessage = null)
-            => GetMessage(context, uri, HttpMethod.Post, value, baseMessage);
+            => GetMessage(context, path, HttpMethod.Post, value, baseMessage);
 
         /// <summary>
         /// Creates a HTTP Request via an endpoint url
@@ -34,9 +34,9 @@ namespace Pamaxie.Database.Extensions.Client
         /// <param name="value">Optional value to send to the api</param>
         /// <param name="baseMessage">This is the original request (if deviance from standard procedure gets are required !!if a uri is specified the original uri is overwritten!!)</param>
         /// <returns><see cref="HttpRequestMessage"/> for the request</returns>
-        public static HttpRequestMessage PutRequestMessage(this PamaxieDataContext context, Uri uri, object value = null,
+        public static HttpRequestMessage PutRequestMessage(this PamaxieDataContext context, string path, object value = null,
             HttpRequestMessage baseMessage = null)
-            => GetMessage(context, uri, HttpMethod.Put, value, baseMessage);
+            => GetMessage(context, path, HttpMethod.Put, value, baseMessage);
 
         /// <summary>
         /// Creates a HTTP Request via an endpoint url
@@ -46,9 +46,9 @@ namespace Pamaxie.Database.Extensions.Client
         /// <param name="value">Optional value to send to the api</param>
         /// <param name="baseMessage">This is the original request (if deviance from standard procedure gets are required !!if a uri is specified the original uri is overwritten!!)</param>
         /// <returns><see cref="HttpRequestMessage"/> for the request</returns>
-        public static HttpRequestMessage GetRequestMessage(this PamaxieDataContext context, Uri uri, object value = null,
+        public static HttpRequestMessage GetRequestMessage(this PamaxieDataContext context, string path, object value = null,
             HttpRequestMessage baseMessage = null)
-            => GetMessage(context, uri, HttpMethod.Get, value, baseMessage);
+            => GetMessage(context, path, HttpMethod.Get, value, baseMessage);
 
         /// <summary>
         /// Creates a HTTP Request via an endpoint url
@@ -58,9 +58,9 @@ namespace Pamaxie.Database.Extensions.Client
         /// <param name="value">Optional value to send to the api</param>
         /// <param name="baseMessage">This is the original request (if deviance from standard procedure gets are required !!if a uri is specified the original uri is overwritten!!)</param>
         /// <returns><see cref="HttpRequestMessage"/> for the request</returns>
-        public static HttpRequestMessage DeleteRequestMessage(this PamaxieDataContext context, Uri uri, object value = null,
+        public static HttpRequestMessage DeleteRequestMessage(this PamaxieDataContext context, string path, object value = null,
             HttpRequestMessage baseMessage = null)
-            => GetMessage(context, uri, HttpMethod.Delete, value, baseMessage);
+            => GetMessage(context, path, HttpMethod.Delete, value, baseMessage);
 
         /// <summary>
         /// Creates a new Request with the defined method type. This is a very generalized implementation of requests.
@@ -72,7 +72,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <param name="baseMessage">Overwrites the internally created HttpRequestMessage to allow for customizations in the message for specific method types (Put, set, get, ect...)</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        private static HttpRequestMessage GetMessage(this PamaxieDataContext context, Uri uri, HttpMethod messageMethod, object value,
+        private static HttpRequestMessage GetMessage(this PamaxieDataContext context, string path, HttpMethod messageMethod, object value,
             HttpRequestMessage baseMessage)
         {
             HttpRequestMessage requestMessage = null;
@@ -82,9 +82,9 @@ namespace Pamaxie.Database.Extensions.Client
                 requestMessage = baseMessage;
             }
 
-            if (uri != null)
+            if (path != null)
             {
-                requestMessage = new HttpRequestMessage(messageMethod, uri);
+                requestMessage = new HttpRequestMessage(messageMethod, new Uri(context.ApiUrl + path));
             }
 
             if (requestMessage == null && baseMessage == null)

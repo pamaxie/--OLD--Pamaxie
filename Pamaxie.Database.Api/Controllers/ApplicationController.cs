@@ -39,7 +39,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> GetTask(string key)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -70,7 +70,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> CreateTask(PamaxieApplication application)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -96,7 +96,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> TryCreateTask(PamaxieApplication application)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -127,7 +127,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> UpdateTask(PamaxieApplication application)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -153,7 +153,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> TryUpdateTask(PamaxieApplication application)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -186,7 +186,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> UpdateOrCreateTask(PamaxieApplication application)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -217,7 +217,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> ExistsTask(string key)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -243,7 +243,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> DeleteTask(PamaxieApplication application)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -274,7 +274,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> GetOwner(PamaxieApplication application)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -300,7 +300,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> EnableOrDisableTask(PamaxieApplication application)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -326,7 +326,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> VerifyAuthenticationTask(PamaxieApplication application)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }

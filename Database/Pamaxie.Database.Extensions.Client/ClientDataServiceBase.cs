@@ -28,12 +28,12 @@ namespace Pamaxie.Database.Extensions.Client
         /// <summary>
         /// The base url of the Api
         /// </summary>
-        internal string Url { get; init; }
+        internal string ParentPath { get; init; }
 
         /// <inheritdoc/>
         public T Get(string key)
         {
-            HttpRequestMessage requestMessage = DataContext.GetRequestMessage(new Uri(Url + "/Get=" + key));
+            HttpRequestMessage requestMessage = DataContext.GetRequestMessage(ParentPath + "/Get=" + key);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -47,7 +47,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public T Create(T value)
         {
-            HttpRequestMessage requestMessage = DataContext.PostRequestMessage(new Uri(Url + "/Create"), value);
+            HttpRequestMessage requestMessage = DataContext.PostRequestMessage(ParentPath + "/Create", value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -61,7 +61,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public bool TryCreate(T value, out T createdValue)
         {
-            HttpRequestMessage requestMessage = DataContext.PostRequestMessage(new Uri(Url + "/TryCreate"), value);
+            HttpRequestMessage requestMessage = DataContext.PostRequestMessage(ParentPath + "/TryCreate", value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -76,7 +76,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public T Update(T value)
         {
-            HttpRequestMessage requestMessage = DataContext.PutRequestMessage(new Uri(Url + "/Update"), value);
+            HttpRequestMessage requestMessage = DataContext.PutRequestMessage(ParentPath + "/Update", value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -90,7 +90,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public bool TryUpdate(T value, out T updatedValue)
         {
-            HttpRequestMessage requestMessage = DataContext.PutRequestMessage(new Uri(Url + "/TryUpdate"), value);
+            HttpRequestMessage requestMessage = DataContext.PutRequestMessage(ParentPath + "/TryUpdate", value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -106,7 +106,7 @@ namespace Pamaxie.Database.Extensions.Client
         public bool UpdateOrCreate(T value, out T updatedOrCreatedValue)
         {
             HttpRequestMessage requestMessage =
-                DataContext.PostRequestMessage(new Uri(Url + "/UpdateOrCreate"), value);
+                DataContext.PostRequestMessage(ParentPath + "/UpdateOrCreate", value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -127,7 +127,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public bool Exists(string key)
         {
-            HttpRequestMessage requestMessage = DataContext.GetRequestMessage(new Uri(Url + "/Exists=" + key));
+            HttpRequestMessage requestMessage = DataContext.GetRequestMessage(ParentPath + "/Exists=" + key);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -142,7 +142,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public bool Delete(T value)
         {
-            HttpRequestMessage requestMessage = DataContext.DeleteRequestMessage(new Uri(Url + "/Delete"), value);
+            HttpRequestMessage requestMessage = DataContext.DeleteRequestMessage(ParentPath + "/Delete", value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)

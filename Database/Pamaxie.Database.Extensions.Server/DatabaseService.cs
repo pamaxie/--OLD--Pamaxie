@@ -14,7 +14,7 @@ namespace Pamaxie.Database.Extensions.Server
         public ConfigurationOptions DataContext { get; }
 
         /// <inheritdoc/>
-        public bool ConnectionSuccess { get; set; }
+        public bool IsConnected { get; set; }
 
         /// <inheritdoc/>
         public DateTime LastConnectionSuccess { get; set; }
@@ -46,7 +46,7 @@ namespace Pamaxie.Database.Extensions.Server
                 return false;
             }
 
-            ConnectionSuccess = true;
+            IsConnected = true;
             LastConnectionSuccess = DateTime.Now;
             return true;
         }

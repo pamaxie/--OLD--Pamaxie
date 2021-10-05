@@ -19,12 +19,12 @@ namespace Pamaxie.Database.Extensions.Client
 <<<<<<< HEAD
         /// Defines the available instances for data connection
         /// </summary>
-        public string DataInstances { get; }
+        public string ApiUrl { get; }
 
         /// <summary>
         /// Defines the password to use for the instances
         /// </summary>
-        public AuthToken Token { get; }
+        public AuthToken Token { get; private set; }
 
         /// <summary>
         /// How many attempts should be made to connect to the service
@@ -47,7 +47,7 @@ namespace Pamaxie.Database.Extensions.Client
         // ReSharper disable once MemberCanBePrivate.Global
         public PamaxieDataContext(string instanceName, AuthToken token, int reconnectionAttempts = 3)
         {
-            DataInstances = instanceName;
+            ApiUrl = instanceName;
             Token = token;
             ReconnectionAttempts = reconnectionAttempts;
         }
@@ -78,6 +78,11 @@ namespace Pamaxie.Database.Extensions.Client
                 throw new InvalidOperationException("Please make sure that the token are initialized before calling this method");
 
             return new AuthenticationHeaderValue("Bearer", Token.Token);
+        }
+
+        public void Disconnect()
+        {
+            Token = null;
         }
     }
 }

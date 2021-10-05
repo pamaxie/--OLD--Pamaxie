@@ -40,7 +40,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> GetTask(string key)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -71,7 +71,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> CreateTask(PamaxieUser user)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -97,7 +97,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> TryCreateTask(PamaxieUser user)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -128,7 +128,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> UpdateTask(PamaxieUser user)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -154,7 +154,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> TryUpdateTask(PamaxieUser user)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -187,7 +187,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> UpdateOrCreateTask(PamaxieUser user)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -218,7 +218,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> ExistsTask(string key)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -244,7 +244,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> DeleteTask(PamaxieUser user)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -275,7 +275,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<IEnumerable<PamaxieApplication>> GetAllApplicationsTask(PamaxieUser user)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -301,7 +301,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> VerifyEmailTask(PamaxieUser user)
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }

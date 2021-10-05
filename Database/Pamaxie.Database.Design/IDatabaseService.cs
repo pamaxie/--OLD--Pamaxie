@@ -25,7 +25,7 @@ namespace Pamaxie.Database.Design
         /// <summary>
         /// Is set if <see cref="Connect"/> ran successfully, please see <see cref="LastConnectionSuccess"/> when the last connection was successful
         /// </summary>
-        public bool ConnectionSuccess { get; set; }
+        public bool IsConnected { get; set; }
 
         /// <summary>
         /// Defines when the last connection was made successfully
@@ -37,6 +37,12 @@ namespace Pamaxie.Database.Design
         /// </summary>
         /// <returns><see cref="bool"/> if the connection attempt was successful</returns>
         public bool Connect();
+
+        /// <summary>
+        /// Disconnects from the database instance
+        /// </summary>
+        /// <returns></returns>
+        public bool Disconnect();
 
         /// <summary>
         /// Validates if the service is available

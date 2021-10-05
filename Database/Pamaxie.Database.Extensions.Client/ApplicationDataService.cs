@@ -15,7 +15,7 @@ namespace Pamaxie.Database.Extensions.Client
         {
             DataContext = dataContext;
             Service = service;
-            Url = DataContext.DataInstances + "Application";
+            Url = DataContext.ApiUrl + "Application";
         }
 
         /// <inheritdoc/>

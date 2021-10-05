@@ -43,10 +43,12 @@ namespace Pamaxie.Api.Controllers
         public ActionResult<AuthToken> LoginTask()
         {
             //TODO Not yet implemented
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
+
+            StringValues token = Request.Headers["authorization"];
 
             //if ({Value to use} == null)
             //if (string.IsNullOrEmpty({Value to use}))
@@ -75,7 +77,7 @@ namespace Pamaxie.Api.Controllers
         public ActionResult<string> CreateUserTask()
         {
             //TODO Not yet implemented
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
@@ -106,7 +108,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<AuthToken> RefreshTask()
         {
-            if (!_dbService.ConnectionSuccess)
+            if (!_dbService.IsConnected)
             {
                 return Problem();
             }
