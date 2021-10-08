@@ -15,13 +15,13 @@ namespace Pamaxie.Database.Extensions.Client
         {
             DataContext = dataContext;
             Service = service;
-            Url = DataContext.ApiUrl + "Application";
+            ParentPath = DataContext.ApiUrl + "/Application";
         }
 
         /// <inheritdoc/>
         public PamaxieUser GetOwner(PamaxieApplication value)
         {
-            HttpRequestMessage requestMessage = DataContext.GetRequestMessage(new Uri(Url + "/GetOwner"), value);
+            HttpRequestMessage requestMessage = DataContext.GetRequestMessage(ParentPath + "/GetOwner", value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -35,8 +35,7 @@ namespace Pamaxie.Database.Extensions.Client
         /// <inheritdoc/>
         public PamaxieApplication EnableOrDisable(PamaxieApplication value)
         {
-            HttpRequestMessage requestMessage =
-                DataContext.PutRequestMessage(new Uri(Url + "/EnableOrDisable"), value);
+            HttpRequestMessage requestMessage = DataContext.PutRequestMessage(ParentPath + "/EnableOrDisable", value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)
@@ -51,7 +50,7 @@ namespace Pamaxie.Database.Extensions.Client
         public bool VerifyAuthentication(PamaxieApplication value)
         {
             HttpRequestMessage requestMessage =
-                DataContext.GetRequestMessage(new Uri(Url + "/VerifyAuthentication"), value);
+                DataContext.GetRequestMessage(ParentPath + "/VerifyAuthentication", value);
             HttpResponseMessage response = Service.SendRequestMessage(requestMessage);
 
             if (!response.IsSuccessStatusCode)

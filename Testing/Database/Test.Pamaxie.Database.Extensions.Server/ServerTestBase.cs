@@ -13,14 +13,11 @@ namespace Test.Database.Extensions.Server_Test
     public class ServerBase : TestBase
     {
         /// <summary>
-<<<<<<< HEAD:Testing/Test.Base/Base/ServerBase.cs
         /// Database Context
         /// </summary>
-        protected PamaxieDataContext Context { get; }
+        protected string Context { get; }
 
         /// <summary>
-=======
->>>>>>> database-rework:Testing/Database/Test.Pamaxie.Database.Extensions.Server/ServerTestBase.cs
         /// Database Service
         /// </summary>
         protected DatabaseService Service { get; }
@@ -39,12 +36,8 @@ namespace Test.Database.Extensions.Server_Test
             }
             else
             {
-<<<<<<< HEAD:Testing/Test.Base/Base/ServerBase.cs
-                Context = new PamaxieDataContext(instance, new NetworkCredential(string.Empty, password), reconAttempts);
-                Service = new DatabaseService(Context);
-=======
+                Context = connectionString;
                 Service = new DatabaseService(ConfigurationOptions.Parse(connectionString));
->>>>>>> database-rework:Testing/Database/Test.Pamaxie.Database.Extensions.Server/ServerTestBase.cs
             }
         }
     }

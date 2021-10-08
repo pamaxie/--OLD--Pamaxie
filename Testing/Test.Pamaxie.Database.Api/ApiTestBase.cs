@@ -33,7 +33,7 @@ namespace Test.Pamaxie.Database.Api_Test
                 Service = new DatabaseService(null)
                 {
                     Service = MockIConnectionMultiplexer.Mock(),
-                    ConnectionSuccess = true
+                    IsConnected = true
                 };
             }
             else

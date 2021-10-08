@@ -84,7 +84,7 @@ namespace Pamaxie.Database.Extensions.Client
 
             if (path != null)
             {
-                requestMessage = new HttpRequestMessage(messageMethod, new Uri(context.ApiUrl + path));
+                requestMessage = new HttpRequestMessage(messageMethod, new Uri(path));
             }
 
             if (requestMessage == null && baseMessage == null)

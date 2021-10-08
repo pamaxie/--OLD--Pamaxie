@@ -62,5 +62,10 @@ namespace Pamaxie.Database.Extensions.Server
         {
             throw new NotImplementedException();
         }
+
+        public bool Disconnect()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
