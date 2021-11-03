@@ -1,10 +1,5 @@
 ![**Pamaxie**](https://i.imgur.com/UzSZPs2.png)
 
---UPDATE 10.10.2021--<br/>
-Hey ya'll short update here since we don't have any social media channels atm and the website isn't working like intended atm due to having to cut costs.
-We're currently doing a small break until the end of October / Start of November. This is due to this being a stressful year for us and now we want to take a short break before heading right back in. Stay tuned for big changes next year if we're able to get funded. If not we will have to see where this project goes. Sadly money is really short at this moment and training / sorting millions of images gets less and less feastable without any funding.
-Anyways I wish all of you a happy halloween and stay tuned for some updates here.
-
 [![CodeQL Check](https://github.com/deamonicnet/Pamaxie/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/deamonicnet/Pamaxie/actions/workflows/codeql-analysis.yml)
 [![.NET Build Test](https://github.com/deamonicnet/Pamaxie/actions/workflows/dotnet.yml/badge.svg)](https://github.com/deamonicnet/Pamaxie/actions/workflows/dotnet.yml)
 [![SecurityCodeScan](https://github.com/pamaxie/Pamaxie/actions/workflows/securitycodescan-analysis.yml/badge.svg)](https://github.com/pamaxie/Pamaxie/actions/workflows/securitycodescan-analysis.yml)
