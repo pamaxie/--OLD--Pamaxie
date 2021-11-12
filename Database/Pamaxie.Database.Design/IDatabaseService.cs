@@ -4,7 +4,7 @@ namespace Pamaxie.Database.Design
 {
     /// <summary>
     /// Service responsible for handling interaction with the database or database api. This automatically detects
-    /// the connection context.
+    /// the connection context
     /// </summary>
     public interface IDatabaseService<out T, out T2>
     {
