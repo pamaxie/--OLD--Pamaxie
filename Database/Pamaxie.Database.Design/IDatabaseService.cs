@@ -8,14 +8,11 @@ namespace Pamaxie.Database.Design
     /// </summary>
     public interface IDatabaseService<out T, out T2>
     {
-        #region Services
 
         /// <summary>
         /// The actual Database Service that we use to connect to the database or database api
         /// </summary>
         public T Service { get; }
-
-        #endregion
 
         /// <summary>
         /// The data context that should be used for connecting to instances
