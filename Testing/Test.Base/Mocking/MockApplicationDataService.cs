@@ -16,10 +16,10 @@ namespace Test.Base
         /// <summary>
         /// Mocks the <see cref="ApplicationDataService"/> and applies it to the ApplicationDataServiceExtension for testing usage
         /// </summary>
-        public static IApplicationDataService Mock()
+        public static IDatabasePamaxieApplicationInteraction Mock()
         {
             ApplicationDataService applicationDataService = new ApplicationDataService();
-            Mock<IApplicationDataService> mockApplicationDataService = new Mock<IApplicationDataService>();
+            Mock<IDatabasePamaxieApplicationInteraction> mockApplicationDataService = new Mock<IDatabasePamaxieApplicationInteraction>();
 
             //Setup for Get
             mockApplicationDataService.Setup(_ => _.Get(It.IsAny<string>()))
@@ -89,21 +89,21 @@ namespace Test.Base
             return mockApplicationDataService.Object;
         }
 
-        /// <inheritdoc cref="IApplicationDataService"/>
-        private sealed class ApplicationDataService : IApplicationDataService
+        /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction"/>
+        private sealed class ApplicationDataService : IDatabasePamaxieApplicationInteraction
         {
-            /// <inheritdoc cref="IApplicationDataService.Get"/>
+            /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.Get"/>
             public PamaxieApplication Get(string key)
             {
                 return string.IsNullOrEmpty(key)
                     ? null
-                    : TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key);
+                    : TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.UniqueKey == key);
             }
 
-            /// <inheritdoc cref="IApplicationDataService.Create"/>
+            /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.Create"/>
             public PamaxieApplication Create(PamaxieApplication value)
             {
-                if (value == null || !string.IsNullOrEmpty(value.Key))
+                if (value == null || !string.IsNullOrEmpty(value.UniqueKey))
                 {
                     return null;
                 }
@@ -112,11 +112,11 @@ namespace Test.Base
                 do
                 {
                     key = RandomService.GenerateRandomKey(6);
-                } while (TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key) != null);
+                } while (TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.UniqueKey == key) != null);
 
-                value.Key = key;
+                value.UniqueKey = key;
 
-                PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
+                PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.UniqueKey == value.OwnerKey);
 
                 if (user == null)
                 {
@@ -128,12 +128,12 @@ namespace Test.Base
                 return value;
             }
 
-            /// <inheritdoc cref="IApplicationDataService.TryCreate"/>
+            /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.TryCreate"/>
             public bool TryCreate(PamaxieApplication value, out PamaxieApplication createdValue)
             {
                 createdValue = null;
 
-                if (value == null || !string.IsNullOrEmpty(value.Key))
+                if (value == null || !string.IsNullOrEmpty(value.UniqueKey))
                 {
                     return false;
                 }
@@ -142,11 +142,11 @@ namespace Test.Base
                 do
                 {
                     key = RandomService.GenerateRandomKey(6);
-                } while (TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key) != null);
+                } while (TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.UniqueKey == key) != null);
 
-                value.Key = key;
+                value.UniqueKey = key;
 
-                PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
+                PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.UniqueKey == value.OwnerKey);
 
                 if (user == null)
                 {
@@ -159,15 +159,15 @@ namespace Test.Base
                 return true;
             }
 
-            /// <inheritdoc cref="IApplicationDataService.Update"/>
+            /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.Update"/>
             public PamaxieApplication Update(PamaxieApplication value)
             {
-                if (value == null || string.IsNullOrEmpty(value.Key))
+                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
                 {
                     return null;
                 }
 
-                if (TestApplicationData.ListOfApplications.Any(_ => _.Key == value.Key))
+                if (TestApplicationData.ListOfApplications.Any(_ => _.UniqueKey == value.UniqueKey))
                 {
                     return value;
                 }
@@ -176,17 +176,17 @@ namespace Test.Base
                 return value;
             }
 
-            /// <inheritdoc cref="IApplicationDataService.TryUpdate"/>
+            /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.TryUpdate"/>
             public bool TryUpdate(PamaxieApplication value, out PamaxieApplication updatedValue)
             {
                 updatedValue = null;
 
-                if (value == null || string.IsNullOrEmpty(value.Key))
+                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
                 {
                     return false;
                 }
 
-                int indexToUpdate = TestApplicationData.ListOfApplications.FindIndex(_ => _.Key == value.Key);
+                int indexToUpdate = TestApplicationData.ListOfApplications.FindIndex(_ => _.UniqueKey == value.UniqueKey);
 
                 if (indexToUpdate == -1)
                 {
@@ -198,7 +198,7 @@ namespace Test.Base
                 return true;
             }
 
-            /// <inheritdoc cref="IApplicationDataService.UpdateOrCreate"/>
+            /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.UpdateOrCreate"/>
             public bool UpdateOrCreate(PamaxieApplication value, out PamaxieApplication updatedOrCreatedValue)
             {
                 updatedOrCreatedValue = null;
@@ -208,21 +208,21 @@ namespace Test.Base
                     throw new Exception("Bad data");
                 }
 
-                if (string.IsNullOrEmpty(value.Key) ||
-                    TestApplicationData.ListOfApplications.All(_ => _.Key != value.Key))
+                if (string.IsNullOrEmpty(value.UniqueKey) ||
+                    TestApplicationData.ListOfApplications.All(_ => _.UniqueKey != value.UniqueKey))
                 {
-                    string key = value.Key;
+                    string key = value.UniqueKey;
 
                     if (string.IsNullOrEmpty(key))
                     {
                         do
                         {
                             key = RandomService.GenerateRandomKey(6);
-                        } while (TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == key) != null);
+                        } while (TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.UniqueKey == key) != null);
                     }
 
-                    value.Key = key;
-                    PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
+                    value.UniqueKey = key;
+                    PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.UniqueKey == value.OwnerKey);
 
                     if (user == null)
                     {
@@ -236,29 +236,29 @@ namespace Test.Base
                 }
                 else
                 {
-                    int indexToUpdate = TestApplicationData.ListOfApplications.FindIndex(_ => _.Key == value.Key);
+                    int indexToUpdate = TestApplicationData.ListOfApplications.FindIndex(_ => _.UniqueKey == value.UniqueKey);
                     TestApplicationData.ListOfApplications[indexToUpdate] = value;
                     updatedOrCreatedValue = value;
                     return false;
                 }
             }
 
-            /// <inheritdoc cref="IApplicationDataService.Exists"/>
+            /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.Exists"/>
             public bool Exists(string key)
             {
-                return !string.IsNullOrEmpty(key) && TestApplicationData.ListOfApplications.Any(_ => _.Key == key);
+                return !string.IsNullOrEmpty(key) && TestApplicationData.ListOfApplications.Any(_ => _.UniqueKey == key);
             }
 
-            /// <inheritdoc cref="IApplicationDataService.Delete"/>
+            /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.Delete"/>
             public bool Delete(PamaxieApplication value)
             {
-                if (value == null || string.IsNullOrEmpty(value.Key))
+                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
                 {
                     return false;
                 }
 
                 PamaxieApplication valueToRemove =
-                    TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == value.Key);
+                    TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.UniqueKey == value.UniqueKey);
 
                 if (valueToRemove == null)
                 {
@@ -269,28 +269,28 @@ namespace Test.Base
                 return true;
             }
 
-            /// <inheritdoc cref="IApplicationDataService.GetOwner"/>
+            /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.GetOwner"/>
             public PamaxieUser GetOwner(PamaxieApplication value)
             {
-                if (value == null || string.IsNullOrEmpty(value.Key) || string.IsNullOrEmpty(value.OwnerKey))
+                if (value == null || string.IsNullOrEmpty(value.UniqueKey) || string.IsNullOrEmpty(value.OwnerKey))
                 {
                     return null;
                 }
 
-                PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.OwnerKey);
+                PamaxieUser user = TestUserData.ListOfUsers.FirstOrDefault(_ => _.UniqueKey == value.OwnerKey);
                 return user;
             }
 
-            /// <inheritdoc cref="IApplicationDataService.EnableOrDisable"/>
+            /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.EnableOrDisable"/>
             public PamaxieApplication EnableOrDisable(PamaxieApplication value)
             {
-                if (value == null || string.IsNullOrEmpty(value.Key))
+                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
                 {
                     return null;
                 }
 
                 PamaxieApplication valueToEnableOrDisable =
-                    TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.Key == value.Key);
+                    TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.UniqueKey == value.UniqueKey);
 
                 if (valueToEnableOrDisable == null)
                 {
@@ -301,7 +301,7 @@ namespace Test.Base
                 return valueToEnableOrDisable;
             }
 
-            /// <inheritdoc cref="IApplicationDataService.VerifyAuthentication"/>
+            /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.VerifyAuthentication"/>
             public bool VerifyAuthentication(PamaxieApplication value)
             {
                 throw new NotImplementedException();

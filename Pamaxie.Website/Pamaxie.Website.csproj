@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>a1a59e4e-91e4-4ab7-9d06-64bf916b4610</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
@@ -30,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Database\Pamaxie.Database.Extensions.Client\Pamaxie.Database.Extensions.Client.csproj" />
     <ProjectReference Include="..\Database\Pamaxie.Data\Pamaxie.Data.csproj" />
   </ItemGroup>
 

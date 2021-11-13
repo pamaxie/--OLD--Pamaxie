@@ -17,7 +17,7 @@ namespace Pamaxie.Data
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public string Key { get; set; }
+        public string UniqueKey { get; set; }
 
         /// <summary>
         /// <inheritdoc/>

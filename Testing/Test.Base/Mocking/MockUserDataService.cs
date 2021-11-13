@@ -16,10 +16,10 @@ namespace Test.Base
         /// <summary>
         /// Mocks the <see cref="UserDataService"/> and applies it to the UserDataServiceExtension for testing usage
         /// </summary>
-        public static IUserDataService Mock()
+        public static IPamaxieUserDataInteraction Mock()
         {
             UserDataService userDataService = new UserDataService();
-            Mock<IUserDataService> mockUserDataService = new Mock<IUserDataService>();
+            Mock<IPamaxieUserDataInteraction> mockUserDataService = new Mock<IPamaxieUserDataInteraction>();
 
             //Setup for Get
             mockUserDataService.Setup(_ => _.Get(It.IsAny<string>()))
@@ -84,19 +84,19 @@ namespace Test.Base
             return mockUserDataService.Object;
         }
 
-        /// <inheritdoc cref="IUserDataService"/>
-        private sealed class UserDataService : IUserDataService
+        /// <inheritdoc cref="IPamaxieUserDataInteraction"/>
+        private sealed class UserDataService : IPamaxieUserDataInteraction
         {
-            /// <inheritdoc cref="IUserDataService.Get"/>
+            /// <inheritdoc cref="IPamaxieUserDataInteraction.Get"/>
             public PamaxieUser Get(string key)
             {
-                return string.IsNullOrEmpty(key) ? null : TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == key);
+                return string.IsNullOrEmpty(key) ? null : TestUserData.ListOfUsers.FirstOrDefault(_ => _.UniqueKey == key);
             }
 
-            /// <inheritdoc cref="IUserDataService.Create"/>
+            /// <inheritdoc cref="IPamaxieUserDataInteraction.Create"/>
             public PamaxieUser Create(PamaxieUser value)
             {
-                if (value == null || !string.IsNullOrEmpty(value.Key))
+                if (value == null || !string.IsNullOrEmpty(value.UniqueKey))
                 {
                     return null;
                 }
@@ -105,20 +105,20 @@ namespace Test.Base
                 do
                 {
                     key = RandomService.GenerateRandomKey();
-                } while (TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == key) != null);
+                } while (TestUserData.ListOfUsers.FirstOrDefault(_ => _.UniqueKey == key) != null);
 
-                value.Key = key;
+                value.UniqueKey = key;
 
                 TestUserData.ListOfUsers.Add(value);
                 return value;
             }
 
-            /// <inheritdoc cref="IUserDataService.TryCreate"/>
+            /// <inheritdoc cref="IPamaxieUserDataInteraction.TryCreate"/>
             public bool TryCreate(PamaxieUser value, out PamaxieUser createdValue)
             {
                 createdValue = null;
 
-                if (value == null || !string.IsNullOrEmpty(value.Key))
+                if (value == null || !string.IsNullOrEmpty(value.UniqueKey))
                 {
                     return false;
                 }
@@ -127,24 +127,24 @@ namespace Test.Base
                 do
                 {
                     key = RandomService.GenerateRandomKey();
-                } while (TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == key) != null);
+                } while (TestUserData.ListOfUsers.FirstOrDefault(_ => _.UniqueKey == key) != null);
 
-                value.Key = key;
+                value.UniqueKey = key;
 
                 TestUserData.ListOfUsers.Add(value);
                 createdValue = value;
                 return true;
             }
 
-            /// <inheritdoc cref="IUserDataService.Update"/>
+            /// <inheritdoc cref="IPamaxieUserDataInteraction.Update"/>
             public PamaxieUser Update(PamaxieUser value)
             {
-                if (value == null || string.IsNullOrEmpty(value.Key))
+                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
                 {
                     return null;
                 }
 
-                if (TestUserData.ListOfUsers.Any(_ => _.Key == value.Key))
+                if (TestUserData.ListOfUsers.Any(_ => _.UniqueKey == value.UniqueKey))
                 {
                     return value;
                 }
@@ -153,17 +153,17 @@ namespace Test.Base
                 return value;
             }
 
-            /// <inheritdoc cref="IUserDataService.TryUpdate"/>
+            /// <inheritdoc cref="IPamaxieUserDataInteraction.TryUpdate"/>
             public bool TryUpdate(PamaxieUser value, out PamaxieUser updatedValue)
             {
                 updatedValue = null;
 
-                if (value == null || string.IsNullOrEmpty(value.Key))
+                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
                 {
                     return false;
                 }
 
-                int indexToUpdate = TestUserData.ListOfUsers.FindIndex(_ => _.Key == value.Key);
+                int indexToUpdate = TestUserData.ListOfUsers.FindIndex(_ => _.UniqueKey == value.UniqueKey);
 
                 if (indexToUpdate == -1)
                 {
@@ -175,7 +175,7 @@ namespace Test.Base
                 return true;
             }
 
-            /// <inheritdoc cref="IUserDataService.UpdateOrCreate"/>
+            /// <inheritdoc cref="IPamaxieUserDataInteraction.UpdateOrCreate"/>
             public bool UpdateOrCreate(PamaxieUser value, out PamaxieUser updatedOrCreatedValue)
             {
                 updatedOrCreatedValue = null;
@@ -185,47 +185,47 @@ namespace Test.Base
                     return false;
                 }
 
-                if (string.IsNullOrEmpty(value.Key) || TestUserData.ListOfUsers.All(_ => _.Key != value.Key))
+                if (string.IsNullOrEmpty(value.UniqueKey) || TestUserData.ListOfUsers.All(_ => _.UniqueKey != value.UniqueKey))
                 {
-                    string key = value.Key;
+                    string key = value.UniqueKey;
 
                     if (string.IsNullOrEmpty(key))
                     {
                         do
                         {
                             key = RandomService.GenerateRandomKey();
-                        } while (TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == key) != null);
+                        } while (TestUserData.ListOfUsers.FirstOrDefault(_ => _.UniqueKey == key) != null);
                     }
 
-                    value.Key = key;
+                    value.UniqueKey = key;
                     TestUserData.ListOfUsers.Add(value);
                     updatedOrCreatedValue = value;
                     return true;
                 }
                 else
                 {
-                    int indexToUpdate = TestUserData.ListOfUsers.FindIndex(_ => _.Key == value.Key);
+                    int indexToUpdate = TestUserData.ListOfUsers.FindIndex(_ => _.UniqueKey == value.UniqueKey);
                     TestUserData.ListOfUsers[indexToUpdate] = value;
                     updatedOrCreatedValue = value;
                     return false;
                 }
             }
 
-            /// <inheritdoc cref="IApplicationDataService.Exists"/>
+            /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.Exists"/>
             public bool Exists(string key)
             {
-                return !string.IsNullOrEmpty(key) && TestUserData.ListOfUsers.Any(_ => _.Key == key);
+                return !string.IsNullOrEmpty(key) && TestUserData.ListOfUsers.Any(_ => _.UniqueKey == key);
             }
 
-            /// <inheritdoc cref="IUserDataService.Delete"/>
+            /// <inheritdoc cref="IPamaxieUserDataInteraction.Delete"/>
             public bool Delete(PamaxieUser value)
             {
-                if (value == null || string.IsNullOrEmpty(value.Key))
+                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
                 {
                     return false;
                 }
 
-                PamaxieUser valueToRemove = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.Key);
+                PamaxieUser valueToRemove = TestUserData.ListOfUsers.FirstOrDefault(_ => _.UniqueKey == value.UniqueKey);
 
                 if (valueToRemove == null)
                 {
@@ -236,10 +236,10 @@ namespace Test.Base
                 return true;
             }
 
-            /// <inheritdoc cref="IUserDataService.GetAllApplications"/>
+            /// <inheritdoc cref="IPamaxieUserDataInteraction.GetAllApplications"/>
             public IEnumerable<PamaxieApplication> GetAllApplications(PamaxieUser value)
             {
-                if (value == null || string.IsNullOrEmpty(value.Key))
+                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
                 {
                     return null;
                 }
@@ -250,7 +250,7 @@ namespace Test.Base
                 {
                     PamaxieApplication application = TestApplicationData.ListOfApplications[i];
 
-                    if (application.OwnerKey == value.Key)
+                    if (application.OwnerKey == value.UniqueKey)
                     {
                         applications.Add(application);
                     }
@@ -259,15 +259,15 @@ namespace Test.Base
                 return applications.AsEnumerable();
             }
 
-            /// <inheritdoc cref="IUserDataService.VerifyEmail"/>
+            /// <inheritdoc cref="IPamaxieUserDataInteraction.VerifyEmail"/>
             public bool VerifyEmail(PamaxieUser value)
             {
-                if (value == null || string.IsNullOrEmpty(value.Key))
+                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
                 {
                     return false;
                 }
 
-                PamaxieUser valueToVerify = TestUserData.ListOfUsers.FirstOrDefault(_ => _.Key == value.Key);
+                PamaxieUser valueToVerify = TestUserData.ListOfUsers.FirstOrDefault(_ => _.UniqueKey == value.UniqueKey);
 
                 if (valueToVerify == null)
                 {

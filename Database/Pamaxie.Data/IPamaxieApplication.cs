@@ -2,6 +2,7 @@
 
 namespace Pamaxie.Data
 {
+    //TODO: someone PLEASE think of a better name for this. This is an insanely confusing name. I'm sadly out of ideas...
     public interface IPamaxieApplication : IDatabaseObject
     {
         /// <summary>
@@ -10,7 +11,7 @@ namespace Pamaxie.Data
         public AppAuthCredentials Credentials { get; set; }
 
         /// <summary>
-        /// The Key of the owner of the application
+        /// The UniqueKey of the owner of the application
         /// </summary>
         public string OwnerKey { get; set; }
 

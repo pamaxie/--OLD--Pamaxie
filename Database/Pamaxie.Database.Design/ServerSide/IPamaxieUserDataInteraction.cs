@@ -6,7 +6,7 @@ namespace Pamaxie.Database.Design
     /// <summary>
     /// Interface that defines User interactions
     /// </summary>
-    public interface IUserDataService : IDataServiceBase<PamaxieUser>
+    public interface IPamaxieUserDataInteraction : IPamaxieDataInteractionBase<PamaxieUser>
     {
         /// <summary>
         /// Gets a list of <see cref="PamaxieApplication"/> from a <see cref="PamaxieUser"/>

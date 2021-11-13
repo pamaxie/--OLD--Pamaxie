@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <NeutralLanguage>English (United States)</NeutralLanguage>
   </PropertyGroup>
 
@@ -18,8 +18,6 @@
     <ProjectReference Include="..\Assemblies\Pamaxie.ImageProcessing\Pamaxie.ImageProcessing.csproj" />
     <ProjectReference Include="..\Assemblies\Pamaxie.Jwt\Pamaxie.Jwt.csproj" />
     <ProjectReference Include="..\Assemblies\Pamaxie.MediaDetection\Pamaxie.MediaDetection.csproj" />
-    <ProjectReference Include="..\Database\Pamaxie.Database.Extensions.Client\Pamaxie.Database.Extensions.Client.csproj" />
-    <ProjectReference Include="..\Database\Pamaxie.Database.Redis\Pamaxie.Database.Redis.csproj" />
     <ProjectReference Include="..\Database\Pamaxie.Data\Pamaxie.Data.csproj" />
     <ProjectReference Include="..\MLModules\PamaxieML.Model\Pamaxie.ImageScanning.csproj" />
   </ItemGroup>

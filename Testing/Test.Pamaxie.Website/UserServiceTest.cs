@@ -110,7 +110,7 @@ namespace Test.Pamaxie.Website_Test
 
             //Assert
             Assert.True(confirmedEmail);
-            PamaxieUser verifiedPamaxieUser = UserDataServiceExtension.Get(user.Key);
+            PamaxieUser verifiedPamaxieUser = UserDataServiceExtension.Get(user.UniqueKey);
             TestOutputHelper.WriteLine("Email verified: {0}", verifiedPamaxieUser.EmailVerified);
             Assert.True(verifiedPamaxieUser.EmailVerified);
         }

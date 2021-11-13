@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Pamaxie.Database.Redis.DataClasses;
 using Pamaxie.ImageScanning;
 
+/*
 namespace Pamaxie.Api.Controllers
 {
     /// <summary>
@@ -52,6 +52,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<string>> ScanImageTask(string fileStream)
         {
+            
             //TODO: FORWARD the request to the WorkerService or the analysis method directly depending on what the user sets (single server mode)
             //TODO: Allow sending/ analysis of binary/raw data
             //TODO: Add response for 102 Processing
@@ -61,6 +62,7 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest();
             }
 
+            
             string filehash = await ImageProcessing.ImageProcessing.GetFileHash(fileStream);
             MediaPredictionData data = new MediaPredictionData(filehash);
 
@@ -146,4 +148,4 @@ namespace Pamaxie.Api.Controllers
             return Ok(hash);
         }
     }
-}
+}*/

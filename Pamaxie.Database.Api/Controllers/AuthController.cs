@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
-using Pamaxie.Database.Extensions.Server;
+using Pamaxie.Database.Design;
 using Pamaxie.Jwt;
 
 namespace Pamaxie.Api.Controllers
@@ -16,17 +16,17 @@ namespace Pamaxie.Api.Controllers
     public sealed class AuthController : ControllerBase
     {
         private readonly TokenGenerator _generator;
-        private readonly DatabaseService _dbService;
+        private readonly IPamaxieDatabaseDriver _dbDriver;
 
         /// <summary>
         /// Constructor for <see cref="AuthController"/>
         /// </summary>
         /// <param name="generator">Token generator</param>
         /// <param name="dbService">Database Service</param>
-        public AuthController(TokenGenerator generator, DatabaseService dbService)
+        public AuthController(TokenGenerator generator, IPamaxieDatabaseDriver dbService)
         {
             _generator = generator;
-            _dbService = dbService;
+            _dbDriver = dbService;
         }
 
         /// <summary>
@@ -42,11 +42,6 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<AuthToken> LoginTask()
         {
-            //TODO Not yet implemented
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
 
             StringValues token = Request.Headers["authorization"];
 
@@ -76,11 +71,6 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<string> CreateUserTask()
         {
-            //TODO Not yet implemented
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
 
             //if ({Value to use} == null)
             //if (string.IsNullOrEmpty({Value to use}))
@@ -108,10 +98,6 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<AuthToken> RefreshTask()
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
 
             StringValues token = Request.Headers["authorization"];
 
@@ -122,7 +108,7 @@ namespace Pamaxie.Api.Controllers
 
             string userId = TokenGenerator.GetUserKey(token);
 
-            if (_dbService.Users.Exists(userId))
+            if (!_dbDriver.Service.PamaxieUserData.Exists(userId))
             {
                 return Unauthorized();
             }

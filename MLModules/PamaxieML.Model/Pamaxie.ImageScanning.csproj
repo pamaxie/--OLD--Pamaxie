@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <NeutralLanguage>English (United States)</NeutralLanguage>
   </PropertyGroup>
   <ItemGroup>

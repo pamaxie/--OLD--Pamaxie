@@ -1,5 +1,6 @@
 ﻿namespace Pamaxie.Data
 {
+    //TODO: this needs to be added to the database with the required adapter and hash spec (so we can seperate it from other things)
     public interface IWebDomain : IDatabaseObject
     {
         /// <summary>

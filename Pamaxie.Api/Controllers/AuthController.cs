@@ -37,7 +37,7 @@ namespace Pamaxie.Api.Controllers
         public ActionResult<AuthToken> LoginTask(PamaxieApplication application)
         {
             //TODO: Use basic auth here please, do not use a HTTPPost for login.
-            if (string.IsNullOrEmpty(application.Credentials.AuthorizationToken) || default == application.Key)
+            if (string.IsNullOrEmpty(application.Credentials.AuthorizationToken) || default == application.UniqueKey)
             {
                 return Unauthorized();
             }
@@ -47,7 +47,7 @@ namespace Pamaxie.Api.Controllers
                 return Unauthorized();
             }
 
-            AuthToken token = _generator.CreateToken(application.Key);
+            AuthToken token = _generator.CreateToken(application.UniqueKey);
             return Ok(token);
         }
 

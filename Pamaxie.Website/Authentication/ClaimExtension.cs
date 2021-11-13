@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Security.Claims;
 using Pamaxie.Data;
-using Pamaxie.Database.Extensions.Client;
 
 namespace Pamaxie.Website.Authentication
 {
@@ -36,7 +35,7 @@ namespace Pamaxie.Website.Authentication
                 switch (claim.Type)
                 {
                     case "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier":
-                        googleClaim.Key = claim.Value;
+                        googleClaim.UniqueKey = claim.Value;
                         break;
                     case "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name":
                         googleClaim.UserName = claim.Value;
@@ -57,11 +56,11 @@ namespace Pamaxie.Website.Authentication
             }
 
             //Check if user exists if yes get their id if no create one!
-            IPamaxieUser pamaxieUser = UserDataServiceExtension.Get(googleClaim.Key);
+            IPamaxieUser pamaxieUser = UserDataServiceExtension.Get(googleClaim.UniqueKey);
             if (pamaxieUser is not { Deleted: false })
                 return googleClaim;
             hasAccount = true;
-            googleClaim.Key = pamaxieUser.Key;
+            googleClaim.UniqueKey = pamaxieUser.UniqueKey;
             return googleClaim;
         }
     }

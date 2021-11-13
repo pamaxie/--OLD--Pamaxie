@@ -41,13 +41,13 @@ namespace Pamaxie.Api.Controllers
 
             PamaxieApplication appData = JsonConvert.DeserializeObject<PamaxieApplication>(result);
 
-            if (string.IsNullOrEmpty(appData?.Credentials.AuthorizationToken) || default == appData.Key)
+            if (string.IsNullOrEmpty(appData?.Credentials.AuthorizationToken) || default == appData.UniqueKey)
                 return Unauthorized();
 
             if (!appData.VerifyAuthentication())
                 return Unauthorized();
 
-            AuthToken token = _generator.CreateToken(appData.Key);
+            AuthToken token = _generator.CreateToken(appData.UniqueKey);
             return Ok(token);
         }
 

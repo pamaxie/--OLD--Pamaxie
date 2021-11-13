@@ -109,7 +109,7 @@ namespace Pamaxie.Website.Pages
 
             NewApplication = new PamaxieApplication()
             {
-                OwnerKey = User.Key,
+                OwnerKey = User.UniqueKey,
                 Disabled = false,
                 LastAuth = DateTime.Now,
                 RateLimited = false

@@ -21,9 +21,9 @@ namespace Test.Base
         public static IConnectionMultiplexer Mock()
         {
             _listOfEverything = new List<string[]>(TestApplicationData.ListOfApplications.Select(application =>
-                new[] { application.Key, JsonConvert.SerializeObject(application) }).ToList());
+                new[] { application.UniqueKey, JsonConvert.SerializeObject(application) }).ToList());
             _listOfEverything.AddRange(TestUserData.ListOfUsers.Select(user =>
-                new[] { user.Key, JsonConvert.SerializeObject(user) }));
+                new[] { user.UniqueKey, JsonConvert.SerializeObject(user) }));
 
             Mock<IConnectionMultiplexer> mockConnectionMultiplexer = new Mock<IConnectionMultiplexer>();
             mockConnectionMultiplexer.Setup(_ => _.IsConnected).Returns(false);

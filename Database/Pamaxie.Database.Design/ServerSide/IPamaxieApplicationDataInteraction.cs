@@ -5,7 +5,7 @@ namespace Pamaxie.Database.Design
     /// <summary>
     /// Interface that defines Application interactions
     /// </summary>
-    public interface IApplicationDataService : IDataServiceBase<PamaxieApplication>
+    public interface IPamaxieApplicationDataInteraction : IPamaxieDataInteractionBase<PamaxieApplication>
     {
         /// <summary>
         /// Get the owner of the <see cref="PamaxieApplication"/>

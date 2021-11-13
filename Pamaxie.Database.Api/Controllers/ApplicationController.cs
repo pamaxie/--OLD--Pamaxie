@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pamaxie.Data;
-using Pamaxie.Database.Extensions.Server;
+using Pamaxie.Database.Design;
 
+/*
 namespace Pamaxie.Api.Controllers
 {
     /// <summary>
@@ -15,21 +16,22 @@ namespace Pamaxie.Api.Controllers
     [Route("[controller]")]
     public sealed class ApplicationController : ControllerBase
     {
-        private readonly DatabaseService _dbService;
+
+        private readonly IPamaxieDatabaseDriver _dbDriver;
 
         /// <summary>
         /// Constructor for <see cref="ApplicationController"/>
         /// </summary>
-        /// <param name="dbService">Database Service</param>
-        public ApplicationController(DatabaseService dbService)
+        /// <param name="dbDriver">Database Service</param>
+        public ApplicationController(IPamaxieDatabaseDriver dbDriver)
         {
-            _dbService = dbService;
+            _dbDriver = dbDriver;
         }
 
         /// <summary>
         /// Gets a <see cref="PamaxieApplication"/> from the database by a key
         /// </summary>
-        /// <param name="key">Unique Key of the <see cref="PamaxieApplication"/></param>
+        /// <param name="key">Unique UniqueKey of the <see cref="PamaxieApplication"/></param>
         /// <returns>A <see cref="PamaxieApplication"/> from the database</returns>
         [Authorize]
         [HttpGet("Get={key}")]
@@ -39,10 +41,6 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> GetTask(string key)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
 
             if (string.IsNullOrEmpty(key))
             {
@@ -207,7 +205,7 @@ namespace Pamaxie.Api.Controllers
         /// <summary>
         /// Checks if a <see cref="PamaxieApplication"/> exists in the database
         /// </summary>
-        /// <param name="key">Unique Key of the <see cref="PamaxieApplication"/></param>
+        /// <param name="key">Unique UniqueKey of the <see cref="PamaxieApplication"/></param>
         /// <returns><see cref="bool"/> if <see cref="PamaxieApplication"/> exists in the database</returns>
         [Authorize]
         [HttpGet("Exists={key}")]
@@ -344,4 +342,4 @@ namespace Pamaxie.Api.Controllers
             return Unauthorized();
         }
     }
-}
+}*/

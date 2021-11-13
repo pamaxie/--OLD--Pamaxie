@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pamaxie.Data;
-using Pamaxie.Database.Extensions.Server;
+using Pamaxie.Database.Design;
 
 namespace Pamaxie.Api.Controllers
 {
@@ -16,21 +16,22 @@ namespace Pamaxie.Api.Controllers
     [Route("[controller]")]
     public sealed class UserController : ControllerBase
     {
-        private readonly DatabaseService _dbService;
+
+        private readonly IPamaxieDatabaseDriver _dbDriver;
 
         /// <summary>
         /// Constructor for <see cref="UserController"/>
         /// </summary>
-        /// <param name="dbService">Database Service</param>
-        public UserController(DatabaseService dbService)
+        /// <param name="dbDriver">Driver for talking to the requested database service</param>
+        public UserController(IPamaxieDatabaseDriver dbDriver)
         {
-            _dbService = dbService;
+            _dbDriver = dbDriver;
         }
 
         /// <summary>
         /// Get a <see cref="PamaxieUser"/> from the database by a key
         /// </summary>
-        /// <param name="key">Unique Key of the <see cref="PamaxieUser"/></param>
+        /// <param name="key">Unique UniqueKey of the <see cref="PamaxieUser"/></param>
         /// <returns>A <see cref="PamaxieUser"/> from the database</returns>
         [Authorize]
         [HttpGet("Get={key}")]
@@ -40,22 +41,17 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> GetTask(string key)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (string.IsNullOrEmpty(key))
             {
                 return BadRequest();
             }
-
-            if (!_dbService.Applications.Exists(key))
+            
+            if (!_dbDriver.Service.PamaxieApplicationData.Exists(key))
             {
                 return NotFound();
             }
 
-            return Ok(_dbService.Users.Get(key));
+            return Ok(_dbDriver.Service.PamaxieUserData.Get(key));
         }
 
         /// <summary>
@@ -71,17 +67,12 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> CreateTask(PamaxieUser user)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (user == null)
             {
                 return BadRequest();
             }
 
-            return Created("", _dbService.Users.Create(user));
+            return Created("", _dbDriver.Service.PamaxieUserData.Create(user));
         }
 
         /// <summary>
@@ -97,17 +88,12 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> TryCreateTask(PamaxieUser user)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (user == null)
             {
                 return BadRequest();
             }
 
-            if (_dbService.Users.TryCreate(user, out PamaxieUser createdUser))
+            if (_dbDriver.Service.PamaxieUserData.TryCreate(user, out PamaxieUser createdUser))
             {
                 return Created("", createdUser);
             }
@@ -128,17 +114,12 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> UpdateTask(PamaxieUser user)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (user == null)
             {
                 return BadRequest();
             }
 
-            return Ok(_dbService.Users.Update(user));
+            return Ok(_dbDriver.Service.PamaxieUserData.Update(user));
         }
 
         /// <summary>
@@ -154,17 +135,12 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> TryUpdateTask(PamaxieUser user)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (user == null)
             {
                 return BadRequest();
             }
 
-            if (_dbService.Users.TryUpdate(user, out PamaxieUser updatedUser))
+            if (_dbDriver.Service.PamaxieUserData.TryUpdate(user, out PamaxieUser updatedUser))
             {
                 return Ok(updatedUser);
             }
@@ -187,17 +163,12 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> UpdateOrCreateTask(PamaxieUser user)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (user == null)
             {
                 return BadRequest();
             }
 
-            if (_dbService.Users.UpdateOrCreate(user, out PamaxieUser updatedOrCreatedUser))
+            if (_dbDriver.Service.PamaxieUserData.UpdateOrCreate(user, out PamaxieUser updatedOrCreatedUser))
             {
                 return Created("", updatedOrCreatedUser);
             }
@@ -207,8 +178,9 @@ namespace Pamaxie.Api.Controllers
 
         /// <summary>
         /// Checks if a <see cref="PamaxieUser"/> exists in the database
+        /// TODO: This should probably not exist. Maybe check if this is required.
         /// </summary>
-        /// <param name="key">Unique Key of the <see cref="PamaxieUser"/></param>
+        /// <param name="key">Unique UniqueKey of the <see cref="PamaxieUser"/></param>
         /// <returns><see cref="bool"/> if <see cref="PamaxieUser"/> exists in the database</returns>
         [Authorize]
         [HttpGet("Exists={key}")]
@@ -218,17 +190,12 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> ExistsTask(string key)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (string.IsNullOrEmpty(key))
             {
                 return BadRequest();
             }
 
-            return Ok(_dbService.Users.Exists(key));
+            return Ok(_dbDriver.Service.PamaxieUserData.Exists(key));
         }
 
         /// <summary>
@@ -244,17 +211,12 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> DeleteTask(PamaxieUser user)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (user == null)
             {
                 return BadRequest();
             }
 
-            if (_dbService.Users.Delete(user))
+            if (_dbDriver.Service.PamaxieUserData.Delete(user))
             {
                 return Ok(true);
             }
@@ -275,17 +237,12 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<IEnumerable<PamaxieApplication>> GetAllApplicationsTask(PamaxieUser user)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (user == null)
             {
                 return BadRequest();
             }
 
-            return Ok(_dbService.Users.GetAllApplications(user));
+            return Ok(_dbDriver.Service.PamaxieUserData.GetAllApplications(user));
         }
 
         /// <summary>
@@ -301,17 +258,12 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> VerifyEmailTask(PamaxieUser user)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (user == null)
             {
                 return BadRequest();
             }
 
-            if (_dbService.Users.VerifyEmail(user))
+            if (_dbDriver.Service.PamaxieUserData.VerifyEmail(user))
             {
                 return Ok(true);
             }

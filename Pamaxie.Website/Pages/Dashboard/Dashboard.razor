@@ -22,7 +22,7 @@
                     <MudText Class="dynamicPadding" Typo="Typo.h6">Create new Application</MudText>
                     <div style="text-align: left">
                         <MudForm Class="dynamicPadding mg-10">
-                            <MudField Label="Application Id" Variant="Variant.Text">@NewApplication.Key</MudField>
+                            <MudField Label="Application Id" Variant="Variant.Text">@NewApplication.UniqueKey</MudField>
                             <MudTextField T="string" Label="Application Name" Required="true" RequiredError="Application Name is required!" ValueChanged="s => NewApplication.ApplicationName = s"/>
                             <MudTextField T="string" Label="Application Token" HelperText="Choose an AppToken" @ref="PwField1"
                                           InputType="InputType.Password"

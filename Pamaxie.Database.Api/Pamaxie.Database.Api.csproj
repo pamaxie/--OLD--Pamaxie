@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
 	  <UserSecretsId>aspnet-Pamaxie.Api-044EE535-5EED-4FCD-95B3-28072588E67B</UserSecretsId>
     <WebProject_DirectoryAccessLevelKey>0</WebProject_DirectoryAccessLevelKey>
     <StartupObject>Pamaxie.Api.Program</StartupObject>
@@ -26,7 +26,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Assemblies\Pamaxie.Helpers\Pamaxie.Helpers.csproj" />
     <ProjectReference Include="..\Assemblies\Pamaxie.Jwt\Pamaxie.Jwt.csproj" />
-    <ProjectReference Include="..\Database\Pamaxie.Database.Extensions.Server\Pamaxie.Database.Extensions.Server.csproj" />
+    <ProjectReference Include="..\Database\Pamaxie.Database.Design\Pamaxie.Database.Design.csproj" />
+    <ProjectReference Include="..\Database\Pamaxie.Database.Redis\Pamaxie.Database.Server.csproj" />
   </ItemGroup>
 
   <ItemGroup>

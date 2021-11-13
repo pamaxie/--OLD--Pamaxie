@@ -12,7 +12,7 @@
             <MudAvatar Image="@User?.ProfilePictureAddress"/>
             <MudField Label="User Name" Variant="Variant.Text" Disabled="true">@User?.UserName</MudField>
             <MudField Label="Email Address" Variant="Variant.Text" Disabled="true">@User?.EmailAddress</MudField>
-            <MudField Label="User Id" Variant="Variant.Text" Disabled="true">@User?.Key</MudField>
+            <MudField Label="User Id" Variant="Variant.Text" Disabled="true">@User?.UniqueKey</MudField>
             <MudButton Class="mg-20" Color="Color.Error" OnClick="OnDeleteButtonClicked" Disabled="@DisableDeleteData">Delete Account</MudButton>
         </MudForm>
 

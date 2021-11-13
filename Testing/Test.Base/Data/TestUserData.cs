@@ -18,7 +18,7 @@ namespace Test.Base
         {
             new PamaxieUser
             {
-                Key = "108533958726952849891",
+                UniqueKey = "108533958726952849891",
                 UserName = "Xystosie",
                 FirstName = "Santina",
                 LastName = "Xystos",
@@ -30,7 +30,7 @@ namespace Test.Base
             },
             new PamaxieUser
             {
-                Key = "102617494281791801620",
+                UniqueKey = "102617494281791801620",
                 UserName = "Indrakitten",
                 FirstName = "Indra",
                 LastName = "Aronne",
@@ -42,7 +42,7 @@ namespace Test.Base
             },
             new PamaxieUser
             {
-                Key = "103932469084294046511",
+                UniqueKey = "103932469084294046511",
                 UserName = "Maxster",
                 FirstName = "Oshrat",
                 LastName = "Max",
@@ -54,7 +54,7 @@ namespace Test.Base
             },
             new PamaxieUser
             {
-                Key = "104669818103955818761",
+                UniqueKey = "104669818103955818761",
                 UserName = "Paulo",
                 FirstName = "Paulus",
                 LastName = "Ferdinand",
@@ -66,7 +66,7 @@ namespace Test.Base
             },
             new PamaxieUser
             {
-                Key = "101321258707856828644",
+                UniqueKey = "101321258707856828644",
                 UserName = "Mana",
                 FirstName = "Manuela",
                 LastName = "Jéssica",
@@ -97,7 +97,7 @@ namespace Test.Base
                         //Add the user to the list of users
                         PamaxieUser pamaxieUser = new PamaxieUser
                         {
-                            Key = "101963629560135630792",
+                            UniqueKey = "101963629560135630792",
                             UserName = "PersonalUser",
                             FirstName = "Lucy",
                             LastName = "Pamaxie",
@@ -117,7 +117,7 @@ namespace Test.Base
 
             ListOfUsers.Add(new PamaxieUser()
             {
-                Key = "101963629560135630792",
+                UniqueKey = "101963629560135630792",
                 UserName = "",
                 FirstName = "",
                 LastName = "",

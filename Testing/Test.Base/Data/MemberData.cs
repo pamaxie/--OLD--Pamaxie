@@ -28,7 +28,7 @@ namespace Test.Base
                         continue;
                     }
 
-                    list.Add(new object[] { user.Key });
+                    list.Add(new object[] { user.UniqueKey });
                 }
 
                 return list;
@@ -99,7 +99,7 @@ namespace Test.Base
                         {
                             Claim[] claimUser = TestGoogleClaimData.ListOfGoogleUserPrincipleClaims[j];
 
-                            if (user.Key == claimUser[0].Value)
+                            if (user.UniqueKey == claimUser[0].Value)
                             {
                                 list.Add(new object[] { claimUser });
                             }
@@ -129,7 +129,7 @@ namespace Test.Base
                         {
                             Claim[] claimUser = TestGoogleClaimData.ListOfGoogleUserPrincipleClaims[j];
 
-                            if (user.Key == claimUser[0].Value)
+                            if (user.UniqueKey == claimUser[0].Value)
                             {
                                 list.Add(new object[] { claimUser });
                             }
@@ -154,7 +154,7 @@ namespace Test.Base
                 {
                     PamaxieUser user = TestUserData.ListOfUsers[i];
 
-                    if (user.Key == "101963629560135630792" && !user.Deleted)
+                    if (user.UniqueKey == "101963629560135630792" && !user.Deleted)
                     {
                         list.Add(new object[] { user });
                     }
@@ -179,7 +179,7 @@ namespace Test.Base
 
                     if (!application.Deleted)
                     {
-                        list.Add(new object[] { application.Key });
+                        list.Add(new object[] { application.UniqueKey });
                     }
                 }
 
@@ -258,7 +258,7 @@ namespace Test.Base
                             AuthorizationTokenCipher = "",
                             LastAuth = DateTime.Now
                         },
-                        OwnerKey = TestUserData.ListOfUsers[rnd.Next(TestUserData.ListOfUsers.Count - 1)].Key,
+                        OwnerKey = TestUserData.ListOfUsers[rnd.Next(TestUserData.ListOfUsers.Count - 1)].UniqueKey,
                         ApplicationName = RandomService.GenerateRandomName(),
                         LastAuth = DateTime.Now
                     };

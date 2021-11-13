@@ -62,7 +62,7 @@ namespace Test.Database.Extensions.Server_Test
 
             //Assert
             Assert.NotNull(createdApplication);
-            Assert.False(string.IsNullOrEmpty(createdApplication.Key));
+            Assert.False(string.IsNullOrEmpty(createdApplication.UniqueKey));
             string str = JsonConvert.SerializeObject(createdApplication);
             TestOutputHelper.WriteLine(str);
 
@@ -84,7 +84,7 @@ namespace Test.Database.Extensions.Server_Test
             //Assert
             Assert.True(created);
             Assert.NotNull(createdApplication);
-            Assert.False(string.IsNullOrEmpty(createdApplication.Key));
+            Assert.False(string.IsNullOrEmpty(createdApplication.UniqueKey));
             string str = JsonConvert.SerializeObject(createdApplication);
             TestOutputHelper.WriteLine(str);
 
@@ -161,7 +161,7 @@ namespace Test.Database.Extensions.Server_Test
             //Assert
             Assert.True(created);
             Assert.NotNull(createdApplication);
-            Assert.False(string.IsNullOrEmpty(createdApplication.Key));
+            Assert.False(string.IsNullOrEmpty(createdApplication.UniqueKey));
             string str = JsonConvert.SerializeObject(createdApplication);
             TestOutputHelper.WriteLine(str);
 

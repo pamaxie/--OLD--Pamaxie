@@ -57,7 +57,7 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
 
             //Assert
             Assert.NotNull(createdUser);
-            Assert.NotEmpty(createdUser.Key);
+            Assert.NotEmpty(createdUser.UniqueKey);
             string str = JsonConvert.SerializeObject(createdUser);
             TestOutputHelper.WriteLine(str);
         }
@@ -76,7 +76,7 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
             //Assert
             Assert.True(created);
             Assert.NotNull(createdUser);
-            Assert.NotEmpty(createdUser.Key);
+            Assert.NotEmpty(createdUser.UniqueKey);
             string str = JsonConvert.SerializeObject(createdUser);
             TestOutputHelper.WriteLine(str);
         }
@@ -150,7 +150,7 @@ namespace Test.Pamaxie.Database.Extensions.Client_Test
             //Assert
             Assert.True(created);
             Assert.NotNull(createdUser);
-            Assert.NotEmpty(createdUser.Key);
+            Assert.NotEmpty(createdUser.UniqueKey);
             string str = JsonConvert.SerializeObject(createdUser);
             TestOutputHelper.WriteLine(str);
         }

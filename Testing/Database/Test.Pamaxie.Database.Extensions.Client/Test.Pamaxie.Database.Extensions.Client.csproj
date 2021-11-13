@@ -1,13 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
 
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Database\Pamaxie.Database.Extensions.Client\Pamaxie.Database.Extensions.Client.csproj" />
       <ProjectReference Include="..\..\..\Pamaxie.Database.Api\Pamaxie.Database.Api.csproj" />
       <ProjectReference Include="..\..\Test.Base\Test.Base.csproj" />
     </ItemGroup>

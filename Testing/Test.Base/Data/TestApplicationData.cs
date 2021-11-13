@@ -17,7 +17,7 @@ namespace Test.Base
         {
             new PamaxieApplication
             {
-                Key = "1064922",
+                UniqueKey = "1064922",
                 OwnerKey = "102617494281791801620",
                 TTL = DateTime.Now,
                 Credentials = new AppAuthCredentials
@@ -31,7 +31,7 @@ namespace Test.Base
             },
             new PamaxieApplication
             {
-                Key = "1053324",
+                UniqueKey = "1053324",
                 OwnerKey = "102617494281791801620",
                 TTL = DateTime.Now,
                 Credentials = new AppAuthCredentials
@@ -45,7 +45,7 @@ namespace Test.Base
             },
             new PamaxieApplication
             {
-                Key = "1051080",
+                UniqueKey = "1051080",
                 OwnerKey = "104669818103955818761",
                 TTL = DateTime.Now,
                 Credentials = new AppAuthCredentials
@@ -59,7 +59,7 @@ namespace Test.Base
             },
             new PamaxieApplication
             {
-                Key = "1065779",
+                UniqueKey = "1065779",
                 OwnerKey = "104669818103955818761",
                 TTL = DateTime.Now,
                 Credentials = new AppAuthCredentials
@@ -73,7 +73,7 @@ namespace Test.Base
             },
             new PamaxieApplication
             {
-                Key = "1060105",
+                UniqueKey = "1060105",
                 OwnerKey = "104669818103955818761",
                 TTL = DateTime.Now,
                 Credentials = new AppAuthCredentials
