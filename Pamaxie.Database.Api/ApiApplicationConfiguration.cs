@@ -17,8 +17,25 @@ namespace Pamaxie.Database.Api
     /// </summary>
     public class ApiApplicationConfiguration
     {
+        /// <summary>
+        /// Settings that hold the configuration for database access
+        /// </summary>
         public const string DbSettingsEnvVar = "7812_PamaxieDbApi_DbSettings";
+
+        /// <summary>
+        /// Settings that hold the configuration for the jwt settings
+        /// </summary>
         public const string JwtSettingsEnvVar = "7812_PamaxieDbApi_AuthSettings";
+
+        /// <summary>
+        /// Holds the Database settings
+        /// </summary>
+        public static string DbSettings;
+
+        /// <summary>
+        /// Holds the settings for Jwt token Generation
+        /// </summary>
+        public static string JwtSettings;
 
         /// <summary>
         /// Validates that the settings exist and are correct
@@ -74,6 +91,16 @@ namespace Pamaxie.Database.Api
         }
 
         /// <summary>
+        /// Loads the configuration
+        /// </summary>
+        /// <returns></returns>
+        internal static void LoadConfiguration()
+        {
+            DbSettings = Environment.GetEnvironmentVariable(DbSettingsEnvVar, EnvironmentVariableTarget.User);
+            JwtSettings = Environment.GetEnvironmentVariable(JwtSettingsEnvVar, EnvironmentVariableTarget.User);
+        }
+
+        /// <summary>
         /// Generates the configuration for the api
         /// </summary>
         /// <returns></returns>
@@ -126,8 +153,8 @@ namespace Pamaxie.Database.Api
                     Environment.SetEnvironmentVariable(DbSettingsEnvVar, databaseConnectionString, EnvironmentVariableTarget.User);
                 }
 
-                AnsiConsole.Render(new Markup("We stored the configuration in the enviorement variables for you.\n " +
-                    "Thank you for using Pamaxies Services. If you require help using this service please see our wiki at [blue]https://wiki.pamaxie.com[/]\n"));
+                AnsiConsole.Render(new Markup("We stored the configuration in the enviorement variables for you.\n" +
+                    "Thank you for using Pamaxies Services.If you require help using this service please see our wiki at [blue]https://wiki.pamaxie.com[/]\n"));
                 return true;
             }
 

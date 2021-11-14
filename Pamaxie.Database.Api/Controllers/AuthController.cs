@@ -6,6 +6,7 @@ using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Pamaxie.Data;
+using Pamaxie.Database.Api;
 using Pamaxie.Database.Design;
 using Pamaxie.Helpers;
 using Pamaxie.Jwt;
@@ -80,7 +81,7 @@ namespace Pamaxie.Api.Controllers
                 return Unauthorized("Invalid username or password");
             }
 
-            AuthToken newToken = _generator.CreateToken(userId);
+            AuthToken newToken = _generator.CreateToken(userId, ApiApplicationConfiguration.JwtSettings);
             return Ok(newToken);
         }
 

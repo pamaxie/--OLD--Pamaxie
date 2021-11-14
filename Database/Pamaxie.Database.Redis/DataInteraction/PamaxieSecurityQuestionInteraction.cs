@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Pamaxie.Database.Server.DataInteraction
 {
     /// <inheritdoc/>
-    internal class PamaxieSecurityQuestionInteraction : PamaxieDataInteractionBase<ISecurityQuestions>, ISecurityQuestionInteraction
+    internal class PamaxieSecurityQuestionInteraction : PamaxieDataInteractionBase<SecurityQuestions>, ISecurityQuestionInteraction
     {
         private PamaxieDatabaseDriver _owner;
         /// <summary>
@@ -24,7 +24,7 @@ namespace Pamaxie.Database.Server.DataInteraction
         }
 
         /// <inheritdoc/>
-        public IPamaxieUser GetUser(ISecurityQuestions value)
+        public PamaxieUser GetUser(SecurityQuestions value)
         {
             throw new NotImplementedException();
         }

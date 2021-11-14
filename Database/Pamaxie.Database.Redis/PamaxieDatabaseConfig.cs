@@ -400,7 +400,7 @@ If you make a mistake you will be able to corrrect it at the end of the setup. S
             => options.ChannelPrefix = AnsiConsole.Ask<string>("Please specify a channel prefix that should be used during pub/sub operations", null);
 
         private void GenerateDefaultDatabase(ConfigurationOptions options)
-            => options.DefaultDatabase = AnsiConsole.Ask("Default database index (please make sure this does not exceed the amount of databases we have)", 1) - 1;
+            => options.DefaultDatabase = AnsiConsole.Ask("Default database index (please make sure this does not exceed the amount of databases you have)", 1) - 1;
 
         #endregion
     }

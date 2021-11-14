@@ -48,6 +48,7 @@ namespace Pamaxie.Api
                 System.Environment.Exit(-501);
             }
 
+            ApiApplicationConfiguration.LoadConfiguration();
             services.AddControllers();
 
             var dbSettings = JsonConvert.DeserializeObject<PamaxieDatabaseClientSettings>(Environment.GetEnvironmentVariable(ApiApplicationConfiguration.DbSettingsEnvVar, EnvironmentVariableTarget.User));
@@ -72,7 +73,7 @@ namespace Pamaxie.Api
                     };
                     });
 
-
+            
             var dbDriver = DbDriverManager.LoadDatabaseDriver(dbSettings.DatabaseDriverGuid);
             dbDriver.Configuration.LoadConfig(dbSettings.Settings);
             services.AddSingleton(dbDriver);

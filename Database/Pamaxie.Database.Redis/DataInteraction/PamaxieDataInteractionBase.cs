@@ -181,9 +181,20 @@ namespace Pamaxie.Database.Server.DataInteraction
             using var conn = ConnectionMultiplexer.Connect(_owner.Configuration.ToString());
             IDatabase db = conn.GetDatabase();
 
+            //Usually this shouldn't be done but we require this because of Redis being a non rational database
+            if (data is IPamaxieUser user)
+            {
+                if (!db.KeyExists(user.UserName))
+                {
+                    throw new ArgumentException("The user you entered does not exist in our database yet. Please ensure the username is correct.");
+                }
+
+                db.StringSet(user.UserName, user.UniqueKey);
+            }
+
             if (!db.KeyExists(data.UniqueKey))
             {
-                throw new ArgumentException("The key u entered does not exist in our database yet");
+                throw new ArgumentException("The key you entered does not exist in our database yet");
             }
 
             string parsedData = JsonConvert.SerializeObject(data);
@@ -221,6 +232,17 @@ namespace Pamaxie.Database.Server.DataInteraction
             if (!db.KeyExists(data.UniqueKey))
             {
                 return false;
+            }
+
+            //Usually this shouldn't be done but we require this because of Redis being a non rational database
+            if (data is IPamaxieUser user)
+            {
+                if (!db.KeyExists(user.UserName))
+                {
+                    return false;
+                }
+
+                db.StringSet(user.UserName, user.UniqueKey);
             }
 
             string parsedData = JsonConvert.SerializeObject(data);

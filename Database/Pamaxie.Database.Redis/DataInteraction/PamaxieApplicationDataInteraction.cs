@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Pamaxie.Database.Server.DataInteraction
 {
     /// <inheritdoc/>
-    internal class PamaxieApplicationDataInteraction : PamaxieDataInteractionBase<IPamaxieApplication>, IPamaxieApplicationDataInteraction
+    internal class PamaxieApplicationDataInteraction : PamaxieDataInteractionBase<PamaxieApplication>, IPamaxieApplicationDataInteraction
     {
         private PamaxieDatabaseDriver _owner;
         /// <summary>
@@ -24,7 +24,7 @@ namespace Pamaxie.Database.Server.DataInteraction
         }
 
         /// <inheritdoc/>
-        public IPamaxieApplication EnableOrDisable(IPamaxieApplication value)
+        public PamaxieApplication EnableOrDisable(PamaxieApplication value)
         {
             if (_owner == null)
             {
@@ -62,7 +62,7 @@ namespace Pamaxie.Database.Server.DataInteraction
         }
 
         /// <inheritdoc/>
-        public IPamaxieUser GetOwner(IPamaxieApplication value)
+        public PamaxieUser GetOwner(PamaxieApplication value)
         {
             if (_owner == null)
             {
@@ -97,7 +97,7 @@ namespace Pamaxie.Database.Server.DataInteraction
         }
 
         /// <inheritdoc/>
-        public bool VerifyAuthentication(IPamaxieApplication value)
+        public bool VerifyAuthentication(PamaxieApplication value)
         {
             throw new NotSupportedException("This method has not been implemented yet, and therefore can't be supported on this API yet.");
         }

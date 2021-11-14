@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace Pamaxie.Jwt
 {
@@ -26,13 +27,34 @@ namespace Pamaxie.Jwt
         /// </summary>
         /// <param name="userId">User id of the user that will be contained in the token</param>
         /// <returns>A authentication token object</returns>
-        public AuthToken CreateToken(string userId)
+        public AuthToken CreateToken(string userId, string authTokenSettings = null)
         {
+            //TODO: something is wrong with how this token is generated here. We need to fix this for gathering user information about a token to refresh it for example
+
             //Authentication successful so generate JWT Token
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            IConfigurationSection section = _configuration.GetSection("AuthData");
-            byte[] key = Encoding.ASCII.GetBytes(section.GetValue<string>("Secret"));
-            DateTime expires = DateTime.UtcNow.AddMinutes(section.GetValue<int>("ExpiresInMinutes"));
+
+            byte[] key = null;
+            DateTime? expires = null;
+            if (string.IsNullOrWhiteSpace(authTokenSettings))
+            {
+                IConfigurationSection section = _configuration.GetSection("AuthData");
+                key = Encoding.ASCII.GetBytes(section.GetValue<string>("Secret"));
+                expires = DateTime.UtcNow.AddMinutes(section.GetValue<int>("ExpiresInMinutes"));
+            }
+            else
+            {
+                //TODO: this is only a temporary fix until we figured out how to use our own configuration via dependency injection.
+                var settings = JsonConvert.DeserializeObject<AuthSettings>(authTokenSettings);
+                key = Encoding.ASCII.GetBytes(settings.Secret);
+                expires = DateTime.UtcNow.AddMinutes(settings.ExpiresInMinutes);
+            }
+
+            if (expires == null || key == null)
+            {
+                throw new InvalidOperationException("We hit an unexpected problem while generating the token");
+            }
+            
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
@@ -45,8 +67,7 @@ namespace Pamaxie.Jwt
             };
 
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return new AuthToken { ExpiresAtUTC = expires, Token = tokenHandler.WriteToken(token) };
+            return new AuthToken { ExpiresAtUTC = (DateTime)expires, Token = tokenHandler.WriteToken(token) };
         }
 
         /// <summary>
@@ -56,9 +77,8 @@ namespace Pamaxie.Jwt
         /// <returns></returns>
         public static string GetUserKey(string authToken)
         {
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            JwtSecurityToken token = handler.ReadJwtToken(authToken);
-            return token?.Claims.First(claim => claim.Type == "unique_name").Value;
+            var jwtToken = new JwtSecurityToken(authToken);
+            return jwtToken.Subject;
         }
 
         public static string GenerateSecret()
