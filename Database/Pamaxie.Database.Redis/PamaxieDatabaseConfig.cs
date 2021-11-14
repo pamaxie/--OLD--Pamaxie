@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Pamaxie.Database.Design;
+using Pamaxie.Database.Extensions.ServerSide;
 using Spectre.Console;
 using StackExchange.Redis;
 using System;
@@ -32,47 +33,75 @@ namespace Pamaxie.Database.Server
         /// <inheritdoc/>
         public string GenerateConfig()
         {
-            var ruler = new Rule(@"[yellow]Redis setup[/]");
+            var ruler = new Rule(@"[red]Redis setup[/]");
             ruler.Alignment = Justify.Left;
             AnsiConsole.Render(ruler);
             AnsiConsole.WriteLine(
-                        @"For using this service you require a redis database to be configured and installed on the current system.
-                        Usually with the provided installer for this software you were instructed to install redis on another server or this one.
-                        In the following steps we will help you configure these redis databases.
-                        Please ensure this configuration is correct otherwise we are unable to handle any requests.");
+@"Hello and welcome, this is the Redis database setup guide.
+We will guide you through the installation with ease.
+Please ensure all configurations are setup correctly otherwise connecting to the database might not work.
+If you make a mistake you will be able to corrrect it at the end of the setup. So no worries!");
+            ConfigurationOptions options = new ConfigurationOptions();
+            GenerateSentinelOptions(options);
+            GenerateClientNameOptions(options);
+            GeneratePasswordOptions(options);
+            GenerateAllowAdminOptions(options);
+            GenerateAzureOptions(options);
+            GenerateSslOptions(options);
+            string[] instances = GenerateInstances();
 
-            var setupType = AnsiConsole.Prompt(new SelectionPrompt<string>()
-                .Title(@"--Please select the database enviorement that you are using--")
-                .AddChoices(new[]{@"Local Instance", @"Remote Instance"}));
-
-            dynamic redisObj = new JObject();
-
-            string selectedRedisConfig = string.Empty;
-            if (setupType == @"Local Instance")
+            while (true)
             {
-                ruler.Title = @"[yellow]Local Instance setup[/]";
+                Console.Clear();
+                ruler = new Rule(@"[red]Redis setup[/]");
+                ruler.Alignment = Justify.Left;
                 AnsiConsole.Render(ruler);
-                selectedRedisConfig = GenerateServerOptions();
-            }
-            else
-            {
-                //TODO: Finish generating configurations for multiple servers (have a peek at the documentation if you wanna know how to do this)
-                ruler.Title = @"[yellow]Remote Instance setup[/]";
-                int instances = AnsiConsole.Ask<int>(@"How many redis servers [red](NOT INSTANCES)[/] do you have?", 1);
-                for (int i = 0; i < instances; i++)
+                DrawOptions(options, instances);
+                DrawAdvancedOptions(options);
+
+                string[] choices = new[] { "[Green]Confirm Settings[/]", "Advanced Options", "Edit Settings", "[Red]Cancel[/]" };
+                var confirmSettings = AnsiConsole.Prompt(new SelectionPrompt<string>()
+                                                    .Title("Please select one of these options")
+                                                    .AddChoices(choices));
+
+
+                if (confirmSettings == choices[1])
                 {
-                    string instanceName = AnsiConsole.Ask<string>(@"Please tell us your instance address");
-                    GenerateServerOptions(instanceName);
-                    //TODO: we still need to save the server options here somehow.
-                }
+                    OpenAdvancedOptionsMenu(options, instances);
+                    continue;
 
-                AnsiConsole.Render(ruler);
+                }
+                else if (confirmSettings == choices[2])
+                {
+                    OpenEditOptionsMenu(options, ref instances);
+                    continue;
+                }
+                else if (confirmSettings == choices[3])
+                {
+                    if (AnsiConsole.Ask("[red]Are you sure you wish to proceed. " +
+                        "Cancelling this setup will exit this software.[/] " +
+                        "We require a database to be setup for this software to work.", false))
+                    {
+                        AnsiConsole.Write("Exiting...");
+                        Environment.Exit(-1);
+                    }
+
+                    continue;
+                }
+                else
+                {
+                    foreach(var item in instances)
+                    {
+                        options.EndPoints.Add(item);
+                    }
+
+                    PamaxieDatabaseClientSettings settings = new PamaxieDatabaseClientSettings();
+                    settings.DatabaseDriverGuid = DatabaseDriverGuid;
+                    settings.Settings = options.ToString();
+                    return JsonConvert.SerializeObject(settings, Formatting.Indented);
+                }
             }
 
-            //PLEASE MAKE SURE TO SET THESE EXACTLY LIKE THIS IF YOU BUILD YOUR OWN DRIVER
-            redisObj.DatabaseDriverGuid = DatabaseDriverGuid;
-            redisObj.Settings = selectedRedisConfig;
-            return JsonConvert.SerializeObject(redisObj);
         }
 
         /// <inheritdoc/>
@@ -86,88 +115,293 @@ namespace Pamaxie.Database.Server
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-        {
-            dynamic options = new JObject();
-            options.Guid = this.DatabaseDriverGuid;
-            options.DatabaseConfig = configurationOptions.ToString();
+            => configurationOptions.ToString();
 
-            return JsonConvert.SerializeObject(options, Formatting.Indented);
+        #region General Options Generation
+        private void DrawOptions(ConfigurationOptions options, string[] instances)
+        {
+            var root = new Tree("Generated Database Options:");
+            var databaseInstancesTreeRoot = root.AddNode("[yellow]Specified Redis Instances[/]");
+
+            for (int i = 0; i < instances.Length; i++)
+            {
+                databaseInstancesTreeRoot.AddNode($"{i + 1} -- {instances[i]}");
+            }
+
+            var connectionParametersTreeRoot = root.AddNode("[yellow]Connection Parameters[/]");
+            bool usingSentinel = !string.IsNullOrWhiteSpace(options.ServiceName);
+            DrawBoolNode(connectionParametersTreeRoot, "Sentinel", usingSentinel);
+
+            if (usingSentinel)
+            {
+                connectionParametersTreeRoot.AddNode($"Sentinal Host Name: {options.ServiceName}");
+            }
+
+            connectionParametersTreeRoot.AddNode($"Client Name: {options.ClientName}");
+            DrawBoolNode(connectionParametersTreeRoot, nameof(options.Password), !string.IsNullOrWhiteSpace(options.Password));
+            DrawBoolNode(connectionParametersTreeRoot, "Admin Mode", options.AllowAdmin);
+
+            var isAzureInstance = options.DefaultVersion == new Version("3.0");
+            DrawBoolNode(connectionParametersTreeRoot, "Azure Instance", isAzureInstance);
+
+            if (isAzureInstance)
+            {
+                connectionParametersTreeRoot.AddNode($"Client Name: {options.DefaultVersion}");
+                DrawBoolNode(connectionParametersTreeRoot, nameof(options.AbortOnConnectFail), options.AbortOnConnectFail);
+            }
+
+            DrawBoolNode(connectionParametersTreeRoot, nameof(options.Ssl), options.Ssl);
+            AnsiConsole.Render(root);
         }
 
-
-        /// <summary>
-        /// Generates the server options for connecting to the redis database
-        /// </summary>
-        /// <param name="serverAddress">the instance address / name</param>
-        /// <returns></returns>
-        private static string GenerateServerOptions(string serverAddress = "redis")
+        private void OpenEditOptionsMenu(ConfigurationOptions options, ref string[] instances)
         {
-            ConfigurationOptions options = new ConfigurationOptions();
-
-            var port = AnsiConsole.Ask<int>(
-                "Whats the port number of the local redis instance?", 6379);
-
-            if (AnsiConsole.Ask<bool>("Do you want to use a password for the database (this is HIGHLY recommended)",
-                true))
+            while (true)
             {
-                options.Password = AnsiConsole.Prompt(
-                    new TextPrompt<string>("Please enter your database password. " +
-                                           "[yellow]We do [red]NOT[/] accept passwords with a length of shorter than 8 characters[/], these can be too easily brute forced with redis.")
-                        .Secret()
-                        .PromptStyle("red")
-                        .Validate(token =>
-                        {
-                            if (token.Length < 8)
-                                return ValidationResult.Error(
-                                    "[red]The entered password was too short, please ensure its at least 8 Characters.[/]");
-                            return ValidationResult.Success();
-                        }));
-            }
+                Console.Clear();
+                var ruler = new Rule(@"[red]Redis setup[/]");
+                ruler.Alignment = Justify.Left;
+                AnsiConsole.Render(ruler);
 
-            var instanceCount = AnsiConsole.Ask<int>("How many redis instances are running locally?", 16);
-            int[] instances = new int[instanceCount];
+                DrawOptions(options, instances);
+                DrawAdvancedOptions(options);
 
-            for (int i = 0; i < instanceCount; i++)
-            {
-                instances[i] = i;
-            }
-
-            var selectedInstances = AnsiConsole.Prompt(
-                new MultiSelectionPrompt<int>()
-                    .Title("Please select the Redis instances we should use")
-                    .Required()
-                    .PageSize(10)
-                    .MoreChoicesText("[grey](Move up and down to display more instances)[/]")
-                    .InstructionsText(
-                        "[grey](Press [blue]<space>[/] to toggle an instance, " +
-                        "[green]<enter>[/] to accept)[/]")
-                    .AddChoices(instances));
-            var reconnectionPolicy = AnsiConsole.Prompt(new SelectionPrompt<string>()
-                .Title("--Please select the reconnection policy that should be used if the connection is ever lost--")
-                .PageSize(10)
-                .AddChoices(new[]
+                string[] choices = new[] { "Sentinel", "Client Name", "Password", "Allow Admin", "Use Azure", "Use SSl", "Instances", "[red]Exit Options[/]" };
+                var confirmSettings = AnsiConsole.Prompt(new SelectionPrompt<string>()
+                                                    .Title("Please select which setting you would like to edit")
+                                                    .AddChoices(choices));
+                if (confirmSettings == choices[0])
                 {
-                    "Linear", "Exponential"
-                }));
-            var reconnectionAttempts = AnsiConsole.Ask<int>("How many reconnection attempts should we do?", 5000);
+                    GenerateSentinelOptions(options);
+                    Console.Clear();
+                }
+                else if (confirmSettings == choices[1])
+                {
+                    GenerateClientNameOptions(options);
+                    Console.Clear();
+                }
+                else if (confirmSettings == choices[2])
+                {
+                    GeneratePasswordOptions(options);
+                    Console.Clear();
+                }
+                else if (confirmSettings == choices[3])
+                {
+                    GenerateAllowAdminOptions(options);
+                    Console.Clear();
+                }
+                else if (confirmSettings == choices[4])
+                {
+                    GenerateAzureOptions(options);
+                    Console.Clear();
+                }
+                else if (confirmSettings == choices[5])
+                {
+                    GenerateSslOptions(options);
+                    Console.Clear();
+                }
+                else if (confirmSettings == choices[6])
+                {
+                    instances = GenerateInstances();
+                    Console.Clear();
+                }
+                else if (confirmSettings == choices[7])
+                {
+                    break;
+                }
+            }
+        }
 
-            if (reconnectionPolicy == "Linear")
+        private void GenerateSentinelOptions(ConfigurationOptions options)
+        {
+            if (AnsiConsole.Ask("Do you want to use a sentinel master service", false))
             {
-                options.ReconnectRetryPolicy = new LinearRetry(reconnectionAttempts);
+                options.ServiceName = AnsiConsole.Ask<string>("Please enter your service name: ");
             }
             else
             {
-                options.ReconnectRetryPolicy = new ExponentialRetry(reconnectionAttempts);
+                options.ServiceName = null;
             }
-
-            foreach (var instance in selectedInstances)
-            {
-                options.EndPoints.Add(serverAddress + instance, port);
-            }
-
-            AnsiConsole.WriteLine("The generated redis configuration looks like this:");
-            AnsiConsole.Render(new Markup($"[yellow]{options}[/]\n"));
-            return options.ToString();
         }
+
+        private void GenerateClientNameOptions(ConfigurationOptions options) 
+            => options.ClientName = AnsiConsole.Ask<string>("Please enter a name for your client. It is used to identify this client within Redis", "Pamaxie");
+
+        private void GeneratePasswordOptions(ConfigurationOptions options)
+        {
+            if (AnsiConsole.Ask("Does your service use a password for protection. [red] WE HIGHLY RECOMMNED SETTING ONE IF YOU HAVEN'T[/]", true))
+            {
+                while (true)
+                {
+                    var pw = AnsiConsole.Prompt(new TextPrompt<string>("Enter your password. (This will be stored in [red]cleartext[/] in the configuration): ").PromptStyle("red").Secret());
+                    var pwConfirm = AnsiConsole.Prompt(new TextPrompt<string>("Enter your password. (Confirm): ").PromptStyle("red").Secret());
+                    if (pw == pwConfirm)
+                    {
+                        options.Password = pw;
+                        break;
+                    }
+                    else
+                    {
+                        AnsiConsole.WriteLine("Passwords do not match. Please try again");
+                    }
+                }
+            }
+            else
+            {
+                options.Password = null;
+            }
+        }
+
+        private void GenerateAllowAdminOptions(ConfigurationOptions options) 
+            => options.AllowAdmin = AnsiConsole.Ask("Do you want to enable Admin mode, we recommend doing this. This allows us to execute commands that are considered Risky", true);
+
+        private void GenerateAzureOptions(ConfigurationOptions options)
+        {
+            if (AnsiConsole.Ask("Are you running this redis instance in Azure. This requires some adjustments we need to make in the configuration", false))
+            {
+                options.AbortOnConnectFail = true;
+                options.DefaultVersion = new Version("3.0");
+            }
+            else
+            {
+                options.AbortOnConnectFail = false;
+                options.DefaultVersion = new Version("2.0");
+            }
+        }
+
+        private void GenerateSslOptions(ConfigurationOptions options) 
+            => options.Ssl = AnsiConsole.Ask("Do you want SSL encryption to be used for connecting to the database. We recommend enabling this setting", true);
+
+        private string[] GenerateInstances()
+        {
+            while (true)
+            {
+                int instanceCount = AnsiConsole.Prompt(new TextPrompt<int>("Please enter the amount of instances you have: "));
+                if (instanceCount <= 0)
+                {
+                    AnsiConsole.WriteLine("We require one or more instances to be configured. The number you entered is less than that.");
+                    continue;
+                }
+
+                string[] instances = new string[instanceCount];
+
+                for (int i = 0; i < instanceCount; i++)
+                {
+                    short port = AnsiConsole.Ask<short>("Please enter the port of the service: ", 6379);
+                    if (port <= 0)
+                    {
+                        AnsiConsole.WriteLine("Invalid port specified");
+                        i--;
+                        continue;
+                    }
+                    string hostName = AnsiConsole.Prompt(new TextPrompt<string>("Please enter the hostname of your redis instances: "));
+
+                    if (string.IsNullOrWhiteSpace(hostName))
+                    {
+                        AnsiConsole.WriteLine("Invalid hostname");
+                        i--;
+                        continue;
+                    }
+
+                    instances[i] = $"{hostName}:{port}";
+                }
+
+                return instances;
+            }
+        }
+
+        private void DrawBoolNode(TreeNode node, string parameterName, bool isTrue)
+        {
+            if (isTrue)
+            {
+                node.AddNode($"Using {parameterName}: [green]true[/]");
+            }
+            else
+            {
+                node.AddNode($"Using {parameterName}: [red]false[/]");
+            }
+        }
+        #endregion General Options Generation
+
+        #region Advanced Options Generation
+
+        private void DrawAdvancedOptions(ConfigurationOptions options)
+        {
+            var root = new Tree("Advanced Database Options:");
+            var connectionParametersTreeRoot = root.AddNode("[yellow]Connection Parameters[/]");
+
+
+            connectionParametersTreeRoot.AddNode($"Connection Timeout: {options.ConnectTimeout} ms");
+            connectionParametersTreeRoot.AddNode($"Connection Retry Attempts: {options.ConnectRetry}");
+            DrawBoolNode(connectionParametersTreeRoot, nameof(options.CheckCertificateRevocation), options.CheckCertificateRevocation);
+            connectionParametersTreeRoot.AddNode($"Channel Prefix: {options.ChannelPrefix}");
+            connectionParametersTreeRoot.AddNode($"Default Database Index: {options.DefaultDatabase}");
+            AnsiConsole.Render(root);
+        }
+
+        private void OpenAdvancedOptionsMenu(ConfigurationOptions options, string[] instances)
+        {
+            while (true)
+            {
+                Console.Clear();
+                var ruler = new Rule(@"[red]Redis setup[/]");
+                ruler.Alignment = Justify.Left;
+                AnsiConsole.Render(ruler);
+
+                DrawOptions(options, instances);
+                DrawAdvancedOptions(options);
+
+                string[] choices = new[] { "Connection Timeout", "Reconnection Attempts", "Check Certificate Revocation", "Channel Prefix", "Default Database", "[red]Exit Advanced Options[/]" };
+                var confirmSettings = AnsiConsole.Prompt(new SelectionPrompt<string>()
+                                                    .Title("Please select which setting you would like to edit")
+                                                    .AddChoices(choices));
+                if (confirmSettings == choices[0])
+                {
+                    GenerateConnectionTimeout(options);
+                    Console.Clear();
+                }
+                else if (confirmSettings == choices[1])
+                {
+                    GenerateReconnectionAttempts(options);
+                    Console.Clear();
+                }
+                else if (confirmSettings == choices[2])
+                {
+                    GenerateCheckCertificateRevocation(options);
+                    Console.Clear();
+                }
+                else if (confirmSettings == choices[3])
+                {
+                    GenerateChannelPrefix(options);
+                    Console.Clear();
+                }
+                else if (confirmSettings == choices[4])
+                {
+                    GenerateDefaultDatabase(options);
+                    Console.Clear();
+                }
+                else if (confirmSettings == choices[5])
+                {
+                    break;
+                }
+            }
+        }
+
+        private void GenerateConnectionTimeout(ConfigurationOptions options)
+            => options.ConnectTimeout = AnsiConsole.Ask("Please specify a conneciton timeout (ms) for connect operations", 5000);
+
+        private void GenerateReconnectionAttempts(ConfigurationOptions options)
+            => options.ConnectRetry = AnsiConsole.Ask("Please specify the number of retry attempts that are doing during connection", 3);
+
+        private void GenerateCheckCertificateRevocation(ConfigurationOptions options)
+            => options.CheckCertificateRevocation = AnsiConsole.Ask("Please specify whether the certificate revocation list is checked during authentication.", true);
+
+        private void GenerateChannelPrefix(ConfigurationOptions options)
+            => options.ChannelPrefix = AnsiConsole.Ask<string>("Please specify a channel prefix that should be used during pub/sub operations", null);
+
+        private void GenerateDefaultDatabase(ConfigurationOptions options)
+            => options.DefaultDatabase = AnsiConsole.Ask("Default database index (please make sure this does not exceed the amount of databases we have)", 1) - 1;
+
+        #endregion
     }
 }

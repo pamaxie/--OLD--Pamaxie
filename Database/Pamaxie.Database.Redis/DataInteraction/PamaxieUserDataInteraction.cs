@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Pamaxie.Database.Server.DataInteraction
 {
     /// <inheritdoc cref="IPamaxieUserDataInteraction"/>
-    internal class PamaxieUserDataInteraction : PamaxieDataInteractionBase<PamaxieUser>, IPamaxieUserDataInteraction
+    internal class PamaxieUserDataInteraction : PamaxieDataInteractionBase<IPamaxieUser>, IPamaxieUserDataInteraction
     {
         /// <summary>
         /// Used for accessing the Redis database
@@ -27,8 +27,8 @@ namespace Pamaxie.Database.Server.DataInteraction
             _owner = owner;
         }
 
-        /// <inheritdoc cref="IPamaxieUserDataInteraction.GetAllApplications(PamaxieUser)"/>
-        public IEnumerable<PamaxieApplication> GetAllApplications(PamaxieUser value)
+        /// <inheritdoc cref="IPamaxieUserDataInteraction.GetAllApplications(IPamaxieUser)"/>
+        public IEnumerable<IPamaxieApplication> GetAllApplications(IPamaxieUser value)
         {
             if (_owner == null)
             {
@@ -82,8 +82,8 @@ namespace Pamaxie.Database.Server.DataInteraction
             return applications.AsEnumerable();
         }
 
-        /// <inheritdoc cref="IPamaxieUserDataInteraction.VerifyEmail(PamaxieUser)"/>
-        public bool VerifyEmail(PamaxieUser value)
+        /// <inheritdoc cref="IPamaxieUserDataInteraction.VerifyEmail(IPamaxieUser)"/>
+        public bool VerifyEmail(IPamaxieUser value)
         {
             if (_owner == null)
             {

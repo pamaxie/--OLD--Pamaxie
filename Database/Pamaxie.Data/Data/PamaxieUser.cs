@@ -26,6 +26,11 @@ namespace Pamaxie.Data
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        public string Password { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public string FirstName { get; set; }
 
         /// <summary>
@@ -62,5 +67,10 @@ namespace Pamaxie.Data
         /// <inheritdoc/>
         /// </summary>
         public bool Deleted { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public string SecurityQuestionsId { get; set; }
     }
 }

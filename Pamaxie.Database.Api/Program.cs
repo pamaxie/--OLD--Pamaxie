@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Pamaxie.Database.Extensions;
 
 namespace Pamaxie.Api
 {
@@ -35,7 +36,7 @@ namespace Pamaxie.Api
             if (string.IsNullOrEmpty(nameString))
             {
                 //Default Url if nothing was specified, this is basically the "default" server url
-                nameString = "http://0.0.0.0:5000";
+                nameString = "https://0.0.0.0";
             }
             else if (nameString.Contains(","))
             {

@@ -13,6 +13,11 @@ namespace Pamaxie.Data
         public string UserName { get; set; }
 
         /// <summary>
+        /// Password that the user is using
+        /// </summary>
+        public string Password { get; set; }
+
+        /// <summary>
         /// The first name of the user
         /// </summary>
         public string FirstName { get; set; }
@@ -53,5 +58,10 @@ namespace Pamaxie.Data
         /// If the user was deleted by request
         /// </summary>
         public bool Deleted { get; set; }
+
+        /// <summary>
+        /// Id of the entry holding the security questions
+        /// </summary>
+        public string SecurityQuestionsId { get; set; }
     }
 }

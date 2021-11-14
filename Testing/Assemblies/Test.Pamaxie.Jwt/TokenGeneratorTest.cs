@@ -38,7 +38,7 @@ namespace Test.Pamaxie.Jwt_Test
             Assert.NotNull(authToken);
             Assert.False(string.IsNullOrEmpty(authToken.Token));
             TestOutputHelper.WriteLine("Token: {0}", authToken.Token);
-            TestOutputHelper.WriteLine("Expires at {0:R}", authToken.ExpirationUtc.ToLocalTime());
+            TestOutputHelper.WriteLine("Expires at {0:R}", authToken.ExpiresAtUTC.ToLocalTime());
         }
 
         /// <summary>

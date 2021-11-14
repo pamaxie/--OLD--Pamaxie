@@ -93,7 +93,7 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest();
             }
 
-            if (_dbDriver.Service.PamaxieUserData.TryCreate(user, out PamaxieUser createdUser))
+            if (_dbDriver.Service.PamaxieUserData.TryCreate(user, out var createdUser))
             {
                 return Created("", createdUser);
             }
@@ -140,7 +140,7 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest();
             }
 
-            if (_dbDriver.Service.PamaxieUserData.TryUpdate(user, out PamaxieUser updatedUser))
+            if (_dbDriver.Service.PamaxieUserData.TryUpdate(user, out var updatedUser))
             {
                 return Ok(updatedUser);
             }
@@ -168,7 +168,7 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest();
             }
 
-            if (_dbDriver.Service.PamaxieUserData.UpdateOrCreate(user, out PamaxieUser updatedOrCreatedUser))
+            if (_dbDriver.Service.PamaxieUserData.UpdateOrCreate(user, out var updatedOrCreatedUser))
             {
                 return Created("", updatedOrCreatedUser);
             }

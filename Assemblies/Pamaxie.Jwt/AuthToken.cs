@@ -15,6 +15,6 @@ namespace Pamaxie.Jwt
         /// <summary>
         /// The expiration date of the token
         /// </summary>
-        public DateTime ExpirationUtc { get; init; }
+        public DateTime ExpiresAtUTC { get; init; }
     }
 }

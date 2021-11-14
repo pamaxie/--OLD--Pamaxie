@@ -6,20 +6,20 @@ namespace Pamaxie.Database.Design
     /// <summary>
     /// Interface that defines User interactions
     /// </summary>
-    public interface IPamaxieUserDataInteraction : IPamaxieDataInteractionBase<PamaxieUser>
+    public interface IPamaxieUserDataInteraction : IPamaxieDataInteractionBase<IPamaxieUser>
     {
         /// <summary>
-        /// Gets a list of <see cref="PamaxieApplication"/> from a <see cref="PamaxieUser"/>
+        /// Gets a list of <see cref="IPamaxieApplication"/> from a <see cref="IPamaxieUser"/>
         /// </summary>
-        /// <param name="value">The key of the <see cref="PamaxieUser"/> who owns the applications</param>
-        /// <returns>A list of all applications the <see cref="PamaxieUser"/> owns</returns>
-        public IEnumerable<PamaxieApplication> GetAllApplications(PamaxieUser value);
+        /// <param name="value">The key of the <see cref="IPamaxieUser"/> who owns the applications</param>
+        /// <returns>A list of all applications the <see cref="IPamaxieUser"/> owns</returns>
+        public IEnumerable<IPamaxieApplication> GetAllApplications(IPamaxieUser value);
 
         /// <summary>
-        /// Verifies the email of the <see cref="PamaxieUser"/>
+        /// Verifies the email of the <see cref="IPamaxieUser"/>
         /// </summary>
-        /// <param name="value">The <see cref="PamaxieUser"/> that will have their email verified</param>
+        /// <param name="value">The <see cref="IPamaxieUser"/> that will have their email verified</param>
         /// <returns><see cref="bool"/> if the operation was successful and the email was verified</returns>
-        public bool VerifyEmail(PamaxieUser value);
+        public bool VerifyEmail(IPamaxieUser value);
     }
 }

@@ -2,6 +2,8 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Pamaxie.Database.Extensions;
+using Pamaxie.Database.Extensions.ServerSide;
+using Pamaxie.Helpers;
 using Pamaxie.Jwt;
 using Spectre.Console;
 using System;
@@ -15,6 +17,9 @@ namespace Pamaxie.Database.Api
     /// </summary>
     public class ApiApplicationConfiguration
     {
+        public const string DbSettingsEnvVar = "7812_PamaxieDbApi_DbSettings";
+        public const string JwtSettingsEnvVar = "7812_PamaxieDbApi_AuthSettings";
+
         /// <summary>
         /// Validates that the settings exist and are correct
         /// </summary>
@@ -22,40 +27,48 @@ namespace Pamaxie.Database.Api
         public static bool ValidateConfiguration(IConfiguration configuration, out string additionalIssue)
 
         {
-            var ruler = new Rule("[orange]Pamaxie Database API[/]");
+            var ruler = new Rule("[blue]Pamaxie Database API[/]");
             ruler.Alignment = Justify.Left;
             AnsiConsole.Render(ruler);
 
-            ruler = new Rule("Settings validation");
-            AnsiConsole.Render(ruler);
 
             additionalIssue = string.Empty;
-            if (!File.Exists("app.configuration"))
+
+            var dbSettings = Environment.GetEnvironmentVariable(DbSettingsEnvVar, EnvironmentVariableTarget.User);
+            var jwtSettings = Environment.GetEnvironmentVariable(JwtSettingsEnvVar, EnvironmentVariableTarget.User);
+            if (string.IsNullOrWhiteSpace(jwtSettings) || string.IsNullOrWhiteSpace(dbSettings))
             {
-                if (!AnsiConsole.Confirm("[orange]No app.config could be found. This is required to start the application.[/] Create one now?"))
+                ruler = new Rule("Settings validation");
+                ruler.Alignment = Justify.Left;
+                AnsiConsole.Render(ruler);
+
+                if (!AnsiConsole.Confirm("[yellow]It seems like parts of the conifugration are missing or it hasn't been created yet. \n" +
+                    "We require a configuration for the JwtBearer settings and database to run this software. \n" +
+                    "Do you want to create the missing settings now?[/]"))
                 {
-                    AnsiConsole.WriteLine(
-                        "[red]No configuration exists, please manually or automatically create a configuration before continuing. Startup failed.[/]");
+                    AnsiConsole.WriteLine("No configuration exists, please manually or automatically create a configuration before continuing. Startup failed.");
                     return false;
                 }
 
-                //TODO: Save the settings after this :derp:
-                do
+                MissingSettings missingSettings = 0;
+
+                if (string.IsNullOrWhiteSpace(dbSettings))
                 {
-                    Console.Clear();
-                } while (!GenerateConfig());
+                    missingSettings += (int)MissingSettings.Database;
+                }
+                if (string.IsNullOrWhiteSpace(jwtSettings))
+                {
+                    missingSettings += (int)MissingSettings.JwtBearer;
+                }
 
-                System.Environment.Exit(-501);
+                while (true)
+                {
+                   if (GenerateConfig(missingSettings))
+                    {
+                        break;
+                    }
+                }
             }
-
-            //TODO: Validate Redis connection and that all instances can be connected to
-            IConfigurationSection authSection = configuration.GetSection("AuthData");
-            if (authSection == null)
-            {
-                additionalIssue = "The authentication section ";
-                return false;
-            }
-
 
             return true;
         }
@@ -64,25 +77,69 @@ namespace Pamaxie.Database.Api
         /// Generates the configuration for the api
         /// </summary>
         /// <returns></returns>
-        private static bool GenerateConfig()
+        private static bool GenerateConfig(MissingSettings missingSettings)
         {
             Console.Clear();
-            string jwtBearerConfig = GenerateJwtConfig();
-            string databaseConnectionString = GenerateDatabaseConfig();
+            string databaseConnectionString = Environment.GetEnvironmentVariable(DbSettingsEnvVar);
+            if (missingSettings.HasFlag(MissingSettings.Database))
+            {
+                databaseConnectionString = GenerateDatabaseConfig();
+            }
+
+            string jwtBearerConfig = Environment.GetEnvironmentVariable(JwtSettingsEnvVar);
+            if (missingSettings.HasFlag(MissingSettings.JwtBearer))
+            {
+                jwtBearerConfig = GenerateJwtConfig();
+            }
             Console.Clear();
+
             var ruler = new Rule("[yellow]Configuration Setup[/]");
             ruler.Alignment = Justify.Left;
             AnsiConsole.Render(ruler);
             ruler.Title = "[yellow]Finishing touches[/]";
+            ruler.Alignment = Justify.Left;
             AnsiConsole.Render(ruler);
-            dynamic obj = new JObject();
-            obj.AuthData = jwtBearerConfig;
-            obj.Database = databaseConnectionString;
-            var jsonString = JsonConvert.SerializeObject(obj, Formatting.Indented);
-            AnsiConsole.WriteLine("The generated configuration looks like this:");
-            AnsiConsole.Render(new Markup($"[yellow]{jsonString}[/]\n"));
-            return AnsiConsole.Ask(
-                "Are you happy with this configuration? (If not we'll guide you through it again from the start)", false);
+
+
+            AnsiConsole.WriteLine("The generated configuration look like this:");
+
+            if (missingSettings.HasFlag(MissingSettings.Database))
+            {
+                AnsiConsole.Render(new Markup($"[blue]Database Settings: {databaseConnectionString}[/]\n")); ;
+            }
+
+            if (missingSettings.HasFlag(MissingSettings.JwtBearer))
+            {
+                AnsiConsole.Render(new Markup($"[green]Jwt Settings: {jwtBearerConfig}[/]\n"));
+            }
+            
+            if (AnsiConsole.Ask("Do you want to use the configured settings?", true))
+            {
+                if (missingSettings.HasFlag(MissingSettings.JwtBearer))
+                {
+                    Environment.SetEnvironmentVariable(JwtSettingsEnvVar, jwtBearerConfig, EnvironmentVariableTarget.User);
+                }
+
+
+                if (missingSettings.HasFlag(MissingSettings.Database))
+                {
+                    Environment.SetEnvironmentVariable(DbSettingsEnvVar, databaseConnectionString, EnvironmentVariableTarget.User);
+                }
+
+                AnsiConsole.Render(new Markup("We stored the configuration in the enviorement variables for you.\n " +
+                    "Thank you for using Pamaxies Services. If you require help using this service please see our wiki at [blue]https://wiki.pamaxie.com[/]\n"));
+                return true;
+            }
+
+            return false;
+        }
+
+        [Flags]
+        private enum MissingSettings : ushort
+        {
+            None = 0,
+            Database = 1,
+            JwtBearer = 2
         }
 
         /// <summary>
@@ -116,7 +173,7 @@ namespace Pamaxie.Database.Api
 
             secret = TokenGenerator.GenerateSecret();
 
-            if (AnsiConsole.Confirm("Show the set token now? [yellow]It will also be put into the configuration file so u can always see it.[/]", 
+            if (AnsiConsole.Confirm($"Should we show you the token now? [yellow]Otherwise it will be visible in the enviorement varibles under the envvar {JwtSettingsEnvVar}[/]", 
                                     false))
             {
                 AnsiConsole.WriteLine(secret);
@@ -126,11 +183,11 @@ namespace Pamaxie.Database.Api
                 "How long in minutes should the timeout for the Jwt bearer be? \n" +
                 "[yellow]We usually recommend anywhere between 5 - 15 minutes lifespan[/]", 10);
 
-            dynamic authObj = new JObject();
-            authObj.Secret = secret;
-            authObj.ExpiresInMinutes = timeout;
+            AuthSettings authSettings = new AuthSettings();
+            authSettings.Secret = secret;
+            authSettings.ExpiresInMinutes = timeout;
 
-            return JsonConvert.SerializeObject(authObj);
+            return JsonConvert.SerializeObject(authSettings, Formatting.Indented);
         }
 
         /// <summary>
@@ -139,10 +196,9 @@ namespace Pamaxie.Database.Api
         /// <returns></returns>
         private static string GenerateDatabaseConfig()
         {
-            var ruler = new Rule("[yellow]Configuration Setup[/]");
+            Console.Clear();
+            var ruler = new Rule("[yellow]Database Configuration[/]");
             ruler.Alignment = Justify.Left;
-            AnsiConsole.Render(ruler);
-            ruler.Title = "[blue]Setting up the database[/]";
             AnsiConsole.Render(ruler);
 
             var drivers = DbDriverManager.LoadDatabaseDrivers();

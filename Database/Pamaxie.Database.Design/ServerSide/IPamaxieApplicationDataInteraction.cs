@@ -5,27 +5,27 @@ namespace Pamaxie.Database.Design
     /// <summary>
     /// Interface that defines Application interactions
     /// </summary>
-    public interface IPamaxieApplicationDataInteraction : IPamaxieDataInteractionBase<PamaxieApplication>
+    public interface IPamaxieApplicationDataInteraction : IPamaxieDataInteractionBase<IPamaxieApplication>
     {
         /// <summary>
-        /// Get the owner of the <see cref="PamaxieApplication"/>
+        /// Get the owner of the <see cref="IPamaxieApplication"/>
         /// </summary>
-        /// <param name="value">The <see cref="PamaxieApplication"/> to get the owner from</param>
-        /// <returns>The <see cref="PamaxieApplication"/>'s owner</returns>
-        public PamaxieUser GetOwner(PamaxieApplication value);
+        /// <param name="value">The <see cref="IPamaxieApplication"/> to get the owner from</param>
+        /// <returns>The <see cref="IPamaxieApplication"/>'s owner</returns>
+        public IPamaxieUser GetOwner(IPamaxieApplication value);
 
         /// <summary>
-        /// Enables or Disables the <see cref="PamaxieApplication"/>
+        /// Enables or Disables the <see cref="IPamaxieApplication"/>
         /// </summary>
-        /// <param name="value">The <see cref="PamaxieApplication"/> that will be enabled or disabled</param>
-        /// <returns>The enabled or disabled <see cref="PamaxieApplication"/> from the database</returns>
-        public PamaxieApplication EnableOrDisable(PamaxieApplication value);
+        /// <param name="value">The <see cref="IPamaxieApplication"/> that will be enabled or disabled</param>
+        /// <returns>The enabled or disabled <see cref="IPamaxieApplication"/> from the database</returns>
+        public IPamaxieApplication EnableOrDisable(IPamaxieApplication value);
 
         /// <summary>
-        /// Verify the Authentication of the <see cref="AppAuthCredentials"/> in the <see cref="PamaxieApplication"/>
+        /// Verify the Authentication of the <see cref="AppAuthCredentials"/> in the <see cref="IPamaxieApplication"/>
         /// </summary>
-        /// <param name="value">The <see cref="AppAuthCredentials"/> from the <see cref="PamaxieApplication"/></param>
+        /// <param name="value">The <see cref="AppAuthCredentials"/> from the <see cref="IPamaxieApplication"/></param>
         /// <returns><see cref="bool"/> if the authentication was verified</returns>
-        public bool VerifyAuthentication(PamaxieApplication value);
+        public bool VerifyAuthentication(IPamaxieApplication value);
     }
 }

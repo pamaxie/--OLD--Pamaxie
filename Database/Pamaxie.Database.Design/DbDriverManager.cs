@@ -1,4 +1,5 @@
 ﻿using Pamaxie.Database.Design;
+using Pamaxie.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +14,7 @@ namespace Pamaxie.Database.Extensions
     {
         public static IEnumerable<IPamaxieDatabaseDriver> LoadDatabaseDrivers()
         {
-            var callingProcessPath = new FileInfo(Environment.ProcessPath).DirectoryName;
+            var callingProcessPath = PamaxieEnviorement.GetExecutingAssemblyDirectory();
             var files = Directory.GetFiles(callingProcessPath, "*.dll");
 
             var foundtypes = new List<IPamaxieDatabaseDriver>();
@@ -37,7 +38,7 @@ namespace Pamaxie.Database.Extensions
             return foundtypes;
         }
 
-        public static IPamaxieDatabaseDriver LoadDatabaseDriver(string driverGuid)
+        public static IPamaxieDatabaseDriver LoadDatabaseDriver(Guid driverGuid)
         {
             var callingProcessPath = new FileInfo(Environment.ProcessPath).DirectoryName;
             var files = Directory.GetFiles(callingProcessPath, "*.dll");
@@ -54,10 +55,8 @@ namespace Pamaxie.Database.Extensions
                     continue;
                 }
 
-
-
                 var knownTypes = types.Where(t => t.IsClass && t.GetInterfaces().Contains(typeof(IPamaxieDatabaseDriver))).Select(x => (IPamaxieDatabaseDriver)Activator.CreateInstance(x));
-                var foundType = knownTypes.FirstOrDefault(x => x.DatabaseTypeGuid == new Guid(driverGuid));
+                var foundType = knownTypes.FirstOrDefault(x => x.DatabaseTypeGuid == driverGuid);
                 if (foundType != null)
                 {
                     return foundType;
