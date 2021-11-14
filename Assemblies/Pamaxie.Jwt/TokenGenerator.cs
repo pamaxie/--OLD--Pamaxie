@@ -46,7 +46,7 @@ namespace Pamaxie.Jwt
 
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return new AuthToken { ExpirationUtc = expires, Token = tokenHandler.WriteToken(token) };
+            return new AuthToken { ExpiresAtUTC = expires, Token = tokenHandler.WriteToken(token) };
         }
 
         /// <summary>

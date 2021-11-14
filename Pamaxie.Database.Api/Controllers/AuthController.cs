@@ -1,9 +1,19 @@
+using Isopoh.Cryptography.Argon2;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Pamaxie.Data;
 using Pamaxie.Database.Design;
+using Pamaxie.Helpers;
 using Pamaxie.Jwt;
+using System;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Pamaxie.Api.Controllers
 {
@@ -42,21 +52,36 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<AuthToken> LoginTask()
         {
+            string authHeader = Request.Headers["authorization"].ToString();
 
-            StringValues token = Request.Headers["authorization"];
+            if (string.IsNullOrWhiteSpace(authHeader) || !authHeader.StartsWith("Basic"))
+            {
+                return Forbid(authHeader);
+            }
 
-            //if ({Value to use} == null)
-            //if (string.IsNullOrEmpty({Value to use}))
-            //{
-            //    return BadRequest();
-            //}
+            string encodedUsernamePassword = authHeader.Substring("Basic ".Length).Trim();
 
-            //if ({Logic on the user that will be logged in and return a bool})
-            //{
-            //    return Status202Accepted();
-            //}
+            //the coding should be iso or you could use ASCII and UTF-8 decoder
+            Encoding encoding = Encoding.GetEncoding("iso-8859-1");
+            string usernamePassword = encoding.GetString(Convert.FromBase64String(encodedUsernamePassword));
+            int seperatorIndex = usernamePassword.IndexOf(':');
+            var userName = usernamePassword.Substring(0, seperatorIndex);
+            var userPass = usernamePassword.Substring(seperatorIndex + 1);
+            var userId = PamaxieCryptoHelpers.GetUserId(new System.Net.NetworkCredential(userName, userPass));
+            var user = _dbDriver.Service.PamaxieUserData.Get(userId);
 
-            return Unauthorized();
+            if (user == null)
+            {
+                return Unauthorized("Invalid username or password");
+            }
+            
+            if (!Argon2.Verify(user.Password, userPass))
+            {
+                return Unauthorized("Invalid username or password");
+            }
+
+            AuthToken newToken = _generator.CreateToken(userId);
+            return Ok(newToken);
         }
 
         /// <summary>
@@ -69,21 +94,59 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<string> CreateUserTask()
+        public async Task<ActionResult<string>> CreateUserTask()
         {
+            using var reader = new StreamReader(HttpContext.Request.Body);
+            var body = await reader.ReadToEndAsync();
 
-            //if ({Value to use} == null)
-            //if (string.IsNullOrEmpty({Value to use}))
-            //{
-            //    return BadRequest();
-            //}
+            if (string.IsNullOrEmpty(body))
+            {
+                return BadRequest("Please specify a user to create");
+            }
 
-            //if ({Logic on the user that will be created and return a bool and out the user})
-            //{
-            //    return Created("https://pamaxie.com/auth/", {the created user});
-            //}
+            JObject googleSearch = JObject.Parse(body);
+            var user = googleSearch["userData"].ToObject<PamaxieUser>();
+            var securityQuestions = googleSearch["securityQuestions"].ToObject<SecurityQuestions>();
 
-            return Problem();
+            /*
+            var deseralizedQuestions = JsonConvert.DeserializeObject(securityQuestionsString);
+            var deseralizedUserData = JsonConvert.DeserializeObject(userDataString);
+
+            if (!(deseralizedUserData is IPamaxieUser user) || !(deseralizedQuestions is ISecurityQuestions securityQuestions))
+            {
+                return BadRequest("The data reached in was in an invalid or unsupported format. ");
+            }*/
+
+            if (string.IsNullOrWhiteSpace(securityQuestions.BackupKey1) || string.IsNullOrWhiteSpace(securityQuestions.BackupKey2) ||
+                string.IsNullOrWhiteSpace(securityQuestions.BackupKey3))
+            {
+                return BadRequest("Please make sure all of the security questions are specified before creating a user");
+            }
+
+            user.UniqueKey = PamaxieCryptoHelpers.GetUserId(new System.Net.NetworkCredential(user.UserName, user.Password));
+            user.Password = Argon2.Hash(user.Password);
+            user.EmailVerified = false;
+            user.Disabled = false;
+            user.TTL = DateTime.MaxValue;
+            user.SecurityQuestionsId = PamaxieCryptoHelpers.GetSecurityQuestionId(securityQuestions.BackupKey1, securityQuestions.BackupKey2,
+                                                                                  securityQuestions.BackupKey3);
+            securityQuestions.UniqueKey = user.SecurityQuestionsId;
+            securityQuestions.TTL = DateTime.MaxValue;
+            securityQuestions.RelatedUserId = user.UniqueKey;
+
+            if (_dbDriver.Service.PamaxieUserData.Exists(user.UniqueKey))
+            {
+                return BadRequest("The specified user already exists in the database");
+            }
+            
+            if (_dbDriver.Service.SecurityQuestionData.Exists(securityQuestions.UniqueKey))
+            {
+                return BadRequest("The specified security questions already exist");
+            }
+
+            _dbDriver.Service.PamaxieUserData.Create(user);
+            _dbDriver.Service.SecurityQuestionData.Create(securityQuestions);
+            return Created(String.Empty, null);
         }
 
         /// <summary>

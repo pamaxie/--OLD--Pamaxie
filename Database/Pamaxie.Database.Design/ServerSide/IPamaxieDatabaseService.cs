@@ -13,6 +13,11 @@
         IPamaxieUserDataInteraction PamaxieUserData { get; }
 
         /// <summary>
+        /// Service for accessing pamaxies security questions
+        /// </summary>
+        ISecurityQuestionInteraction SecurityQuestionData { get; }
+
+        /// <summary>
         /// Validates the connection to the database with the reached in database context
         /// </summary>
         /// <param name="connectionParams">The connection parameters for establishing a connection with the database</param>

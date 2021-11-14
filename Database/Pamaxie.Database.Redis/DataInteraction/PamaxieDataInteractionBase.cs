@@ -82,8 +82,22 @@ namespace Pamaxie.Database.Server.DataInteraction
                 throw new ArgumentException("The key you tried to create already exists inside of our database");
             }
 
+            //Usually this shouldn't be done but we require this because of Redis being a non rational database
+            if (data is IPamaxieUser user)
+            {
+                if (db.KeyExists(user.UserName))
+                {
+                    throw new ArgumentException("The user you tried to create already exists in our database");
+                }
+
+                db.StringSet(user.UserName, user.UniqueKey);
+            }
+
             string parsedData = JsonConvert.SerializeObject(data);
             db.StringSet(data.UniqueKey, parsedData);
+
+
+
             return data;
         }
 
@@ -121,6 +135,17 @@ namespace Pamaxie.Database.Server.DataInteraction
             }
 
             string parseData = JsonConvert.SerializeObject(data);
+
+            //Usually this shouldn't be done but we require this because of Redis being a non rational database
+            if (data is IPamaxieUser user)
+            {
+                if (db.KeyExists(user.UserName))
+                {
+                    return false;
+                }
+
+                db.StringSet(user.UserName, user.UniqueKey);
+            }
 
             if (db.StringSet(data.UniqueKey, parseData))
             {

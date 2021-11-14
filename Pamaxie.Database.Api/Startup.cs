@@ -7,8 +7,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Pamaxie.Database.Api;
 using Pamaxie.Database.Extensions;
+using Pamaxie.Database.Extensions.ServerSide;
 using Pamaxie.Jwt;
 using StackExchange.Redis;
 
@@ -46,18 +49,20 @@ namespace Pamaxie.Api
             }
 
             services.AddControllers();
-            IConfigurationSection authSection = Configuration.GetSection("AuthData");
-            byte[] key = Encoding.ASCII.GetBytes(authSection.GetValue<string>("Secret"));
-            services
-                .AddAuthentication(x =>
-                {
+
+            var dbSettings = JsonConvert.DeserializeObject<PamaxieDatabaseClientSettings>(Environment.GetEnvironmentVariable(ApiApplicationConfiguration.DbSettingsEnvVar, EnvironmentVariableTarget.User));
+            var jwtSettings = JsonConvert.DeserializeObject<AuthSettings>(Environment.GetEnvironmentVariable(ApiApplicationConfiguration.JwtSettingsEnvVar, EnvironmentVariableTarget.User));
+            byte[] key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
+            services.AddAuthentication(x =>
+                    {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(x =>
-                {
+                    })
+                    .AddJwtBearer(x =>
+                    {
                     x.RequireHttpsMetadata = false;
                     x.SaveToken = true;
+                    x.RefreshInterval = new TimeSpan(0, jwtSettings.ExpiresInMinutes, 0);
                     x.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
@@ -65,11 +70,11 @@ namespace Pamaxie.Api
                         ValidateIssuer = false,
                         ValidateAudience = false,
                     };
-                });
+                    });
 
-            var guidSection = Configuration.GetSection("Database").GetSection("DatabaseDriverGuid");
-            var dbDriver = DbDriverManager.LoadDatabaseDriver(guidSection.Value);
-            dbDriver.Configuration.LoadConfig(Configuration.GetSection("Database").GetSection("Settings").Value);
+
+            var dbDriver = DbDriverManager.LoadDatabaseDriver(dbSettings.DatabaseDriverGuid);
+            dbDriver.Configuration.LoadConfig(dbSettings.Settings);
             services.AddSingleton(dbDriver);
             services.AddTransient<TokenGenerator>();
         }

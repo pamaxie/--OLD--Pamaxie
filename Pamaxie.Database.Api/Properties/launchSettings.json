@@ -14,7 +14,8 @@
       "launchUrl": "user/login",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "nativeDebugging": false
     },
     "Pamaxie.Api": {
       "commandName": "Project",
