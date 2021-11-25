@@ -31,7 +31,7 @@ namespace Pamaxie.Jwt
         {
             //TODO: something is wrong with how this token is generated here. We need to fix this for gathering user information about a token to refresh it for example
 
-            //Authentication successful so generate JWT Token
+           //Authentication successful so generate JWT Token
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
 
             byte[] key = null;
