@@ -31,7 +31,7 @@ namespace PamaxieML.Api
                 Console.WriteLine("Tested neural network successfully. Starting now!");
             }catch(Exception ex)
             {
-                Console.WriteLine("Hit an error while testing the Neural Network. Exeting...");
+                Console.WriteLine("Hit an error while testing the Neural Network. Exiting...");
                 Console.WriteLine(ex.Message);
                 Environment.Exit(502);
             }
