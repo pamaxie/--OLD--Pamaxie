@@ -13,6 +13,7 @@ using Pamaxie.Jwt;
 using System;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,7 +47,7 @@ namespace Pamaxie.Api.Controllers
         /// <returns><see cref="AuthToken"/> Token for Authentication</returns>
         [AllowAnonymous]
         [HttpPost("Login")]
-        //[Consumes(MediaTypeNames.Application.Json)] Use if a param is added
+        [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -81,7 +82,7 @@ namespace Pamaxie.Api.Controllers
                 return Unauthorized("Invalid username or password");
             }
 
-            AuthToken newToken = _generator.CreateToken(userId, ApiApplicationConfiguration.JwtSettings);
+            var newToken = _generator.CreateToken(userId, ApiApplicationConfiguration.JwtSettings);
             return Ok(newToken);
         }
 
@@ -91,7 +92,7 @@ namespace Pamaxie.Api.Controllers
         /// <returns><see cref="string"/> Success?</returns>
         [AllowAnonymous]
         [HttpPost("CreateUser")]
-        //[Consumes(MediaTypeNames.Application.Json)] Use if a param is added
+        [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -108,15 +109,6 @@ namespace Pamaxie.Api.Controllers
             JObject googleSearch = JObject.Parse(body);
             var user = googleSearch["userData"].ToObject<PamaxieUser>();
             var securityQuestions = googleSearch["securityQuestions"].ToObject<SecurityQuestions>();
-
-            /*
-            var deseralizedQuestions = JsonConvert.DeserializeObject(securityQuestionsString);
-            var deseralizedUserData = JsonConvert.DeserializeObject(userDataString);
-
-            if (!(deseralizedUserData is IPamaxieUser user) || !(deseralizedQuestions is ISecurityQuestions securityQuestions))
-            {
-                return BadRequest("The data reached in was in an invalid or unsupported format. ");
-            }*/
 
             if (string.IsNullOrWhiteSpace(securityQuestions.BackupKey1) || string.IsNullOrWhiteSpace(securityQuestions.BackupKey2) ||
                 string.IsNullOrWhiteSpace(securityQuestions.BackupKey3))
@@ -177,7 +169,7 @@ namespace Pamaxie.Api.Controllers
                 return Unauthorized();
             }
 
-            AuthToken newToken = _generator.CreateToken(userId);
+            var newToken = _generator.CreateToken(userId, ApiApplicationConfiguration.JwtSettings);
             return Ok(newToken);
         }
     }

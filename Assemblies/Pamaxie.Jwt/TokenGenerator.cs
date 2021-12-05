@@ -54,20 +54,12 @@ namespace Pamaxie.Jwt
             {
                 throw new InvalidOperationException("We hit an unexpected problem while generating the token");
             }
-            
-            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, userId)
-                }),
-                Expires = expires,
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature)
-            };
 
-            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-            return new AuthToken { ExpiresAtUTC = (DateTime)expires, Token = tokenHandler.WriteToken(token) };
+            var token = new JwtSecurityToken("Pamaxie", "Pamaxie", null, DateTime.Now.ToUniversalTime(), expires, new SigningCredentials(new SymmetricSecurityKey(key),SecurityAlgorithms.HmacSha256Signature));
+            token.Payload["userId"] = userId;
+            var handler = new JwtSecurityTokenHandler();
+            var jwt = handler.WriteToken(token);
+            return new AuthToken { ExpiresAtUTC = (DateTime)expires, Token = jwt };
         }
 
         /// <summary>
@@ -77,8 +69,8 @@ namespace Pamaxie.Jwt
         /// <returns></returns>
         public static string GetUserKey(string authToken)
         {
-            var jwtToken = new JwtSecurityToken(authToken);
-            return jwtToken.Subject;
+            var jwtToken = new JwtSecurityToken(authToken.Replace("Bearer ", string.Empty));
+            return jwtToken.Claims.FirstOrDefault(x => x.Type == "userId").Value;
         }
 
         public static string GenerateSecret()

@@ -68,8 +68,11 @@ namespace Pamaxie.Api
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidIssuer = "Pamaxie",
+                        ValidAudience = "Pamaxie"
                     };
                     });
 
