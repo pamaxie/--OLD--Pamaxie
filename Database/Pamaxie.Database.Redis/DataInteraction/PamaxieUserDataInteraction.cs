@@ -59,6 +59,11 @@ namespace Pamaxie.Database.Server.DataInteraction
             }
 
             IEnumerable<string> applicationKeys = value.ApplicationKeys;
+            if (applicationKeys == null)
+            {
+                return null;
+            }
+
             List<PamaxieApplication> applications = new List<PamaxieApplication>();
 
             foreach (string applicationKey in applicationKeys)
