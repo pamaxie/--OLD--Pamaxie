@@ -3,25 +3,27 @@
 namespace Test.Base
 {
     /// <summary>
-    /// Class containing method for mocking NavigationManager.
+    /// Class containing method for mocking <see cref="NavigationManager"/>.
     /// </summary>
     public static class MockNavigationManager
     {
         /// <summary>
-        /// Mocks the NavigationManager so a url can be made for the EmailSender.
+        /// Mocks the <see cref="NavigationManager"/> so a url can be made for the EmailSender.
         /// </summary>
-        /// <returns>Mocked NavigationManager</returns>
+        /// <returns>Mocked <see cref="NavigationManager"/></returns>
         public static NavigationManager Mock()
         {
             return new MockedNavigationManager();
         }
-        
+
         private sealed class MockedNavigationManager : NavigationManager
         {
-            public MockedNavigationManager() => 
+            public MockedNavigationManager() =>
                 Initialize("http://localhost:2112/", "http://localhost:2112/test");
 
-            protected override void NavigateToCore(string uri, bool forceLoad) { }
+            protected override void NavigateToCore(string uri, bool forceLoad)
+            {
+            }
         }
     }
 }

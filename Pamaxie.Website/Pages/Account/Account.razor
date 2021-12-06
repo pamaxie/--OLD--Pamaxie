@@ -7,12 +7,12 @@
         <Pamaxie.Website.Shared.RedirectToLogin/>
     </NotAuthorized>
     <Authorized>
-        <MudText Class="dynamicPadding mg-10" Typo="Typo.h4">This is your account, @Profile?.UserName</MudText>
+        <MudText Class="dynamicPadding mg-10" Typo="Typo.h4">This is your account, @User?.UserName</MudText>
         <MudForm Class="dynamicPadding dash-spacing">
-            <MudAvatar Image="@Profile?.ProfilePictureAddress"/>
-            <MudField Label="User Name" Variant="Variant.Text" Disabled="true">@Profile?.UserName</MudField>
-            <MudField Label="Email Address" Variant="Variant.Text" Disabled="true">@Profile?.EmailAddress</MudField>
-            <MudField Label="User Id" Variant="Variant.Text" Disabled="true">@Profile?.GoogleClaimUserId</MudField>
+            <MudAvatar Image="@User?.ProfilePictureAddress"/>
+            <MudField Label="User Name" Variant="Variant.Text" Disabled="true">@User?.UserName</MudField>
+            <MudField Label="Email Address" Variant="Variant.Text" Disabled="true">@User?.EmailAddress</MudField>
+            <MudField Label="User Id" Variant="Variant.Text" Disabled="true">@User?.UniqueKey</MudField>
             <MudButton Class="mg-20" Color="Color.Error" OnClick="OnDeleteButtonClicked" Disabled="@DisableDeleteData">Delete Account</MudButton>
         </MudForm>
 

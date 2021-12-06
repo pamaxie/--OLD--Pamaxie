@@ -1,18 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-      <PackageReference Include="xunit" Version="2.4.1" />
+      <ProjectReference Include="..\..\Pamaxie.Website\Pamaxie.Website.csproj" />
+      <ProjectReference Include="..\Test.Base\Test.Base.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Assemblies\Pamaxie.Data\Pamaxie.Data.csproj" />
-      <ProjectReference Include="..\..\Pamaxie.Website\Pamaxie.Website.csproj" />
-      <ProjectReference Include="..\Test.Base\Test.Base.csproj" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     </ItemGroup>
 
 </Project>

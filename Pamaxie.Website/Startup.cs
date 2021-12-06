@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -10,10 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
-using Pamaxie.Database.Extensions.Sql;
 using Pamaxie.Website.Services;
 
-namespace Pamaxie.Website 
+namespace Pamaxie.Website
 {
     /// <summary>
     /// Startup class, usually gets called by <see cref="Program"/>
@@ -31,8 +28,6 @@ namespace Pamaxie.Website
 
         private IConfiguration Configuration { get; }
 
-        
-        // This method gets called by the runtime. Use this method to add services to the container.
         /// <summary>
         /// This method gets called by the runtime to add services to the container for dependency injection
         /// </summary>
@@ -40,60 +35,20 @@ namespace Pamaxie.Website
         public void ConfigureServices(IServiceCollection services)
         {
             IConfigurationSection dbConfigSection = Configuration.GetSection("Pamaxie");
-            string sqlConString =  dbConfigSection.GetValue<string>("PamaxieSqlDb");
+            string sqlConString = dbConfigSection.GetValue<string>("PamaxieSqlDb");
             Environment.SetEnvironmentVariable("PamaxieSqlDb", sqlConString);
             Environment.SetEnvironmentVariable("ApplyMigrations", dbConfigSection.GetValue<string>("Apply Migrations"));
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddScoped<BrowserService>();
             services.AddScoped<UserService>();
             services.AddScoped<EmailSender>();
 
             // ReSharper disable once UnusedVariable
-            CookiePolicyOptions cookiePolicy = new()
+            CookiePolicyOptions cookiePolicy = new CookiePolicyOptions
             {
-                Secure = CookieSecurePolicy.Always,
+                Secure = CookieSecurePolicy.Always
             };
-
-            //Add rate limit
-            services.AddMemoryCache();
-            services.AddInMemoryRateLimiting();
-            services.Configure<ClientRateLimitOptions>(option =>
-            {
-                option.EnableEndpointRateLimiting = false;
-                option.StackBlockedRequests = true;
-                option.HttpStatusCode = 429;
-                option.ClientWhitelist = new List<string> {"", ""};
-                option.GeneralRules = new List<RateLimitRule>
-                {
-                    new()
-                    {
-                        Endpoint = "*",
-                        Period = "1s",
-                        Limit = 2
-                    },
-                    new()
-                    {
-                        Endpoint = "*",
-                        Period = "15m",
-                        Limit = 100
-                    },
-                    new()
-                    {
-                        Endpoint = "*",
-                        Period = "12h",
-                        Limit = 1000
-                    },
-                    new()
-                    {
-                        Endpoint = "*",
-                        Period = "7d",
-                        Limit = 10000
-                    }
-                };
-            });
-            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 
             //Add the Mudblazor Theme
             services.AddMudServices();
@@ -106,11 +61,11 @@ namespace Pamaxie.Website
             });
 
             services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            })
+                {
+                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                })
                 .AddCookie();
 
             services.AddAuthentication().AddGoogle(options =>
@@ -122,17 +77,12 @@ namespace Pamaxie.Website
             });
 
             services.AddApplicationInsightsTelemetry();
-            
+
             //Adds access to the HTTP Context
             services.AddHttpContextAccessor();
-            
-            if (!DbExtensions.SqlDbCheckup(out string error))
-            {
-                Console.WriteLine(error);
-                Environment.Exit(501);
-            }
-        }
 
+            //TODO Validate connection to the database api
+        }
 
         /// <summary>
         /// This is called by the runtime to configure the HTTP request pipeline
@@ -157,7 +107,6 @@ namespace Pamaxie.Website
                 MinimumSameSitePolicy = SameSiteMode.Lax
             });
 
-            app.UseIpRateLimiting();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();

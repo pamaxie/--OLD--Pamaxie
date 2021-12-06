@@ -1,120 +1,90 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using Microsoft.Extensions.Configuration;
 using Pamaxie.Data;
 
 namespace Test.Base
 {
-    public class TestApplicationData
+    /// <summary>
+    /// Contains randomly generated <see cref="PamaxieApplication"/> Data
+    /// </summary>
+    public static class TestApplicationData
     {
         /// <summary>
-        /// List of Users for the SqlDbContext.
+        /// List of Test Applications
         /// </summary>
-        public static readonly List<Application> ListOfApplications = new()
+        public static readonly List<PamaxieApplication> ListOfApplications = new List<PamaxieApplication>
         {
-            new Application()
+            new PamaxieApplication
             {
-                ApplicationId = 2,
-                AppToken = "Apple",
-                UserId = 2,
-                ApplicationName = "",
-                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
-                RateLimited = false,
-                Disabled = false,
-                Deleted = false
+                UniqueKey = "1064922",
+                OwnerKey = "102617494281791801620",
+                TTL = DateTime.Now,
+                Credentials = new AppAuthCredentials
+                {
+                    AuthorizationToken = "Apple",
+                    AuthorizationTokenCipher = "",
+                    LastAuth = DateTime.Now
+                },
+                ApplicationName = "Sparkle",
+                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE"))
             },
-            new Application()
+            new PamaxieApplication
             {
-                ApplicationId = 3,
-                AppToken = "Pie",
-                UserId = 2,
-                ApplicationName = "",
-                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
-                RateLimited = false,
-                Disabled = false,
-                Deleted = false
+                UniqueKey = "1053324",
+                OwnerKey = "102617494281791801620",
+                TTL = DateTime.Now,
+                Credentials = new AppAuthCredentials
+                {
+                    AuthorizationToken = "Pie",
+                    AuthorizationTokenCipher = "",
+                    LastAuth = DateTime.Now
+                },
+                ApplicationName = "Droop",
+                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE"))
             },
-            new Application()
+            new PamaxieApplication
             {
-                ApplicationId = 4,
-                AppToken = "Orange",
-                UserId = 4,
-                ApplicationName = "",
-                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
-                RateLimited = false,
-                Disabled = false,
-                Deleted = false
+                UniqueKey = "1051080",
+                OwnerKey = "104669818103955818761",
+                TTL = DateTime.Now,
+                Credentials = new AppAuthCredentials
+                {
+                    AuthorizationToken = "Orange",
+                    AuthorizationTokenCipher = "",
+                    LastAuth = DateTime.Now
+                },
+                ApplicationName = "Cornwall",
+                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE"))
             },
-            new Application()
+            new PamaxieApplication
             {
-                ApplicationId = 5,
-                AppToken = "Pear",
-                UserId = 4,
-                ApplicationName = "",
-                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
-                RateLimited = false,
-                Disabled = false,
-                Deleted = false
+                UniqueKey = "1065779",
+                OwnerKey = "104669818103955818761",
+                TTL = DateTime.Now,
+                Credentials = new AppAuthCredentials
+                {
+                    AuthorizationToken = "Pear",
+                    AuthorizationTokenCipher = "",
+                    LastAuth = DateTime.Now
+                },
+                ApplicationName = "Crystal",
+                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE"))
             },
-            new Application()
+            new PamaxieApplication
             {
-                ApplicationId = 6,
-                AppToken = "Cake",
-                UserId = 4,
-                ApplicationName = "",
-                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
-                RateLimited = false,
-                Disabled = false,
-                Deleted = false
+                UniqueKey = "1060105",
+                OwnerKey = "104669818103955818761",
+                TTL = DateTime.Now,
+                Credentials = new AppAuthCredentials
+                {
+                    AuthorizationToken = "Cake",
+                    AuthorizationTokenCipher = "",
+                    LastAuth = DateTime.Now
+                },
+                ApplicationName = "Penny",
+                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE"))
             }
         };
-
-        static TestApplicationData()
-        {
-            //Check if configuration file exists before adding personal testing data
-            if (File.Exists("appsettings.test.json"))
-            {
-                IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
-                if (configuration.GetChildren().Any(_ => _.Key == "ApplicationData"))
-                {
-                    IConfigurationSection configurationSection = configuration.GetSection("ApplicationData");
-
-                    //Check if a email is given
-                    string appToken = configurationSection.GetValue<string>("AppToken");
-
-                    if (!string.IsNullOrEmpty(appToken))
-                    {
-                        //Add the user to the list of users
-                        Application application = new()
-                        {
-                            ApplicationId = 1,
-                            AppToken = appToken,
-                            UserId = 1,
-                            ApplicationName = "PersonalApplication",
-                            LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
-                            RateLimited = false,
-                            Disabled = false,
-                            Deleted = false
-                        };
-                        ListOfApplications.Add(application);
-                        return;
-                    }
-                }
-            }
-            ListOfApplications.Add(new Application()
-            {
-                ApplicationId = 1,
-                AppToken = "qwerty",
-                UserId = 1,
-                ApplicationName = "PersonalApplication",
-                LastAuth = DateTime.Parse("15 05 2008", new CultureInfo("de-DE")),
-                RateLimited = false,
-                Disabled = false,
-                Deleted = true
-            });
-        }
     }
 }

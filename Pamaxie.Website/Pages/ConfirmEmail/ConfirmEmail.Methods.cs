@@ -2,15 +2,17 @@
 
 namespace Pamaxie.Website.Pages
 {
-    // ReSharper disable once ClassNeverInstantiated.Global
+    // ReSharper disable once ClassNeverInstantiated.Global¨'
+    /// <summary>
+    /// Class for the Email Confirmation page
+    /// </summary>
     public partial class ConfirmEmail
     {
         protected override Task OnInitializedAsync()
         {
-            if (UserService.ConfirmEmail(Token));
-            {
+            if (!string.IsNullOrEmpty(Token) && UserService.ConfirmEmail(Token))
                 NavigationManager.NavigateTo(NavigationManager.BaseUri);
-            }
+
             return Task.CompletedTask;
         }
     }

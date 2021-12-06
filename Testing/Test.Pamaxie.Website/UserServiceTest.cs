@@ -1,119 +1,118 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Pamaxie.Data;
-using Pamaxie.Database.Extensions.Sql.Data;
-using Pamaxie.Database.Sql;
-using Pamaxie.Extensions.Sql;
-using Pamaxie.Website.Authentication;
+using Pamaxie.Database.Extensions.Client;
 using Pamaxie.Website.Services;
 using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Pamaxie.Website
+namespace Test.Pamaxie.Website_Test
 {
     /// <summary>
-    /// Testing class for UserService
+    /// Testing class for <see cref="UserService"/>
     /// </summary>
-    public class UserServiceTest : Base.Test
+    public sealed class UserServiceTest : TestBase
     {
-        public static IEnumerable<object[]> AllVerifiedUsers => MemberData.AllVerifiedGoogleClaimUsers;
-        public static IEnumerable<object[]> AllUnverifiedUsers => MemberData.AllUnverifiedGoogleClaimUsers;
-        
+        /// <summary>
+        /// <inheritdoc cref="MemberData.AllUnverifiedUsers"/>
+        /// </summary>
+        public static IEnumerable<object[]> AllUnverifiedUsers => MemberData.AllUnverifiedUsers;
+
+        /// <summary>
+        /// <inheritdoc cref="MemberData.AllVerifiedGoogleClaimUsers"/>
+        /// </summary>
+        public static IEnumerable<object[]> AllVerifiedGoogleClaimUsers => MemberData.AllVerifiedGoogleClaimUsers;
+
+        /// <summary>
+        /// <inheritdoc cref="MemberData.AllUnverifiedGoogleClaimUsers"/>
+        /// </summary>
+        public static IEnumerable<object[]> AllUnverifiedGoogleClaimUsers => MemberData.AllUnverifiedGoogleClaimUsers;
+
         public UserServiceTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
+            DatabaseService.UserService = MockUserDataService.Mock();
         }
-        
+
+        /// <summary>
+        /// Test for IsEmailOfCurrentUserVerified to see if verified users are true
+        /// </summary>
+        /// <param name="googleClaims">The claims of a google user</param>
         [Theory]
-        [MemberData(nameof(AllVerifiedUsers))]
-        public void IsEmailOfCurrentUserVerified_Success(string googleUserId)
+        [MemberData(nameof(AllVerifiedGoogleClaimUsers))]
+        public void IsEmailOfCurrentUserVerified_Success(Claim[] googleClaims)
         {
-            //Mock Database
-            SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
-            UserExtensions.DbContext = sqlDbContext;
-
-            //Get Google Claims from the googleUserId
-            Claim[] googleClaims = TestGoogleClaimData.ListOfGoogleUserPrincipleClaims.FirstOrDefault(_ => _[0].Value == googleUserId);
-            Assert.NotNull(googleClaims);
-            
-            //Mock HttpContext with principle claims
+            //Arrange
             IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);
+            UserService userService = new UserService(Configuration, httpContextAccessor, null);
 
-            UserService userService = new(Configuration, httpContextAccessor, null);
-            Assert.True(userService.IsEmailOfCurrentUserVerified());
+            //Act
+            bool verified = userService.IsEmailOfCurrentUserVerified();
+
+            //Assert
+            Assert.True(verified);
         }
-        
+
+        /// <summary>
+        /// Test for IsEmailOfCurrentUserVerified to see if unverified users are false
+        /// </summary>
+        /// <param name="googleClaims">The claims of a google user</param>
+        [Theory]
+        [MemberData(nameof(AllUnverifiedGoogleClaimUsers))]
+        public void IsEmailOfCurrentUserVerified_Failure(Claim[] googleClaims)
+        {
+            //Arrange
+            IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);
+            UserService userService = new UserService(Configuration, httpContextAccessor, null);
+
+            //Act
+            bool verified = userService.IsEmailOfCurrentUserVerified();
+
+            //Assert
+            Assert.False(verified);
+        }
+
+        /// <summary>
+        /// Test for generating a email confirmation token
+        /// </summary>
+        /// <param name="user">The <see cref="PamaxieUser"/> to generate a token from</param>
         [Theory]
         [MemberData(nameof(AllUnverifiedUsers))]
-        public void IsEmailOfCurrentUserVerified_Failure(string googleUserId)
+        public void GenerateEmailConfirmationToken(PamaxieUser user)
         {
-            //Mock Database
-            SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
-            UserExtensions.DbContext = sqlDbContext;
+            //Arrange
+            UserService userService = new UserService(Configuration, null!, null);
 
-            //Get Google Claims from the googleUserId
-            Claim[] googleClaims = TestGoogleClaimData.ListOfGoogleUserPrincipleClaims.FirstOrDefault(_ => _[0].Value == googleUserId);
-            Assert.NotNull(googleClaims);
-            
-            //Mock HttpContext with principle claims
-            IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);
+            //Act
+            string token = userService.GenerateEmailConfirmationToken(user);
 
-            UserService userService = new(Configuration, httpContextAccessor, null);
-            Assert.False(userService.IsEmailOfCurrentUserVerified());
-        }
-
-        [Theory]
-        [MemberData(nameof(AllUnverifiedUsers))]
-        public void GenerateEmailConfirmationToken_Success(string googleUserId)
-        {
-            //Get Google Claims from the googleUserId
-            Claim[] googleClaims = TestGoogleClaimData.ListOfGoogleUserPrincipleClaims.FirstOrDefault(_ => _[0].Value == googleUserId);
-            Assert.NotNull(googleClaims);
-            
-            //Mock HttpContext with principle claims
-            IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);
-
-            //Get ProfileData from ClaimPrinciple
-            ProfileData profile = httpContextAccessor.HttpContext?.User.GetGoogleAuthData(out bool _)?.GetProfileData();
-            Assert.NotNull(profile);
-            
-            UserService userService = new(Configuration, httpContextAccessor, null);
-            string token = userService.GenerateEmailConfirmationToken(profile);
+            //Assert
+            Assert.False(string.IsNullOrEmpty(token));
             TestOutputHelper.WriteLine(token);
-            Assert.NotEmpty(token);
         }
-        
+
+        /// <summary>
+        /// Test for confirming a email for a <see cref="PamaxieUser"/>
+        /// </summary>
+        /// <param name="user">The <see cref="PamaxieUser"/> to confirm email</param>
         [Theory]
         [MemberData(nameof(AllUnverifiedUsers))]
-        public void ConfirmEmail_Success(string googleUserId)
+        public void ConfirmEmail(PamaxieUser user)
         {
-            //Get Google Claims from the googleUserId
-            Claim[] googleClaims = TestGoogleClaimData.ListOfGoogleUserPrincipleClaims.FirstOrDefault(_ => _[0].Value == googleUserId);
-            Assert.NotNull(googleClaims);
-            
-            //Mock Database
-            SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
-            UserExtensions.DbContext = sqlDbContext;
-            
-            //Mock HttpContext with principle claims
-            IHttpContextAccessor httpContextAccessor = MockIHttpContextAccessor.Mock(googleClaims);
+            //Arrange
+            TestOutputHelper.WriteLine("Email verified: {0}", user.EmailVerified);
+            UserService userService = new UserService(Configuration, null!, null);
+            string token = userService.GenerateEmailConfirmationToken(user);
 
-            //Get ProfileData from ClaimPrinciple
-            ProfileData profile = httpContextAccessor.HttpContext?.User.GetGoogleAuthData(out bool _)?.GetProfileData();
-            Assert.NotNull(profile);
+            //Act
+            bool confirmedEmail = userService.ConfirmEmail(token);
 
-            User unverifiedUser = UserExtensions.GetUser(googleUserId);
-            TestOutputHelper.WriteLine("Email verified: " + unverifiedUser.EmailVerified);
-
-            UserService userService = new(Configuration, httpContextAccessor, null);
-            string token = userService.GenerateEmailConfirmationToken(profile);
-            Assert.True(userService.ConfirmEmail(token));
-            
-            User verifiedUser = UserExtensions.GetUser(googleUserId);
-            TestOutputHelper.WriteLine("Email verified: " + verifiedUser.EmailVerified);
-            Assert.True(userService.IsEmailOfCurrentUserVerified());
+            //Assert
+            Assert.True(confirmedEmail);
+            PamaxieUser verifiedPamaxieUser = UserDataServiceExtension.Get(user.UniqueKey);
+            TestOutputHelper.WriteLine("Email verified: {0}", verifiedPamaxieUser.EmailVerified);
+            Assert.True(verifiedPamaxieUser.EmailVerified);
         }
     }
 }

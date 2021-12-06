@@ -5,12 +5,15 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Pamaxie.Data;
-using Pamaxie.Extensions.Sql;
+using Pamaxie.Database.Extensions.Client;
 using Pamaxie.Website.Authentication;
 
 namespace Pamaxie.Website.Pages
 {
     // ReSharper disable once ClassNeverInstantiated.Global
+    /// <summary>
+    /// Class for the Dashboard page
+    /// </summary>
     public partial class Dashboard
     {
         protected override Task OnInitializedAsync()
@@ -19,9 +22,9 @@ namespace Pamaxie.Website.Pages
             if (user == null)
                 return Task.CompletedTask;
 
-            Profile = user.GetGoogleAuthData(out bool hasAccount)?.GetProfileData();
+            User = user.GetGoogleAuthData(out bool hasAccount);
             //Something weird is going on. Logout the user to make sure we are not de-syncing or anything.
-            if (Profile == null)
+            if (User == null)
             {
                 NavigationManager.NavigateTo("/Logout", true);
                 return Task.CompletedTask;
@@ -30,40 +33,42 @@ namespace Pamaxie.Website.Pages
             //Has no Account has to create one first before accessing this.
             if (!hasAccount)
                 return Task.CompletedTask;
-            
-            Applications = ApplicationExtensions.GetApplications(Profile.Id).ToList();
+
+            Applications = User.GetAllApplications().ToList();
             StateHasChanged();
             return Task.CompletedTask;
         }
 
-        private async Task DeleteApplication(Application application)
+        private async Task DeleteApplication(PamaxieApplication pamaxieApplication)
         {
             bool? result = await DialogService.ShowMessageBox(
-                $"Do you really wanna delete {application.ApplicationName}?",
+                $"Do you really wanna delete {pamaxieApplication.ApplicationName}?",
                 "Deleting your applications can't be undone! It will join the dark side of our data and be gone forever! " +
                 "(Like seriously we delete it entirely from all of our services and wipe it from existence, there is nothing we can do once its gone.)",
                 "Jep", cancelText: "Nope");
-            if (result is true && Profile is not null)
+            if (result is true && User is not null)
             {
-                application.DeleteApplication();
-                Applications = ApplicationExtensions.GetApplications(Profile.Id).ToList();
+                pamaxieApplication.Delete();
+                Applications = User.GetAllApplications().ToList();
                 StateHasChanged();
             }
         }
 
-        private async Task SwitchIfApplicationEnabled(Application application)
+        private async Task EnableOrDisableApplication(PamaxieApplication pamaxieApplication)
         {
-            bool? result = await DialogService.ShowMessageBox(
-                $"Do you really wanna disable {application.ApplicationName}?",
-                "Disabling your application will block anyone from accessing it. You can re-enable it any time however! " +
-                "This will just block access to it if you suspect issues with your token and want to validate everything is ok.",
-                "Jep", cancelText: "Nope");
+            bool? result = true;
+            if (!pamaxieApplication.Disabled)
+                result = await DialogService.ShowMessageBox(
+                    $"Do you really wanna disable {pamaxieApplication.ApplicationName}?",
+                    "Disabling your application will block anyone from accessing it. You can re-enable it any time however! " +
+                    "This will just block access to it if you suspect issues with your token and want to validate everything is ok.",
+                    "Jep", cancelText: "Nope");
             if (result is true)
             {
-                application.SetApplicationStatus(application.Disabled);
+                pamaxieApplication.EnableOrDisable();
 
-                if (Profile != null)
-                    Applications = ApplicationExtensions.GetApplications(Profile.Id).ToList();
+                if (User != null)
+                    Applications = User.GetAllApplications().ToList();
                 StateHasChanged();
             }
         }
@@ -93,7 +98,7 @@ namespace Pamaxie.Website.Pages
 
         private void CreateEmptyApplication()
         {
-            if (Profile == null)
+            if (User == null)
                 return;
 
             if (!UserService.IsEmailOfCurrentUserVerified())
@@ -102,10 +107,9 @@ namespace Pamaxie.Website.Pages
                 return;
             }
 
-            NewApplication = new Application()
+            NewApplication = new PamaxieApplication()
             {
-                ApplicationId = ApplicationExtensions.GetLastIndex(),
-                UserId = Profile.Id,
+                OwnerKey = User.UniqueKey,
                 Disabled = false,
                 LastAuth = DateTime.Now,
                 RateLimited = false
@@ -117,8 +121,8 @@ namespace Pamaxie.Website.Pages
             if (NewApplication == null)
                 return;
 
-            NewApplication.AppToken = PwField1.Value;
-            ApplicationExtensions.CreateApplication(NewApplication, out Application createdApp);
+            NewApplication.Credentials.AuthorizationToken = PwField1.Value;
+            PamaxieApplication createdApp = NewApplication.Create();
             Applications.Add(createdApp);
             NewApplication = null;
         }

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http;
 using MudBlazor;
-using Pamaxie.Database.Extensions.Sql.Data;
+using Pamaxie.Data;
 using Pamaxie.Website.Services;
 
 #pragma warning disable 8618
@@ -10,6 +10,9 @@ using Pamaxie.Website.Services;
 namespace Pamaxie.Website.Shared
 {
     // ReSharper disable once ClassNeverInstantiated.Global
+    /// <summary>
+    /// <inheritdoc cref="NavMenu"/>
+    /// </summary>
     public partial class NavMenu
     {
         [Inject] private NavigationManager NavigationManager { get; set; }
@@ -18,13 +21,14 @@ namespace Pamaxie.Website.Shared
         [Inject] private IDialogService DialogService { get; set; }
         [Inject] private EmailSender EmailSender { get; set; }
 
-        //Render Frag for rendering the child content of the Website
-        [Parameter] public RenderFragment ChildContent { get; set; }
+        /// <summary>
+        /// Render Frag for rendering the child content of the Website
+        /// </summary>
+        [Parameter]
+        public RenderFragment ChildContent { get; set; }
 
-        private ProfileData? Profile { get; set; }
+        private PamaxieUser? User { get; set; }
         private bool UserHasAccount { get; set; } = true;
         private bool ShowCreateAccount { get; set; }
-
-
     }
 }

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace Pamaxie.MediaDetection
 {
     /// <inheritdoc />
     public abstract class FileSpecification : IFileSpecification
     {
-        protected FileSpecification(ulong referenceTypeId, byte[] signature, int headerOffset = 0, string specialTypeIdentifier = "")
+        protected FileSpecification(ulong referenceTypeId, byte[] signature, int headerOffset = 0,
+            string specialTypeIdentifier = "")
         {
             ReferenceTypeId = referenceTypeId;
             Signature = signature;
@@ -18,17 +20,17 @@ namespace Pamaxie.MediaDetection
         /// <inheritdoc/>
         /// </summary>
         public string SpecialTypeIdentifier { get; set; }
-        
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         public ulong ReferenceTypeId { get; set; }
-        
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         public byte[] Signature { get; set; }
-        
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -37,11 +39,8 @@ namespace Pamaxie.MediaDetection
         /// <summary>
         /// <inheritdoc cref="IFileSpecification.ToString" />
         /// </summary>
-        public override string ToString()
-        {
-            return SpecialTypeIdentifier;
-        }
-        
+        public override string ToString() => SpecialTypeIdentifier;
+
         /// <summary>
         /// Checks if the stream matches the specification
         /// </summary>
@@ -54,18 +53,11 @@ namespace Pamaxie.MediaDetection
 
             if (stream.Length < Signature.Length)
                 return false;
-            
-            stream.Position = HeaderOffset;
-            for (var i = 0; i < Signature.Length; i++)
-            {
-                int b = stream.ReadByte();
-                if (b != Signature[i])
-                    return false;
-            }
 
-            return true;
+            stream.Position = HeaderOffset;
+            return !(from t in Signature let b = stream.ReadByte() where b != t select t).Any();
         }
-        
+
         /// <summary>
         /// Compare two file specifications for sorting
         /// </summary>
@@ -74,12 +66,12 @@ namespace Pamaxie.MediaDetection
         public int CompareTo(IFileSpecification fileSpecification)
         {
             if (fileSpecification.Signature == null)
-                throw new ArgumentNullException(nameof(fileSpecification), "The signature of the filetype that should be compared was not defined");
+                throw new ArgumentNullException(nameof(fileSpecification),
+                    "The signature of the filetype that should be compared was not defined");
             if (fileSpecification.Signature.Length == 0)
                 throw new ArgumentException("Please make sure the signature for the compared file type is valid");
 
             return 1;
         }
-        
     }
 }

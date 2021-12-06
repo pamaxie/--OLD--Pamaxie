@@ -10,23 +10,19 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <NeutralLanguage>English (United States)</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCoreRateLimit" Version="4.0.1" />
-    <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
+    <ProjectReference Include="..\Assemblies\Pamaxie.ImageProcessing\Pamaxie.ImageProcessing.csproj" />
+    <ProjectReference Include="..\Assemblies\Pamaxie.Jwt\Pamaxie.Jwt.csproj" />
+    <ProjectReference Include="..\Assemblies\Pamaxie.MediaDetection\Pamaxie.MediaDetection.csproj" />
+    <ProjectReference Include="..\Database\Pamaxie.Data\Pamaxie.Data.csproj" />
+    <ProjectReference Include="..\MLModules\PamaxieML.Model\Pamaxie.ImageScanning.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Assemblies\Pamaxie.Database.Extensions.Redis\Pamaxie.Database.Extensions.Redis.csproj" />
-    <ProjectReference Include="..\Assemblies\Pamaxie.Database.Extensions.Sql\Pamaxie.Database.Extensions.Sql.csproj" />
-    <ProjectReference Include="..\Assemblies\Pamaxie.ImageProcessing\Pamaxie.ImageProcessing.csproj" />
-    <ProjectReference Include="..\Assemblies\Pamaxie.MediaDetection\Pamaxie.MediaDetection.csproj" />
-    <ProjectReference Include="..\MLModules\PamaxieML.Model\PamaxieML.Model.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
   </ItemGroup>
 </Project>

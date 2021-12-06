@@ -1,8 +1,10 @@
 ﻿namespace Pamaxie.Website.Pages
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public partial class About 
+    /// <summary>
+    /// Class for the About page
+    /// </summary>
+    public partial class About
     {
-        
     }
 }

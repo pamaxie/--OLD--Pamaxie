@@ -1,7 +1,10 @@
 ﻿#pragma warning disable 8618
 namespace Pamaxie.Api.Data
 {
-    public class PredictionModel
+    /// <summary>
+    /// Prediction Model
+    /// </summary>
+    public sealed class PredictionModel
     {
         public string ImageExtension;
         public string ImageUrl;

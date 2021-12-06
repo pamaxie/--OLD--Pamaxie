@@ -15,8 +15,7 @@ namespace Test.Base
         /// List of Google user principle claims.
         /// Used to act as a user being logged into the website.
         /// </summary>
-
-        public static readonly List<Claim[]> ListOfGoogleUserPrincipleClaims = new()
+        public static readonly List<Claim[]> ListOfGoogleUserPrincipleClaims = new List<Claim[]>
         {
             new[]
             {
@@ -55,7 +54,7 @@ namespace Test.Base
             {
                 new Claim(ClaimTypes.NameIdentifier, "104669818103955818761", ClaimValueTypes.String, "Google"),
                 new(ClaimTypes.Name, "Paulo", ClaimValueTypes.String, "Google"),
-                new(ClaimTypes.GivenName, "Paulusz", ClaimValueTypes.String, "Google"),
+                new(ClaimTypes.GivenName, "Paulus", ClaimValueTypes.String, "Google"),
                 new(ClaimTypes.Surname, "Ferdinand", ClaimValueTypes.String, "Google"),
                 new(ClaimTypes.Email, "Pafe@fakemail.com", ClaimValueTypes.String, "Google"),
                 new("urn:google:image",
@@ -78,25 +77,37 @@ namespace Test.Base
         static TestGoogleClaimData()
         {
             //Check if configuration file exists before adding personal testing data
-            if (!File.Exists("appsettings.test.json")) return;
+            if (!File.Exists("appsettings.test.json"))
+            {
+                return;
+            }
+
             IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
-            if (configuration.GetChildren().All(_ => _.Key != "UserData")) return;
+
+            if (configuration.GetChildren().All(_ => _.Key != "UserData"))
+            {
+                return;
+            }
+
             IConfigurationSection configurationSection = configuration.GetSection("UserData");
 
             //Check if the two most important claims exists
-            string email = configurationSection.GetValue<string>("Email");
+            string email = configurationSection.GetValue<string>("EmailAddress");
 
-            if (string.IsNullOrEmpty(email)) return;
+            if (string.IsNullOrEmpty(email))
+            {
+                return;
+            }
 
             //Add the claims to the list of principle claims
             Claim[] claims =
             {
-                new(ClaimTypes.NameIdentifier, "101963629560135630792", ClaimValueTypes.String, "Google"),
-                new(ClaimTypes.Name, "PersonalUser", ClaimValueTypes.String, "Google"),
-                new(ClaimTypes.GivenName, "Test", ClaimValueTypes.String, "Google"),
-                new(ClaimTypes.Surname, "The Tester", ClaimValueTypes.String, "Google"),
-                new(ClaimTypes.Email, email, ClaimValueTypes.String, "Google"),
-                new("urn:google:image",
+                new Claim(ClaimTypes.NameIdentifier, "101963629560135630792", ClaimValueTypes.String, "Google"),
+                new Claim(ClaimTypes.Name, "PersonalUser", ClaimValueTypes.String, "Google"),
+                new Claim(ClaimTypes.GivenName, "Test", ClaimValueTypes.String, "Google"),
+                new Claim(ClaimTypes.Surname, "The Tester", ClaimValueTypes.String, "Google"),
+                new Claim(ClaimTypes.Email, email, ClaimValueTypes.String, "Google"),
+                new Claim("urn:google:image",
                     "https://lh3.googleusercontent.com/-K6jEW8D8F4E/YRy0Zw8i-OI/AAAAAAAAAMQ/pJE0bflfklI1iGnB5zqUspjINcPo1yJ3wCMICGAYYCw/s96-c"
                     , ClaimValueTypes.String, "Google")
             };

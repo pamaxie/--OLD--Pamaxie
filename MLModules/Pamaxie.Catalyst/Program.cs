@@ -1,6 +1,6 @@
-﻿using Catalyst;
+﻿using System;
+using Catalyst;
 using Mosaik.Core;
-using System;
 
 namespace Pamaxie.Catalyst
 {

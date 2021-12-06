@@ -7,59 +7,74 @@ using Pamaxie.Data;
 namespace Test.Base
 {
     /// <summary>
-    /// Contains randomly generated User Data
+    /// Contains randomly generated <see cref="PamaxieUser"/> Data
     /// </summary>
     public static class TestUserData
     {
         /// <summary>
-        /// List of Users for the SqlDbContext.
+        /// List of Test Users
         /// </summary>
-        public static readonly List<User> ListOfUsers = new()
+        public static readonly List<PamaxieUser> ListOfUsers = new List<PamaxieUser>
         {
-            new User
+            new PamaxieUser
             {
-                GoogleUserId = "108533958726952849891",
-                Id = 2,
-                Username = "Xystosie",
-                Email = "Saxy@fakemail.com",
+                UniqueKey = "108533958726952849891",
+                UserName = "Xystosie",
+                FirstName = "Santina",
+                LastName = "Xystos",
+                EmailAddress = "Saxy@fakemail.com",
                 EmailVerified = false,
-                DeletedAccount = false
+                ProfilePictureAddress =
+                    "https://lh3.googleusercontent.com/-KHm9C7OfwHE/YRygoiMAYaI/AAAAAAAAAIU/EtHpaiw9rqQiXwbtloPiN-hhxuRRJmJFwCMICGAYYCw/s96-c",
+                ApplicationKeys = new List<string>().AsEnumerable()
             },
-            new User
+            new PamaxieUser
             {
-                GoogleUserId = "102617494281791801620",
-                Id = 3,
-                Username = "Indrakitten",
-                Email = "Inar@fakemail.com",
+                UniqueKey = "102617494281791801620",
+                UserName = "Indrakitten",
+                FirstName = "Indra",
+                LastName = "Aronne",
+                EmailAddress = "Inar@fakemail.com",
                 EmailVerified = true,
-                DeletedAccount = false
+                ProfilePictureAddress =
+                    "https://lh3.googleusercontent.com/-gN0jNA4zEEc/YRyhZ7pvf4I/AAAAAAAAAKo/a0Zi5AZgM4Umg4hWhtGB0bMz8RAt8bKHgCMICGAYYCw/s96-c",
+                ApplicationKeys = new[] { "1064922", "1053324" }
             },
-            new User
+            new PamaxieUser
             {
-                GoogleUserId = "103932469084294046511",
-                Id = 4,
-                Username = "Maxster",
-                Email = "Osma@fakemail.com",
+                UniqueKey = "103932469084294046511",
+                UserName = "Maxster",
+                FirstName = "Oshrat",
+                LastName = "Max",
+                EmailAddress = "Osma@fakemail.com",
                 EmailVerified = false,
-                DeletedAccount = false
+                ProfilePictureAddress =
+                    "https://lh3.googleusercontent.com/-ZoqFDMxHwW8/YRyhOXy4usI/AAAAAAAAAKI/aYF2Yf-OkgA1A5Q4h2H5Kl1uyEpH3FwsgCMICGAYYCw/s96-c",
+                ApplicationKeys = new List<string>().AsEnumerable()
             },
-            new User
+            new PamaxieUser
             {
-                GoogleUserId = "104669818103955818761",
-                Id = 5,
-                Username = "Paulo",
-                Email = "Pafe@fakemail.com",
+                UniqueKey = "104669818103955818761",
+                UserName = "Paulo",
+                FirstName = "Paulus",
+                LastName = "Ferdinand",
+                EmailAddress = "Pafe@fakemail.com",
                 EmailVerified = true,
-                DeletedAccount = false
+                ProfilePictureAddress =
+                    "https://lh3.googleusercontent.com/-sWl6t08Q35E/YRyhBB8AlkI/AAAAAAAAAJQ/BO8AYPZlG90gQEND_C_W63fGEnRBvLnhQCMICGAYYCw/s96-c",
+                ApplicationKeys = new[] { "1051080", "1065779", "1060105" }
             },
-            new User
+            new PamaxieUser
             {
-                GoogleUserId = "101321258707856828644",
-                Id = 6,
-                Username = "Mana",
-                Email = "Maje@fakemail.com",
+                UniqueKey = "101321258707856828644",
+                UserName = "Mana",
+                FirstName = "Manuela",
+                LastName = "Jéssica",
+                EmailAddress = "Maje@fakemail.com",
                 EmailVerified = false,
-                DeletedAccount = false
+                ProfilePictureAddress =
+                    "https://lh3.googleusercontent.com/-njVNd76BfGQ/YRyhHMcQWRI/AAAAAAAAAJw/dLEOLMKV7Tk8-NrNNRyh5r-lAGd1DPmqwCMICGAYYCw/s96-c",
+                ApplicationKeys = new List<string>().AsEnumerable()
             }
         };
 
@@ -69,38 +84,48 @@ namespace Test.Base
             if (File.Exists("appsettings.test.json"))
             {
                 IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
+
                 if (configuration.GetChildren().Any(_ => _.Key == "UserData"))
                 {
                     IConfigurationSection configurationSection = configuration.GetSection("UserData");
 
                     //Check if a email is given
-                    string email = configurationSection.GetValue<string>("Email");
+                    string email = configurationSection.GetValue<string>("EmailAddress");
 
                     if (!string.IsNullOrEmpty(email))
                     {
                         //Add the user to the list of users
-                        User user = new()
+                        PamaxieUser pamaxieUser = new PamaxieUser
                         {
-                            GoogleUserId = "101963629560135630792",
-                            Id = 1,
-                            Username = "PersonalUser",
-                            Email = email,
+                            UniqueKey = "101963629560135630792",
+                            UserName = "PersonalUser",
+                            FirstName = "Lucy",
+                            LastName = "Pamaxie",
+                            EmailAddress = email,
                             EmailVerified = false,
-                            DeletedAccount = false
+                            ProfilePictureAddress =
+                                "https://lh3.googleusercontent.com/-K6jEW8D8F4E/YRy0Zw8i-OI/AAAAAAAAAMQ/pJE0bflfklI1iGnB5zqUspjINcPo1yJ3wCMICGAYYCw/s96-c",
+                            ApplicationKeys = new List<string>().AsEnumerable(),
+                            Disabled = false,
+                            Deleted = false
                         };
-                        ListOfUsers.Add(user);
+                        ListOfUsers.Add(pamaxieUser);
                         return;
                     }
                 }
             }
-            ListOfUsers.Add(new User()
+
+            ListOfUsers.Add(new PamaxieUser()
             {
-                GoogleUserId = "101963629560135630792",
-                Id = 1,
-                Username = "",
-                Email = "",
+                UniqueKey = "101963629560135630792",
+                UserName = "",
+                FirstName = "",
+                LastName = "",
+                EmailAddress = "",
                 EmailVerified = false,
-                DeletedAccount = true
+                ProfilePictureAddress = "",
+                Disabled = false,
+                Deleted = true
             });
         }
     }

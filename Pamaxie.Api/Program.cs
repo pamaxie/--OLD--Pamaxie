@@ -3,12 +3,19 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using PamaxieML.Model;
+using Pamaxie.ImageScanning;
 
 namespace Pamaxie.Api
 {
+    /// <summary>
+    /// Class for the Main entry point
+    /// </summary>
     public static class Program
     {
+        /// <summary>
+        /// Main entry point for the application
+        /// </summary>
+        /// <param name="args">Launch Parameters</param>
         public static void Main(string[] args)
         {
             //Testing the prediction engine. We test this very early to ensure everything is working properly.
@@ -16,9 +23,10 @@ namespace Pamaxie.Api
             {
                 Console.WriteLine("We are testing if the neural network works. This may take a minute.");
 
-                FileInfo image = ImageProcessing.ImageProcessing.DownloadFile("https://www.pinclipart.com/picdir/middle/9-93455_what-is-the-meaning-of-png-clipart-download.png");
+                FileInfo image = ImageProcessing.ImageProcessing.DownloadFile(
+                    "https://www.pinclipart.com/picdir/middle/9-93455_what-is-the-meaning-of-png-clipart-download.png");
                 // Add input data
-                ModelInput input = new()
+                ModelInput input = new ModelInput
                 {
                     ImageSource = image.FullName
                 };
@@ -28,7 +36,8 @@ namespace Pamaxie.Api
                 image.Delete();
 
                 Console.WriteLine("Tested neural network successfully. Starting now!");
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine("Hit an error while testing the Neural Network. Exiting...");
                 Console.WriteLine(ex.Message);

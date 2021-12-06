@@ -3,27 +3,30 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using MudBlazor;
 using Pamaxie.Data;
-using Pamaxie.Database.Extensions.Sql.Data;
-using Pamaxie.Extensions.Sql;
+using Pamaxie.Database.Extensions.Client;
 using Pamaxie.Website.Authentication;
 using Pamaxie.Website.Models;
 
 namespace Pamaxie.Website.Services
 {
-    public class UserService
+    /// <summary>
+    /// A service for User interactions on the website
+    /// </summary>
+    public sealed class UserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISnackbar? _snackbar;
-        
+
         private readonly string _secret;
-        
+
         public UserService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ISnackbar? snackbar)
         {
             IConfigurationSection jwtTokenSection = configuration.GetSection("JwtToken");
             _secret = jwtTokenSection.GetValue<string>("Secret");
             _httpContextAccessor = httpContextAccessor;
             _snackbar = snackbar;
-            if (_snackbar == null) return;
+            if (_snackbar == null)
+                return;
             _snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
             _snackbar.Configuration.PreventDuplicates = true;
             _snackbar.Configuration.VisibleStateDuration = 10000;
@@ -34,30 +37,30 @@ namespace Pamaxie.Website.Services
         /// <summary>
         /// Checks if the current logged-in user have their email verified.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>If the email of the current user is verified</returns>
         public bool IsEmailOfCurrentUserVerified()
         {
             ClaimsPrincipal? claimUser = _httpContextAccessor.HttpContext?.User;
             if (claimUser is null)
                 return false;
-            ProfileData? profile = claimUser.GetGoogleAuthData(out _)?.GetProfileData();
-            if (profile is null)
+            PamaxieUser? googleUser = claimUser.GetGoogleAuthData(out _);
+            if (googleUser == null)
                 return false;
-            User user = UserExtensions.GetUser(profile.GoogleClaimUserId);
-            return user is {EmailVerified: true};
+            PamaxieUser pamaxieUser = UserDataServiceExtension.Get(googleUser.UniqueKey);
+            return pamaxieUser is { EmailVerified: true };
         }
-        
+
         /// <summary>
         /// Generates a token for EmailConfirmation for a User
         /// </summary>
-        /// <param name="profileData"></param>
-        /// <returns>Token</returns>
-        public string GenerateEmailConfirmationToken(ProfileData profileData)
+        /// <param name="user"></param>
+        /// <returns>Email Confirmation Token</returns>
+        public string GenerateEmailConfirmationToken(PamaxieUser user)
         {
-            IBody body = new ConfirmEmailBody(profileData);
+            IBody body = new ConfirmEmailBody(user);
             return JsonWebToken.Encode(body, _secret);
         }
-        
+
         /// <summary>
         /// Confirms the email of a user from a GoogleUserId included in the token
         /// </summary>
@@ -68,10 +71,10 @@ namespace Pamaxie.Website.Services
             ConfirmEmailBody? body = JsonWebToken.Decode<ConfirmEmailBody>(token, _secret) as ConfirmEmailBody;
             if (body?.Purpose is not EmailPurpose.EMAIL_CONFIRMATION)
                 return false;
-            User user = UserExtensions.GetUser(body.ProfileData.GoogleClaimUserId);
-            return user.Email == body.ProfileData.EmailAddress && body.ProfileData.VerifyUser();
+            PamaxieUser pamaxieUser = UserDataServiceExtension.Get(body.User.UniqueKey);
+            return pamaxieUser.EmailAddress == body.User.EmailAddress && body.User.VerifyEmail();
         }
-        
+
         /// <summary>
         /// Shows a Snackbar dialog telling the user to verify their email address.
         /// </summary>

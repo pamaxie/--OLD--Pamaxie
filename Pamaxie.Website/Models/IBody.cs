@@ -1,12 +1,26 @@
 ﻿using System;
-using Pamaxie.Database.Extensions.Sql.Data;
+using Pamaxie.Data;
 
 namespace Pamaxie.Website.Models
 {
+    /// <summary>
+    /// JWT Token body
+    /// </summary>
     public interface IBody
     {
-        EmailPurpose Purpose { get; }
-        DateTime Expiration { get; set; }
-        ProfileData ProfileData { get; }
+        /// <summary>
+        /// The purpose of the email
+        /// </summary>
+        public EmailPurpose Purpose { get; }
+
+        /// <summary>
+        /// Expiration date of the email
+        /// </summary>
+        public DateTime Expiration { get; set; }
+
+        /// <summary>
+        /// <inheritdoc cref="PamaxieUser"/>
+        /// </summary>
+        public PamaxieUser User { get; }
     }
 }

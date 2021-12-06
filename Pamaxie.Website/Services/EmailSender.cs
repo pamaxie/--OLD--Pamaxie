@@ -5,7 +5,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
-using Pamaxie.Database.Extensions.Sql.Data;
+using Pamaxie.Data;
 using WebMarkupMin.Core;
 
 namespace Pamaxie.Website.Services
@@ -13,7 +13,7 @@ namespace Pamaxie.Website.Services
     /// <summary>
     /// Service for everything related to sending emails
     /// </summary>
-    public class EmailSender
+    public sealed class EmailSender
     {
         private readonly string _email;
         private readonly string _password;
@@ -33,12 +33,12 @@ namespace Pamaxie.Website.Services
         /// <summary>
         /// Sends a confirmation email to the registered user.
         /// </summary>
-        /// <param name="profile"></param>
-        public async void SendConfirmationEmail(ProfileData profile)
+        /// <param name="user">The <see cref="PamaxieUser"/> the email will be sent to</param>
+        public async void SendConfirmationEmail(PamaxieUser user)
         {
-            string code = _userService.GenerateEmailConfirmationToken(profile);
+            string code = _userService.GenerateEmailConfirmationToken(user);
             string callbackUrl = _navigationManager.ToAbsoluteUri($"ConfirmEmail/{code}/").ToString();
-            await SendEmailAsync(profile.EmailAddress, "Confirm Your Email",
+            await SendEmailAsync(user.EmailAddress, "Confirm Your Email",
                 EmailBody.EmailConfirmationBody(callbackUrl)).ConfigureAwait(false);
         }
 
@@ -49,7 +49,7 @@ namespace Pamaxie.Website.Services
 
         private Task Execute(string email, string subject, string body)
         {
-            MailMessage mail = new()
+            MailMessage mail = new MailMessage
             {
                 From = new MailAddress(_email, "Pamaxie"),
                 Subject = subject,
@@ -58,7 +58,7 @@ namespace Pamaxie.Website.Services
             };
             mail.To.Add(email);
 
-            SmtpClient smtpClient = new()
+            SmtpClient smtpClient = new SmtpClient
             {
                 Host = "smtp.privateemail.com",
                 Port = 587,
@@ -86,6 +86,11 @@ namespace Pamaxie.Website.Services
                 EmailConfirmationHtml = MinifyHtmlPage(File.ReadAllText(emailConfirmationPath));
         }
 
+        /// <summary>
+        /// Email body for the email confirmation emails
+        /// </summary>
+        /// <param name="callbackUrl">Return URL to the website</param>
+        /// <returns>A email body, used for the EmailSender</returns>
         public static string EmailConfirmationBody(string callbackUrl)
         {
             return EmailConfirmationHtml.Replace("CALLBACKURL", HtmlEncoder.Default.Encode(callbackUrl));
@@ -93,7 +98,7 @@ namespace Pamaxie.Website.Services
 
         private static string MinifyHtmlPage(string html)
         {
-            HtmlMinifier htmlMinifier = new();
+            HtmlMinifier htmlMinifier = new HtmlMinifier();
             MarkupMinificationResult result = htmlMinifier.Minify(html);
             return result.MinifiedContent;
         }

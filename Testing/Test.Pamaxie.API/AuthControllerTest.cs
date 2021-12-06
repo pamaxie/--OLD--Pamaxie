@@ -1,75 +1,64 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Pamaxie.Api.Controllers;
-using Pamaxie.Api.Data;
-using Pamaxie.Api.Security;
 using Pamaxie.Data;
-using Pamaxie.Database.Sql;
-using Pamaxie.Extensions.Sql;
+using Pamaxie.Database.Extensions.Client;
+using Pamaxie.Jwt;
 using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Test.Pamaxie.API_UnitTesting
+namespace Test.Pamaxie.API_Test
 {
     /// <summary>
-    /// Testing class for AuthController
+    /// Testing class for <see cref="AuthController"/>
     /// </summary>
-    public class AuthControllerTest : Base.Test
+    public sealed class AuthControllerTest : ApiTestBase<AuthController>
     {
+        /// <summary>
+        /// <inheritdoc cref="MemberData.AllApplications"/>
+        /// </summary>
         public static IEnumerable<object[]> AllApplications => MemberData.AllApplications;
-        
+
         public AuthControllerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
+            //Mock ApplicationDataService, for ApplicationDataServiceExtension
+            DatabaseService.ApplicationService = MockApplicationDataService.Mock();
+            //Instantiate the controller and add a default HttpContext
+            Controller = new AuthController(new TokenGenerator(Configuration))
+            {
+                ControllerContext = { HttpContext = new DefaultHttpContext() }
+            };
         }
-        
+
         /// <summary>
-        /// 
+        /// Test for login of a <see cref="PamaxieApplication"/>
         /// </summary>
+        /// <param name="application">The <see cref="PamaxieApplication"/> from inlined data</param>
         [Theory]
         [MemberData(nameof(AllApplications))]
-        public void Login_Succeed(long applicationId)
+        public void Login(PamaxieApplication application)
         {
-            //Get application
-            Application application = TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.ApplicationId == applicationId);
-            Assert.NotNull(application);
-            
-            //Mock Database
-            SqlDbContext sqlDbContext = MockSqlDbContext.Mock();
-            AuthenticationExtensions.DbContext = sqlDbContext;
-            
-            //Instantiate the controller and add a default HttpContext
-            AuthController authController = new(new TokenGenerator(Configuration))
-            {
-                ControllerContext = {HttpContext = new DefaultHttpContext()}
-            };
+            //Act
+            ActionResult<AuthToken> result = Controller.LoginTask(application);
 
-            //Parse the application to a request body and send it to the controller
-            Stream body = CreateStream(application);
-            authController.Request.Body = body;
-            
-            ActionResult<AuthToken> result = authController.LoginTask();
-            TestOutputHelper.WriteLine(result.Result.ToString());
-            //Assert.Equal(, result.Result);
+            //Assert
+            Assert.Equal(StatusCodes.Status200OK, GetObjectResultStatusCode(result));
+            AuthToken token = GetObjectResultContent(result);
+            Assert.NotNull(token);
+            TestOutputHelper.WriteLine(JsonConvert.SerializeObject(token));
         }
-        
-        private static Stream CreateStream(object body)
-        {            
-            MemoryStream ms = new();
-            StreamWriter sw = new(ms);
- 
-            string json = JsonConvert.SerializeObject(body);
- 
-            sw.Write(json);
-            sw.Flush();
- 
-            ms.Position = 0;
-            
-            return ms;
+
+        /// <summary>
+        /// Test refreshing an exiting <see cref="AuthToken"/> through <see cref="AuthController.RefreshTask"/>
+        /// </summary>
+        [Fact]
+        public void Refresh()
+        {
+            throw new NotImplementedException();
         }
     }
 }

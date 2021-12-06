@@ -1,17 +1,31 @@
 ﻿using System;
-using Pamaxie.Database.Extensions.Sql.Data;
+using Pamaxie.Data;
 
 namespace Pamaxie.Website.Models
 {
-    public class ConfirmEmailBody : IBody
+    /// <summary>
+    /// Confirmation email body, used for the JWT Token
+    /// </summary>
+    public sealed class ConfirmEmailBody : IBody
     {
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public EmailPurpose Purpose => EmailPurpose.EMAIL_CONFIRMATION;
-        public DateTime Expiration { get; set; } = DateTime.UtcNow.AddDays(10);
-        public ProfileData ProfileData { get; }
 
-        public ConfirmEmailBody(ProfileData profileData)
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public DateTime Expiration { get; set; } = DateTime.UtcNow.AddDays(10);
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public PamaxieUser User { get; }
+
+        public ConfirmEmailBody(PamaxieUser user)
         {
-            ProfileData = profileData;
+            User = user;
         }
     }
 }
