@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pamaxie.Data;
 using Pamaxie.Database.Design;
+using Pamaxie.Jwt;
 
 namespace Pamaxie.Api.Controllers
 {
@@ -67,12 +68,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> CreateTask(PamaxieUser user)
         {
-            if (user == null)
-            {
-                return BadRequest();
-            }
-
-            return Created("", _dbDriver.Service.PamaxieUserData.Create(user));
+            return NotFound("This endpoint is not avialable for this data type");
         }
 
         /// <summary>
@@ -88,17 +84,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> TryCreateTask(PamaxieUser user)
         {
-            if (user == null)
-            {
-                return BadRequest();
-            }
-
-            if (_dbDriver.Service.PamaxieUserData.TryCreate(user, out var createdUser))
-            {
-                return Created("", createdUser);
-            }
-
-            return Problem();
+            return NotFound("This endpoint is not avialable for this data type");
         }
 
         /// <summary>
@@ -163,17 +149,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> UpdateOrCreateTask(PamaxieUser user)
         {
-            if (user == null)
-            {
-                return BadRequest();
-            }
-
-            if (_dbDriver.Service.PamaxieUserData.UpdateOrCreate(user, out var updatedOrCreatedUser))
-            {
-                return Created("", updatedOrCreatedUser);
-            }
-
-            return Ok(updatedOrCreatedUser);
+            return NotFound("This endpoint is not avialable for this data type");
         }
 
         /// <summary>
@@ -227,37 +203,49 @@ namespace Pamaxie.Api.Controllers
         /// <summary>
         /// Get all <see cref="PamaxieApplication"/>s the user owns
         /// </summary>
-        /// <param name="user">The <see cref="PamaxieUser"/> of the applications</param>
+        /// <param name="userId">The user to get the applications from</param>
         /// <returns>A list of all <see cref="PamaxieApplication"/>s the <see cref="PamaxieUser"/> owns</returns>
         [Authorize]
-        [HttpGet("GetAllApplications")]
-        [Consumes(MediaTypeNames.Application.Json)]
+        [HttpGet("GetAllApplications={userId}")]
+
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PamaxieApplication>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<PamaxieApplication>> GetAllApplicationsTask(PamaxieUser user)
+        public ActionResult<IEnumerable<PamaxieApplication>> GetAllApplicationsTask(string userId)
         {
-            if (user == null)
+            if (userId == null)
             {
                 return BadRequest();
             }
 
+            var user = _dbDriver.Service.PamaxieUserData.Get(userId);
             return Ok(_dbDriver.Service.PamaxieUserData.GetAllApplications(user));
         }
 
         /// <summary>
         /// Verifies the <see cref="PamaxieUser"/>'s email address
         /// </summary>
-        /// <param name="user"><see cref="PamaxieUser"/> to be deleted</param>
+        /// <param name="userId">The user to get the email from and to verify</param>
         /// <returns><see cref="bool"/> if the user got verified</returns>
         [Authorize]
         [HttpPost("VerifyEmail")]
-        [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<bool> VerifyEmailTask(PamaxieUser user)
+        public ActionResult<bool> VerifyEmailTask(string userId)
         {
+            if (userId == null)
+            {
+                return BadRequest();
+            }
+
+            var user = _dbDriver.Service.PamaxieUserData.Get(userId);
+
+            if (ValidateUserId(userId))
+            {
+                return Unauthorized();
+            }
+
             if (user == null)
             {
                 return BadRequest();
@@ -269,6 +257,19 @@ namespace Pamaxie.Api.Controllers
             }
 
             return Problem();
+        }
+
+
+        /// <summary>
+        /// Validates if the person making the request is actually the person who owns the user
+        /// </summary>
+        /// <param name="assumedUserId"></param>
+        /// <returns></returns>
+        private bool ValidateUserId(string assumedUserId)
+        {
+            string token = Request.Headers["authorization"];
+            string userId = TokenGenerator.GetUserKey(token);
+            return assumedUserId == userId;
         }
     }
 }

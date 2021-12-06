@@ -2,10 +2,11 @@ using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using Pamaxie.Data;
 using Pamaxie.Database.Design;
+using Pamaxie.Jwt;
 
-/*
 namespace Pamaxie.Api.Controllers
 {
     /// <summary>
@@ -47,12 +48,12 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest();
             }
 
-            if (!_dbService.Applications.Exists(key))
+            if (!_dbDriver.Service.PamaxieApplicationData.Exists(key))
             {
                 return NotFound();
             }
 
-            return Ok(_dbService.Applications.Get(key));
+            return Ok(_dbDriver.Service.PamaxieApplicationData.Get(key));
         }
 
         /// <summary>
@@ -68,17 +69,17 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> CreateTask(PamaxieApplication application)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (application == null)
             {
                 return BadRequest();
             }
 
-            return Created("", _dbService.Applications.Create(application));
+            if (!validateApplicationOwner(application.UniqueKey, out application, application))
+            {
+                return Unauthorized();
+            }
+
+            return Created("", _dbDriver.Service.PamaxieApplicationData.Create(application));
         }
 
         /// <summary>
@@ -94,17 +95,17 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> TryCreateTask(PamaxieApplication application)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (application == null)
             {
                 return BadRequest();
             }
 
-            if (_dbService.Applications.TryCreate(application, out PamaxieApplication createdApplication))
+            if (!validateApplicationOwner(application.UniqueKey, out application, application))
+            {
+                return Unauthorized();
+            }
+
+            if (_dbDriver.Service.PamaxieApplicationData.TryCreate(application, out PamaxieApplication createdApplication))
             {
                 return Created("", createdApplication);
             }
@@ -125,17 +126,17 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> UpdateTask(PamaxieApplication application)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (application == null)
             {
                 return BadRequest();
             }
 
-            return Ok(_dbService.Applications.Update(application));
+            if (!validateApplicationOwner(application.UniqueKey, out application, application))
+            {
+                return Unauthorized();
+            }
+
+            return Ok(_dbDriver.Service.PamaxieApplicationData.Update(application));
         }
 
         /// <summary>
@@ -151,17 +152,17 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> TryUpdateTask(PamaxieApplication application)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (application == null)
             {
                 return BadRequest();
             }
 
-            if (_dbService.Applications.TryUpdate(application, out PamaxieApplication updatedApplication))
+            if (!validateApplicationOwner(application.UniqueKey, out application, application))
+            {
+                return Unauthorized();
+            }
+
+            if (_dbDriver.Service.PamaxieApplicationData.TryUpdate(application, out PamaxieApplication updatedApplication))
             {
                 return Ok(updatedApplication);
             }
@@ -184,17 +185,12 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieApplication> UpdateOrCreateTask(PamaxieApplication application)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (application == null)
             {
                 return BadRequest();
             }
 
-            if (_dbService.Applications.UpdateOrCreate(application, out PamaxieApplication updatedOrCreatedApplication))
+            if (_dbDriver.Service.PamaxieApplicationData.UpdateOrCreate(application, out PamaxieApplication updatedOrCreatedApplication))
             {
                 return Created("", updatedOrCreatedApplication);
             }
@@ -215,23 +211,18 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> ExistsTask(string key)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (string.IsNullOrEmpty(key))
             {
                 return BadRequest();
             }
 
-            return Ok(_dbService.Applications.Exists(key));
+            return Ok(_dbDriver.Service.PamaxieApplicationData.Exists(key));
         }
 
         /// <summary>
         /// Deletes a <see cref="PamaxieApplication"/> in the database
         /// </summary>
-        /// <param name="application">The <see cref="PamaxieApplication"/> to be deleted</param>
+        /// <param name="applicationId">The Id of the application that should be deleted</param>
         /// <returns><see cref="bool"/> if <see cref="PamaxieApplication"/> is deleted</returns>
         [Authorize]
         [HttpDelete("Delete")]
@@ -239,22 +230,24 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<bool> DeleteTask(PamaxieApplication application)
+        public ActionResult<bool> DeleteTask(string applicationId)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
-            if (application == null)
+            if (applicationId == null)
             {
                 return BadRequest();
             }
 
-            if (_dbService.Applications.Delete(application))
+            if (!validateApplicationOwner(applicationId, out var application))
+            {
+                return Unauthorized();
+            }
+
+            if (_dbDriver.Service.PamaxieApplicationData.Delete(application))
             {
                 return Ok(true);
             }
+
+
 
             return Problem();
         }
@@ -272,23 +265,18 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> GetOwner(PamaxieApplication application)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (application == null)
             {
                 return BadRequest();
             }
 
-            return Ok(_dbService.Applications.GetOwner(application));
+            return Ok(_dbDriver.Service.PamaxieApplicationData.GetOwner(application));
         }
 
         /// <summary>
         /// Enables or disables the <see cref="PamaxieApplication"/> 
         /// </summary>
-        /// <param name="application">The <see cref="PamaxieApplication"/> to enable or disable</param>
+        /// <param name="applicationId">Id of the application that should be enabled or disabled</param>
         /// <returns>Enabled or disabled <see cref="PamaxieApplication"/></returns>
         [Authorize]
         [HttpPut("EnableOrDisable")]
@@ -296,19 +284,19 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PamaxieApplication))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<PamaxieApplication> EnableOrDisableTask(PamaxieApplication application)
+        public ActionResult<PamaxieApplication> EnableOrDisableTask(string applicationId)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
-            if (application == null)
+            if (applicationId == null)
             {
                 return BadRequest();
             }
 
-            return Ok(_dbService.Applications.EnableOrDisable(application));
+            if (!validateApplicationOwner(applicationId, out var application))
+            {
+                return Unauthorized();
+            }
+
+            return Ok(_dbDriver.Service.PamaxieApplicationData.EnableOrDisable(application));
         }
 
         /// <summary>
@@ -324,22 +312,40 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> VerifyAuthenticationTask(PamaxieApplication application)
         {
-            if (!_dbService.IsConnected)
-            {
-                return Problem();
-            }
-
             if (application == null)
             {
                 return BadRequest();
             }
 
-            if (_dbService.Applications.VerifyAuthentication(application))
+            if (_dbDriver.Service.PamaxieApplicationData.VerifyAuthentication(application))
             {
                 return Ok(true);
             }
 
             return Unauthorized();
         }
+
+        /// <summary>
+        /// Validates if the person making changes to an application is its actual owner
+        /// </summary>
+        /// <param name="applicationId"></param>
+        /// <param name="application"></param>
+        /// <returns></returns>
+        private bool validateApplicationOwner(string applicationId, out PamaxieApplication application, PamaxieApplication applicationIn = null)
+        {
+            //Validate if the owner is the one trying to do this request.
+            if (applicationIn == null)
+            {
+                application = _dbDriver.Service.PamaxieApplicationData.Get(applicationId);
+            }
+            else
+            {
+                application = applicationIn;
+            }
+
+            string token = Request.Headers["authorization"];
+            string userId = TokenGenerator.GetUserKey(token);
+            return application.OwnerKey == userId;
+        }
     }
-}*/
+}
