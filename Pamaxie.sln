@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Pamaxie.Website", "Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.MediaDetection", "Assemblies\Pamaxie.MediaDetection\Pamaxie.MediaDetection.csproj", "{026BB22A-512A-482E-8A2F-A9B1FAFABD2B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assemblies", "Assemblies", "{37C54DFB-BDD0-4B87-A2DC-7C0B742ECE9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.Database.Api", "Assemblies\Pamaxie.Database.Api\Pamaxie.Database.Api.csproj", "{ACECD58F-6153-4D2E-AB69-DBB2957D68F0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pamaxie.ImageProcessing", "Assemblies\Pamaxie.ImageProcessing\Pamaxie.ImageProcessing.csproj", "{5C90F422-2B17-4632-B075-3F9BA2624016}"
 EndProject

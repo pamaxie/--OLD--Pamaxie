@@ -8,7 +8,7 @@ namespace Pamaxie.ImageScanning
     /// <summary>
     /// BUG: Rewrite all of this, this is auto generated currently and doesn't nessecarily fit our needs.
     /// </summary>
-    public class ConsumeModel
+    public static class ConsumeModel
     {
         private static Lazy<PredictionEngine<ModelInput, ModelOutput>> PredictionEngine =
             new Lazy<PredictionEngine<ModelInput, ModelOutput>>(CreatePredictionEngine);
@@ -18,7 +18,7 @@ namespace Pamaxie.ImageScanning
 
         // For more info on consuming ML.NET models, visit https://aka.ms/mlnet-consume
         // Method for consuming model in your app
-        public static ModelOutput Predict(ModelInput input, out OutputProperties properties)
+        public static ModelOutput Predict(this ModelInput input, out OutputProperties properties)
         {
             var result = PredictionEngine.Value.Predict(input);
             var label = OutputProperties.ImagePredictionResult.None;
