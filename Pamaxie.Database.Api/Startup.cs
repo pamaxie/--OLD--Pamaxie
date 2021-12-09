@@ -77,7 +77,17 @@ namespace Pamaxie.Api
                     };
                     });
 
-            
+            services.AddSwaggerGen(o => {
+                o.SwaggerDoc(
+                    "v1",
+                    new Microsoft.OpenApi.Models.OpenApiInfo
+                    {
+                        Title = "Pamaxie Database API",
+                        Version = "v1"
+                    });
+            });
+
+
             var dbDriver = DbDriverManager.LoadDatabaseDriver(dbSettings.DatabaseDriverGuid);
             dbDriver.Configuration.LoadConfig(dbSettings.Settings);
             services.AddSingleton(dbDriver);
@@ -98,6 +108,11 @@ namespace Pamaxie.Api
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseSwagger();
+            app.UseSwaggerUI(o =>
+            {
+                o.SwaggerEndpoint("/swagger/v1/swagger.json", "API");
+            });
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
