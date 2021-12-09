@@ -1,8 +1,7 @@
 ![**Pamaxie**](https://i.imgur.com/UzSZPs2.png)
 
-[![CodeQL Check](https://github.com/deamonicnet/Pamaxie/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/deamonicnet/Pamaxie/actions/workflows/codeql-analysis.yml)
+[![CodeQL](https://github.com/pamaxie/Pamaxie/actions/workflows/CodeQL.yml/badge.svg)](https://github.com/pamaxie/Pamaxie/actions/workflows/CodeQL.yml)
 [![.NET Build Test](https://github.com/deamonicnet/Pamaxie/actions/workflows/dotnet.yml/badge.svg)](https://github.com/deamonicnet/Pamaxie/actions/workflows/dotnet.yml)
-[![SecurityCodeScan](https://github.com/pamaxie/Pamaxie/actions/workflows/securitycodescan-analysis.yml/badge.svg)](https://github.com/pamaxie/Pamaxie/actions/workflows/securitycodescan-analysis.yml)
 
 Documentation for this project can be found at [Pamaxies wiki](https://wiki.pamaxie.com/). API Credentials can be created at [Pamaxies website](https://pamaxie.com/). Please let us know if the API misbehaves in any way. We will assist you as soon as possible.
 
