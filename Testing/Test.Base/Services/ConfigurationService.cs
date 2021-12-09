@@ -3,7 +3,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Pamaxie.Jwt;
+
 
 namespace Test.Base
 {

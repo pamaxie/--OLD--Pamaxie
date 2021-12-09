@@ -42,7 +42,7 @@ namespace Test.Pamaxie.Website_Test
             string token = JsonWebToken.Encode(body, _secret);
 
             //Assert
-            Assert.False(string.IsNullOrEmpty(token));
+            Assert.False(string.IsNullOrWhiteSpace(token));
             TestOutputHelper.WriteLine(token);
         }
 

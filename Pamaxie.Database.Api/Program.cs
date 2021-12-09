@@ -33,7 +33,7 @@ namespace Pamaxie.Api
             List<string> hostUrl = new List<string>();
             string nameString = configuration["hosturl"];
 
-            if (string.IsNullOrEmpty(nameString))
+            if (string.IsNullOrWhiteSpace(nameString))
             {
                 //Default Url if nothing was specified, this is basically the "default" server url
                 nameString = "https://0.0.0.0";

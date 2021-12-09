@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Pamaxie.Authentication;
 using Pamaxie.Database.Extensions;
 using Pamaxie.Database.Extensions.ServerSide;
 using Pamaxie.Helpers;
-using Pamaxie.Jwt;
 using Spectre.Console;
 using System;
 using System.IO;
@@ -198,7 +198,7 @@ namespace Pamaxie.Database.Api
                         }));
             }
 
-            secret = TokenGenerator.GenerateSecret();
+            secret = JwtTokenGenerator.GenerateSecret();
 
             if (AnsiConsole.Confirm($"Should we show you the token now? [yellow]Otherwise it will be visible in the enviorement varibles under the envvar {JwtSettingsEnvVar}[/]", 
                                     false))
@@ -210,7 +210,7 @@ namespace Pamaxie.Database.Api
                 "How long in minutes should the timeout for the Jwt bearer be? \n" +
                 "[yellow]We usually recommend anywhere between 5 - 15 minutes lifespan[/]", 10);
 
-            AuthSettings authSettings = new AuthSettings();
+            JwtTokenConfig authSettings = new JwtTokenConfig();
             authSettings.Secret = secret;
             authSettings.ExpiresInMinutes = timeout;
 

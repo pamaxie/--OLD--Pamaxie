@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Assemblies\Pamaxie.ImageProcessing\Pamaxie.ImageProcessing.csproj" />
-    <ProjectReference Include="..\Assemblies\Pamaxie.Jwt\Pamaxie.Jwt.csproj" />
+    <ProjectReference Include="..\Assemblies\Pamaxie.Jwt\Pamaxie.Authentication.csproj" />
     <ProjectReference Include="..\Assemblies\Pamaxie.MediaDetection\Pamaxie.MediaDetection.csproj" />
     <ProjectReference Include="..\Database\Pamaxie.Data\Pamaxie.Data.csproj" />
     <ProjectReference Include="..\MLModules\PamaxieML.Model\Pamaxie.ImageScanning.csproj" />

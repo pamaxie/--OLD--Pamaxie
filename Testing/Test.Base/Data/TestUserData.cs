@@ -92,7 +92,7 @@ namespace Test.Base
                     //Check if a email is given
                     string email = configurationSection.GetValue<string>("EmailAddress");
 
-                    if (!string.IsNullOrEmpty(email))
+                    if (!string.IsNullOrWhiteSpace(email))
                     {
                         //Add the user to the list of users
                         PamaxieUser pamaxieUser = new PamaxieUser

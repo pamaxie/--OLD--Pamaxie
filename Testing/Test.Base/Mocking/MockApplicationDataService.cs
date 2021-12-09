@@ -95,7 +95,7 @@ namespace Test.Base
             /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.Get"/>
             public PamaxieApplication Get(string key)
             {
-                return string.IsNullOrEmpty(key)
+                return string.IsNullOrWhiteSpace(key)
                     ? null
                     : TestApplicationData.ListOfApplications.FirstOrDefault(_ => _.UniqueKey == key);
             }
@@ -103,7 +103,7 @@ namespace Test.Base
             /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.Create"/>
             public PamaxieApplication Create(PamaxieApplication value)
             {
-                if (value == null || !string.IsNullOrEmpty(value.UniqueKey))
+                if (value == null || !string.IsNullOrWhiteSpace(value.UniqueKey))
                 {
                     return null;
                 }
@@ -133,7 +133,7 @@ namespace Test.Base
             {
                 createdValue = null;
 
-                if (value == null || !string.IsNullOrEmpty(value.UniqueKey))
+                if (value == null || !string.IsNullOrWhiteSpace(value.UniqueKey))
                 {
                     return false;
                 }
@@ -162,7 +162,7 @@ namespace Test.Base
             /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.Update"/>
             public PamaxieApplication Update(PamaxieApplication value)
             {
-                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
+                if (value == null || string.IsNullOrWhiteSpace(value.UniqueKey))
                 {
                     return null;
                 }
@@ -181,7 +181,7 @@ namespace Test.Base
             {
                 updatedValue = null;
 
-                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
+                if (value == null || string.IsNullOrWhiteSpace(value.UniqueKey))
                 {
                     return false;
                 }
@@ -208,12 +208,12 @@ namespace Test.Base
                     throw new Exception("Bad data");
                 }
 
-                if (string.IsNullOrEmpty(value.UniqueKey) ||
+                if (string.IsNullOrWhiteSpace(value.UniqueKey) ||
                     TestApplicationData.ListOfApplications.All(_ => _.UniqueKey != value.UniqueKey))
                 {
                     string key = value.UniqueKey;
 
-                    if (string.IsNullOrEmpty(key))
+                    if (string.IsNullOrWhiteSpace(key))
                     {
                         do
                         {
@@ -246,13 +246,13 @@ namespace Test.Base
             /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.Exists"/>
             public bool Exists(string key)
             {
-                return !string.IsNullOrEmpty(key) && TestApplicationData.ListOfApplications.Any(_ => _.UniqueKey == key);
+                return !string.IsNullOrWhiteSpace(key) && TestApplicationData.ListOfApplications.Any(_ => _.UniqueKey == key);
             }
 
             /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.Delete"/>
             public bool Delete(PamaxieApplication value)
             {
-                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
+                if (value == null || string.IsNullOrWhiteSpace(value.UniqueKey))
                 {
                     return false;
                 }
@@ -272,7 +272,7 @@ namespace Test.Base
             /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.GetOwner"/>
             public PamaxieUser GetOwner(PamaxieApplication value)
             {
-                if (value == null || string.IsNullOrEmpty(value.UniqueKey) || string.IsNullOrEmpty(value.OwnerKey))
+                if (value == null || string.IsNullOrWhiteSpace(value.UniqueKey) || string.IsNullOrWhiteSpace(value.OwnerKey))
                 {
                     return null;
                 }
@@ -284,7 +284,7 @@ namespace Test.Base
             /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.EnableOrDisable"/>
             public PamaxieApplication EnableOrDisable(PamaxieApplication value)
             {
-                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
+                if (value == null || string.IsNullOrWhiteSpace(value.UniqueKey))
                 {
                     return null;
                 }

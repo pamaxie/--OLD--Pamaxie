@@ -10,7 +10,7 @@ namespace Pamaxie.Website.Pages
     {
         protected override Task OnInitializedAsync()
         {
-            if (!string.IsNullOrEmpty(Token) && UserService.ConfirmEmail(Token))
+            if (!string.IsNullOrWhiteSpace(Token) && UserService.ConfirmEmail(Token))
                 NavigationManager.NavigateTo(NavigationManager.BaseUri);
 
             return Task.CompletedTask;

@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Assemblies\Pamaxie.Jwt\Pamaxie.Jwt.csproj" />
+    <ProjectReference Include="..\..\Assemblies\Pamaxie.Jwt\Pamaxie.Authentication.csproj" />
     <ProjectReference Include="..\Pamaxie.Database.Design\Pamaxie.Database.Design.csproj" />
     <ProjectReference Include="..\Pamaxie.Data\Pamaxie.Data.csproj" />
   </ItemGroup>

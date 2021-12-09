@@ -50,9 +50,9 @@ namespace Test.Pamaxie.Website_Test
         [MemberData(nameof(PersonalUser))]
         public void SendConfirmationEmail(PamaxieUser user)
         {
-            if (string.IsNullOrEmpty(UserEmail) ||
-                string.IsNullOrEmpty(SenderEmail) ||
-                string.IsNullOrEmpty(SenderPassword))
+            if (string.IsNullOrWhiteSpace(UserEmail) ||
+                string.IsNullOrWhiteSpace(SenderEmail) ||
+                string.IsNullOrWhiteSpace(SenderPassword))
             {
                 TestOutputHelper.WriteLine("Information not provided, so the test will not run");
                 return;

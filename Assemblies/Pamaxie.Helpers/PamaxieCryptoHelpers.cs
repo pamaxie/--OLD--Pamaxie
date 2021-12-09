@@ -18,9 +18,6 @@ namespace Pamaxie.Helpers
     {
         public static string GetUserId(NetworkCredential credentials)
             => ComputeSha512($"{credentials.UserName}\0{credentials.Password}");
-
-        public static string GetSecurityQuestionId(string answer1, string answer2, string answer3)
-            => ComputeSha512($"{answer1}\0{answer2}\0{answer3}");
     
         /// <summary>
         /// Computes the hash from some data

@@ -48,7 +48,7 @@ namespace Pamaxie.Database.Server.DataInteraction
             using var conn = ConnectionMultiplexer.Connect(_owner.Configuration.ToString());
             IDatabase db = conn.GetDatabase();
             RedisValue rawData = db.StringGet(uniqueKey);
-            return string.IsNullOrEmpty(rawData) ? default : JsonConvert.DeserializeObject<T>(rawData);
+            return string.IsNullOrWhiteSpace(rawData) ? default : JsonConvert.DeserializeObject<T>(rawData);
         }
 
         /// <inheritdoc cref="IPamaxieDataInteractionBase{T}.Create(T)"/>
@@ -72,7 +72,7 @@ namespace Pamaxie.Database.Server.DataInteraction
             using var conn = ConnectionMultiplexer.Connect(_owner.Configuration.ToString());
             IDatabase db = conn.GetDatabase();
 
-            if (string.IsNullOrEmpty(data.UniqueKey))
+            if (string.IsNullOrWhiteSpace(data.UniqueKey))
             {
                 data.UniqueKey = Guid.NewGuid().ToString();
                 Debug.Assert(!db.KeyExists(data.UniqueKey));
@@ -124,7 +124,7 @@ namespace Pamaxie.Database.Server.DataInteraction
             IDatabase db = conn.GetDatabase();
             createdItem = default;
 
-            if (string.IsNullOrEmpty(data.UniqueKey))
+            if (string.IsNullOrWhiteSpace(data.UniqueKey))
             {
                 data.UniqueKey = Guid.NewGuid().ToString();
                 Debug.Assert(!db.KeyExists(data.UniqueKey));
@@ -284,7 +284,7 @@ namespace Pamaxie.Database.Server.DataInteraction
             updatedOrCreatedItem = default;
             bool createdNew = false;
 
-            if (string.IsNullOrEmpty(data.UniqueKey))
+            if (string.IsNullOrWhiteSpace(data.UniqueKey))
             {
                 data.UniqueKey = Guid.NewGuid().ToString();
                 Debug.Assert(!db.KeyExists(data.UniqueKey));

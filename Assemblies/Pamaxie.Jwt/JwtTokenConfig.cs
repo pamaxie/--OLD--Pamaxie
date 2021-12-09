@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pamaxie.Jwt
+namespace Pamaxie.Authentication
 {
-    public class AuthSettings
+    public class JwtTokenConfig
     {
         /// <summary>
         /// Secret of the Authenication Settings

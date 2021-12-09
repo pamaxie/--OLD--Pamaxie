@@ -90,13 +90,13 @@ namespace Test.Base
             /// <inheritdoc cref="IPamaxieUserDataInteraction.Get"/>
             public PamaxieUser Get(string key)
             {
-                return string.IsNullOrEmpty(key) ? null : TestUserData.ListOfUsers.FirstOrDefault(_ => _.UniqueKey == key);
+                return string.IsNullOrWhiteSpace(key) ? null : TestUserData.ListOfUsers.FirstOrDefault(_ => _.UniqueKey == key);
             }
 
             /// <inheritdoc cref="IPamaxieUserDataInteraction.Create"/>
             public PamaxieUser Create(PamaxieUser value)
             {
-                if (value == null || !string.IsNullOrEmpty(value.UniqueKey))
+                if (value == null || !string.IsNullOrWhiteSpace(value.UniqueKey))
                 {
                     return null;
                 }
@@ -118,7 +118,7 @@ namespace Test.Base
             {
                 createdValue = null;
 
-                if (value == null || !string.IsNullOrEmpty(value.UniqueKey))
+                if (value == null || !string.IsNullOrWhiteSpace(value.UniqueKey))
                 {
                     return false;
                 }
@@ -139,7 +139,7 @@ namespace Test.Base
             /// <inheritdoc cref="IPamaxieUserDataInteraction.Update"/>
             public PamaxieUser Update(PamaxieUser value)
             {
-                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
+                if (value == null || string.IsNullOrWhiteSpace(value.UniqueKey))
                 {
                     return null;
                 }
@@ -158,7 +158,7 @@ namespace Test.Base
             {
                 updatedValue = null;
 
-                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
+                if (value == null || string.IsNullOrWhiteSpace(value.UniqueKey))
                 {
                     return false;
                 }
@@ -185,11 +185,11 @@ namespace Test.Base
                     return false;
                 }
 
-                if (string.IsNullOrEmpty(value.UniqueKey) || TestUserData.ListOfUsers.All(_ => _.UniqueKey != value.UniqueKey))
+                if (string.IsNullOrWhiteSpace(value.UniqueKey) || TestUserData.ListOfUsers.All(_ => _.UniqueKey != value.UniqueKey))
                 {
                     string key = value.UniqueKey;
 
-                    if (string.IsNullOrEmpty(key))
+                    if (string.IsNullOrWhiteSpace(key))
                     {
                         do
                         {
@@ -214,13 +214,13 @@ namespace Test.Base
             /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.Exists"/>
             public bool Exists(string key)
             {
-                return !string.IsNullOrEmpty(key) && TestUserData.ListOfUsers.Any(_ => _.UniqueKey == key);
+                return !string.IsNullOrWhiteSpace(key) && TestUserData.ListOfUsers.Any(_ => _.UniqueKey == key);
             }
 
             /// <inheritdoc cref="IPamaxieUserDataInteraction.Delete"/>
             public bool Delete(PamaxieUser value)
             {
-                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
+                if (value == null || string.IsNullOrWhiteSpace(value.UniqueKey))
                 {
                     return false;
                 }
@@ -239,7 +239,7 @@ namespace Test.Base
             /// <inheritdoc cref="IPamaxieUserDataInteraction.GetAllApplications"/>
             public IEnumerable<PamaxieApplication> GetAllApplications(PamaxieUser value)
             {
-                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
+                if (value == null || string.IsNullOrWhiteSpace(value.UniqueKey))
                 {
                     return null;
                 }
@@ -262,7 +262,7 @@ namespace Test.Base
             /// <inheritdoc cref="IPamaxieUserDataInteraction.VerifyEmail"/>
             public bool VerifyEmail(PamaxieUser value)
             {
-                if (value == null || string.IsNullOrEmpty(value.UniqueKey))
+                if (value == null || string.IsNullOrWhiteSpace(value.UniqueKey))
                 {
                     return false;
                 }

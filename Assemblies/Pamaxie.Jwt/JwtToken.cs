@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Pamaxie.Jwt
+namespace Pamaxie.Authentication
 {
     /// <summary>
     /// Authentication Token
     /// </summary>
-    public sealed class AuthToken
+    public sealed class JwtToken
     {
         /// <summary>
         /// The token

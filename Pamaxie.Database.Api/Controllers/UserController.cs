@@ -3,9 +3,9 @@ using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Pamaxie.Authentication;
 using Pamaxie.Data;
 using Pamaxie.Database.Design;
-using Pamaxie.Jwt;
 
 namespace Pamaxie.Api.Controllers
 {
@@ -42,11 +42,16 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> GetTask(string key)
         {
-            if (string.IsNullOrEmpty(key))
+            if (string.IsNullOrWhiteSpace(key))
             {
                 return BadRequest();
             }
-            
+
+            if (!ValidateOwnership(key))
+            {
+                return Unauthorized();
+            }
+
             if (!_dbDriver.Service.PamaxieApplicationData.Exists(key))
             {
                 return NotFound();
@@ -68,7 +73,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PamaxieUser> CreateTask(PamaxieUser user)
         {
-            return NotFound("This endpoint is not avialable for this data type");
+            return NotFound("This endpoint is not avialable for this data type, please use the Auth Controller to create a user.");
         }
 
         /// <summary>
@@ -105,6 +110,21 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest();
             }
 
+            if (string.IsNullOrWhiteSpace(user.UniqueKey))
+            {
+                return BadRequest();
+            }
+
+            if (!ValidateOwnership(user.UniqueKey))
+            {
+                return Unauthorized();
+            }
+
+            if (!_dbDriver.Service.PamaxieUserData.Exists(user.UniqueKey))
+            {
+                return NotFound("The user you want to update does not exist.");
+            }
+
             return Ok(_dbDriver.Service.PamaxieUserData.Update(user));
         }
 
@@ -124,6 +144,16 @@ namespace Pamaxie.Api.Controllers
             if (user == null)
             {
                 return BadRequest();
+            }
+
+            if (!ValidateOwnership(user.UniqueKey))
+            {
+                return Unauthorized();
+            }
+
+            if (!_dbDriver.Service.PamaxieUserData.Exists(user.UniqueKey))
+            {
+                return NotFound("The user you want to update does not exist.");
             }
 
             if (_dbDriver.Service.PamaxieUserData.TryUpdate(user, out var updatedUser))
@@ -166,9 +196,14 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> ExistsTask(string key)
         {
-            if (string.IsNullOrEmpty(key))
+            if (string.IsNullOrWhiteSpace(key))
             {
                 return BadRequest();
+            }
+
+            if (!ValidateOwnership(key))
+            {
+                return Unauthorized();
             }
 
             return Ok(_dbDriver.Service.PamaxieUserData.Exists(key));
@@ -192,6 +227,21 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest();
             }
 
+            if (string.IsNullOrWhiteSpace(user.UniqueKey))
+            {
+                return BadRequest();
+            }
+
+            if (!ValidateOwnership(user.UniqueKey))
+            {
+                return Unauthorized();
+            }
+
+            if (!_dbDriver.Service.PamaxieApplicationData.Exists(user.UniqueKey))
+            {
+                return NotFound();
+            }
+
             if (_dbDriver.Service.PamaxieUserData.Delete(user))
             {
                 return Ok(true);
@@ -213,9 +263,19 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<IEnumerable<PamaxieApplication>> GetAllApplicationsTask(string userId)
         {
-            if (userId == null)
+            if (string.IsNullOrWhiteSpace(userId))
             {
                 return BadRequest();
+            }
+
+            if (ValidateOwnership(userId))
+            {
+                return Unauthorized();
+            }
+
+            if (!_dbDriver.Service.PamaxieUserData.Exists(userId))
+            {
+                return NotFound();
             }
 
             var user = _dbDriver.Service.PamaxieUserData.Get(userId);
@@ -239,12 +299,12 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest();
             }
 
-            var user = _dbDriver.Service.PamaxieUserData.Get(userId);
-
-            if (ValidateUserId(userId))
+            if (ValidateOwnership(userId))
             {
                 return Unauthorized();
             }
+
+            var user = _dbDriver.Service.PamaxieUserData.Get(userId);
 
             if (user == null)
             {
@@ -261,14 +321,14 @@ namespace Pamaxie.Api.Controllers
 
 
         /// <summary>
-        /// Validates if the person making the request is actually the person who owns the user
+        /// Validates a user owns this resource to modify it
         /// </summary>
         /// <param name="assumedUserId"></param>
         /// <returns></returns>
-        private bool ValidateUserId(string assumedUserId)
+        private bool ValidateOwnership(string assumedUserId)
         {
             string token = Request.Headers["authorization"];
-            string userId = TokenGenerator.GetUserKey(token);
+            string userId = JwtTokenGenerator.GetUserKey(token);
             return assumedUserId == userId;
         }
     }

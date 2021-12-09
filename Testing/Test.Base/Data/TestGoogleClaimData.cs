@@ -94,7 +94,7 @@ namespace Test.Base
             //Check if the two most important claims exists
             string email = configurationSection.GetValue<string>("EmailAddress");
 
-            if (string.IsNullOrEmpty(email))
+            if (string.IsNullOrWhiteSpace(email))
             {
                 return;
             }

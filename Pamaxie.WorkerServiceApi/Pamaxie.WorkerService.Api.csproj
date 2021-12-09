@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Assemblies\Pamaxie.Jwt\Pamaxie.Jwt.csproj" />
+      <ProjectReference Include="..\Assemblies\Pamaxie.Jwt\Pamaxie.Authentication.csproj" />
     </ItemGroup>
 
 </Project>

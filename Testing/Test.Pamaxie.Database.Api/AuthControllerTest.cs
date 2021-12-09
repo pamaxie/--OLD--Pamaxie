@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Pamaxie.Api.Controllers;
-using Pamaxie.Jwt;
+
 using Xunit;
 using Xunit.Abstractions;
 

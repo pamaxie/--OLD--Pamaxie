@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using Pamaxie.Authentication;
 using Pamaxie.Data;
 using Pamaxie.Database.Design;
-using Pamaxie.Jwt;
+
 
 namespace Pamaxie.Api.Controllers
 {
@@ -32,7 +33,7 @@ namespace Pamaxie.Api.Controllers
         /// <summary>
         /// Gets a <see cref="PamaxieApplication"/> from the database by a key
         /// </summary>
-        /// <param name="key">Unique UniqueKey of the <see cref="PamaxieApplication"/></param>
+        /// <param name="applicationId">Unique UniqueKey of the <see cref="PamaxieApplication"/></param>
         /// <returns>A <see cref="PamaxieApplication"/> from the database</returns>
         [Authorize]
         [HttpGet("Get={key}")]
@@ -40,20 +41,30 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<PamaxieApplication> GetTask(string key)
+        public ActionResult<PamaxieApplication> GetTask(string applicationId)
         {
 
-            if (string.IsNullOrEmpty(key))
+            if (string.IsNullOrWhiteSpace(applicationId))
             {
                 return BadRequest();
             }
 
-            if (!_dbDriver.Service.PamaxieApplicationData.Exists(key))
+            if (string.IsNullOrEmpty(applicationId))
+            {
+                return BadRequest();
+            }
+
+            if (!ValidateOwnership(applicationId))
+            {
+                return Unauthorized();
+            }
+
+            if (!_dbDriver.Service.PamaxieApplicationData.Exists(applicationId))
             {
                 return NotFound();
             }
 
-            return Ok(_dbDriver.Service.PamaxieApplicationData.Get(key));
+            return Ok(_dbDriver.Service.PamaxieApplicationData.Get(applicationId));
         }
 
         /// <summary>
@@ -74,9 +85,18 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest();
             }
 
-            if (!validateApplicationOwner(application.UniqueKey, out application, application))
+            if (string.IsNullOrEmpty(application.OwnerKey))
             {
-                return Unauthorized();
+                return BadRequest();
+            }
+
+
+            string token = Request.Headers["authorization"];
+            string userId = JwtTokenGenerator.GetUserKey(token);
+
+            if (application.OwnerKey != userId)
+            {
+                return BadRequest();
             }
 
             return Created("", _dbDriver.Service.PamaxieApplicationData.Create(application));
@@ -100,9 +120,18 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest();
             }
 
-            if (!validateApplicationOwner(application.UniqueKey, out application, application))
+            if (string.IsNullOrEmpty(application.OwnerKey))
             {
-                return Unauthorized();
+                return BadRequest();
+            }
+
+
+            string token = Request.Headers["authorization"];
+            string userId = JwtTokenGenerator.GetUserKey(token);
+
+            if (application.OwnerKey != userId)
+            {
+                return BadRequest();
             }
 
             if (_dbDriver.Service.PamaxieApplicationData.TryCreate(application, out PamaxieApplication createdApplication))
@@ -131,7 +160,12 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest();
             }
 
-            if (!validateApplicationOwner(application.UniqueKey, out application, application))
+            if (string.IsNullOrEmpty(application.UniqueKey) || string.IsNullOrEmpty(application.OwnerKey))
+            {
+                return BadRequest();
+            }
+
+            if (!ValidateOwnership(application.UniqueKey))
             {
                 return Unauthorized();
             }
@@ -157,7 +191,12 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest();
             }
 
-            if (!validateApplicationOwner(application.UniqueKey, out application, application))
+            if (string.IsNullOrEmpty(application.UniqueKey) || string.IsNullOrEmpty(application.OwnerKey))
+            {
+                return BadRequest();
+            }
+
+            if (!ValidateOwnership(application.UniqueKey))
             {
                 return Unauthorized();
             }
@@ -172,7 +211,8 @@ namespace Pamaxie.Api.Controllers
 
         /// <summary>
         /// Tries to update a <see cref="PamaxieApplication"/> in the database,
-        /// if the <see cref="PamaxieApplication"/> does not exist, then a new one will be created
+        /// if the <see cref="PamaxieApplication"/> does not exist, then a new one will be created. 
+        /// This requires the UniqueKey of the application to be not set. Otherwise you will get an authentication error.
         /// </summary>
         /// <param name="application">The <see cref="PamaxieApplication"/> to be created, or updated values on <see cref="PamaxieApplication"/></param>
         /// <returns>Updated or created <see cref="PamaxieApplication"/></returns>
@@ -190,6 +230,26 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest();
             }
 
+            if (string.IsNullOrEmpty(application.OwnerKey))
+            {
+                return BadRequest();
+            }
+
+            if (string.IsNullOrEmpty(application.UniqueKey))
+            {
+                string token = Request.Headers["authorization"];
+                string userId = JwtTokenGenerator.GetUserKey(token);
+
+                if (application.OwnerKey != userId)
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                ValidateOwnership(application.UniqueKey);
+            }
+
             if (_dbDriver.Service.PamaxieApplicationData.UpdateOrCreate(application, out PamaxieApplication updatedOrCreatedApplication))
             {
                 return Created("", updatedOrCreatedApplication);
@@ -201,7 +261,7 @@ namespace Pamaxie.Api.Controllers
         /// <summary>
         /// Checks if a <see cref="PamaxieApplication"/> exists in the database
         /// </summary>
-        /// <param name="key">Unique UniqueKey of the <see cref="PamaxieApplication"/></param>
+        /// <param name="applicationId">Unique UniqueKey of the <see cref="PamaxieApplication"/></param>
         /// <returns><see cref="bool"/> if <see cref="PamaxieApplication"/> exists in the database</returns>
         [Authorize]
         [HttpGet("Exists={key}")]
@@ -209,14 +269,24 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<bool> ExistsTask(string key)
+        public ActionResult<bool> ExistsTask(string applicationId)
         {
-            if (string.IsNullOrEmpty(key))
+            if (string.IsNullOrWhiteSpace(applicationId))
             {
                 return BadRequest();
             }
 
-            return Ok(_dbDriver.Service.PamaxieApplicationData.Exists(key));
+            if (string.IsNullOrEmpty(applicationId))
+            {
+                return BadRequest();
+            }
+
+            if (!ValidateOwnership(applicationId))
+            {
+                return Unauthorized();
+            }
+
+            return Ok(_dbDriver.Service.PamaxieApplicationData.Exists(applicationId));
         }
 
         /// <summary>
@@ -237,17 +307,28 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest();
             }
 
-            if (!validateApplicationOwner(applicationId, out var application))
+            if (string.IsNullOrWhiteSpace(applicationId))
+            {
+                return BadRequest();
+            }
+
+            if (!ValidateOwnership(applicationId))
             {
                 return Unauthorized();
             }
+
+            var application = _dbDriver.Service.PamaxieApplicationData.Get(applicationId);
+
+            if (application == null)
+            {
+                return NotFound();
+            }
+
 
             if (_dbDriver.Service.PamaxieApplicationData.Delete(application))
             {
                 return Ok(true);
             }
-
-
 
             return Problem();
         }
@@ -268,6 +349,16 @@ namespace Pamaxie.Api.Controllers
             if (application == null)
             {
                 return BadRequest();
+            }
+
+            if (string.IsNullOrEmpty(application.UniqueKey) || string.IsNullOrEmpty(application.OwnerKey))
+            {
+                return BadRequest();
+            }
+
+            if (!ValidateOwnership(application.UniqueKey))
+            {
+                return Unauthorized();
             }
 
             return Ok(_dbDriver.Service.PamaxieApplicationData.GetOwner(application));
@@ -291,9 +382,21 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest();
             }
 
-            if (!validateApplicationOwner(applicationId, out var application))
+            if (string.IsNullOrEmpty(applicationId))
+            {
+                return BadRequest();
+            }
+
+            if (!ValidateOwnership(applicationId))
             {
                 return Unauthorized();
+            }
+
+            var application = _dbDriver.Service.PamaxieApplicationData.Get(applicationId);
+
+            if (application == null)
+            {
+                return NotFound();
             }
 
             return Ok(_dbDriver.Service.PamaxieApplicationData.EnableOrDisable(application));
@@ -317,6 +420,21 @@ namespace Pamaxie.Api.Controllers
                 return BadRequest();
             }
 
+            if (string.IsNullOrEmpty(application.UniqueKey) || string.IsNullOrEmpty(application.OwnerKey))
+            {
+                return BadRequest();
+            }
+
+            if (!ValidateOwnership(application.UniqueKey))
+            {
+                return Unauthorized();
+            }
+
+            if (!_dbDriver.Service.PamaxieApplicationData.Exists(application.UniqueKey))
+            {
+                return NotFound();
+            }
+
             if (_dbDriver.Service.PamaxieApplicationData.VerifyAuthentication(application))
             {
                 return Ok(true);
@@ -329,22 +447,18 @@ namespace Pamaxie.Api.Controllers
         /// Validates if the person making changes to an application is its actual owner
         /// </summary>
         /// <param name="applicationId"></param>
-        /// <param name="application"></param>
-        /// <returns></returns>
-        private bool validateApplicationOwner(string applicationId, out PamaxieApplication application, PamaxieApplication applicationIn = null)
+        /// <returns>If the user owns the application. Defaults to <see cref="false"/> if the application could not be found.</returns>
+        private bool ValidateOwnership(string applicationId)
         {
-            //Validate if the owner is the one trying to do this request.
-            if (applicationIn == null)
+            var application = _dbDriver.Service.PamaxieApplicationData.Get(applicationId);
+
+            if (application == null)
             {
-                application = _dbDriver.Service.PamaxieApplicationData.Get(applicationId);
-            }
-            else
-            {
-                application = applicationIn;
+                return false;
             }
 
             string token = Request.Headers["authorization"];
-            string userId = TokenGenerator.GetUserKey(token);
+            string userId = JwtTokenGenerator.GetUserKey(token);
             return application.OwnerKey == userId;
         }
     }

@@ -18,7 +18,6 @@ namespace Pamaxie.Database.Server
             this.owner = owner;
             PamaxieUserData = new PamaxieUserDataInteraction(owner);
             PamaxieApplicationData = new PamaxieApplicationDataInteraction(owner);
-            SecurityQuestionData = new PamaxieSecurityQuestionInteraction(owner);
 
         }
 
@@ -27,9 +26,6 @@ namespace Pamaxie.Database.Server
 
         /// <inheritdoc cref="IPamaxieDatabaseService.PamaxieUserData"/>
         public IPamaxieUserDataInteraction PamaxieUserData { get; }
-
-        /// <inheritdoc cref="IPamaxieDatabaseService.SecurityQuestionData"/>
-        public ISecurityQuestionInteraction SecurityQuestionData { get; }
 
         /// <inheritdoc cref="IPamaxieDatabaseService.CheckDatabaseContext(IDatabaseContext)"/>
         public bool CheckDatabaseContext(IPamaxieDatabaseConfiguration connectionParams)

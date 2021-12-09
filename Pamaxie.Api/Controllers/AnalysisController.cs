@@ -57,7 +57,7 @@ namespace Pamaxie.Api.Controllers
             //TODO: Allow sending/ analysis of binary/raw data
             //TODO: Add response for 102 Processing
             //TODO: DO NOT scan things directly on this controller, that's highly inefficient
-            if (string.IsNullOrEmpty(fileStream))
+            if (string.IsNullOrWhiteSpace(fileStream))
             {
                 return BadRequest();
             }
@@ -105,7 +105,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<string>> GetExistingData(string fileStream)
         {
-            if (string.IsNullOrEmpty(fileStream))
+            if (string.IsNullOrWhiteSpace(fileStream))
             {
                 return BadRequest();
             }
@@ -133,14 +133,14 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<string>> GetHash(string fileStream)
         {
-            if (string.IsNullOrEmpty(fileStream))
+            if (string.IsNullOrWhiteSpace(fileStream))
             {
                 return BadRequest();
             }
 
             string hash = await ImageProcessing.ImageProcessing.GetFileHash(fileStream);
 
-            if (string.IsNullOrEmpty(hash))
+            if (string.IsNullOrWhiteSpace(hash))
             {
                 return BadRequest();
             }

@@ -70,7 +70,7 @@ namespace Pamaxie.Database.Server.DataInteraction
             {
                 RedisValue rawData = db.StringGet(applicationKey);
 
-                if (!string.IsNullOrEmpty(rawData))
+                if (!string.IsNullOrWhiteSpace(rawData))
                 {
                     PamaxieApplication application = JsonConvert.DeserializeObject<PamaxieApplication>(rawData);
 

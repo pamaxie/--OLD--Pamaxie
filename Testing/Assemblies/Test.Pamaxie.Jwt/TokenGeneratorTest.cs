@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Pamaxie.Jwt;
+
 using Test.Base;
 using Xunit;
 using Xunit.Abstractions;
@@ -36,7 +36,7 @@ namespace Test.Pamaxie.Jwt_Test
 
             //Assert
             Assert.NotNull(authToken);
-            Assert.False(string.IsNullOrEmpty(authToken.Token));
+            Assert.False(string.IsNullOrWhiteSpace(authToken.Token));
             TestOutputHelper.WriteLine("Token: {0}", authToken.Token);
             TestOutputHelper.WriteLine("Expires at {0:R}", authToken.ExpiresAtUTC.ToLocalTime());
         }
@@ -58,7 +58,7 @@ namespace Test.Pamaxie.Jwt_Test
             string userKey = TokenGenerator.GetUserKey(authToken.Token);
 
             //Assert
-            Assert.False(string.IsNullOrEmpty(userKey));
+            Assert.False(string.IsNullOrWhiteSpace(userKey));
             TestOutputHelper.WriteLine("Actual user key {0}", userKey);
             TestOutputHelper.WriteLine("Expected user key {0}", expectedUserKey);
             Assert.Equal(expectedUserKey, userKey);

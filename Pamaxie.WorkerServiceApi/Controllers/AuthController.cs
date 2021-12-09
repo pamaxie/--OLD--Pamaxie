@@ -5,7 +5,7 @@ using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Client;
-using Pamaxie.Jwt;
+
 
 namespace Pamaxie.Api.Controllers
 {
@@ -36,12 +36,12 @@ namespace Pamaxie.Api.Controllers
             //TODO: Use basic auth here please, do not use a HTTPPost for login.
             StreamReader reader = new StreamReader(Request.Body);
             string result = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            if (string.IsNullOrEmpty(result))
+            if (string.IsNullOrWhiteSpace(result))
                 return BadRequest();
 
             PamaxieApplication appData = JsonConvert.DeserializeObject<PamaxieApplication>(result);
 
-            if (string.IsNullOrEmpty(appData?.Credentials.AuthorizationToken) || default == appData.UniqueKey)
+            if (string.IsNullOrWhiteSpace(appData?.Credentials.AuthorizationToken) || default == appData.UniqueKey)
                 return Unauthorized();
 
             if (!appData.VerifyAuthentication())
@@ -61,7 +61,7 @@ namespace Pamaxie.Api.Controllers
         {
             //TODO Not yet implemented
             StringValues token = Request.Headers["authorization"];
-            if (string.IsNullOrEmpty(token))
+            if (string.IsNullOrWhiteSpace(token))
                 return BadRequest("Authentication token for refresh could not be found");
 
             string userId = TokenGenerator.GetUserKey(token);

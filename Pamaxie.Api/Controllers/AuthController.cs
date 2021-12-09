@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Pamaxie.Data;
 using Pamaxie.Database.Extensions.Client;
-using Pamaxie.Jwt;
+
 
 namespace Pamaxie.Api.Controllers
 {
@@ -37,7 +37,7 @@ namespace Pamaxie.Api.Controllers
         public ActionResult<AuthToken> LoginTask(PamaxieApplication application)
         {
             //TODO: Use basic auth here please, do not use a HTTPPost for login.
-            if (string.IsNullOrEmpty(application.Credentials.AuthorizationToken) || default == application.UniqueKey)
+            if (string.IsNullOrWhiteSpace(application.Credentials.AuthorizationToken) || default == application.UniqueKey)
             {
                 return Unauthorized();
             }
@@ -64,7 +64,7 @@ namespace Pamaxie.Api.Controllers
             //TODO Not yet implemented
             StringValues token = Request.Headers["authorization"];
 
-            if (string.IsNullOrEmpty(token))
+            if (string.IsNullOrWhiteSpace(token))
             {
                 return BadRequest("Authentication token for refresh could not be found");
             }

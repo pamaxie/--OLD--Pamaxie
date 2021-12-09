@@ -8,16 +8,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
-namespace Pamaxie.Jwt
+namespace Pamaxie.Authentication
 {
     /// <summary>
     /// Authentication token generator
     /// </summary>
-    public sealed class TokenGenerator
+    public sealed class JwtTokenGenerator
     {
         private readonly IConfiguration _configuration;
 
-        public TokenGenerator(IConfiguration configuration)
+        public JwtTokenGenerator(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -27,7 +27,7 @@ namespace Pamaxie.Jwt
         /// </summary>
         /// <param name="userId">User id of the user that will be contained in the token</param>
         /// <returns>A authentication token object</returns>
-        public AuthToken CreateToken(string userId, string authTokenSettings = null)
+        public JwtToken CreateToken(string userId, string authTokenSettings = null)
         {
             //TODO: something is wrong with how this token is generated here. We need to fix this for gathering user information about a token to refresh it for example
 
@@ -45,7 +45,7 @@ namespace Pamaxie.Jwt
             else
             {
                 //TODO: this is only a temporary fix until we figured out how to use our own configuration via dependency injection.
-                var settings = JsonConvert.DeserializeObject<AuthSettings>(authTokenSettings);
+                var settings = JsonConvert.DeserializeObject<JwtTokenConfig>(authTokenSettings);
                 key = Encoding.ASCII.GetBytes(settings.Secret);
                 expires = DateTime.UtcNow.AddMinutes(settings.ExpiresInMinutes);
             }
@@ -59,7 +59,7 @@ namespace Pamaxie.Jwt
             token.Payload["userId"] = userId;
             var handler = new JwtSecurityTokenHandler();
             var jwt = handler.WriteToken(token);
-            return new AuthToken { ExpiresAtUTC = (DateTime)expires, Token = jwt };
+            return new JwtToken { ExpiresAtUTC = (DateTime)expires, Token = jwt };
         }
 
         /// <summary>

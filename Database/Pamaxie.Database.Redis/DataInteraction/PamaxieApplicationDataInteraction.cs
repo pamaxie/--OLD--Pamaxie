@@ -93,7 +93,7 @@ namespace Pamaxie.Database.Server.DataInteraction
             }
 
             RedisValue rawData = db.StringGet(value.OwnerKey);
-            return string.IsNullOrEmpty(rawData) ? default : JsonConvert.DeserializeObject<PamaxieUser>(rawData);
+            return string.IsNullOrWhiteSpace(rawData) ? default : JsonConvert.DeserializeObject<PamaxieUser>(rawData);
         }
 
         /// <inheritdoc/>

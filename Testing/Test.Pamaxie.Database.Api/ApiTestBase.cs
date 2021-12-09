@@ -28,7 +28,7 @@ namespace Test.Pamaxie.Database.Api_Test
             IConfigurationSection dbConfigSection = Configuration.GetSection("RedisData");
             string connectionString = dbConfigSection.GetValue<string>("ConnectionString");
 
-            if (string.IsNullOrEmpty(connectionString))
+            if (string.IsNullOrWhiteSpace(connectionString))
             {
                 Service = new DatabaseService(null)
                 {

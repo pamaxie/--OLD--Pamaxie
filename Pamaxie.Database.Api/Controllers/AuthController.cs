@@ -9,7 +9,7 @@ using Pamaxie.Data;
 using Pamaxie.Database.Api;
 using Pamaxie.Database.Design;
 using Pamaxie.Helpers;
-using Pamaxie.Jwt;
+using Pamaxie.Authentication;
 using System;
 using System.IO;
 using System.Linq;
@@ -27,7 +27,7 @@ namespace Pamaxie.Api.Controllers
     [Route("[controller]")]
     public sealed class AuthController : ControllerBase
     {
-        private readonly TokenGenerator _generator;
+        private readonly JwtTokenGenerator _generator;
         private readonly IPamaxieDatabaseDriver _dbDriver;
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Pamaxie.Api.Controllers
         /// </summary>
         /// <param name="generator">Token generator</param>
         /// <param name="dbService">Database Service</param>
-        public AuthController(TokenGenerator generator, IPamaxieDatabaseDriver dbService)
+        public AuthController(JwtTokenGenerator generator, IPamaxieDatabaseDriver dbService)
         {
             _generator = generator;
             _dbDriver = dbService;
@@ -44,7 +44,7 @@ namespace Pamaxie.Api.Controllers
         /// <summary>
         /// Signs in a user via Basic authentication and returns a token.
         /// </summary>
-        /// <returns><see cref="AuthToken"/> Token for Authentication</returns>
+        /// <returns><see cref="JwtToken"/> Token for Authentication</returns>
         [AllowAnonymous]
         [HttpPost("Login")]
         [Consumes(MediaTypeNames.Application.Json)]
@@ -52,7 +52,7 @@ namespace Pamaxie.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<AuthToken> LoginTask()
+        public ActionResult<JwtToken> LoginTask()
         {
             string authHeader = Request.Headers["authorization"].ToString();
 
@@ -101,69 +101,52 @@ namespace Pamaxie.Api.Controllers
             using var reader = new StreamReader(HttpContext.Request.Body);
             var body = await reader.ReadToEndAsync();
 
-            if (string.IsNullOrEmpty(body))
+            if (string.IsNullOrWhiteSpace(body))
             {
                 return BadRequest("Please specify a user to create");
             }
 
             JObject googleSearch = JObject.Parse(body);
             var user = googleSearch["userData"].ToObject<PamaxieUser>();
-            var securityQuestions = googleSearch["securityQuestions"].ToObject<SecurityQuestions>();
-
-            if (string.IsNullOrWhiteSpace(securityQuestions.BackupKey1) || string.IsNullOrWhiteSpace(securityQuestions.BackupKey2) ||
-                string.IsNullOrWhiteSpace(securityQuestions.BackupKey3))
-            {
-                return BadRequest("Please make sure all of the security questions are specified before creating a user");
-            }
 
             user.UniqueKey = PamaxieCryptoHelpers.GetUserId(new System.Net.NetworkCredential(user.UserName, user.Password));
             user.Password = Argon2.Hash(user.Password);
             user.EmailVerified = false;
             user.Disabled = false;
             user.TTL = DateTime.MaxValue;
-            user.SecurityQuestionsId = PamaxieCryptoHelpers.GetSecurityQuestionId(securityQuestions.BackupKey1, securityQuestions.BackupKey2,
-                                                                                  securityQuestions.BackupKey3);
-            securityQuestions.UniqueKey = user.SecurityQuestionsId;
-            securityQuestions.TTL = DateTime.MaxValue;
-            securityQuestions.RelatedUserId = user.UniqueKey;
 
             if (_dbDriver.Service.PamaxieUserData.Exists(user.UniqueKey))
             {
                 return BadRequest("The specified user already exists in the database");
             }
-            
-            if (_dbDriver.Service.SecurityQuestionData.Exists(securityQuestions.UniqueKey))
-            {
-                return BadRequest("The specified security questions already exist");
-            }
 
             _dbDriver.Service.PamaxieUserData.Create(user);
-            _dbDriver.Service.SecurityQuestionData.Create(securityQuestions);
             return Created(String.Empty, null);
         }
 
         /// <summary>
-        /// Refreshes an exiting <see cref="AuthToken"/>
+        /// Refreshes an exiting <see cref="JwtToken"/>
         /// </summary>
-        /// <returns>Refreshed <see cref="AuthToken"/></returns>
+        /// <returns>Refreshed <see cref="JwtToken"/></returns>
         [Authorize]
         [HttpPost("Refresh")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<AuthToken> RefreshTask()
+        public ActionResult<JwtToken> RefreshTask()
         {
 
             StringValues token = Request.Headers["authorization"];
 
-            if (string.IsNullOrEmpty(token))
+            if (string.IsNullOrWhiteSpace(token))
             {
                 return BadRequest();
             }
 
-            string userId = TokenGenerator.GetUserKey(token);
+            string userId = JwtTokenGenerator.GetUserKey(token);
 
+            //Validate if the user was maybe deleted since the last auth
             if (!_dbDriver.Service.PamaxieUserData.Exists(userId))
             {
                 return Unauthorized();

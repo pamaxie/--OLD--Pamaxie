@@ -9,10 +9,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Pamaxie.Authentication;
 using Pamaxie.Database.Api;
 using Pamaxie.Database.Extensions;
 using Pamaxie.Database.Extensions.ServerSide;
-using Pamaxie.Jwt;
+
 using StackExchange.Redis;
 
 namespace Pamaxie.Api
@@ -52,7 +53,7 @@ namespace Pamaxie.Api
             services.AddControllers();
 
             var dbSettings = JsonConvert.DeserializeObject<PamaxieDatabaseClientSettings>(Environment.GetEnvironmentVariable(ApiApplicationConfiguration.DbSettingsEnvVar, EnvironmentVariableTarget.User));
-            var jwtSettings = JsonConvert.DeserializeObject<AuthSettings>(Environment.GetEnvironmentVariable(ApiApplicationConfiguration.JwtSettingsEnvVar, EnvironmentVariableTarget.User));
+            var jwtSettings = JsonConvert.DeserializeObject<JwtTokenConfig>(Environment.GetEnvironmentVariable(ApiApplicationConfiguration.JwtSettingsEnvVar, EnvironmentVariableTarget.User));
             byte[] key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
             services.AddAuthentication(x =>
                     {
@@ -80,7 +81,7 @@ namespace Pamaxie.Api
             var dbDriver = DbDriverManager.LoadDatabaseDriver(dbSettings.DatabaseDriverGuid);
             dbDriver.Configuration.LoadConfig(dbSettings.Settings);
             services.AddSingleton(dbDriver);
-            services.AddTransient<TokenGenerator>();
+            services.AddTransient<JwtTokenGenerator>();
         }
 
         /// <summary>

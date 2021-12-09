@@ -88,7 +88,7 @@ namespace Test.Pamaxie.Website_Test
             string token = userService.GenerateEmailConfirmationToken(user);
 
             //Assert
-            Assert.False(string.IsNullOrEmpty(token));
+            Assert.False(string.IsNullOrWhiteSpace(token));
             TestOutputHelper.WriteLine(token);
         }
 

@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using Microsoft.Extensions.Configuration;
 using Pamaxie.Database.Extensions.Client;
-using Pamaxie.Jwt;
+
 using Test.Base;
 using Xunit.Abstractions;
 
