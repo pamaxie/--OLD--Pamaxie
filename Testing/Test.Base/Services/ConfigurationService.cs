@@ -3,7 +3,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
+using Pamaxie.Authentication;
 
 namespace Test.Base
 {
@@ -22,7 +22,7 @@ namespace Test.Base
 
             //AuthData
             dynamic objAuthData = new JObject();
-            objAuthData.Secret = TokenGenerator.GenerateSecret();
+            objAuthData.Secret = JwtTokenGenerator.GenerateSecret();
             objAuthData.ExpiresInMinutes = 15;
             obj.AuthData = objAuthData;
 
@@ -49,7 +49,7 @@ namespace Test.Base
 
             //JwtToken
             dynamic objJwtToken = new JObject();
-            objJwtToken.Secret = TokenGenerator.GenerateSecret();
+            objJwtToken.Secret = JwtTokenGenerator.GenerateSecret();
             obj.JwtToken = objJwtToken;
 
             string jsonString = JsonConvert.SerializeObject(obj, Formatting.Indented);

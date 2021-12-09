@@ -27,7 +27,7 @@
     <ProjectReference Include="..\Assemblies\Pamaxie.Helpers\Pamaxie.Helpers.csproj" />
     <ProjectReference Include="..\Assemblies\Pamaxie.Jwt\Pamaxie.Authentication.csproj" />
     <ProjectReference Include="..\Database\Pamaxie.Database.Design\Pamaxie.Database.Design.csproj" />
-    <ProjectReference Include="..\Database\Pamaxie.Database.Redis\Pamaxie.Database.Server.csproj" />
+    <ProjectReference Include="..\Database\Pamaxie.Database.Redis\Pamaxie.Database.Redis.csproj" />
   </ItemGroup>
 
   <ItemGroup>

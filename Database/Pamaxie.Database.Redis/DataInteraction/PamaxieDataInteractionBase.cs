@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pamaxie.Database.Server.DataInteraction
+namespace Pamaxie.Database.Redis.DataInteraction
 {
     internal class PamaxieDataInteractionBase<T>  : IPamaxieDataInteractionBase<T> where T : IDatabaseObject
     {

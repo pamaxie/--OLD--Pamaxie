@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pamaxie.Database.Server.DataInteraction
+namespace Pamaxie.Database.Redis.DataInteraction
 {
     /// <inheritdoc cref="IPamaxieUserDataInteraction"/>
     internal class PamaxieUserDataInteraction : PamaxieDataInteractionBase<PamaxieUser>, IPamaxieUserDataInteraction

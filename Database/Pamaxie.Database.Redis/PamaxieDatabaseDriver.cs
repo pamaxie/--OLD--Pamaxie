@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pamaxie.Database.Server
+namespace Pamaxie.Database.Redis
 {
     /// <summary>
     /// Database Driver for interacting with Pamaxie and Redis, 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Pamaxie.Authentication;
+using System.Collections.Generic;
 
 using Test.Base;
 using Xunit;
@@ -29,10 +30,10 @@ namespace Test.Pamaxie.Jwt_Test
         public void CreateToken(string userKey)
         {
             //Arrange
-            TokenGenerator generator = new TokenGenerator(Configuration);
+            JwtTokenGenerator generator = new JwtTokenGenerator(Configuration);
 
             //Act
-            AuthToken authToken = generator.CreateToken(userKey);
+            JwtToken authToken = generator.CreateToken(userKey);
 
             //Assert
             Assert.NotNull(authToken);
@@ -50,12 +51,12 @@ namespace Test.Pamaxie.Jwt_Test
         public void GetUserKey(string expectedUserKey)
         {
             //Arrange
-            TokenGenerator generator = new TokenGenerator(Configuration);
-            AuthToken authToken = generator.CreateToken(expectedUserKey);
+            JwtTokenGenerator generator = new JwtTokenGenerator(Configuration);
+            JwtToken authToken = generator.CreateToken(expectedUserKey);
             Assert.NotNull(authToken);
 
             //Act
-            string userKey = TokenGenerator.GetUserKey(authToken.Token);
+            string userKey = JwtTokenGenerator.GetUserKey(authToken.Token);
 
             //Assert
             Assert.False(string.IsNullOrWhiteSpace(userKey));

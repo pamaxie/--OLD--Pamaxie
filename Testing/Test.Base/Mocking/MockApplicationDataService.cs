@@ -16,10 +16,10 @@ namespace Test.Base
         /// <summary>
         /// Mocks the <see cref="ApplicationDataService"/> and applies it to the ApplicationDataServiceExtension for testing usage
         /// </summary>
-        public static IDatabasePamaxieApplicationInteraction Mock()
+        public static IPamaxieApplicationDataInteraction Mock()
         {
             ApplicationDataService applicationDataService = new ApplicationDataService();
-            Mock<IDatabasePamaxieApplicationInteraction> mockApplicationDataService = new Mock<IDatabasePamaxieApplicationInteraction>();
+            Mock<IPamaxieApplicationDataInteraction> mockApplicationDataService = new Mock<IPamaxieApplicationDataInteraction>();
 
             //Setup for Get
             mockApplicationDataService.Setup(_ => _.Get(It.IsAny<string>()))
@@ -90,7 +90,7 @@ namespace Test.Base
         }
 
         /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction"/>
-        private sealed class ApplicationDataService : IDatabasePamaxieApplicationInteraction
+        private sealed class ApplicationDataService : IPamaxieApplicationDataInteraction
         {
             /// <inheritdoc cref="IDatabasePamaxieApplicationInteraction.Get"/>
             public PamaxieApplication Get(string key)
