@@ -1,4 +1,5 @@
-﻿using Pamaxie.Authentication;
+﻿using Microsoft.Extensions.Configuration;
+using Pamaxie.Authentication;
 using System.Collections.Generic;
 
 using Test.Base;

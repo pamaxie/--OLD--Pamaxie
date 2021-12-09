@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Assemblies\Pamaxie.Jwt\Pamaxie.Authentication.csproj" />
+      <ProjectReference Include="..\..\Assemblies\Pamaxie.Authentication\Pamaxie.Authentication.csproj" />
       <ProjectReference Include="..\..\Assemblies\Pamaxie.MediaDetection\Pamaxie.MediaDetection.csproj" />
       <ProjectReference Include="..\..\Database\Pamaxie.Database.Design\Pamaxie.Database.Design.csproj" />
       <ProjectReference Include="..\..\Database\Pamaxie.Data\Pamaxie.Data.csproj" />

@@ -76,6 +76,7 @@ namespace Pamaxie.Authentication
         public static string GenerateSecret()
         {
             using RNGCryptoServiceProvider cryptRng = new RNGCryptoServiceProvider();
+            
             byte[] tokenBuffer = new byte[64];
             cryptRng.GetBytes(tokenBuffer);
             return Convert.ToBase64String(tokenBuffer);

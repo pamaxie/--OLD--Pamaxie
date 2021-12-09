@@ -447,7 +447,7 @@ namespace Pamaxie.Api.Controllers
         /// Validates if the person making changes to an application is its actual owner
         /// </summary>
         /// <param name="applicationId"></param>
-        /// <returns>If the user owns the application. Defaults to <see cref="false"/> if the application could not be found.</returns>
+        /// <returns>If the user owns the application. Defaults to false if the application could not be found.</returns>
         private bool ValidateOwnership(string applicationId)
         {
             var application = _dbDriver.Service.PamaxieApplicationData.Get(applicationId);
