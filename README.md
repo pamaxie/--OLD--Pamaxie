@@ -2,6 +2,7 @@
 
 [![CodeQL](https://github.com/pamaxie/Pamaxie/actions/workflows/CodeQL.yml/badge.svg)](https://github.com/pamaxie/Pamaxie/actions/workflows/CodeQL.yml)
 [![.NET Build Test](https://github.com/deamonicnet/Pamaxie/actions/workflows/dotnet.yml/badge.svg)](https://github.com/deamonicnet/Pamaxie/actions/workflows/dotnet.yml)
+[![Publish Pamaxie.MediaDetection](https://github.com/pamaxie/Pamaxie/actions/workflows/pamaxie..client-publish.yml/badge.svg)](https://github.com/pamaxie/Pamaxie/actions/workflows/pamaxie..client-publish.yml)
 
 Documentation for this project can be found at [Pamaxies wiki](https://wiki.pamaxie.com/). API Credentials can be created at [Pamaxies website](https://pamaxie.com/). Please let us know if the API misbehaves in any way. We will assist you as soon as possible.
 
