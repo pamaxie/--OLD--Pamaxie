@@ -1,0 +1,31 @@
+name: Publish Pamaxie.MediaDetection
+
+#Only run this if someone changed the Project file. This ensures the version is different than it was before. (Or that someone at least changed something in there lol)
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "Pamaxie.Client/Pamaxie.Client.csproj"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+    - name: Publish  
+      uses: brandedoutcast/publish-nuget@v2.5.2  
+      with:   
+        PROJECT_FILE_PATH: Pamaxie.Client/Pamaxie.Client.csproj
+        NUGET_KEY: ${{secrets.NUGET_PAMAXIE}}
