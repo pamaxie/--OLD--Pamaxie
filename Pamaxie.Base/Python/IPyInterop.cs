@@ -10,14 +10,14 @@
         /// <param name="sourceDirectory">The source directory to search for files in</param>
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<FileInfo> GetPythonFiles(string sourceDirectory);
+        public IEnumerable<FileInfo?> GetPythonFiles(string? sourceDirectory = null);
 
         /// <summary>
         /// Returns fully qualified file path for the detected files that we can interop with
         /// </summary>
         /// <param name="sourceDirectory">The source directory to search for files in</param>
         /// <returns></returns>
-        public IEnumerable<string> GetPythonFilePaths(string sourceDirectory);
+        public IEnumerable<string> GetPythonFilePaths(string? sourceDirectory = null);
 
         /// <summary>
         /// Validates we can run a given file. This basically ensures that the python compiles

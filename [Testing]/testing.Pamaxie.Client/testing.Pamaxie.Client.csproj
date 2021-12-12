@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Pamaxie.Client\Pamaxie.Client.csproj" />
+  </ItemGroup>
+
 </Project>

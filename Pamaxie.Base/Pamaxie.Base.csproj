@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="pythonnet" Version="3.0.0-preview2021-12-03" />
+  </ItemGroup>
+
 </Project>

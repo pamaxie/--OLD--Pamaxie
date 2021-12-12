@@ -1,11 +1,13 @@
 ﻿
+using Pamaxie.Base.Python;
+
 namespace Pamaxie.Base
 {
     public class Program 
     {
-        public void Main() 
-        { 
-        
+        public static void Main() 
+        {
+            TestPyInterop interop = new();
         }
     }
 }

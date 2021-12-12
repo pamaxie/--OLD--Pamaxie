@@ -6,7 +6,7 @@ namespace Pamaxie.Client
     {
         public void Main()
         {
-            aljksd;
+            
         }
     }
 }

@@ -1,20 +1,42 @@
 ﻿using Microsoft.Win32;
+using Python.Runtime;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
 namespace Pamaxie.Base.Python
 {
     /// <summary>
     /// <inheritdoc cref="IPyInterop"/>
     /// </summary>
-    internal class PyInterop : IPyInterop
+    public class PyInterop : Singleton<PyInterop>, IPyInterop
     {
-        private bool _hasPython;
-        private const string _pythonVersion = "3";
+        private static bool _hasPython;
+        private static string _pythonVersion = "3.5";
+
+        public PyInterop() : base()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                _pythonVersion = "libpython3.8.so";
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                _pythonVersion = "python38.dll";
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                _pythonVersion = "libpython3.8.dylib";
+            }
+        }
 
         /// <summary>
         /// <inheritdoc cref="IPyInterop.CanRun(string)"/>
@@ -53,10 +75,15 @@ namespace Pamaxie.Base.Python
         /// <summary>
         /// <inheritdoc cref="IPyInterop.GetPythonFilePaths(string)"/>
         /// </summary>
-        public IEnumerable<string> GetPythonFilePaths(string sourceDirectory)
+        public IEnumerable<string> GetPythonFilePaths(string? sourceDirectory = null)
         {
             if (string.IsNullOrWhiteSpace(sourceDirectory))
             {
+                if (System.Reflection.Assembly.GetEntryAssembly() == null)
+                {
+                    throw new ArgumentNullException(nameof(sourceDirectory));
+                }
+
                 sourceDirectory = System.Reflection.Assembly.GetEntryAssembly().Location;
             }
 
@@ -74,12 +101,17 @@ namespace Pamaxie.Base.Python
         }
 
         /// <summary>
-        /// <inheritdoc cref="IPyInterop.GetPythonFiles(string)"/>
+        /// <inheritdoc cref="IPyInterop.GetPythonFilePaths(string)"/>
         /// </summary>
-        public IEnumerable<FileInfo?> GetPythonFiles(string sourceDirectory)
+        public IEnumerable<FileInfo?> GetPythonFiles(string? sourceDirectory = null)
         {
             if (string.IsNullOrWhiteSpace(sourceDirectory))
             {
+                if (System.Reflection.Assembly.GetEntryAssembly() == null)
+                {
+                    throw new ArgumentNullException(nameof(sourceDirectory));
+                }
+
                 sourceDirectory = System.Reflection.Assembly.GetEntryAssembly().Location;
             }
 
@@ -107,25 +139,21 @@ namespace Pamaxie.Base.Python
                 return true;
             }
 
-            //Tries to run the python process.
-            ProcessStartInfo pythonProcess = new();
-            pythonProcess.FileName = @"cmd.exe"; // Specify exe name.
-            pythonProcess.Arguments = "python --version";
-            pythonProcess.UseShellExecute = false;
-            pythonProcess.RedirectStandardError = true;
-            pythonProcess.CreateNoWindow = true;
 
-            using Process process = Process.Start(pythonProcess);
-            if (process == null)
+            Runtime.PythonDLL = _pythonVersion;
+
+            try
             {
+                using (Py.GIL()){}
+
+                return true;
+            } 
+            catch(TypeInitializationException)
+            {
+                //Probably the wrong python version or python is not installed?
                 return false;
             }
-
-            using StreamReader reader = process.StandardError;
-            var result = reader.ReadToEnd();
-            reader.Close();
-            process.Close();
-            return string.IsNullOrWhiteSpace(result);
         }
     }
 }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
