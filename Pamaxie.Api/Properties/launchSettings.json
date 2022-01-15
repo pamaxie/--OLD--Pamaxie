@@ -1,38 +1,44 @@
 {
-  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "$schema": "http://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:16992",
-      "sslPort": 44324
+      "applicationUrl": "http://api.Pamaxie.app:58801",
+      "sslPort": 44313
     }
   },
   "profiles": {
-    "Pamaxie.Api": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchUrl": "user/login",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:7074;http://localhost:5074",
-      "dotnetRunMessages": true
+      "nativeDebugging": false
     },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
+    "Pamaxie.Api": {
+      "commandName": "Project",
+      "launchUrl": "user/login",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "http://localhost:5000;https://api.Pamaxie.app:443"
     },
     "Docker": {
       "commandName": "Docker",
-      "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/user/login",
       "publishAllPorts": true,
       "useSSL": true
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "launchUrl": "https://api.pamaxie.app/user/login",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5000;https://api.Pamaxie.app:443"
+      },
+      "distributionName": ""
     }
   }
 }

@@ -11,4 +11,12 @@
     <ProjectReference Include="..\..\Pamaxie.Base\Pamaxie.Base.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Python\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.Proxy" Version="4.2.1" />
+  </ItemGroup>
+
 </Project>
