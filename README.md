@@ -22,3 +22,5 @@ Our API can be either trained with your own data.
 If you don't want to train your own data, you can just access our API for free by just creating an account on our website. 
 
 ### We will release further updates on the wiki once the API is available for public signup
+
+![**Pamaxie**](https://i.imgur.com/riyuVGf.jpg)
